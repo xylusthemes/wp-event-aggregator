@@ -103,6 +103,29 @@
 		jQuery("#ical_import_by").trigger('change');
 	});	
 
+	// Render Dynamic Terms.
+	jQuery(document).ready(function() {
+	    jQuery('.event_plugin').on( 'change', function() {
+
+	    	var event_plugin = jQuery(this).val();
+	    	var data = {
+	            'action': 'wpea_render_terms_by_plugin',
+	            'event_plugin': event_plugin
+	        };
+
+	        var terms_space = jQuery('.event_taxo_terms_wraper');
+	        terms_space.html('<span class="spinner is-active" style="float: none;"></span>');
+	        // send ajax request.
+	        jQuery.post(ajaxurl, data, function(response) {
+	            if( response != '' ){
+	            	terms_space.html( response );
+	            }else{
+	            	terms_space.html( '' );
+	            }	            
+	        });    
+	    });
+	    jQuery(".event_plugin").trigger('change');                  
+	});
 
 })( jQuery );
 

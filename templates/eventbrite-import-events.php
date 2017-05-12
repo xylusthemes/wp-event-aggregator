@@ -34,7 +34,7 @@ global $importevents;
 					        <td>
 					            <select name="eventbrite_import_by" id="eventbrite_import_by">
 			                    	<option value="event_id"><?php esc_attr_e( 'Event ID','wp-event-aggregator' ); ?></option>
-			                    	<option value="your_events" ><?php esc_attr_e( 'Your Events','wp-event-aggregator' ); ?></option>
+			                    	<option value="your_events"><?php esc_attr_e( 'Your Events','wp-event-aggregator' ); ?></option>
 			                    	<option value="organizer_id"><?php esc_attr_e( 'Organazer ID','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
@@ -48,7 +48,7 @@ global $importevents;
 					    		<?php esc_attr_e( 'Eventbrite Event ID','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-					    		<input class="wpea_text wpea_eventbrite_id" name="wpea_eventbrite_id" type="text" />
+					    		<input class="wpea_text" name="wpea_eventbrite_id" type="text" />
 			                    <span class="wpea_small">
 			                        <?php _e( 'Insert eventbrite event ID ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>  ).', 'wp-event-aggregator' ); ?>
 			                    </span>
@@ -73,16 +73,15 @@ global $importevents;
 					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-						    	<?php wpea_render_import_type(); ?>
+						    	<?php $importevents->common->render_import_type(); ?>
 					    	</td>
 					    </tr>
 
 					    <?php 
-					    wpea_render_eventstatus_input();
-					    wpea_render_category_input();
+						// import into.
+					    $importevents->common->render_import_into_and_taxonomy();
+					    $importevents->common->render_eventstatus_input();
 					    ?>
-
-
 					</tbody>
 		        </table>
                 

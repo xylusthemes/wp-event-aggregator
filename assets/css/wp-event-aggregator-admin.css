@@ -22,6 +22,15 @@
 	font-size: 16px !important;
 }
 
+.support_well{
+  background: url('../images/xt_logo.png') no-repeat bottom 7% right 2% #fff;
+  background-size: 10%;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 8px 20px 25px;
+}
+
 .hide_frequency .import_frequency, .wpea_eventbrite_form tr.eventbrite_organizer_id{
   display: none;
 }
@@ -173,9 +182,9 @@
     margin-top: 10px !important;
 }
 
-#poststuff .stuffbox > h3, #poststuff h2, #poststuff h3.hndle {
+/*#poststuff .stuffbox > h3, #poststuff h2, #poststuff h3.hndle {
     padding-bottom: 0px;
-}
+}*/
 .wpea_element {
     margin-top: 5px;
     margin-bottom: 20px;
@@ -194,4 +203,61 @@
     font-size: 13px;
     font-style: italic;
     color: #bababa;
+}
+
+/* Meta box design */
+table.wpea_form_table td, table.wpea_form_table th {
+    padding: 2px 10px;
+    text-align: left;
+}
+table.wpea_form_table{
+  width: 100%;
+}
+table.wpea_form_table td input[type="text"]{
+  vertical-align: bottom;
+}
+table.wpea_form_table tr td:nth-child(1) {
+  width: 160px;
+}
+
+.plugin_box {
+    width: 24%;
+    float: left;
+    background-color: #fff;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    margin-bottom: 20px;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+
+.plugin_box .plugin_img{
+    width: 100%;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.plugin_box h3{
+    margin: 0.5em 0;
+}
+.plugin_box .plugin_content{
+    padding: 10px 10px 20px 10px;
+}
+ @media (max-width: 1300px ){
+    .plugin_box {
+        width: 32.333%;
+    }
+}
+@media (max-width: 1080px ){
+    .plugin_box {
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+}
+ @media (max-width: 1080px ){
+    .plugin_box {
+        width: 100%;
+        float: none;
+    }
 }

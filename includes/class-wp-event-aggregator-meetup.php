@@ -21,6 +21,8 @@ class WP_Event_Aggregator_Meetup {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
+		global $importevents;
+
 		$options = wpea_get_import_options( 'meetup' );
 		$this->api_key = isset( $options['meetup_api_key'] ) ? $options['meetup_api_key'] : '';
 	}
@@ -53,7 +55,7 @@ class WP_Event_Aggregator_Meetup {
 			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
-
+		
 		$meetup_events = json_decode( $meetup_response['body'], true );
 		if ( is_array( $meetup_events ) && ! isset( $meetup_events['error'] ) ) {
 
@@ -80,288 +82,158 @@ class WP_Event_Aggregator_Meetup {
 	 * @param string $event_data events import data
 	 * @return void
 	 */
-	public function save_meetup_event( $meetup_event = array(), $event_data = array() ) {
-
+	public function save_meetup_event( $meetup_event = array(), $event_args = array() ) {
+		global $importevents;
 		if ( ! empty( $meetup_event ) && is_array( $meetup_event ) && array_key_exists( 'id', $meetup_event ) ) {
-
-			$is_exitsing_event = $this->get_event_by_event_id( $meetup_event['id'] );
-			$formated_args = $this->format_event_args_for_tec( $meetup_event, $event_data );
-
-			if ( $is_exitsing_event ) {
-				// Update event using TEC advanced functions if already exits.
-				$options = wpea_get_import_options( 'meetup' );
-				$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
-
-				if ( 'yes' == $update_events ) {
-					return $this->update_meetup_event( $is_exitsing_event, $meetup_event, $formated_args, $event_data );
-				}
-
-			} else {
-				return $this->create_meetup_event( $meetup_event, $formated_args, $event_data );
-			}
+			$centralize_array = $this->generate_centralize_array( $meetup_event );
+			return $importevents->common->import_events_into( $centralize_array, $event_args );
 		}
 	}
 
 	/**
-	 * Create New meetup event.
+	 * Format events arguments as per TEC
 	 *
 	 * @since    1.0.0
-	 * @param array $meetup_event Meetup event.
-	 * @param array $formated_args Formated arguments for meetup event.
-	 * @param int   $post_id Post id.
-	 * @return void
-	 */
-	public function create_meetup_event( $meetup_event = array(), $formated_args = array(), $event_data = array()  ) {
-		// Create event using TEC advanced functions.
-		if( empty( $formated_args ) ){ return; }
-		$new_event_id = tribe_create_event( $formated_args );
-		if ( $new_event_id ) {
-			update_post_meta( $new_event_id, 'wpea_meetup_event_id', absint( $meetup_event['id'] ) );
-			update_post_meta( $new_event_id, 'wpea_meetup_event_link', esc_url( $meetup_event['link'] ) );
-			update_post_meta( $new_event_id, 'wpea_meetup_response_raw_data', wp_json_encode( $meetup_event ) );
-
-			// Asign event category.
-			$event_cats = isset( $event_data['event_cats'] ) ? $event_data['event_cats'] : array();
-			if( !empty( $event_cats ) ){
-				$cat_ids = array();
-				if ( ! empty( $event_cats ) ) {
-					foreach ( $event_cats as $event_cat ) {
-						$cat_ids[] = (int)$event_cat;
-					}
-				}
-				if ( ! empty( $cat_ids ) ) {
-					wp_set_object_terms( $new_event_id, $cat_ids, WPEA_TEC_TAXONOMY );
-				}
-			}
-			do_action( 'wpea_after_create_meetup_event', $new_event_id, $formated_args, $meetup_event );
-			return $new_event_id;
-		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator' );
-			return;
-		}
-	}
-
-	/**
-	 * Update meetup event.
-	 *
-	 * @since 1.0.0
-	 * @param int   $event_id Exsting event ID.
-	 * @param array $meetup_event Meetup event.
-	 * @param array $formated_args Formated arguments for meetup event.
-	 * @param array $event_args import data.
-	 * @return void
-	 */
-	public function update_meetup_event( $event_id, $meetup_event, $formated_args = array(), $event_args = array() ) {
-		// Update event using TEC advanced functions.
-		$update_event_id =  tribe_update_event( $event_id, $formated_args );
-		if ( $update_event_id ) {
-			update_post_meta( $update_event_id, 'wpea_meetup_event_id', absint( $meetup_event['id'] ) );
-			update_post_meta( $update_event_id, 'wpea_meetup_event_link', esc_url( $meetup_event['link'] ) );
-			update_post_meta( $update_event_id, 'wpea_meetup_response_raw_data', wp_json_encode( $meetup_event ) );
-
-			// Asign event category.
-			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
-			if ( ! empty( $wpea_cats ) ) {
-				foreach ( $wpea_cats as $wpea_catk => $wpea_catv ) {
-					$wpea_cats[ $wpea_catk ] = (int) $wpea_catv;
-				}
-			}
-			if ( ! empty( $wpea_cats ) ) {
-				wp_set_object_terms( $update_event_id, $wpea_cats, WPEA_TEC_TAXONOMY );
-			}
-
-			do_action( 'wpea_after_update_meetup_event', $update_event_id, $formated_args, $meetup_event );
-			return $update_event_id;
-		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator' );
-			return;
-		}
-	}
-
-	/**
-	 * Fetch group slug from group url.
-	 *
-	 * @since    1.0.0
-	 * @param array $meetup_event Meetup event.
+	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function format_event_args_for_tec( $meetup_event, $event_data = array() ) {
+	public function generate_centralize_array( $meetup_event ) {
 
-		if ( array_key_exists( 'time', $meetup_event ) ) {
-			$event_start_time_utc = floor( $meetup_event['time'] / 1000 );
-		} else {
-			$event_start_time_utc = time();
+		if( ! isset( $meetup_event['id'] ) ){
+			return false;
 		}
 
+		$start_time = $start_time_utc = time();
+		$end_time = $end_time_utc = time();
+		$utc_offset = 0;
+
+		if ( array_key_exists( 'time', $meetup_event ) ) {
+			$start_time_utc = floor( $meetup_event['time'] / 1000 );
+		}
 		$event_duration = array_key_exists( 'duration', $meetup_event ) ? $meetup_event['duration'] : 0;
 		$event_duration = absint( floor( $event_duration / 1000 ) ); // convert to seconds.
-		$event_end_time_utc = absint( $event_start_time_utc + $event_duration );
+		$end_time_utc = absint( $start_time_utc + $event_duration );
 
 		$utc_offset = array_key_exists( 'utc_offset', $meetup_event ) ? $meetup_event['utc_offset'] : 0;
 		$utc_offset = floor( $utc_offset / 1000 );
-		$event_start_time = absint( $event_start_time_utc + $utc_offset );
-		$event_end_time = absint( $event_end_time_utc + $utc_offset );
-		
-		$default_status = isset( $event_data['event_status']) ? $event_data['event_status'] : 'pending';
-		$post_type = 'tribe_events';
+		$start_time = absint( $start_time_utc + $utc_offset );
+		$end_time = absint( $end_time_utc + $utc_offset );
 
-		if( defined( 'WPEA_TEC_POSTTYPE' ) ){
-			$post_type = WPEA_TEC_POSTTYPE;			
-		}
+		$event_name = isset( $meetup_event['name']) ? sanitize_text_field( $meetup_event['name'] ) : '';
+		$event_description = isset( $meetup_event['description'] ) ? $meetup_event['description'] : '';
+		$event_url = isset( $meetup_event['link'] ) ? $meetup_event['link'] : '';
+		$image_url = '';
 
-		$event_args  = array(
-			'post_type'             => $post_type,
-			'post_title'            => array_key_exists( 'name', $meetup_event ) ? sanitize_text_field( $meetup_event['name'] ) : '',
-			'post_status'           => $default_status,
-			'post_content'          => array_key_exists( 'description', $meetup_event ) ? $meetup_event['description'] : '',
-			'EventStartDate'        => date( 'Y-m-d', $event_start_time ),
-			'EventStartHour'        => date( 'h', $event_start_time ),
-			'EventStartMinute'      => date( 'i', $event_start_time ),
-			'EventStartMeridian'    => date( 'a', $event_start_time ),
-			'EventEndDate'          => date( 'Y-m-d', $event_end_time ),
-			'EventEndHour'          => date( 'h', $event_end_time ),
-			'EventEndMinute'        => date( 'i', $event_end_time ),
-			'EventEndMeridian'      => date( 'a', $event_end_time ),
-			'EventStartDateUTC'     => date( 'Y-m-d H:i:s', $event_start_time_utc ),
-			'EventEndDateUTC'       => date( 'Y-m-d H:i:s', $event_end_time_utc ),
-			'EventURL'              => array_key_exists( 'link', $meetup_event ) ? $meetup_event['link'] : '',
-			'EventShowMap' 			=> 1,
-			'EventShowMapLink'		=> 1,
+		$xt_event = array(
+			'origin'          => 'meetup',
+			'ID'              => isset( $meetup_event['id'] ) ? $meetup_event['id'] : '',
+			'name'            => $event_name,
+			'description'     => $event_description,
+			'starttime_local' => $start_time,
+			'endtime_local'   => $end_time,
+			'startime_utc'    => $start_time_utc,
+			'endtime_utc'     => $end_time_utc,
+			'timezone'        => '',
+			'utc_offset'      => $utc_offset,
+			'event_duration'  => '',
+			'is_all_day'      => '',
+			'url'             => $event_url,
+			'image_url'       => $image_url,
 		);
 
 		if ( array_key_exists( 'group', $meetup_event ) ) {
-			$event_args['organizer'] = $this->get_organizer_args( $meetup_event );
+			$xt_event['organizer'] = $this->get_organizer( $meetup_event );
 		}
 
 		if ( array_key_exists( 'venue', $meetup_event ) ) {
-			$event_args['venue'] = $this->get_venue_args( $meetup_event );
+			$xt_event['location'] = $this->get_location( $meetup_event );
 		}
-
-		return $event_args;
+		return $xt_event;
 	}
 
 	/**
-	 * Get organizer args for event
+	 * Get organizer args for event.
 	 *
 	 * @since    1.0.0
 	 * @param array $meetup_event Meetup event.
 	 * @return array
 	 */
-	public function get_organizer_args( $meetup_event ) {
+	public function get_organizer( $meetup_event ) {
 		if ( ! array_key_exists( 'group', $meetup_event ) ) {
 			return null;
 		}
-		$event_organizer = $meetup_event['group'];
-		$post_type = 'tribe_organizer';
-		if ( class_exists( 'Tribe__Events__Organizer' ) ) {
-			$post_type = Tribe__Events__Organizer::POSTTYPE;
-		}
-		$existing_organizer = get_posts( array(
-			'posts_per_page' => 1,
-			'post_type' => $post_type,
-			'meta_key' => 'wpea_event_organizer_id',
-			'meta_value' => $event_organizer['id'],
-			'suppress_filters' => false,
-		) );
 
-		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
-			return array(
-				'OrganizerID' => $existing_organizer[0]->ID,
-			);
-		}
+		$organizer = $meetup_event['group'];
+		$event_organizer = array(
+			'ID'          => isset( $organizer['id'] ) ? $organizer['id'] : '',
+			'name'        => isset( $organizer['name'] ) ? $organizer['name'] : '',
+			'description' => isset( $organizer['description'] ) ? $organizer['description'] : '',
+			'email'       => '',
+			'phone'       => '',
+			'url'         => isset( $organizer['urlname'] ) ? "https://www.meetup.com/".$organizer['urlname']."/":'',
+			'image_url'   => '',
+		);
+		return $event_organizer;
 
-		$creat_organizer = tribe_create_organizer( array(
-			'Organizer' => isset( $event_organizer['name'] ) ? $event_organizer['name'] : '',
-		) );
+		/*$meetup_group_id = $this->fetch_group_slug_from_url( $meetup_url );
+		if( $meetup_group_id != '' ){
+			$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/?key=' . $this->api_key;
+		    $get_oraganizer = wp_remote_get( $meetup_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+			if ( !is_wp_error( $get_oraganizer ) ) {
+				$oraganizer = json_decode( $get_oraganizer['body'], true );
+				if ( is_array( $oraganizer ) && ! isset( $oraganizer['errors'] ) ) {
+					if ( ! empty( $oraganizer ) && array_key_exists( 'id', $oraganizer ) ) {
 
-		if ( $creat_organizer ) {
-			update_post_meta( $creat_organizer, 'wpea_event_organizer_id', $event_organizer['id'] );
-			return array(
-				'OrganizerID' => $creat_organizer,
-			);
-		}
-
-		return null;
+						$image_url  = isset( $oraganizer['organizer']['photo']['photo_link'] ) ? urldecode( $$oraganizer['organizer']['photo']['photo_link'] ) : '';
+						
+						$event_organizer = array(
+							'ID'          => isset( $oraganizer['id'] ) ? $oraganizer['id'] : '',
+							'name'        => isset( $oraganizer['name'] ) ? $oraganizer['name'] : '',
+							'description' => isset( $oraganizer['description'] ) ? $oraganizer['description'] : '',
+							'email'       => '',
+							'phone'       => '',
+							'url'         => isset( $oraganizer['link'] ) ? $oraganizer['link'] : '',
+							'image_url'   => $image_url,
+						);
+						return $event_organizer;
+					}
+				}
+			}
+		}*/
 	}
 
 	/**
-	 * Get venue args for event
+	 * Get location args for event
 	 *
 	 * @since    1.0.0
-	 * @param array $meetup_event Meetup event.
+	 * @param array $meetup_event meetup event.
 	 * @return array
 	 */
-	public function get_venue_args( $meetup_event ) {
+	public function get_location( $meetup_event ) {
 		if ( ! array_key_exists( 'venue', $meetup_event ) ) {
 			return null;
 		}
-		$event_venue = $meetup_event['venue'];
-		$post_type = 'tribe_venue';
-		if ( class_exists( 'Tribe__Events__Venue' ) ) {
-			$post_type = Tribe__Events__Venue::POSTTYPE;
-		}
-
-		$existing_venue = get_posts( array(
-			'posts_per_page' => 1,
-			'post_type' => $post_type,
-			'meta_key' => 'wpea_event_venue_id',
-			'meta_value' => $event_venue['id'],
-			'suppress_filters' => false,
-		) );
-
-		if ( is_array( $existing_venue ) && ! empty( $existing_venue ) ) {
-			return array(
-				'VenueID' => $existing_venue[0]->ID,
-			);
-		}
-
-		$crate_venue = tribe_create_venue( array(
-			'Venue' => $event_venue['name'],
-			'Address' => isset( $event_venue['address_1'] ) ? $event_venue['address_1'] : '',
-			'City' => isset( $event_venue['city'] ) ? $event_venue['city'] : '',
-			'State' => isset( $event_venue['state'] ) ? $event_venue['state'] : '',
-			'Country' => isset( $event_venue['country'] ) ? strtoupper( $event_venue['country'] ) : '',
-			'Zip' => isset( $event_venue['zip'] ) ? $event_venue['zip'] : '',
-			'Phone' => isset( $event_venue['phone'] ) ? $event_venue['phone'] : '',
-		) );
-
-		if ( $crate_venue ) {
-			update_post_meta( $crate_venue, 'wpea_event_venue_id', $event_venue['id'] );
-			return array(
-				'VenueID' => $crate_venue,
-			);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Check for Existing Event
-	 *
-	 * @since    1.0.0
-	 * @param int $meetup_event_id meetup event id.
-	 * @return /boolean
-	 */
-	public function get_event_by_event_id( $meetup_event_id ) {
-		$event_args = array(
-			'post_type' => WPEA_TEC_POSTTYPE,
-			'post_status' => array( 'pending', 'draft', 'publish' ),
-			'posts_per_page' => -1,
-			'meta_key'   => 'wpea_meetup_event_id',
-			'meta_value' => $meetup_event_id,
+		$venue = $meetup_event['venue'];
+		$event_location = array(
+			'ID'           => isset( $venue['id'] ) ? $venue['id'] : '',
+			'name'         => isset( $venue['name'] ) ? $venue['name'] : '',
+			'description'  => '',
+			'address_1'    => isset( $venue['address_1'] ) ? $venue['address_1'] : '',
+			'address_2'    => isset( $venue['address_2'] ) ? $venue['address_2'] : '',
+			'city'         => isset( $venue['city'] ) ? $venue['city'] : '',
+			'state'        => isset( $venue['state'] ) ? $venue['state'] : '',
+			'country'      => isset( $venue['country'] ) ? strtoupper( $venue['country'] ) : '',
+			'zip'	       => isset( $venue['zip'] ) ? $venue['zip'] : '',
+			'lat'     	   => isset( $venue['lat'] ) ? $venue['lat'] : '',
+			'long'		   => isset( $venue['lon'] ) ? $venue['lon'] : '',
+			'full_address' => isset( $venue['address_1'] ) ? $venue['address_1'] : '',
+			'url'          => '',
+			'image_url'    => '',
+			'phone'	       => isset( $venue['phone'] ) ? $venue['phone'] : '',
 		);
-
-		$events = new WP_Query( $event_args );
-		if ( $events->have_posts() ) {
-			while ( $events->have_posts() ) {
-				$events->the_post();
-				return get_the_ID();
-			}
-		}
-		wp_reset_postdata();
-		return false;
+		return $event_location;
 	}
-
+	
 	/**
 	 * Get organizer Name based on Organiser ID.
 	 *

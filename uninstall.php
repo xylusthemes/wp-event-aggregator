@@ -18,7 +18,7 @@ delete_option( WPEA_OPTIONS );
 
 // Remove schduled Imports
 $scheduled_import_args = array(
-		'post_type'     => 'xt_scheduled_imports',
+		'post_type'     => 'wpea_import_history',
 		'posts_per_page' => -1,
 	);
 $scheduled_imports = get_posts( $scheduled_import_args );

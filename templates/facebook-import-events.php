@@ -59,7 +59,7 @@ global $importevents;
 					    		<?php esc_attr_e( 'Organization and page username / ID to fetch events from','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td> 
-					    		<input class="wpea_text facebook_page_username" name="facebook_page_username" class="facebook_page_username" type="text" disabled="disabled" />
+					    		<input class="wpea_text" name="facebook_page_username" class="facebook_page_username" type="text" disabled="disabled" />
 			                    <span class="wpea_small">
 			                        <?php _e( ' Eg. username for https://www.facebook.com/xylusinfo/ is "xylusinfo".', 'wp-event-aggregator' ); ?>
 			                    </span>
@@ -72,13 +72,13 @@ global $importevents;
 					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-						    	<?php wpea_render_import_type(); ?>
+						    	<?php $importevents->common->render_import_type(); ?>
 					    	</td>
 					    </tr>
 
 					    <?php 
-					    wpea_render_eventstatus_input();
-					    wpea_render_category_input();
+					    $importevents->common->render_import_into_and_taxonomy();
+					    $importevents->common->render_eventstatus_input();
 					    ?>
 
 

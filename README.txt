@@ -1,20 +1,20 @@
 === WP Event Aggregator ===
 Contributors: xylus
 Donate link: http://xylusthemes.com
-Tags: event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, RSVP, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import
+Tags: event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, RSVP, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site (The Events Calendar).
+Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
 
 == Description ==
 
-WP Event Aggregator allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site (The Events Calendar).
+WP Event Aggregator allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
 
-This is add-on plugin for [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/), which allows you to run imports from multiple sources right from your dashboard, including Facebook, Meetup, Google Calendar( using iCal Url or .ics file ), Outlook Calendar ( using iCal Url or .ics file ), Apple Calendar ( using iCal Url or .ics file ), iCalendar, and ICS into The Events Calendar. As an add-on plugin this plugin need The Events Calendar installed and activated.
+This Plugin is works as a stand alone as well as add-on plugin for below listed Events plugins, which allows you to run imports from multiple sources right from your dashboard, including Facebook, Meetup, Google Calendar( using iCal Url or .ics file ), Outlook Calendar ( using iCal Url or .ics file ), Apple Calendar ( using iCal Url or .ics file ), iCalendar, and ICS into WordPress. As a stand alone plugin this plugin work independently for event import and Event Management.
 
 **Import Events sources**
 
@@ -26,6 +26,15 @@ This is add-on plugin for [The Events Calendar](https://wordpress.org/plugins/th
 * Google Calendar ( using iCal Url or .ics file )
 * Outlook Calendar ( using iCal Url or .ics file )
 * Apple Calendar ( using iCal Url or .ics file )
+
+**Import Events into**
+
+* [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/)
+* [Events manager](https://wordpress.org/plugins/events-manager/)
+* [All-in-One Event Calendar](https://wordpress.org/plugins/all-in-one-event-calendar/)
+* [Event Organiser](https://wordpress.org/plugins/event-organiser/)
+* [EventON](https://codecanyon.net/item/eventon-wordpress-event-calendar-plugin/1211017)
+* [My Calendar](https://wordpress.org/plugins/my-calendar/)
 
 **Additional [PRO Version](https://xylusthemes.com/plugins/wp-event-aggregator/) Features**
 
@@ -57,9 +66,21 @@ This is add-on plugin for [The Events Calendar](https://wordpress.org/plugins/th
 6. Facebook event import using Page or Organizer ID (Pro).
 7. iCal events import.
 8. Scheduled Imports (Pro)
-9. Settings for import events.
+9. Import History
+10. Settings for import events.
 
 == Changelog ==
+
+= 1.1.0 =
+* Added: in-built event management system.
+* Added: import into Events Manager
+* Added: Import into My Calendar
+* Added: Import into eventON
+* Added: import into All-in-One Event Calendar
+* Added: import into Event Organizer
+* Added: Import history
+* Improvements in scheduled imports
+* Fixes: some bug fixes
 
 = 1.0.0 =
 * Initial Version.

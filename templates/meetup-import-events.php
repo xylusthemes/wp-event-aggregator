@@ -32,7 +32,7 @@ global $importevents;
 					    		<?php esc_attr_e( 'Meetup Group URL','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-					    		<input class="wpea_text" name="meetup_url" type="text" />
+					    		<input class="wpea_text" name="meetup_url" type="url" required="required" />
 			                    <span class="wpea_small">
 			                        <?php _e( 'Insert meetup group url ( Eg. https://www.meetup.com/ny-tech/).', 'wp-event-aggregator' ); ?>
 			                    </span>
@@ -44,13 +44,13 @@ global $importevents;
 					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-						    	<?php wpea_render_import_type(); ?>
+						    	<?php $importevents->common->render_import_type(); ?>
 					    	</td>
 					    </tr>
 
 					    <?php 
-					    wpea_render_eventstatus_input();
-					    wpea_render_category_input();
+					    $importevents->common->render_import_into_and_taxonomy();
+					    $importevents->common->render_eventstatus_input();
 					    ?>
 
 
@@ -70,9 +70,7 @@ global $importevents;
 				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
 				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? $_REQUEST['tab'] : 'eventbrite' ?>" />
 				<input type="hidden" name="ntab" value="<?php echo $_REQUEST['ntab'] ?>" />
-				<?php
-				do_action( 'wpea_render_pro_notice' );
-        		?>
+				<?php do_action( 'wpea_render_pro_notice' ); ?>
 				</form>
 				<?php
 			} ?>

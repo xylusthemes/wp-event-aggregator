@@ -33,7 +33,7 @@ global $importevents;
 					        </th>
 					        <td>
 					            <select name="ical_import_by" id="ical_import_by">
-					            	<option value="ics_file" ><?php esc_attr_e( '.ics File','wp-event-aggregator' ); ?></option>
+					            	<option value="ics_file"><?php esc_attr_e( '.ics File','wp-event-aggregator' ); ?></option>
 			                    	<option value="ical_url"><?php esc_attr_e( 'iCal URL','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
@@ -82,16 +82,15 @@ global $importevents;
 					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-						    	<?php wpea_render_import_type(); ?>
+						    	<?php $importevents->common->render_import_type(); ?>
 					    	</td>
 					    </tr>
 
 					    <?php 
-					    wpea_render_eventstatus_input();
-					    wpea_render_category_input();
+					    $importevents->common->render_import_into_and_taxonomy();
+					    $importevents->common->render_eventstatus_input();
 					    ?>
-
-
+					    
 					</tbody>
 		        </table>
                 
