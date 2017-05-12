@@ -1,0 +1,197 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ .upgrade_to_pro{
+	padding-top: 100px;
+	padding: 15px;
+	border-radius: 2px;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+	margin-bottom: 20px;
+	background: url('../images/xt_logo.png') no-repeat bottom 5%right 5% #fff;
+	background-size: 20%;
+}
+.upgrade_to_pro h2{
+	font-size: 22px !important;
+	padding: 0px !important; 
+}
+.upgrade_button{
+	height: 36px !important;
+	padding: 4px 20px !important;
+	font-size: 16px !important;
+}
+
+.hide_frequency .import_frequency, .wpea_eventbrite_form tr.eventbrite_organizer_id{
+  display: none;
+}
+
+.setting_bar {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 6px 0 6px 12px;
+}
+
+.import_events_nav{
+	background-color: #fafafa;
+}
+
+.import_events_nav ul.vercal_tabs{
+	position: relative;
+	float: left;
+	list-style: none;
+	width: 200px;
+	line-height: 1em;
+	margin: 0 0 -1px 0;
+	padding: 0;
+	background-color: #fafafa;
+	border-right: 1px solid #eee;
+	box-sizing: border-box;
+}
+
+.import_events_nav ul.vercal_tabs li {
+
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    line-height: 20px;
+
+}
+
+.import_events_nav ul.vercal_tabs li a {
+    display: block;
+    margin: 0;
+    padding: 12px;
+    line-height: 20px !important;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+    box-shadow: none;
+    font-size: 14px;
+}
+
+.import_events_nav ul.vercal_tabs li.active a {
+    position: relative;
+    font-weight: 700;
+    color: #555;
+    background-color: #fff;
+    margin: 0px -1px 0px 0px;
+    border-left: 2px solid #00a0d2;
+}
+
+.import_events_nav_content {
+    float: left;
+    width: calc(100% - 200px);
+    margin-left: -1px;
+    border-left: 1px solid #eee;
+    padding: 20px;
+	box-sizing: border-box;
+	background-color: #fff;
+}
+
+.wp-event-aggregator-page-content{
+	background-color: #fff;
+	border: 1px solid #ccc;	
+	margin: 20px 0;
+}
+
+@media ( max-width: 460px ){
+	.import_events_nav ul.vercal_tabs{
+		float: none;
+		width: 100%;
+	}
+	.import_events_nav_content {
+	    float: none;
+	    width: 100%;
+	}
+}
+
+.wpea_container * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.wpea_container *:before,
+.wpea_container *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.wpea_container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.wpea_row {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.xtei-column{
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.wpea_container:before,
+.wpea_container:after,
+.wpea_row:before,
+.wpea_row:after {
+  content: " ";
+  display: table;
+}
+
+.wpea_container:after,
+.wpea_row:after {
+  clear: both;
+}
+
+.wpea_well{
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    margin: 00px 0;
+    padding: 8px 20px 12px;
+}
+.wpea_label{
+    font-weight: bold;
+    margin-right: 20px;
+    display: block;
+    margin-bottom: 5px;
+}
+.wpea_small {
+    font-size: 13px;
+    color: #777;
+    display: block;
+    margin-top: 5px;
+}
+.wpea_submit_button{
+    margin-top: 10px !important;
+}
+
+#poststuff .stuffbox > h3, #poststuff h2, #poststuff h3.hndle {
+    padding-bottom: 0px;
+}
+.wpea_element {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+.wpea_small span.borderall {
+    border: 2px solid red;
+}
+.tecauto_cat, .emauto_cat{
+  display: none;
+  margin-left: 25px;
+}
+
+.wpea_desciption {
+    display: block;
+    margin-left: 25px;
+    font-size: 13px;
+    font-style: italic;
+    color: #bababa;
+}
