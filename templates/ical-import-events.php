@@ -72,7 +72,7 @@ global $importevents;
 					            <input type="text" name="start_date" class="xt_datepicker start_date" placeholder="<?php esc_html_e('Select start date', 'wp-event-aggregator' ); ?>"> - 
 					            <input type="text" name="end_date" class="xt_datepicker end_date" placeholder="<?php esc_html_e('Select end date', 'wp-event-aggregator' ); ?>">
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select date range from which you want to import events.', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Select date range from which you want to import events. Default startdate is Today', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>

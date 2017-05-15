@@ -80,7 +80,7 @@ class WP_Event_Aggregator_TEC {
 	public function import_event( $centralize_array, $event_args ){
 		global $importevents;
 
-		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array['ID'] );
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		$formated_args = $this->format_event_args_for_tec( $centralize_array );
 		if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
 			$formated_args['post_status'] = $event_args['event_status'];
@@ -117,6 +117,8 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $new_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $new_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
 			update_post_meta( $new_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
+			update_post_meta( $new_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
+            update_post_meta( $new_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
 			
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
@@ -141,7 +143,7 @@ class WP_Event_Aggregator_TEC {
 			);
 
 		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator' );
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator' );
 			return;
 		}
 	}
@@ -165,6 +167,8 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $update_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $update_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
+			update_post_meta( $update_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
+            update_post_meta( $update_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
 			
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? (array) $event_args['event_cats'] : array();
@@ -190,7 +194,7 @@ class WP_Event_Aggregator_TEC {
 				'id' 	 => $update_event_id
 			);
 		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator' );
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator' );
 			return;
 		}
 	}
@@ -229,6 +233,9 @@ class WP_Event_Aggregator_TEC {
 			'EventShowMap' 			=> 1,
 			'EventShowMapLink'		=> 1,
 		);
+		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
+            $event_args['EventAllDay'] = 'yes';
+        }
 
 		if ( array_key_exists( 'organizer', $centralize_array ) ) {
 			$event_args['organizer'] = $this->get_organizer_args( $centralize_array['organizer'] );

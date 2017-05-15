@@ -55,7 +55,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	 * @return array
 	 */
 	function column_title( $item ) {
-
+		global $importevents;
 		$wpea_url_delete_args = array(
 			'page'   => wp_unslash( $_REQUEST['page'] ),
 			'wpea_action' => 'wpea_simport_delete',
@@ -65,13 +65,23 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		$actions = array(
 		    'delete' => sprintf( '<a href="%1$s" onclick="return confirm(\'Warning!! Are you sure to Delete this scheduled import? Scheduled import will be permanatly deleted.\')">%2$s</a>',esc_url( wp_nonce_url( add_query_arg( $wpea_url_delete_args ), 'wpea_delete_import_nonce' ) ), esc_html__( 'Delete', 'wp-event-aggregator' ) ),
 		);
+		
+		$import_into = '';
+		$active_plugins = $importevents->common->get_active_supported_event_plugins();
+		if( isset( $active_plugins[$item["import_into"]] ) ){
+			$import_into = $active_plugins[$item["import_into"]];
+			if( $import_into != '' ){
+				$import_into = '(' . $import_into . ')';
+			}
+		}
 
 		// Return the title contents.
-		return sprintf('<strong>%1$s</strong><span>%4$s</span> <span style="color:silver">(id:%2$s)</span>%3$s',
+		return sprintf('<strong>%1$s</strong><span>%4$s</span> <span style="display:block;">%5$s</span> <span style="color:silver">(id:%2$s)</span>%3$s',
 		    $item['title'],
 		    $item['ID'],
 		    $this->row_actions( $actions ),
-		    __('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>'
+		    __('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
+		    $import_into
 		);
 	}
 
@@ -90,11 +100,16 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			'import_id'  => $item['ID'],
 		);
 
+		$total_import = '';
+		if( $item['total_import'] > 0 ){
+			$total_import = "<strong>".esc_html__( 'Total imported Events:', 'wp-event-aggregator' )."</strong> ".$item['total_import'];	
+		}
 		// Return the title contents.
-		return sprintf( '<a class="button-primary" href="%1$s">%2$s</a><br/>%3$s',
+		return sprintf( '<a class="button-primary" href="%1$s">%2$s</a><br/>%3$s<br/>%4$s',
 			esc_url( wp_nonce_url( add_query_arg( $xtmi_run_import_args ), 'wpea_run_import_nonce' ) ),
 			esc_html__( 'Import Now', 'wp-event-aggregator' ),
-			$item['last_import']
+			$item['last_import'],
+			$total_import
 		);
 	}
 
@@ -171,7 +186,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	 * @since    1.0.0
 	 */
 	function get_scheduled_import_data( $origin = '' ) {
-		global $importevents;
+		global $importevents, $wpdb;
 
 		$scheduled_import_data = array( 'total_records' => 0, 'import_data' => array() );
 		$per_page = 10;
@@ -233,6 +248,11 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 						}elseif( $import_plugin == 'wpea' ){
 
 							$get_term = get_term( $term, $importevents->wpea->get_taxonomy() );	
+
+						}elseif( $import_plugin == 'eventum' ){
+
+							$get_term = get_term( $term, $importevents->eventum->get_taxonomy() );
+
 						}else{
 							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );
 						}
@@ -243,14 +263,13 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					}
 				}	
 
-				$last_import_history_date = '123132';
+				$last_import_history_date = '';
 				$history_args = array(
 					'post_type'   => 'wpea_import_history',
 					'post_status' => 'publish',
 					'posts_per_page' => 1,
 					'meta_key'   => 'schedule_import_id',
 					'meta_value' => $import_id,
-
 				);
 
 				$history = new WP_Query( $history_args );
@@ -261,6 +280,10 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					}
 				}
 				wp_reset_postdata();
+	
+				$totalimport_query = $wpdb->prepare( "SELECT SUM( meta_value) AS created_total FROM ".$wpdb->postmeta." WHERE post_id IN ( SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key = 'schedule_import_id' AND meta_value = %d ) AND meta_key = 'created'", $import_id );
+
+				$totalimport = $wpdb->get_var( $totalimport_query );
 
 				$scheduled_import_data['import_data'][] = array(
 					'ID' => $import_id,
@@ -269,7 +292,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					'import_category' => implode( ', ', $term_names ),
 					'import_frequency'=> isset( $import_data['import_frequency'] ) ? ucfirst( $import_data['import_frequency'] ) : '',
 					'import_origin'   => $import_origin,
+					'import_into'     => $import_plugin,
 					'last_import'     => $last_import_history_date,
+					'total_import'	  => $totalimport
 				);
 			}
 		}
@@ -502,6 +527,11 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 						}elseif( $import_plugin == 'wpea' ){
 
 							$get_term = get_term( $term, $importevents->wpea->get_taxonomy() );	
+							
+						}elseif( $import_plugin == 'eventum' ){
+
+							$get_term = get_term( $term, $importevents->eventum->get_taxonomy() );
+							
 						}else{
 							
 							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );

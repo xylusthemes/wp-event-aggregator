@@ -37,6 +37,7 @@ class WP_Event_Aggregator_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts') );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles') );
 		add_action( 'admin_notices', array( $this, 'display_notices') );
+		add_filter( 'submenu_file', array( $this, 'get_selected_tab_submenu' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_event_aggregator_credit' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget') );
 	}
@@ -55,7 +56,7 @@ class WP_Event_Aggregator_Admin {
 		$submenu['import_events'][] = array( __( 'Eventbrite Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=eventbrite' ) );
     	$submenu['import_events'][] = array( __( 'Meetup Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=meetup' ) );
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
-    	$submenu['import_events'][] = array( __( 'iCalendar/.ics Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
+    	$submenu['import_events'][] = array( __( 'iCalendar/.ics Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=ical' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
     	$submenu['import_events'][] = array( __( 'Support & help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
 
@@ -90,7 +91,7 @@ class WP_Event_Aggregator_Admin {
 	function enqueue_admin_styles( $hook ) {
 
 	  	$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
-	 	wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.12.0" );
+	 	wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
 	 	wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, "" );
 	}
 
@@ -207,10 +208,10 @@ class WP_Event_Aggregator_Admin {
 	 * @since    1.0.0
 	 */
 	public function display_notices() {
-		global $errors, $success_msg, $warnings, $info_msg;
+		global $wpea_errors, $wpea_success_msg, $wpea_warnings, $wpea_info_msg;
 		
-		if ( ! empty( $errors ) ) {
-			foreach ( $errors as $error ) :
+		if ( ! empty( $wpea_errors ) ) {
+			foreach ( $wpea_errors as $error ) :
 			    ?>
 			    <div class="notice notice-error is-dismissible">
 			        <p><?php echo $error; ?></p>
@@ -219,8 +220,8 @@ class WP_Event_Aggregator_Admin {
 			endforeach;
 		}
 
-		if ( ! empty( $success_msg ) ) {
-			foreach ( $success_msg as $success ) :
+		if ( ! empty( $wpea_success_msg ) ) {
+			foreach ( $wpea_success_msg as $success ) :
 			    ?>
 			    <div class="notice notice-success is-dismissible">
 			        <p><?php echo $success; ?></p>
@@ -229,8 +230,8 @@ class WP_Event_Aggregator_Admin {
 			endforeach;
 		}
 
-		if ( ! empty( $warnings ) ) {
-			foreach ( $warnings as $warning ) :
+		if ( ! empty( $wpea_warnings ) ) {
+			foreach ( $wpea_warnings as $warning ) :
 			    ?>
 			    <div class="notice notice-warning is-dismissible">
 			        <p><?php echo $warning; ?></p>
@@ -239,8 +240,8 @@ class WP_Event_Aggregator_Admin {
 			endforeach;
 		}
 
-		if ( ! empty( $info_msg ) ) {
-			foreach ( $info_msg as $info ) :
+		if ( ! empty( $wpea_info_msg ) ) {
+			foreach ( $wpea_info_msg as $info ) :
 			    ?>
 			    <div class="notice notice-info is-dismissible">
 			        <p><?php echo $info; ?></p>
@@ -394,6 +395,8 @@ class WP_Event_Aggregator_Admin {
 			'import-eventbrite-events' => esc_html__( 'Import Eventbrite Events', 'wp-event-aggregator' ),
 			'import-meetup-events' => esc_html__( 'Import Meetup Events', 'wp-event-aggregator' ),
 			'wp-bulk-delete' => esc_html__( 'WP Bulk Delete', 'wp-event-aggregator' ),
+			'xt-facebook-events' => esc_html__( 'Facebook Events', 'wp-event-aggregator' ),
+			'event-schema' => esc_html__( 'Event Schema / Structured Data: Google Rich Snippet Schema for Event', 'wp-event-aggregator' ),
 		);
 	}
 
@@ -425,7 +428,7 @@ class WP_Event_Aggregator_Admin {
 				),
 			) );
 
-			if ( ! is_wp_error( $data ) ) {
+			if ( ! is_wp_error( $plugin_data ) ) {
 				
 			} else {
 				// If there was a bug on the Current Request just leave
@@ -434,5 +437,22 @@ class WP_Event_Aggregator_Admin {
 			set_transient( $transient_name, $plugin_data, 24 * HOUR_IN_SECONDS );
 		}
 		return $plugin_data;
+	}
+
+	/**
+	 * Tab Submenu got selected.
+	 *
+	 * @since 1.2
+	 * @return void
+	 */
+	public function get_selected_tab_submenu( $submenu_file ){
+		if( !empty( $_GET['page'] ) && $_GET['page'] == 'import_events' ){
+			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'settings', 'support' );
+			$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
+			if( in_array( $tab, $allowed_tabs ) ){
+				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
+			}
+		}
+		return $submenu_file;
 	}
 }

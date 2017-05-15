@@ -67,7 +67,7 @@ class WP_Event_Aggregator_Aioec {
 			return false;
 		}
 
-		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array['ID'] );
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		
 		if ( $is_exitsing_event ) {
 			// Update event or not?
@@ -130,6 +130,8 @@ class WP_Event_Aggregator_Aioec {
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $event_uri ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
+			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
+			update_post_meta( $inserted_event_id, '_wpea_endtime_str', $end_time );
 			
 			// Custom table Details
 			$event_array = array(
@@ -159,6 +161,16 @@ class WP_Event_Aggregator_Aioec {
 			if( $lat != '' && $lon != '' ){
 				$show_map = $show_coordinates = 1;
 			}
+			$full_address = $address;
+			if( $city != '' ){
+				$full_address .= ', '.$city;
+			}
+			if( $state != '' ){
+				$full_address .= ', '.$state;
+			}
+			if( $zip != '' ){
+				$full_address .= ' '.$zip;
+			}
 
 			$organizer = isset( $centralize_array['organizer'] ) ? $centralize_array['organizer'] : '';
 			$org_name  = isset( $organizer['name'] ) ? $organizer['name'] : '';
@@ -170,12 +182,12 @@ class WP_Event_Aggregator_Aioec {
 				'post_id' 		   => $inserted_event_id,
 				'start'            => $start_time,
 				'end' 	  		   => $end_time,
-				'timezone_name'    => '',
+				'timezone_name'    => 'UTC',
 				'allday' 	  	   => 0,
 				'instant_event'    => 0,
 				'venue' 	  	   => $location_name,
 				'country' 	  	   => $country,
-				'address' 	  	   => $address,
+				'address' 	  	   => $full_address,
 				'city' 	       	   => $city,
 				'province' 	       => $state,
 				'postal_code' 	   => $zip,
@@ -183,9 +195,9 @@ class WP_Event_Aggregator_Aioec {
 				'contact_name' 	   => $org_name,
 				'contact_phone'    => $org_phone,
 				'contact_email'    => $org_email,
-				'contact_url' 	   => $event_uri,			
+				'contact_url' 	   => $org_url,			
 				'cost'   		   => '',
-				'ticket_url' 	   => '',
+				'ticket_url' 	   => $event_uri,
 				'ical_uid' 	  	   => $this->get_ical_uid_for_event( $inserted_event_id ),
 				'show_coordinates' => $show_coordinates,
 			);

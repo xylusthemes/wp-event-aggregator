@@ -28,6 +28,11 @@ class WP_Event_Aggregator_Facebook {
 	*/
 	public $fb_graph_url;
 
+	/*
+	*	Facebook Access Token
+	*/
+	private $fb_access_token;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -52,12 +57,12 @@ class WP_Event_Aggregator_Facebook {
 	 */
 	public function import_events( $event_data = array() ){
 
-		global $errors;
+		global $wpea_errors;
 		$imported_events = array();
 		$facebook_event_ids = array();
 
 		if( $this->fb_app_id == '' || $this->fb_app_secret == '' ){
-			$errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
 			return;
 		}			
 
@@ -78,7 +83,10 @@ class WP_Event_Aggregator_Facebook {
 		if( !empty( $facebook_event_ids ) ){
 			foreach ($facebook_event_ids as $facebook_event_id ) {
 				if( $facebook_event_id != '' ){
-					$imported_events[] = $this->import_event_by_event_id( $facebook_event_id, $event_data );
+					$imported_event = $this->import_event_by_event_id( $facebook_event_id, $event_data );
+					if( !empty( $imported_event ) ){
+						$imported_events[] = $imported_event;
+					}
 				}		
 			}
 		}
@@ -94,28 +102,26 @@ class WP_Event_Aggregator_Facebook {
 	 */
 	public function import_event_by_event_id( $facebook_event_id, $event_data = array() ){
 
-		global $errors, $importevents;
+		global $wpea_errors, $importevents;
 		$options = wpea_get_import_options( 'facebook' );
 		$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
 		
-		if( $facebook_event_id == '' || $this->fb_app_id == '' || $this->fb_app_secret == '' ){
-			if( $this->fb_app_id == '' || $this->fb_app_secret == '' ){
-				$errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
-				return;
-			}
+		if( $this->fb_app_id == '' || $this->fb_app_secret == '' ){
+			$wpea_errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
 			return false;
 		}
 
-		/*$is_exitsing_event = $this->get_event_by_event_id( $facebook_event_id );
-		if ( $is_exitsing_event && $update_events == 'no' ) {
-			$errors[] = __( 'Facebook event is already exists.', 'wp-event-aggregator');
-			return;
-		}*/
+		if( $facebook_event_id == '' || !is_numeric( $facebook_event_id ) ){
+			$wpea_errors[] = sprintf( esc_html__( 'Please provide valid Facebook event ID: %s.', 'wp-event-aggregator' ), $facebook_event_id ) ;
+			return false;
+		}
 
 		$facebook_event_object = $this->get_facebook_event_by_event_id( $facebook_event_id );
-
+		if( isset( $facebook_event_object->error ) ){
+			$wpea_errors[] = sprintf( esc_html__( 'We are not able to access Facebook event: %s. Possible reasons: - App Credentials are wrong - Facebook event not exist - Facebook event is not public or some restrictions are there like age,country etc.', 'import-facebook-events-pro' ), $facebook_event_id ) ;
+			return false;
+		}
 		return $this->save_facebook_event( $facebook_event_object, $event_data );
-
 	}
 
 	/**
@@ -142,20 +148,26 @@ class WP_Event_Aggregator_Facebook {
 	 * @since 1.0.0
 	 */
 	public function get_access_token(){
-		$args = array(
-			'grant_type' => 'client_credentials', 
-			'client_id'  => $this->fb_app_id,
-			'client_secret' => $this->fb_app_secret
-			);
-		$access_token_url = add_query_arg( $args, $this->fb_graph_url . 'oauth/access_token' );
-		$access_token_response = wp_remote_get( $access_token_url );
 		
-		$access_token_response_body = wp_remote_retrieve_body( $access_token_response );
-		$access_token_data = json_decode( $access_token_response_body );
+		if( $this->fb_access_token != '' ){
 
-		$access_token = ! empty( $access_token_data->access_token ) ? $access_token_data->access_token : null;
+			return $this->fb_access_token;
+
+		}else{
+			$args = array(
+				'grant_type' => 'client_credentials', 
+				'client_id'  => $this->fb_app_id,
+				'client_secret' => $this->fb_app_secret
+				);
+			$access_token_url = add_query_arg( $args, $this->fb_graph_url . 'oauth/access_token' );
+			$access_token_response = wp_remote_get( $access_token_url );
+			$access_token_response_body = wp_remote_retrieve_body( $access_token_response );
+			$access_token_data = json_decode( $access_token_response_body );
+			$access_token = ! empty( $access_token_data->access_token ) ? $access_token_data->access_token : null;
+			$this->fb_access_token = $access_token;
+			return $access_token;
+		}
 		
-		return $access_token;
 	}
 	
 	/**
@@ -277,7 +289,7 @@ class WP_Event_Aggregator_Facebook {
 		$start_time = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) : date( 'Y-m-d H:i:s');
 		$end_time = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : $start_time;
 
-		$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : '';
+		$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : 'https://www.facebook.com/events/'.$facebook_id;
 		$timezone = $this->get_utc_offset( $facebook_event->start_time );
 		$cover_image = isset( $facebook_event->cover->source ) ? $importevents->common->clean_url( esc_url( $facebook_event->cover->source ) ) : '';
 
@@ -331,8 +343,7 @@ class WP_Event_Aggregator_Facebook {
 					array(
 						'id',
 						'name',
-						'link',
-						'phone'
+						'link'
 					)
 				),
 			)

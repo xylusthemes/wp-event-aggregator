@@ -36,27 +36,37 @@ class WP_Event_Aggregator_Meetup {
 	 */
 	public function import_events( $event_data = array() ){
 
-		global $errors;
+		global $wpea_errors;
 		$imported_events = array();
 		$meetup_url = isset( $event_data['meetup_url'] ) ? $event_data['meetup_url'] : '';
 		
 		if( $this->api_key == '' ){
-			$errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
 			return;
 		}
 
 		$meetup_group_id = $this->fetch_group_slug_from_url( $meetup_url );
-		if( $meetup_group_id == '' ){ return; }
+		if( $meetup_group_id == '' ){
+			$wpea_errors[] = __( 'Please insert valid meetup group URL.', 'wp-event-aggregator');
+			return;
+		}
 
 		$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/events?key=' . $this->api_key;
 	    $meetup_response = wp_remote_get( $meetup_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
-
-		if ( is_wp_error( $meetup_response ) ) {
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+	    
+	    if ( is_wp_error( $meetup_response ) ) {
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
 		
 		$meetup_events = json_decode( $meetup_response['body'], true );
+		// Error Check
+		if( isset( $meetup_events['errors'] ) && !empty( $meetup_events['errors'] ) ){
+			foreach ( $meetup_events['errors'] as $meetuperror ) {
+				$wpea_errors[] = $meetuperror['message'];
+			}			
+			return;
+		}
 		if ( is_array( $meetup_events ) && ! isset( $meetup_events['error'] ) ) {
 
 			if( !empty( $meetup_events ) ){
@@ -67,7 +77,7 @@ class WP_Event_Aggregator_Meetup {
 			return $imported_events;
 
 		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
 
@@ -248,7 +258,7 @@ class WP_Event_Aggregator_Meetup {
 		}
 		
 		if( $this->api_key == '' ){
-			$errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
 			return;
 		}
 

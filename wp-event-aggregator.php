@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.1.3
+ * Version:           1.2.4
  * Author:            Xylus Themes
  * Author URI:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -57,6 +57,7 @@ class WP_Event_Aggregator{
 			self::$instance->eventbrite = new WP_Event_Aggregator_Eventbrite();
 			self::$instance->meetup = new WP_Event_Aggregator_Meetup();
 			self::$instance->facebook = new WP_Event_Aggregator_Facebook();
+			self::$instance->ical_parser = new WP_Event_Aggregator_Ical_Parser();
 			self::$instance->ical = new WP_Event_Aggregator_Ical();
 			self::$instance->admin = new WP_Event_Aggregator_Admin();
 			self::$instance->manage_import = new WP_Event_Aggregator_Manage_Import();
@@ -88,14 +89,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.0.0' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.2.4' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.0.0' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.2.4' ); }
 
 
 	/**
@@ -109,7 +110,7 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.1.0' );
+			define( 'WPEA_VERSION', '1.2.4' );
 		}
 
 		// Plugin folder Path.
@@ -151,11 +152,15 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-list-table.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-admin.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';
+		if( !class_exists( 'vcalendar' ) ){
+			require_once WPEA_PLUGIN_DIR . 'includes/lib/iCalcreator/iCalcreator.php';
+		}
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-cpt.php';
 
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-eventbrite.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-meetup.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-facebook.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical_parser.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical.php';
 		
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-wpea.php';
@@ -248,9 +253,9 @@ function wpea_get_import_options( $type = '' ){
 }
 
 // Get WP_Event_Aggregator Running.
-global $importevents, $errors, $success_msg, $warnings, $info_msg;
+global $importevents, $wpea_errors, $wpea_success_msg, $wpea_warnings, $wpea_info_msg;
 $importevents = run_wp_event_aggregator();
-$errors = $warnings = $success_msg = $info_msg = array();
+$wpea_errors = $wpea_warnings = $wpea_success_msg = $wpea_info_msg = array();
 
 /**
  * The code that runs during plugin activation.

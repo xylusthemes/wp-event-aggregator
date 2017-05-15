@@ -176,8 +176,12 @@ class WP_Event_Aggregator_Common {
 		// check My Calendar
 		if ( is_plugin_active( 'my-calendar/my-calendar.php' ) ) {
 			$supported_plugins['my_calendar'] = __( 'My Calendar', 'wp-event-aggregator' );
-		}		
-		$supported_plugins['wpea'] = __( 'WP Event Aggregator', 'wp-event-aggregator' );
+		}
+		$wpea_options = get_option( WPEA_OPTIONS );
+		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
+		if( $deactive_wpevents != 'yes' ){
+			$supported_plugins['wpea'] = __( 'WP Event Aggregator', 'wp-event-aggregator-pro' );
+		}
 		return $supported_plugins;
 	}
 
@@ -197,75 +201,55 @@ class WP_Event_Aggregator_Common {
 		if( Empty ( $event ) ){
 			return;
 		}
-		$import_origin = get_post_meta( $event_id, 'wpea_event_origin', true );
-		$image_name = '';
-		if( $import_origin != '' ){
-			$image_name .= $import_origin."_";
-		}
-		// Add Featured Image to Post
-		$image_name       .= $event->ID . '_' . $event->post_name . '_image.png';
-		$upload_dir       = wp_upload_dir(); // Set upload folder
-		
-		// Check for event file already Exists or not.
-		$params = array(
-			'numberposts'   => 1,
-			'post_type'     => 'attachment',
-			'meta_query'    => array(
-				array(
-					'key'   => '_wp_attached_file',
-					'value' => trim( $upload_dir['subdir'] . '/' . $image_name, '/' )
-				)
-			)
-		);
 
-		$existing_file = get_posts( $params );
-		if ( file_exists( $upload_dir['path'] . '/' . $image_name ) && isset( $existing_file[0]->ID ) ) {
-			
-			$attach_id = $existing_file[0]->ID;
+		require_once(ABSPATH . 'wp-admin/includes/media.php');
+		require_once(ABSPATH . 'wp-admin/includes/file.php');
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
 
-		}else{
+		$event_title = $event->post_title;
+		//$image = media_sideload_image( $image_url, $event_id, $event_title );
+		if ( ! empty( $image_url ) ) {
 
-			$image_data       = file_get_contents( $image_url ); // Get image data
-			$unique_file_name = wp_unique_filename( $upload_dir['path'], $image_name ); // Generate unique name
-			$filename         = basename( $unique_file_name ); // Create image file name
-
-			// Check folder permission and define file location
-			if( wp_mkdir_p( $upload_dir['path'] ) ) {
-			    $file = $upload_dir['path'] . '/' . $filename;
-			} else {
-			    $file = $upload_dir['basedir'] . '/' . $filename;
+			// Set variables for storage, fix file filename for query strings.
+			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image_url, $matches );
+			if ( ! $matches ) {
+				return new WP_Error( 'image_sideload_failed', __( 'Invalid image URL' ) );
 			}
-		
-			// Create the image  file on the server
-			file_put_contents( $file, $image_data );
 
-			// Check image file type
-			$wp_filetype = wp_check_filetype( $filename, null );
+			$file_array = array();
+			$file_array['name'] = $event->ID . '_image_'.basename( $matches[0] );
+			
+			if( has_post_thumbnail( $event_id ) ){
+				$attachment_id = get_post_thumbnail_id( $event_id );
+				$attach_filename = basename( get_attached_file( $attachment_id ) );
+				if( $attach_filename == $file_array['name'] ){
+					return false;
+				}
+			}
 
-			// Set attachment data
-			$attachment = array(
-			    'post_mime_type' => $wp_filetype['type'],
-			    'post_title'     => sanitize_file_name( $filename ),
-			    'post_content'   => '',
-			    'post_status'    => 'inherit'
-			);
+			// Download file to temp location.
+			$file_array['tmp_name'] = download_url( $image_url );
 
-			// Create the attachment
-			$attach_id = wp_insert_attachment( $attachment, $file, $event_id );
+			// If error storing temporarily, return the error.
+			if ( is_wp_error( $file_array['tmp_name'] ) ) {
+				return $file_array['tmp_name'];
+			}
 
-			// Include image.php
-			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			// Do the validation and storage stuff.
+			$att_id = media_handle_sideload( $file_array, $event_id, $event_title );
 
-			// Define attachment metadata
-			$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+			// If error storing permanently, unlink.
+			if ( is_wp_error( $att_id ) ) {
+				@unlink( $file_array['tmp_name'] );
+				return $att_id;
+			}
 
-			// Assign metadata to attachment
-			wp_update_attachment_metadata( $attach_id, $attach_data );
+			if ($att_id) {
+				set_post_thumbnail($event_id, $att_id);
+			}
 
+			return $att_id;
 		}
-
-		// And finally assign featured image to post
-		set_post_thumbnail( $event_id, $attach_id );
 	}
 
 	/**
@@ -361,7 +345,7 @@ class WP_Event_Aggregator_Common {
 			ob_start();
 			?>
 			<div class="eventbrite-ticket-section" style="width:100%; text-align:left;">
-				<iframe id="eventbrite-tickets-<?php echo $eventbrite_id; ?>" src="http://www.eventbrite.com/tickets-external?eid=<?php echo $eventbrite_id; ?>" style="width:100%;height:300px; border: 0px;"></iframe>
+				<iframe id="eventbrite-tickets-<?php echo $eventbrite_id; ?>" src="//www.eventbrite.com/tickets-external?eid=<?php echo $eventbrite_id; ?>" style="width:100%;height:300px; border: 0px;"></iframe>
 			</div>
 			<?php
 			$ticket = ob_get_clean();
@@ -380,8 +364,8 @@ class WP_Event_Aggregator_Common {
 	 * @return array
 	 */
 	public function display_import_success_message( $import_data = array(),$import_args = array(), $schedule_post = '' ) {
-		global $success_msg, $errors;
-		if( empty( $import_data ) || !empty( $errors ) ){
+		global $wpea_success_msg, $wpea_errors;
+		if( empty( $import_data ) ){
 			return;
 		}
 
@@ -415,7 +399,7 @@ class WP_Event_Aggregator_Common {
 		if( $skipped > 0 ){
 			$success_message .= "<strong>".sprintf( __( '%d Skipped (Already exists)', 'wp-event-aggregator' ), $skipped ) ."</strong><br>";
 		}
-		$success_msg[] = $success_message;
+		$wpea_success_msg[] = $success_message;
 
 		if( $schedule_post != '' && $schedule_post > 0 ){
 			$temp_title = get_the_title( $schedule_post );
@@ -622,42 +606,16 @@ class WP_Event_Aggregator_Common {
 	 * @param int $event_id event id.
 	 * @return /boolean
 	 */
-	public function get_event_by_event_id( $post_type, $event_id ) {
+	public function get_event_by_event_id( $post_type, $centralize_array ) {
+		global $wpdb;
+		$event_id = $centralize_array['ID'];
 		$event_args = array(
 			'post_type' => $post_type,
 			'post_status' => array( 'pending', 'draft', 'publish' ),
 			'posts_per_page' => -1,
 			'suppress_filters' => true,
-			/*'meta_key'   => 'wpea_event_id',
-			'meta_value' => $event_id,*/
-			'meta_query' => array(
-				'relation' => 'OR',
-				array(
-					'key'     => 'wpea_event_id',
-					'value'   => $event_id,
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'wpea_eventbrite_event_id',
-					'value'   => $event_id,
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'wpea_facebook_event_id',
-					'value'   => $event_id,
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'wpea_meetup_event_id',
-					'value'   => $event_id,
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'wpea_ical_event_uid',
-					'value'   => $event_id,
-					'compare' => '=',
-				),
-			),
+			'meta_key'   => 'wpea_event_id',
+			'meta_value' => $event_id
 		);
 
 		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
@@ -674,6 +632,16 @@ class WP_Event_Aggregator_Common {
 			}
 		}
 		wp_reset_postdata();
+
+		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
+			
+			$search_query = $wpdb->prepare( "SELECT DISTINCT ".$wpdb->posts.".`ID` FROM ".$wpdb->posts." INNER JOIN ".$wpdb->postmeta." ON ".$wpdb->posts.".`ID` = ".$wpdb->postmeta.".`post_id` WHERE ".$wpdb->posts.".`post_title` = '%s' AND ".$wpdb->posts.".`post_type` = '%s' AND ( ".$wpdb->postmeta.".`meta_key` = '_wpea_starttime_str' AND ".$wpdb->postmeta.".`meta_value` = '%s' ) LIMIT 1", $centralize_array['name'], $post_type, $centralize_array['starttime_local'] );
+
+			$is_exists = $wpdb->get_var( $search_query );
+			if( $is_exists && is_numeric( $is_exists ) && $is_exists > 0 ){
+				return $is_exists;
+			}
+		}
 		return false;
 	}
 

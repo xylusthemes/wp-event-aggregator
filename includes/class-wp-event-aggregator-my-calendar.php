@@ -56,7 +56,7 @@ class WP_Event_Aggregator_My_Calendar {
 			return false;
 		}
 
-		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array['ID'] );
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		if ( $is_exitsing_event ) {
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
@@ -115,6 +115,8 @@ class WP_Event_Aggregator_My_Calendar {
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', $centralize_array['url'] );
+			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
+			update_post_meta( $inserted_event_id, '_wpea_endtime_str', $end_time );
 
 			// Setup Variables for insert into table.
 			$begin     = date( 'Y-m-d', $start_time );

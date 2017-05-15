@@ -70,7 +70,7 @@ class WP_Event_Aggregator_EventON {
 			return false;
 		}
 
-		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array['ID'] );
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		
 		if ( $is_exitsing_event ) {
 			// Update event or not?
@@ -131,10 +131,15 @@ class WP_Event_Aggregator_EventON {
 			if(  $centralize_array['location']['full_address'] != '' ){
 				$address = $centralize_array['location']['full_address'];
 			}
+			$city = isset( $centralize_array['location']['city'] ) ? sanitize_text_field($centralize_array['location']['city']) : '';
+			$state = isset( $centralize_array['location']['state'] ) ? sanitize_text_field($centralize_array['location']['state']) : '';
+			$country = isset( $centralize_array['location']['country'] ) ? sanitize_text_field($centralize_array['location']['country']) : '';
 			
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', $centralize_array['url'] );
+			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
+			update_post_meta( $inserted_event_id, '_wpea_endtime_str', $end_time );
 			update_post_meta( $inserted_event_id, 'evcal_srow', $start_time );
 			update_post_meta( $inserted_event_id, 'evcal_erow', $end_time );
 			update_post_meta( $inserted_event_id, 'evcal_lmlink', $centralize_array['url'] );
@@ -161,8 +166,14 @@ class WP_Event_Aggregator_EventON {
 				$loc_term_meta['location_lat'] = (!empty($centralize_array['location']['lat']))? $centralize_array['location']['lat']: null;
 				$loc_term_meta['evcal_location_link'] = (isset($centralize_array['location']['url']))?$centralize_array['location']['url']:null;
 				$loc_term_meta['location_address'] = $address;
+				$loc_term_meta['location_city'] = $city;
+				$loc_term_meta['location_state'] = $state;
+				$loc_term_meta['location_country'] = $country;
 				$loc_term_meta['evo_loc_img'] = (isset($centralize_array['location']['image_url']))?$centralize_array['location']['image_url']:null;
 				update_option("taxonomy_".$loc_term_id, $loc_term_meta);
+				if( function_exists( 'evo_save_term_metas' ) ){
+					evo_save_term_metas( $this->location_taxonomy, $loc_term_id, $loc_term_meta);
+				}
 
 				$term_loc_ids = wp_set_object_terms( $inserted_event_id, $loc_term_id, $this->location_taxonomy );
 				update_post_meta( $inserted_event_id, 'evo_location_tax_id', $loc_term_id );
@@ -205,6 +216,9 @@ class WP_Event_Aggregator_EventON {
 				$org_term_meta['evcal_org_exlink']  = (isset($centralize_array['organizer']['url']))?$centralize_array['organizer']['url']:null;
 
 				update_option("taxonomy_".$org_term_id, $org_term_meta);
+				if( function_exists( 'evo_save_term_metas' ) ){
+					evo_save_term_metas( $this->organizer_taxonomy, $org_term_id, $org_term_meta);
+				}
 
 				$term_org_ids = wp_set_object_terms( $inserted_event_id, $org_term_id, $this->organizer_taxonomy );
 				update_post_meta( $inserted_event_id, 'evo_organizer_tax_id', $org_term_id );

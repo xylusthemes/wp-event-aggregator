@@ -77,7 +77,7 @@ class WP_Event_Aggregator_EM {
 			return false;
 		}
 
-		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array['ID'] );
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 				
 		if ( $is_exitsing_event ) {
 			// Update event or not?
@@ -158,6 +158,8 @@ class WP_Event_Aggregator_EM {
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $ticket_uri ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
+			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
+			update_post_meta( $inserted_event_id, '_wpea_endtime_str', $end_time );
 			
 			// Custom table Details
 			$event_array = array(

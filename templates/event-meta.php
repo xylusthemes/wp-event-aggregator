@@ -8,28 +8,20 @@
 		$event_id = get_the_ID();
 	}
 
-	$start_date = get_post_meta( $event_id, 'event_start_date', true );
-	$start_hour = get_post_meta( $event_id, 'event_start_hour', true );
-	$start_minute = get_post_meta( $event_id, 'event_start_minute', true );
-	$start_meridian = get_post_meta( $event_id, 'event_start_meridian', true );
-	$start_time = $start_hour . ':' . $start_minute . ' ' . $start_meridian; 
-	$start_date_formated = date( 'F j', strtotime( $start_date ) );
-
-	$end_date = get_post_meta( $event_id, 'event_end_date', true );
-	$end_hour = get_post_meta( $event_id, 'event_end_hour', true );
-	$end_minute = get_post_meta( $event_id, 'event_end_minute', true );
-	$end_meridian = get_post_meta( $event_id, 'event_end_meridian', true );
-	$end_time = $end_hour . ':' . $end_minute . ' ' . $end_meridian;
-	$end_date_formated = date( 'F j', strtotime( $end_date ) );
-
-	$website = get_post_meta( $event_id, 'wpea_event_link', true );
+$start_date_str = get_post_meta( $event_id, 'start_ts', true );
+$end_date_str = get_post_meta( $event_id, 'end_ts', true );
+$start_date_formated = date_i18n( 'F j', $start_date_str );
+$end_date_formated = date_i18n( 'F j', $end_date_str );
+$start_time = date_i18n( 'h:i a', $start_date_str );
+$end_time = date_i18n( 'h:i a', $end_date_str );
+$website = get_post_meta( $event_id, 'wpea_event_link', true );
 ?>
 <div class="wpea_organizer">
   <div class="details">
     <div class="titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
 
     <?php 
-    if( $start_date == $end_date ){
+    if( date( 'Y-m-d', $start_date_str ) == date( 'Y-m-d', $end_date_str ) ){
     	?>
     	<strong><?php esc_html_e( 'Date','wp-event-aggregator' ); ?>:</strong>
 	    <p><?php echo $start_date_formated; ?></p>
@@ -78,7 +70,7 @@
 	?>
 
     <?php if( $website != '' ){ ?>
-    	<strong><?php esc_html_e( 'Website','wp-event-aggregator' ); ?>:</strong>
+    	<strong><?php esc_html_e( 'Click to Register','wp-event-aggregator' ); ?>:</strong>
     	<a href="<?php echo esc_url( $website ); ?>"><?php echo $website; ?></a>
     <?php } ?>
 
@@ -95,18 +87,18 @@
 			?>
 			<div class="organizer">
 				<div class="titlemain"><?php esc_html_e( 'Organizer','wp-event-aggregator' ); ?></div>
-				<p><?php echo $org_name; ?></p>
+				<p><strong><?php echo $org_name; ?></strong></p>
 			</div>
 			<?php if( $org_email != '' ){ ?>
-		    	<strong><?php esc_html_e( 'Email','wp-event-aggregator' ); ?>:</strong>
+		    	<strong style="display: block;"><?php esc_html_e( 'Email','wp-event-aggregator' ); ?>:</strong>
 		    	<a href="<?php echo 'mailto:'.$org_email; ?>"><?php echo $org_email; ?></a>
 		    <?php } ?>
 		    <?php if( $org_phone != '' ){ ?>
-		    	<strong><?php esc_html_e( 'Phone','wp-event-aggregator' ); ?>:</strong>
+		    	<strong style="display: block;"><?php esc_html_e( 'Phone','wp-event-aggregator' ); ?>:</strong>
 		    	<a href="<?php echo 'tel:'.$org_phone; ?>"><?php echo $org_phone; ?></a>
 		    <?php } ?>
 		    <?php if( $website != '' ){ ?>
-		    	<strong><?php esc_html_e( 'Website','wp-event-aggregator' ); ?>:</strong>
+		    	<strong style="display: block;"><?php esc_html_e( 'Website','wp-event-aggregator' ); ?>:</strong>
 		    	<a href="<?php echo esc_url( $org_url ); ?>"><?php echo $org_url; ?></a>
 		    <?php }
 		}
@@ -129,11 +121,11 @@ if( $venue_name != '' && ( $venue_address != '' || $venue['city'] != '' ) ){
 	?>
 	<div class="wpea_organizer library">
 		<div class="venue">
-			<div class="titlemain"> <?php esc_html_e( 'Venue','wp-event-aggregator' ); ?> </div>
+			<div class="titlemain"><strong><?php esc_html_e( 'Venue','wp-event-aggregator' ); ?></strong></div>
 			<p><?php echo $venue_name; ?></p>
 			<?php
 			if( $venue_address != '' ){
-				echo '<p><i>' . $venue_address . '</i></p>';
+				echo '<p>' . $venue_address . '</p>';
 			}
 			$venue_array = array();
 			foreach ($venue as $key => $value) {
@@ -143,7 +135,7 @@ if( $venue_name != '' && ( $venue_address != '' || $venue['city'] != '' ) ){
 					}
 				}
 			}
-			echo '<p><i>' . implode( ", ", $venue_array ) . '</i></p>';
+			echo '<p>' . implode( ", ", $venue_array ) . '</p>';
 			?>
 		</div>
 		<?php 

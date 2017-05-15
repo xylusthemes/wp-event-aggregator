@@ -38,17 +38,20 @@ class WP_Event_Aggregator_Cpt {
 		$this->event_category = 'event_category';
 		$this->event_tag = 'event_tag';
 
-		add_action( 'init', array( $this, 'register_event_post_type' ) );
-		add_action( 'init', array( $this, 'register_event_taxonomy' ) );
-		add_action( 'add_meta_boxes', array($this, 'add_event_meta_boxes' ) );
-		add_action( 'save_post', array($this, 'save_event_meta_boxes'), 10, 2);
-		
-		add_filter( 'manage_wp_events_posts_columns', array( $this, 'wp_events_columns' ), 10, 1 );
-		add_action( 'manage_posts_custom_column', array( $this, 'wp_events_columns_data' ), 10, 2 ); 
+		$wpea_options = get_option( WPEA_OPTIONS );
+		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
+		if( $deactive_wpevents != 'yes' ){
+			add_action( 'init', array( $this, 'register_event_post_type' ) );
+			add_action( 'init', array( $this, 'register_event_taxonomy' ) );
+			add_action( 'add_meta_boxes', array($this, 'add_event_meta_boxes' ) );
+			add_action( 'save_post', array($this, 'save_event_meta_boxes'), 10, 2);
+			
+			add_filter( 'manage_wp_events_posts_columns', array( $this, 'wp_events_columns' ), 10, 1 );
+			add_action( 'manage_posts_custom_column', array( $this, 'wp_events_columns_data' ), 10, 2 ); 
 
-		add_filter( 'the_content', array( $this, 'wp_events_meta_before_content' ) ); 
-		add_shortcode('wp_events', array( $this, 'wp_events_archive' ) );
- 	
+			add_filter( 'the_content', array( $this, 'wp_events_meta_before_content' ) ); 
+			add_shortcode('wp_events', array( $this, 'wp_events_archive' ) );
+		}
 	}
 
 	/**
@@ -487,6 +490,11 @@ class WP_Event_Aggregator_Cpt {
 		$event_end_minute     = isset( $_POST['event_end_minute'] ) ? sanitize_text_field($_POST['event_end_minute']) : '';
 		$event_end_meridian   = isset( $_POST['event_end_meridian'] ) ? sanitize_text_field($_POST['event_end_meridian']) : '';
 
+		$start_time = $event_start_date.' '.$event_start_hour.':'.$event_start_minute.' '.$event_start_meridian;
+		$end_time = $event_end_date.' '.$event_end_hour.':'.$event_end_minute.' '.$event_end_meridian;
+		$start_ts = strtotime( $start_time );
+		$end_ts = strtotime( $end_time );
+
 		// Venue Deatails
 		$venue_name    = isset( $_POST['venue_name'] ) ? sanitize_text_field( $_POST['venue_name'] ) : '';
 		$venue_address = isset( $_POST['venue_address'] ) ? sanitize_text_field( $_POST['venue_address'] ) : '';
@@ -514,6 +522,8 @@ class WP_Event_Aggregator_Cpt {
 		update_post_meta( $post_id, 'event_end_hour', $event_end_hour );
 		update_post_meta( $post_id, 'event_end_minute', $event_end_minute );
 		update_post_meta( $post_id, 'event_end_meridian', $event_end_meridian );
+		update_post_meta( $post_id, 'start_ts', $start_ts );
+		update_post_meta( $post_id, 'end_ts', $end_ts );
 
 		// Venue
 		update_post_meta( $post_id, 'venue_name', $venue_name );
@@ -539,6 +549,7 @@ class WP_Event_Aggregator_Cpt {
 	 */ 
 	function wp_events_columns( $cols ) {
 		$cols['event_start_date'] = __('Event Date', 'event-list-calendar');
+		$cols['event_origin'] = __('Event Origin', 'event-list-calendar');
 		return $cols;
 	}
 
@@ -549,15 +560,23 @@ class WP_Event_Aggregator_Cpt {
 	function wp_events_columns_data( $column, $post_id ) {
 		switch ( $column ) {
 			case "event_start_date":
-			  $start_date = get_post_meta( $post_id, 'event_start_date', true);
-			  if( $start_date != '' ){
-			  	$start_date = strtotime( $start_date );
-			  	echo date( 'F j, Y', $start_date );	
-			  }else{
-			  	echo '-';
-			  }
-			  
-			  break;
+				$start_date = get_post_meta( $post_id, 'event_start_date', true);
+				if( $start_date != '' ){
+					$start_date = strtotime( $start_date );
+					echo date_i18n( 'F j, Y', $start_date );	
+				}else{
+					echo '-';
+				}
+				break;
+
+			case "event_origin":
+				$event_origin = get_post_meta( $post_id, 'wpea_event_origin', true);
+				if( $event_origin != '' ){
+					echo '<strong>'.ucfirst( $event_origin ).'</strong>';
+				}else{
+					echo '-';
+				}
+				break;
 		}
 	}
 
@@ -593,36 +612,170 @@ class WP_Event_Aggregator_Cpt {
 	 *
 	 */
 	public function wp_events_archive( $atts = array() ){
-
-		$current_date = current_time('Y-m-d');
+		//[wp_events col='2' posts_per_page='12' category="cat1,cat2" past_events="yes" order="desc" orderby="" start_date="" end_date="" ]
+		$current_date = time();
+		$paged = ( get_query_var('paged') ? get_query_var('paged') : 1 );
+		if( is_front_page() ){
+			$paged = ( get_query_var('page') ? get_query_var('page') : 1 );
+		}
 		$eve_args = array(
 		    'post_type' => 'wp_events',
 		    'post_status' => 'publish',
-		    'meta_query' => array(
-						        array(
-						            'key' => 'event_end_date',
-						            'compare' => '>=',
-						            'value' => $current_date,
-						        )
-				            ),
-		    'meta_key' => 'event_end_date',
-		    'orderby' => 'meta_value',
-		    'order' => 'ASC',
-		    'paged' => ( get_query_var('paged') ? get_query_var('paged') : 1 ),
+		    'meta_key' => 'start_ts',
+		    'paged' => $paged,
 		);
 
+		// post per page.
 		if( isset( $atts['posts_per_page'] ) && $atts['posts_per_page'] != '' && is_numeric( $atts['posts_per_page'] ) ){
 			$eve_args['posts_per_page'] = $atts['posts_per_page'];
 		}
 
-		$wp_events = new WP_Query( $eve_args );
+		// Past Events
+		if( ( isset( $atts['start_date'] ) && $atts['start_date'] != '' ) || ( isset( $atts['end_date'] ) && $atts['end_date'] != '') ){
+			$start_date_str = $end_date_str = '';
+			if( isset( $atts['start_date'] ) && $atts['start_date'] != '' ){
+				try {
+				    $start_date_str = strtotime( sanitize_text_field( $atts['start_date'] ));
+				} catch (Exception $e) {
+					$start_date_str = '';
+				}	
+			}
+			if( isset( $atts['end_date'] ) && $atts['end_date'] != '' ){
+				try {
+				    $end_date_str = strtotime( sanitize_text_field( $atts['end_date'] ));
+				} catch (Exception $e) {
+					$end_date_str = '';
+				}
+			}
+						
+			if( $start_date_str != '' && $end_date_str != '' ){
+				$eve_args['meta_query'] = array(
+						   'relation' => 'AND',                        
+					        array(
+					            'key' => 'end_ts',
+					            'compare' => '>=',
+					            'value' => $start_date_str,
+					        ),
+					        array(
+					            'key' => 'end_ts',
+					            'compare' => '<=',
+					            'value' => $end_date_str,
+					        ),
+				        );
+			}elseif(  $start_date_str != '' ){
+				$eve_args['meta_query'] = array(
+					        array(
+					            'key' => 'end_ts',
+					            'compare' => '>=',
+					            'value' => $start_date_str,
+					        )
+				        );
+			}elseif(  $end_date_str != '' ){
+				$eve_args['meta_query'] = array(
+					        array(
+					            'key' => 'end_ts',
+					            'compare' => '<=',
+					            'value' => $end_date_str,
+					        )
+				        );
+			}
 
+		}else{
+			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' ){
+				$eve_args['meta_query'] = array(
+						        array(
+						            'key' => 'end_ts',
+						            'compare' => '<=',
+						            'value' => $current_date,
+						        )
+				            );
+			}else{
+				$eve_args['meta_query'] = array(
+						        array(
+						            'key' => 'end_ts',
+						            'compare' => '>=',
+						            'value' => $current_date,
+						        )
+				            );
+			}
+		}
+		
+		if( isset( $atts['category'] ) && $atts['category'] != '' ){
+			$categories = explode(',', $atts['category'] );
+			$tax_field = 'slug';
+			if( is_numeric( implode('', $categories ) ) ){
+				$tax_field = 'term_id';
+			}
+			if( !empty( $categories ) ){
+				$eve_args['tax_query'] = array(
+					array(
+						'taxonomy' => $this->event_category,
+						'field'    => $tax_field,
+						'terms'    => $categories,
+					)
+				);
+			}
+		}
+
+		// Order by
+		if( isset( $atts['orderby'] ) && $atts['orderby'] != '' ){
+			if( $atts['orderby'] == 'event_start_date' || $atts['orderby'] == 'event_end_date' ){
+				$eve_args['orderby'] = 'meta_value';
+			}else{
+				$eve_args['orderby'] = sanitize_text_field( $atts['orderby'] );
+			}
+		}else{
+			$eve_args['orderby'] = 'meta_value';
+		}
+
+		// Order
+		if( isset( $atts['order'] ) && $atts['order'] != '' ){
+			if( strtoupper( $atts['order'] ) == 'DESC' || strtoupper( $atts['order'] ) == 'ASC' ){
+				$eve_args['order'] = sanitize_text_field( $atts['order'] );
+			}
+		}else{
+			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' && $eve_args['orderby'] == 'meta_value' ){
+				$eve_args['order'] = 'DESC';
+			}else{
+				$eve_args['order'] = 'ASC';
+			}
+		}
+
+		$col = 3;
+        $css_class = 'col-wpea-md-4';
+        if( isset( $atts['col'] ) && $atts['col'] != '' && is_numeric( $atts['col'] ) ){
+             $col = $atts['col'];
+                switch ( $col ) {
+                case '1':
+                    $css_class = 'col-wpea-md-12';
+                    break;
+
+                case '2':
+                    $css_class = 'col-wpea-md-6';
+                    break;
+
+                case '3':
+                    $css_class = 'col-wpea-md-4';
+                    break;
+
+                case '4':
+                    $css_class = 'col-wpea-md-3';
+                    break;
+               
+                default:
+                    $css_class = 'col-wpea-md-4';
+                    break;
+            }
+        }  
+
+        $wp_events = new WP_Query( $eve_args );
+		
 		$wp_list_events = '';
 		/* Start the Loop */
 		
 		ob_start();
 		?>
-		<div class="row_grid wpea_frontend_archives">
+		<div class="row_grid wpea_frontend_archive">
 			<?php
 			if( $wp_events->have_posts() ):
 				while ( $wp_events->have_posts() ) : $wp_events->the_post();
@@ -643,6 +796,8 @@ class WP_Event_Aggregator_Cpt {
 						</nav>
 					</div>
 				<?php endif;
+			else:
+				echo "No Events are found.";
 			endif;
 
 			?>

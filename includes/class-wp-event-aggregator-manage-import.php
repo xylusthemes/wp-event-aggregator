@@ -31,19 +31,19 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function handle_import_form_submit() {
-		global $errors; 
+		global $wpea_errors; 
 		$event_data = array();
 
 		if ( isset( $_POST['wpea_action'] ) && $_POST['wpea_action'] == 'wpea_import_submit' &&  check_admin_referer( 'wpea_import_form_nonce_action', 'wpea_import_form_nonce' ) ) {
 			
 			if( !isset( $_POST['import_origin'] ) || empty( $_POST['import_origin'] ) ){
-				$errors[] = esc_html__( 'Please provide import origin.', 'wp-event-aggregator' );
+				$wpea_errors[] = esc_html__( 'Please provide import origin.', 'wp-event-aggregator' );
 				return;
 			}
 
 			$event_data['import_into'] = isset( $_POST['event_plugin'] ) ? sanitize_text_field( $_POST['event_plugin']) : '';
 			if( $event_data['import_into'] == '' ){
-				$errors[] = esc_html__( 'Please provide Import into plugin for Event import.', 'wp-event-aggregator' );
+				$wpea_errors[] = esc_html__( 'Please provide Import into plugin for Event import.', 'wp-event-aggregator' );
 				return;
 			}
 			$event_data['import_type'] = 'onetime';
@@ -81,7 +81,7 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function handle_import_settings_submit() {
-		global $errors, $success_msg;
+		global $wpea_errors, $wpea_success_msg;
 		if ( isset( $_POST['wpea_action'] ) && $_POST['wpea_action'] == 'wpea_save_settings' &&  check_admin_referer( 'wpea_setting_form_nonce_action', 'wpea_setting_form_nonce' ) ) {
 				
 			$wpea_options = array();
@@ -89,12 +89,11 @@ class WP_Event_Aggregator_Manage_Import {
 			$wpea_options['meetup'] = isset( $_POST['meetup'] ) ? $_POST['meetup'] : array();
 			$wpea_options['facebook'] = isset( $_POST['facebook'] ) ? $_POST['facebook'] : array();
 			$wpea_options['ical'] = isset( $_POST['ical'] ) ? $_POST['ical'] : array();
+			$wpea_options['wpea'] = isset( $_POST['wpea'] ) ? $_POST['wpea'] : array();
 
 			$is_update = update_option( WPEA_OPTIONS, $wpea_options );
 			if( $is_update ){
-				$success_msg[] = __( 'Import settings has been saved successfully.', 'wp-event-aggregator' );
-			}else{
-				$errors[] = __( 'Something went wrong! please try again.', 'wp-event-aggregator' );
+				$wpea_success_msg[] = __( 'Import settings has been saved successfully.', 'wp-event-aggregator' );
 			}
 		}
 	}
@@ -106,7 +105,7 @@ class WP_Event_Aggregator_Manage_Import {
 	 */
 	public function handle_listtable_oprations() {
 
-		global $success_msg;
+		global $wpea_success_msg;
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_simport_delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_delete_import_nonce') ) {
 			$import_id = $_GET['import_id'];
 			$page = isset($_GET['page'] ) ? $_GET['page'] : 'import_events';
@@ -184,11 +183,11 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function handle_eventbrite_import_form_submit( $event_data ){
-		global $errors, $success_msg, $importevents;
+		global $wpea_errors, $wpea_success_msg, $importevents;
 		$import_events = array();
 		$eventbrite_options = wpea_get_import_options('eventbrite');
 		if( !isset( $eventbrite_options['oauth_token'] ) || $eventbrite_options['oauth_token'] == '' ){
-			$errors[] = esc_html__( 'Please insert Eventbrite "Personal OAuth token" in settings.', 'wp-event-aggregator' );
+			$wpea_errors[] = esc_html__( 'Please insert Eventbrite "Personal OAuth token" in settings.', 'wp-event-aggregator' );
 			return;
 		}
 
@@ -198,7 +197,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$event_data['organizer_id'] = '';
 		
 		if( !is_numeric( $event_data['eventbrite_event_id'] ) ){
-			$errors[] = esc_html__( 'Please provide valid Eventbrite event ID.', 'wp-event-aggregator' );
+			$wpea_errors[] = esc_html__( 'Please provide valid Eventbrite event ID.', 'wp-event-aggregator' );
 			return;
 		}
 		$import_events[] = $importevents->eventbrite->import_event_by_event_id( $event_data );
@@ -214,11 +213,11 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function handle_meetup_import_form_submit( $event_data ){
-		global $errors, $success_msg, $importevents;
+		global $wpea_errors, $wpea_success_msg, $importevents;
 
 		$meetup_options = wpea_get_import_options('meetup');
 		if( !isset( $meetup_options['meetup_api_key'] ) || $meetup_options['meetup_api_key'] == '' ){
-			$errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
 			return;
 		}
 		
@@ -226,7 +225,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$event_data['meetup_url'] = isset( $_POST['meetup_url'] ) ? $_POST['meetup_url'] : '';
 		
 		if ( filter_var( $event_data['meetup_url'], FILTER_VALIDATE_URL) === false ){
-			$errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
+			$wpea_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
 			return;
 		}
 		$event_data['meetup_url'] = esc_url( $event_data['meetup_url'] );
@@ -243,13 +242,13 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function handle_facebook_import_form_submit( $event_data ){
-		global $errors, $success_msg, $importevents;
+		global $wpea_errors, $wpea_success_msg, $importevents;
 
 		$fboptions = wpea_get_import_options( 'facebook' );
 		$facebook_app_id = isset( $fboptions['facebook_app_id'] ) ? $fboptions['facebook_app_id'] : '';
 		$facebook_app_secret = isset( $fboptions['facebook_app_secret'] ) ? $fboptions['facebook_app_secret'] : '';
 		if( $facebook_app_id == '' || $facebook_app_secret == '' ){
-			$errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
 			return;
 		}
 		
@@ -272,7 +271,7 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function handle_ical_import_form_submit( $event_data ){
-		global $errors, $success_msg, $importevents;
+		global $wpea_errors, $wpea_success_msg, $importevents;
 
 		$event_data['import_origin'] = 'ical';
 		$event_data['import_by'] = 'ics_file';
@@ -286,68 +285,23 @@ class WP_Event_Aggregator_Manage_Import {
 			$file_type = $_FILES['ics_file']['type'];
 
 			if( $file_type != 'text/calendar' && $file_ext != 'ics' ){
-				$errors[] = esc_html__( 'Please upload .ics file', 'wp-event-aggregator');
+				$wpea_errors[] = esc_html__( 'Please upload .ics file', 'wp-event-aggregator');
 				return;
 			}
 
 			$ics_content =  file_get_contents( $_FILES['ics_file']['tmp_name'] );
-			$ics_content_array = explode("\n", $ics_content);
-
-			$import_events = $importevents->ical->import_events_from_ics_content( $event_data, $ics_content_array );
+			$import_events = $importevents->ical->import_events_from_ics_content( $event_data, $ics_content );
 
 			if( $import_events && !empty( $import_events ) ){
 				if( $import_events && !empty( $import_events ) ){
 					$importevents->common->display_import_success_message( $import_events, $event_data );
 				}
 			}else{
-				if( empty( $errors ) ){
-					$success_msg[] = esc_html__( 'Nothing to import.', 'wp-event-aggregator' );	
+				if( empty( $wpea_errors ) ){
+					$wpea_success_msg[] = esc_html__( 'Nothing to import.', 'wp-event-aggregator' );	
 				}
 			}
 
-		}else{
-			
-			if( $event_data[ 'ical_url' ] == '' ){
-				$errors[] = esc_html__( 'Please provide iCal URL.', 'wp-event-aggregator');
-				return;
-			}
-
-			$domain = @parse_url( trim( $event_data[ 'ical_url' ] ) );
-			$ical_url_domain = ! empty( $domain[ 'host' ] ) ? $domain[ 'host' ] : 'iCal URL';
-
-			if( 'scheduled' == $event_data['import_type'] ){
-				$insert_args = array(
-					'post_type' => 'xt_scheduled_imports',
-					'post_status' => 'publish',
-					'post_title' => $ical_url_domain
-				);
-				
-				$insert = wp_insert_post( $insert_args, true );
-				if ( is_wp_error( $insert ) ) {
-					$errors[] = esc_html__( 'Something went wrong when scheduling event.', 'wp-event-aggregator' ) . $insert->get_error_message();
-					return;
-				}
-
-				$import_frequency = isset( $event_data['import_frequency']) ? $event_data['import_frequency'] : 'twicedaily';
-				update_post_meta( $insert, 'import_origin', 'ical' );
-				update_post_meta( $insert, 'import_eventdata', $event_data );
-				wp_schedule_event( time(), $import_frequency, 'xt_run_scheduled_import', array( 'post_id' => $insert ) );
-				$success_msg[] = esc_html__( 'Import scheduled successfully.', 'wp-event-aggregator' );
-
-			}else{
-
-				$import_events = $importevents->ical->import_events( $event_data );
-				if( $import_events && !empty( $import_events ) ){
-					if( $import_events && !empty( $import_events ) ){
-						$importevents->common->display_import_success_message( $import_events, $event_data );
-					}
-				}else{
-					if( empty( $errors ) ){
-						$success_msg[] = esc_html__( 'Nothing to import.', 'wp-event-aggregator' );	
-					}
-				}
-
-			}
 		}
 	}
 
@@ -357,31 +311,31 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function setup_success_messages(){
-		global $success_msg;
+		global $wpea_success_msg;
 		if( isset( $_GET['imp_msg'] ) && $_GET['imp_msg'] != '' ){
 			switch ( $_GET['imp_msg'] ) {
 				case 'import_del':
-					$success_msg[] = esc_html__( 'Scheduled import deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled import deleted successfully.', 'wp-event-aggregator' );
 					break;
 
 				case 'import_dels':
-					$success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );
 					break;
 
 				case 'import_success':
-					$success_msg[] = esc_html__( 'Scheduled import has been run successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled import has been run successfully.', 'wp-event-aggregator' );
 					break;
 
 				case 'history_del':
-					$success_msg[] = esc_html__( 'Import history deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Import history deleted successfully.', 'wp-event-aggregator' );
 					break;
 
 				case 'history_dels':
-					$success_msg[] = esc_html__( 'Import histories are deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Import histories are deleted successfully.', 'wp-event-aggregator' );
 					break;					
 								
 				default:
-					$success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );
 					break;
 			}
 		}

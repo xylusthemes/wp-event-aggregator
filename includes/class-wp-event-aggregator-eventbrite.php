@@ -35,7 +35,7 @@ class WP_Event_Aggregator_Eventbrite {
 	 */
 	public function import_events( $event_data = array() ){
 
-		global $errors, $importevents;
+		global $wpea_errors, $importevents;
 		$imported_events = array();
 		$options = wpea_get_import_options( 'eventbrite' );
 		$eventbrite_oauth_token = isset( $options['oauth_token'] ) ? $options['oauth_token'] : '';
@@ -53,7 +53,7 @@ class WP_Event_Aggregator_Eventbrite {
 		$eventbrite_response = wp_remote_get( $eventbrite_api_url );
 
 		if ( is_wp_error( $eventbrite_response ) ) {
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
 
@@ -66,7 +66,7 @@ class WP_Event_Aggregator_Eventbrite {
 					echo $eventbrite_api = $eventbrite_api_url. '&page=' . $i;
 					$eventbrite_response_loop = wp_remote_get( $eventbrite_api );
 					if ( is_wp_error( $eventbrite_response_loop ) ) {
-						$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+						$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 						return;
 					}
 					$eventbrite_events_loop = json_decode( $eventbrite_response_loop['body'], true );
@@ -90,7 +90,7 @@ class WP_Event_Aggregator_Eventbrite {
 			return $imported_events;
 
 		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
 
@@ -104,13 +104,13 @@ class WP_Event_Aggregator_Eventbrite {
 	 * @return /boolean
 	 */
 	public function import_event_by_event_id( $event_data = array() ){
-		global $errors, $importevents;
+		global $wpea_errors, $importevents;
 		$options = wpea_get_import_options( 'eventbrite' );
 		$eventbrite_oauth_token = isset( $options['oauth_token'] ) ? $options['oauth_token'] : '';
 		$eventbrite_id = isset( $event_data['eventbrite_event_id'] ) ? $event_data['eventbrite_event_id'] : 0;
 
 		if ( ! $eventbrite_id || $this->oauth_token == '' ) {
-			$errors[] = __( 'Please insert Eventbrite "Personal OAuth token".', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Please insert Eventbrite "Personal OAuth token".', 'wp-event-aggregator');
 			return;
 		}
 
@@ -118,7 +118,7 @@ class WP_Event_Aggregator_Eventbrite {
 	    $eventbrite_response = wp_remote_get( $eventbrite_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 
 		if ( is_wp_error( $eventbrite_response ) ) {
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
 
@@ -128,7 +128,7 @@ class WP_Event_Aggregator_Eventbrite {
 			return $this->save_eventbrite_event( $eventbrite_event, $event_data );
 			
 		}else{
-			$errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
 	}
