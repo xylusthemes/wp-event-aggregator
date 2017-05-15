@@ -24,7 +24,7 @@
 
 	$website = get_post_meta( $event_id, 'wpea_event_link', true );
 ?>
-<div class="organizermain">
+<div class="wpea_organizer">
   <div class="details">
     <div class="titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
 
@@ -127,7 +127,7 @@ $venue_url = esc_url( get_post_meta( $event_id, 'venue_url', true ) );
 
 if( $venue_name != '' && ( $venue_address != '' || $venue['city'] != '' ) ){
 	?>
-	<div class="organizermain library">
+	<div class="wpea_organizer library">
 		<div class="venue">
 			<div class="titlemain"> <?php esc_html_e( 'Venue','wp-event-aggregator' ); ?> </div>
 			<p><?php echo $venue_name; ?></p>

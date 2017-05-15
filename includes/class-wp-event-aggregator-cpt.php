@@ -622,7 +622,7 @@ class WP_Event_Aggregator_Cpt {
 		
 		ob_start();
 		?>
-		<div class="row_grid">
+		<div class="row_grid wpea_frontend_archives">
 			<?php
 			if( $wp_events->have_posts() ):
 				while ( $wp_events->have_posts() ) : $wp_events->the_post();

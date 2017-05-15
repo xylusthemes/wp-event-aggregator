@@ -163,12 +163,14 @@ class WP_Event_Aggregator_Ical {
 
 		$ical_event_id = $ical_event->uid;
 		$post_title = isset( $ical_event->summary ) ? $ical_event->summary : '';
-		$post_description = isset( $ical_event->description ) ? $ical_event->description : '';
+		$post_description = isset( $ical_event->description ) ? str_replace('\n', '<br/>', $ical_event->description):'';
 		$start_time = isset( $ical_event->dtstart_tz ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $ical_event->dtstart_tz ) ) : date( 'Y-m-d H:i:s');
 		$end_time = isset( $ical_event->dtend_tz ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $ical_event->dtend_tz ) ) : $start_time;
 		$website = isset( $ical_event->url ) ? esc_url( $ical_event->url ) : '';
 		$timezone = $this->get_utc_offset( $ical_event->dtstart_tz );
-
+		if( $start_time != '' ){
+			$ical_event_id .= esc_attr( $start_time );
+		}
 		$xt_event = array(
 			'origin'          => 'ical',
 			'ID'              => $ical_event_id,
