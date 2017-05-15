@@ -104,7 +104,7 @@ class WP_Event_Aggregator_TEC {
 	 * Create New TEC event.
 	 *
 	 * @since    1.0.0
-	 * @param array $eventbrite_event Eventbrite event.
+	 * @param array $centralize_array Centralize Array event.
 	 * @param array $formated_args Formated arguments for eventbrite event.
 	 * @param int   $post_id Post id.
 	 * @return void

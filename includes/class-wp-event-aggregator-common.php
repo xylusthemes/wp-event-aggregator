@@ -627,6 +627,7 @@ class WP_Event_Aggregator_Common {
 			'post_type' => $post_type,
 			'post_status' => array( 'pending', 'draft', 'publish' ),
 			'posts_per_page' => -1,
+			'suppress_filters' => true,
 			/*'meta_key'   => 'wpea_event_id',
 			'meta_value' => $event_id,*/
 			'meta_query' => array(
@@ -659,7 +660,13 @@ class WP_Event_Aggregator_Common {
 			),
 		);
 
+		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
+			remove_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );	
+		}		
 		$events = new WP_Query( $event_args );
+		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
+			add_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );
+		}
 		if ( $events->have_posts() ) {
 			while ( $events->have_posts() ) {
 				$events->the_post();

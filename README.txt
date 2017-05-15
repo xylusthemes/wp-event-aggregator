@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, RSVP, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,9 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 10. Settings for import events.
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixes: some bug fixes
 
 = 1.1.0 =
 * Added: in-built event management system.
