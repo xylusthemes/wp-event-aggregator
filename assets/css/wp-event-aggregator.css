@@ -743,7 +743,6 @@ body {
 .details { float: left; width: 50%;}
 .details > a { display: block; line-height:18px;}
 .details > p {margin-bottom: 10px;margin-top:0;}
-strong{ color:#444444; display: block;}
 .venue{ float:left; width:35%;}
 .map {border:2px solid #ddd;float: left;width:64%; border-radius:2px;}
 .footer{ width:100%; float:left; border-top:1px solid #e5e5e5; padding:30px 0 15px 0;}
@@ -752,7 +751,6 @@ strong{ color:#444444; display: block;}
 .footer .calendar{text-decoration:underline; font-weight:normal;}
 .titlemain{ font-size:18px; font-weight:bold; color:#444444; margin-bottom:10px;}
 .margin{ margin-bottom:10px;}
-a:hover {color: #5bc5e2;}
 .title1 strong {display:block;line-height:12px;margin:25px 0 0;}
 .organizermain.library{ margin-top:0;}
 
