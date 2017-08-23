@@ -618,6 +618,21 @@ class WP_Event_Aggregator_Common {
 			'meta_value' => $event_id
 		);
 
+		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
+			if( isset( $centralize_array['ID_ical_old'] ) && $centralize_array['ID_ical_old'] != '' ){
+				$meta_query = array(
+					array(
+						'key'     => 'wpea_event_id',
+						'value'   => array( $event_id, $centralize_array['ID_ical_old'] ),
+						'compare' => 'IN',
+					)
+				);
+				$event_args['meta_query'] = $meta_query;
+				unset( $event_args['meta_key'] );
+				unset( $event_args['meta_value'] );
+			}
+		}
+
 		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
 			remove_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );	
 		}		

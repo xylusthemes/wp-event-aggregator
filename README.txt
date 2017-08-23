@@ -3,7 +3,7 @@ Contributors: xylus
 Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
-Tested up to: 4.7
+Tested up to: 4.8
 Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -69,7 +69,11 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 
 You can use `[wp_events]` for display in-built events list.
 
-<strong>Full Shortcode Example:</strong> `[wp_events col="2" posts_per_page="12" category="cat1,cat2" past_events="yes" order="desc" orderby="post_title" start_date="2017-12-25" end_date="2018-12-25" ]`
+<strong>Shortcode Examples:</strong> 
+`[wp_events]`
+`[wp_events col="3" posts_per_page="12"]`
+`[wp_events category="cat1,cat2"]`
+`[wp_events col="2" posts_per_page="12" category="cat1,cat2" past_events="yes" order="desc" orderby="post_title" start_date="2017-12-25" end_date="2018-12-25" ]`
 
 == Installation ==
 

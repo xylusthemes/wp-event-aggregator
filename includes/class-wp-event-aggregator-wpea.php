@@ -93,7 +93,7 @@ class WP_Event_Aggregator_WPEA {
 
 		if ( ! is_wp_error( $inserted_event_id ) ) {
 			$inserted_event = get_post( $inserted_event_id );
-			if ( empty( $inserted_event ) ) { return '';}
+			if ( empty( $inserted_event ) ) { return false;}
 
 			// Asign event category.
 			$ife_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();

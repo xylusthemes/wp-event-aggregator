@@ -44,7 +44,7 @@ class WP_Event_Aggregator_Facebook {
 		$options = wpea_get_import_options( 'facebook' );
 		$this->fb_app_id = isset( $options['facebook_app_id'] ) ? $options['facebook_app_id'] : '';
 		$this->fb_app_secret = isset( $options['facebook_app_secret'] ) ? $options['facebook_app_secret'] : '';
-		$this->fb_graph_url = 'https://graph.facebook.com/v2.5/';
+		$this->fb_graph_url = 'https://graph.facebook.com/v2.9/';
 
 	}
 
@@ -70,7 +70,8 @@ class WP_Event_Aggregator_Facebook {
 
 		if( 'facebook_organization' == $import_by ){
 			$page_username = isset( $event_data['page_username'] ) ? $event_data['page_username'] : '';
-			if( $page_username == '' || $this->fb_app_id == '' ){
+			if( $page_username == '' ){
+				$wpea_errors[] = __( 'Please insert valid Facebook page username.', 'wp-event-aggregator');
 				return false;
 			}
 			$facebook_event_ids = $this->get_events_for_facebook_page( $page_username );
@@ -134,12 +135,15 @@ class WP_Event_Aggregator_Facebook {
 	public function save_facebook_event( $facebook_event_object = array(), $event_args = array() ) {
 
 		global $importevents;
-		$import_result = '';
+		$import_result = false;
 
 		if ( ! empty( $facebook_event_object ) && isset( $facebook_event_object->id ) ) {
 			$centralize_array = $this->generate_centralize_array( $facebook_event_object );
-			return $importevents->common->import_events_into( $centralize_array, $event_args );
+			if( !empty( $centralize_array ) ){
+				$import_result = $importevents->common->import_events_into( $centralize_array, $event_args );
+			}
 		}
+		return $import_result;
 	}
 
 	/**
@@ -244,7 +248,7 @@ class WP_Event_Aggregator_Facebook {
 	public function get_events_for_facebook_page( $facebook_page_id ) {
 		
 		$args = array(
-			'limit' => 9999,
+			'limit' => 4999,
 			'since' => date( 'Y-m-d' ),
 			'fields' => 'id'
 		);
@@ -289,7 +293,8 @@ class WP_Event_Aggregator_Facebook {
 		$start_time = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) : date( 'Y-m-d H:i:s');
 		$end_time = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : $start_time;
 
-		$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : 'https://www.facebook.com/events/'.$facebook_id;
+		//$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : 'https://www.facebook.com/events/'.$facebook_id;
+		$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : '';
 		$timezone = $this->get_utc_offset( $facebook_event->start_time );
 		$cover_image = isset( $facebook_event->cover->source ) ? $importevents->common->clean_url( esc_url( $facebook_event->cover->source ) ) : '';
 

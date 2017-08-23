@@ -34,10 +34,11 @@ global $importevents;
 					        <td>
 					            <select name="facebook_import_by" id="facebook_import_by">
 			                    	<option value="facebook_event_id"><?php esc_attr_e( 'Facebook Event ID','wp-event-aggregator' ); ?></option>
-			                    	<option value="facebook_organization"><?php esc_attr_e( 'Facebook Organization or Page','wp-event-aggregator' ); ?></option>
+			                    	<option value="facebook_organization"><?php esc_attr_e( 'Facebook Page','wp-event-aggregator' ); ?></option>
+			                    	<option value="facebook_group"><?php esc_attr_e( 'Facebook Group','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select Event source. 1. by Facebook Event ID, 2. Facebook Organization or Page ( import events belonging to a Facebook organization or a Facebook page ).', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Select Event source. 1. by Facebook Event ID, 2. Facebook Page ( import events belonging to a Facebook page ), 3. Facebook Group ( import events belonging to a Facebook group ).', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>
@@ -54,14 +55,27 @@ global $importevents;
 					    	</td>
 					    </tr>
 
-					    <tr class="facebook_page_wrapper">
+					    <tr class="facebook_page_wrapper" style="display: none;">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Organization and page username / ID to fetch events from','wp-event-aggregator' ); ?> : 
+					    		<?php esc_attr_e( 'Page username / ID to fetch events from','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td> 
 					    		<input class="wpea_text" name="facebook_page_username" class="facebook_page_username" type="text" disabled="disabled" />
 			                    <span class="wpea_small">
 			                        <?php _e( ' Eg. username for https://www.facebook.com/xylusinfo/ is "xylusinfo".', 'wp-event-aggregator' ); ?>
+			                    </span>
+			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
+					    	</td>
+					    </tr>
+
+					    <tr class="facebook_group_wrapper" style="display: none;">
+					    	<th scope="row">
+					    		<?php esc_attr_e( 'Facebook Group URL / Numeric ID to fetch events from', 'wp-event-aggregator' ); ?> : 
+					    	</th>
+					    	<td> 
+					    		<input class="wpea_text facebook_group" name="" type="text" disabled="disabled"/>
+			                    <span class="wpea_small">
+			                        <?php _e( ' Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR "123456789123456"', 'wp-event-aggregator' ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>

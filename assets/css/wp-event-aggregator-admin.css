@@ -261,3 +261,9 @@ table.wpea_form_table tr td:nth-child(1) {
         float: none;
     }
 }
+
+.wp-event-aggregator-page .fb_authorize {
+    padding: 0px 15px;
+    margin-top: -10px;
+    background: #ddd;
+}

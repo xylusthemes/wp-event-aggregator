@@ -134,11 +134,15 @@ class WP_Event_Aggregator_EM {
 					delete_post_thumbnail( $inserted_event_id );
 				}
 			}
-
+			$location_id = 0;
 			if ( $is_exitsing_event ) {
-				$location_id = $this->get_location_args( $centralize_array['location'], $inserted_event_id );
+				if( isset( $centralize_array['location'] ) ){ 
+					$location_id = $this->get_location_args( $centralize_array['location'], $inserted_event_id );
+				}
 			}else{
-				$location_id = $this->get_location_args( $centralize_array['location'], false );
+				if( isset( $centralize_array['location'] ) ){ 
+					$location_id = $this->get_location_args( $centralize_array['location'], false );
+				}
 			}
 
 			$event_status = null;

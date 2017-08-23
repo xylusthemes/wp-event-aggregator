@@ -185,7 +185,7 @@ class WP_Event_Aggregator{
 		load_plugin_textdomain(
 			'wp-event-aggregator',
 			false,
-			WPEA_PLUGIN_DIR . '/languages/'
+			basename( dirname( __FILE__ ) ) . '/languages'
 		);
 	
 	}

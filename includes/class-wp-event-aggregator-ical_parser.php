@@ -102,7 +102,8 @@ class WP_Event_Aggregator_Ical_Parser {
 			$this->timezone = $timezone[1];
 		}
 
-		$all_events = $calendar->selectComponents( $start_year, $start_month, $start_day, $end_year, $end_month, $end_day, 'vevent', false, true, false );
+		$all_events = $calendar->selectComponents( $start_year, $start_month, $start_day, $end_year, $end_month, $end_day, 'vevent' );
+		$centralize_events = array();
 		/*
 		iCalCreator Example for parse
 
@@ -165,7 +166,7 @@ class WP_Event_Aggregator_Ical_Parser {
 						
 						$centralize_event = $this->generate_centralize_event_array( $event );
 						if( !empty( $centralize_event ) ){
-							$imported_events[] = $importevents->common->import_events_into( $centralize_event, $event_data );
+							$centralize_events[$centralize_event['ID']] = $centralize_event;
 						}
 						/*echo "<pre>";
 						print_r( $event );
@@ -175,6 +176,14 @@ class WP_Event_Aggregator_Ical_Parser {
 			} //end month foreach
 		} //end year foreach
 		//exit();
+
+		$imported_events = array();
+		if( !empty( $centralize_events ) ){
+			foreach ($centralize_events as $central_event ) {
+				$imported_events[] = $importevents->common->import_events_into( $central_event, $event_data );
+			}
+		}
+		
 		return $imported_events;
 	}
 
@@ -195,6 +204,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$post_title = str_replace('\n', ' ', $event->getProperty( 'SUMMARY' ) );
 		$post_description = str_replace('\n', '<br/>', $event->getProperty( 'DESCRIPTION' ) );
 		$uid = $this->generate_uid_for_ical_event( $event );
+		$uid_old = $this->generate_uid_for_ical_event_old_support( $event );
 		$is_all_day = false;
 		
 		$system_timezone = date_default_timezone_get();
@@ -336,6 +346,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$xt_event = array(
 			'origin'          => 'ical',
 			'ID'              => $uid,
+			'ID_ical_old'     => $uid_old,
 			'name'            => $post_title,
 			'description'     => $post_description,
 			'starttime_local' => $start_time,
@@ -439,6 +450,24 @@ class WP_Event_Aggregator_Ical_Parser {
 	 * @return 	 array
 	 */
 	public function generate_uid_for_ical_event( $ical_event ) {
+
+		$recurrence_id = $ical_event->getProperty( 'RECURRENCE-ID' );
+		if ( false === $recurrence_id && false !== $ical_event->getProperty( 'X-RECURRENCE' ) ) {
+			$current_dt_start = $ical_event->getProperty( 'X-CURRENT-DTSTART' );
+			$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
+		}
+		return $ical_event->getProperty( 'UID' ) . $recurrence_id;
+
+	}
+
+	/**
+	 * Generate UID for ical event old support.
+	 *
+	 * @since    1.0.0
+	 * @param 	 array $ical_event iCal vevent Object.
+	 * @return 	 array
+	 */
+	public function generate_uid_for_ical_event_old_support( $ical_event ) {
 
 		$recurrence_id = $ical_event->getProperty( 'RECURRENCE-ID' );
 		if ( false === $recurrence_id && false !== $ical_event->getProperty( 'X-RECURRENCE' ) ) {

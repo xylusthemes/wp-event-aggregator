@@ -7,6 +7,8 @@ $meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : arra
 $facebook_options = isset($wpea_options['facebook'])? $wpea_options['facebook'] : array();
 $ical_options = isset($wpea_options['ical'])? $wpea_options['ical'] : array();
 $aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
+$facebook_app_id = isset( $facebook_options['facebook_app_id'] ) ? $facebook_options['facebook_app_id'] : '';
+$facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $facebook_options['facebook_app_secret'] : '';
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
@@ -98,7 +100,17 @@ $aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : arra
             <br/>
 
             <h3 class="setting_bar"><?php esc_attr_e( 'Facebook Settings', 'wp-event-aggregator' ); ?></h3>
-            <p><?php _e( 'You need a Facebook App ID and App Secret to import your events from Facebook.','wp-event-aggregator' ); ?> </p>
+            <div class="widefat" style="width: 100%;background-color: #FFFBCC;border: 1px solid #e5e5e5;
+-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);box-shadow: 0 1px 1px rgba(0,0,0,.04);padding: 10px;">
+                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You have to create a Facebook application before filling the following details.','wp-event-aggregator' ), __( 'Click here','wp-event-aggregator' ),  __( 'to create new Facebook application.','wp-event-aggregator' ) ); ?>
+                <br/>
+                <?php _e( 'In the application page in facebook, navigate to <b>Apps &gt; Settings &gt; Edit settings &gt; Website &gt; Site URL</b>. Set the site url as : ', 'wp-event-aggregator' ); ?>
+                <span style="color: green;"><?php echo get_site_url(); ?></span>
+
+                <br><?php _e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
+                <b><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'wp-event-aggregator' ); ?></a></b>.
+            </div>
+
             
             <table class="form-table">
                 <tbody>
@@ -174,6 +186,19 @@ $aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : arra
                             </span>
                         </td>
                     </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
+                        </th>
+                        <td>
+                            <input type="checkbox" name="" disabled="disabled" />
+                            <span class="xtei_small">
+                                <?php _e( 'Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php do_action( 'wpea_render_pro_notice' ); ?>
+                        </td>
+                    </tr>
                 
                 </tbody>
             </table>
@@ -221,5 +246,36 @@ $aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : arra
                 <input type="submit" class="button-primary xtei_submit_button" style=""  value="<?php esc_attr_e( 'Save Settings', 'wp-event-aggregator' ); ?>" />
             </div>
             </form>
+
+            <?php 
+            if( $facebook_app_id != '' && $facebook_app_secret != '' ){
+                ?>
+                <h3 class="setting_bar"><?php esc_attr_e( 'Authorize your Facebook Account (Optional)', 'wp-event-aggregator' ); ?></h3>
+                <div class="fb_authorize">
+                    <table class="form-table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <?php _e( 'Facebook Authorization','wp-event-aggregator' ); ?> : 
+                                </th>
+                                <td>
+                                    <?php 
+                                    $button_value = __('Authorize', 'wp-event-aggregator');
+                                    ?>
+                                    <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" disabled="disabled" />
+                                    <?php 
+                                    do_action( 'wpea_render_pro_notice' );
+                                    ?>
+                                    <span class="wpea_small">
+                                    <?php _e( 'By Authorize your account you are able to import private facebook events which you can see with your profile and import events by group. Authorization is not require if you want to import only public events.','wp-event-aggregator' ); ?>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <?php
+            }
+            ?>
     </div>
 </div>
