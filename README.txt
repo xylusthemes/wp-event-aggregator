@@ -1,10 +1,10 @@
 === WP Event Aggregator: Import Facebook, Eventbrite, Meetup, iCal Events ===
-Contributors: xylus
+Contributors: xylus,dharm1025
 Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 1.2.4
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,7 +45,7 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 
 * Easy and seemless Event import from Facebook, Eventbrite, Meetup, iCalendar and ICS to WordPres.
 * Import Eventrite event by Event ID, organiser ID ([Pro][1]) and from your Eventbrite account ([Pro][1]).
-* Import Facebook event by Event ID, Facebook page ID ([Pro][1]).
+* Import Facebook event by Event ID, Facebook page ID ([Pro][1]), Facebook group ([Pro][1]).
 * Import Meetup events by meetup group URL.
 * Import iCal events using .ics file upload or by iCal URL([Pro][1]).
 * Import multiple events using multiple event IDs at one time ([Pro][1]).
@@ -124,13 +124,22 @@ You can use `[wp_events]` for display in-built events list.
 
 == Changelog ==
 
+= 1.3.0 =
+* ADDED: Support for import events from Facebook group. (Pro)
+* ADDED: Now user can import facebook events which are accesible from user’s profile (Pro)
+* ADDED: Facebook Authorization option for import facebook group events (Pro)
+* ADDED: User can edit scheduled import now. (Pro)
+* FIXED: jQuery UI css conflict with DIVI theme
+* FIXED: Ical parser issues.
+* FIXED: some bug fixes.
+
 = 1.2.4 =
 * ADDED: Option for delete data on plugin uninstall
 * ADDED: Option for disable inbuilt event managent (WP Events).
-* ADDED: Past Events display by add ‘past_events=”yes”‘ into shortcode.
+* ADDED: Past Events display by add ‘past_events="yes"‘ into shortcode.
 * ADDED: ‘col’ attribute into shortcode for number of column layout setup.
 * ADDED: New iCal parse library to prevent various issues.
-* ADDED: more options in shortcode full shortcode is now like. [wp_events col=’2′ posts_per_page=’12’ category=”cat1,cat2″ past_events=”yes” order=”desc” orderby=”post_title” start_date=”2017-12-25″ end_date=”2018-12-25″ ]
+* ADDED: more options in shortcode full shortcode is now like. [wp_events col="2" posts_per_page="12" category="cat1,cat2" past_events="yes" order="desc" orderby="post_title" start_date="2017-12-25" end_date="2018-12-25" ]
 * ADDED: Event Type 2 multi select for EventON(Pro).
 * ADDED: Multiple event IDs are now insertable at once in Eventbrite import(Pro).
 * ADDED: Upcoming Events widget(Pro).
