@@ -803,6 +803,7 @@ class WP_Event_Aggregator_Cpt {
 			?>
 		</div>
 		<?php
+		do_action( 'wpea_after_event_list', $wp_events );
 		$wp_list_events = ob_get_contents();
 		ob_end_clean();
 		wp_reset_postdata();
