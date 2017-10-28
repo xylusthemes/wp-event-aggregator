@@ -99,11 +99,6 @@ class WP_Event_Aggregator_EE4 {
 			$emeventdata['post_status'] = $event_args['event_status'];
 		}
 
-		if ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable('status') ) {
-			$emeventdata['post_status'] = get_post_status( $is_exitsing_event );
-			$event_args['event_status'] = get_post_status( $is_exitsing_event );
-		}
-
 		$inserted_event_id = wp_insert_post( $emeventdata, true );
 
 		if ( ! is_wp_error( $inserted_event_id ) ) {
@@ -118,9 +113,7 @@ class WP_Event_Aggregator_EE4 {
 				}
 			}
 			if ( ! empty( $ife_cats ) ) {
-				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
-					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy );
-				}
+				wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy );
 			}
 
 			// Assign Featured images
@@ -142,7 +135,7 @@ class WP_Event_Aggregator_EE4 {
 
 			$datetime_data = array(
 				'EVT_ID' 		=> $inserted_event_id,
-				'DTT_EVT_start' => $event_end_date,
+				'DTT_EVT_start' => $event_start_date,
 				'DTT_EVT_end' 	=> $event_end_date
 			);
 
