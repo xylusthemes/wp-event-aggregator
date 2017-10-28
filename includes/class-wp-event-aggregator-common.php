@@ -113,6 +113,10 @@ class WP_Event_Aggregator_Common {
 				$event_taxonomy = $importevents->my_calendar->get_taxonomy();
 				break;
 			
+			case 'ee4':
+				$event_taxonomy = $importevents->ee4->get_taxonomy();
+				break;
+
 			default:
 				break;
 		}
@@ -177,6 +181,12 @@ class WP_Event_Aggregator_Common {
 		if ( is_plugin_active( 'my-calendar/my-calendar.php' ) ) {
 			$supported_plugins['my_calendar'] = __( 'My Calendar', 'wp-event-aggregator' );
 		}
+
+		// Check EE4
+		if( defined( 'EVENT_ESPRESSO_VERSION' ) &&  defined( 'EVENT_ESPRESSO_MAIN_FILE' ) ){
+			$supported_plugins['ee4'] = __( 'Event Espresso (EE4)', 'wp-event-aggregator' );
+		}
+
 		$wpea_options = get_option( WPEA_OPTIONS );
 		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
 		if( $deactive_wpevents != 'yes' ){
@@ -465,6 +475,10 @@ class WP_Event_Aggregator_Common {
 
 			case 'my_calendar':
 				$import_result = $importevents->my_calendar->import_event( $centralize_array, $event_args );
+				break;
+
+			case 'ee4':
+				$import_result = $importevents->ee4->import_event( $centralize_array, $event_args );
 				break;
 				
 			default:

@@ -67,6 +67,7 @@ class WP_Event_Aggregator{
 			self::$instance->eventon = new WP_Event_Aggregator_EventON();
 			self::$instance->event_organizer = new WP_Event_Aggregator_Event_Organizer();
 			self::$instance->aioec = new WP_Event_Aggregator_Aioec();
+			self::$instance->ee4 = new WP_Event_Aggregator_EE4();
 			self::$instance->my_calendar = new WP_Event_Aggregator_My_Calendar();
 			
 		}
@@ -170,6 +171,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-event_organizer.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-aioec.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-my-calendar.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ee4.php';
 
 	}
 

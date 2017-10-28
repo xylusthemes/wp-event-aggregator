@@ -253,6 +253,10 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 
 							$get_term = get_term( $term, $importevents->eventum->get_taxonomy() );
 
+						}elseif( $import_plugin == 'ee4' ){
+
+							$get_term = get_term( $term, $importevents->ee4->get_taxonomy() );
+
 						}else{
 							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );
 						}
@@ -531,6 +535,10 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 						}elseif( $import_plugin == 'eventum' ){
 
 							$get_term = get_term( $term, $importevents->eventum->get_taxonomy() );
+							
+						}elseif( $import_plugin == 'ee4' ){
+
+							$get_term = get_term( $term, $importevents->ee4->get_taxonomy() );
 							
 						}else{
 							

@@ -34,7 +34,7 @@ global $importevents;
 					        <td>
 					            <select name="eventbrite_import_by" id="eventbrite_import_by">
 			                    	<option value="event_id"><?php esc_attr_e( 'Event ID','wp-event-aggregator' ); ?></option>
-			                    	<option value="your_events"><?php esc_attr_e( 'Your Events','wp-event-aggregator' ); ?></option>
+			                    	<option value="your_events" disabled="disabled"><?php esc_attr_e( 'Your Events','wp-event-aggregator' ); ?></option>
 			                    	<option value="organizer_id"><?php esc_attr_e( 'Organazer ID','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
