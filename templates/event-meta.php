@@ -102,7 +102,7 @@ $website = get_post_meta( $event_id, 'wpea_event_link', true );
 		    	<strong style="display: block;"><?php esc_html_e( 'Phone','wp-event-aggregator' ); ?>:</strong>
 		    	<a href="<?php echo 'tel:'.$org_phone; ?>"><?php echo $org_phone; ?></a>
 		    <?php } ?>
-		    <?php if( $website != '' ){ ?>
+		    <?php if( $org_url != '' ){ ?>
 		    	<strong style="display: block;"><?php esc_html_e( 'Website','wp-event-aggregator' ); ?>:</strong>
 		    	<a href="<?php echo esc_url( $org_url ); ?>"><?php echo $org_url; ?></a>
 		    <?php }
