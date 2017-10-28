@@ -74,7 +74,10 @@ class WP_Event_Aggregator_Aioec {
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
 			if ( 'yes' != $update_events ) {
-				return array( 'status'=> 'skipped' );
+				return array(
+					'status'=> 'skipped',
+					'id' 	=> $is_exitsing_event
+				);
 			}
 		}
 
@@ -177,13 +180,17 @@ class WP_Event_Aggregator_Aioec {
 			$org_phone = isset( $organizer['phone'] ) ? $organizer['phone'] : '';
 			$org_email = isset( $organizer['email'] ) ? $organizer['email'] : '';
 			$org_url   = isset( $organizer['url'] ) ? $organizer['url'] : '';
+			$allday = 0;
+			if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
+				$allday = 1;
+			}
 
 			$event_table_array = array(
 				'post_id' 		   => $inserted_event_id,
 				'start'            => $start_time,
 				'end' 	  		   => $end_time,
 				'timezone_name'    => 'UTC',
-				'allday' 	  	   => 0,
+				'allday' 	  	   => $allday,
 				'instant_event'    => 0,
 				'venue' 	  	   => $location_name,
 				'country' 	  	   => $country,
