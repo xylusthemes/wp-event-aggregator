@@ -672,11 +672,17 @@ class WP_Event_Aggregator_Cpt {
 				        );
 			}elseif(  $end_date_str != '' ){
 				$eve_args['meta_query'] = array(
+						   'relation' => 'AND',                        
+					        array(
+					            'key' => 'end_ts',
+					            'compare' => '>=',
+					            'value' => strtotime( date( 'Y-m-d' ) ),
+					        ),
 					        array(
 					            'key' => 'end_ts',
 					            'compare' => '<=',
 					            'value' => $end_date_str,
-					        )
+					        ),
 				        );
 			}
 
