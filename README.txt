@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,7 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 * [EventON](https://codecanyon.net/item/eventon-wordpress-event-calendar-plugin/1211017)
 * [My Calendar](https://wordpress.org/plugins/my-calendar/)
 * [Eventum (Tevolution-Events)](https://templatic.com/app-themes/eventum-event-directory-theme/) - Pro Version
+* [Event Espresso 4 (EE4)](https://wordpress.org/plugins/event-espresso-decaf/)
 * In-built Events Management.
 
 
@@ -123,6 +124,15 @@ You can use `[wp_events]` for display in-built events list.
 15. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.4.0 =
+* ADDED: Event Espresso 4 support. (Pro)
+* ADDED: Support for don't update status & category durring autoupdate. (Pro)
+* FIXED: bug in 'Upcoming Events widget"
+* FIXED: bug related to allday events in aioec.
+* FIXED: shortcode pagination bug on homepage.
+* FIXED: bug in advanced syncronization.
+* FIXED: some bug fixes.
 
 = 1.3.0 =
 * ADDED: Support for import events from Facebook group. (Pro)
