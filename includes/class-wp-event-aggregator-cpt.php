@@ -808,7 +808,7 @@ class WP_Event_Aggregator_Cpt {
 					</div>
 				<?php endif;
 			else:
-				echo "No Events are found.";
+				echo apply_filters( 'wpea_no_events_found_message', __( "No Events are found.", 'wp-event-aggregator' ) );
 			endif;
 
 			?>
