@@ -137,70 +137,79 @@ class WP_Event_Aggregator_My_Calendar {
 				}
 			}			
 			// Location Args for.
-			$venue 	 = $centralize_array['location'];
-			$event_label 	= isset( $venue['name'] ) ? $venue['name'] : '';
-			$event_street 	= isset( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
-			$event_street2	= isset( $venue['address_2'] ) ? $venue['address_2'] : '';
-			$address 		= isset( $venue['address_2'] ) ? $venue['address_2'] : '';
-			$event_city 	= isset( $venue['city'] ) ? $venue['city'] : '';
-			$event_state    = isset( $venue['state'] ) ? $venue['state'] : '';
-			$event_postcode = isset( $venue['zip'] ) ? $venue['zip'] : '';
-			$event_region   = isset( $venue['state'] ) ? $venue['state'] : '';
-			$event_latitude = isset( $venue['lat'] ) ? $venue['lat'] : 0.000000;
-			$event_longitude= isset( $venue['long'] ) ? $venue['long'] : 0.000000;
-			$event_country  = isset( $venue['country'] ) ? $venue['country'] : '';
-			$event_url      = isset( $venue['url'] ) ? $venue['url'] : '';
-			$event_phone    = '';
-			$event_phone2   = '';
-			$event_zoom     = 16;
+			$venue 	 = isset( $centralize_array['location'] ) ? $centralize_array['location'] : array();
+			
+			$event_label = $event_street = $event_street2 = $address = $event_city = $event_state = $event_postcode = $event_region = $event_latitude = $event_longitude = $event_country = $event_url = $event_phone = $event_phone2 = $event_zoom = '';
+			$location_id = 0;
+
+			if( !empty( $venue ) ){
+				$event_label 	= isset( $venue['name'] ) ? $venue['name'] : '';
+				$event_street 	= isset( $venue['full_address'] ) ? $venue['full_address'] : '';
+				if( $event_street == '' && isset( $venue['address_1'] ) ){
+					$event_street = $venue['address_1'];
+				}
+				$event_street2	= isset( $venue['address_2'] ) ? $venue['address_2'] : '';
+				$address 		= isset( $venue['address_2'] ) ? $venue['address_2'] : '';
+				$event_city 	= isset( $venue['city'] ) ? $venue['city'] : '';
+				$event_state    = isset( $venue['state'] ) ? $venue['state'] : '';
+				$event_postcode = isset( $venue['zip'] ) ? $venue['zip'] : '';
+				$event_region   = isset( $venue['state'] ) ? $venue['state'] : '';
+				$event_latitude = isset( $venue['lat'] ) ? $venue['lat'] : 0.000000;
+				$event_longitude= isset( $venue['long'] ) ? $venue['long'] : 0.000000;
+				$event_country  = isset( $venue['country'] ) ? $venue['country'] : '';
+				$event_url      = isset( $venue['url'] ) ? $venue['url'] : '';
+				$event_phone    = '';
+				$event_phone2   = '';
+				$event_zoom     = 16;
 
 
-			$location_data = array(
-				'location_label'     => $event_label,
-				'location_street'    => $event_street,
-				'location_street2'   => $event_street2,
-				'location_city'      => $event_city,
-				'location_state'     => $event_state,
-				'location_postcode'  => $event_postcode,
-				'location_region'    => $event_region,
-				'location_country'   => $event_country,
-				'location_url'       => $event_url,
-				'location_longitude' => $event_longitude,
-				'location_latitude'  => $event_latitude,
-				'location_zoom'      => $event_zoom,
-				'location_phone'     => $event_phone,
-				'location_phone2'    => $event_phone2,
-				'location_access'    => ''
-			);			
-			$add_loc = array_map( 'mc_kses_post', $location_data );
-							
-			$loc_formats = array(
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%f',
-				'%f',
-				'%d',
-				'%s',
-				'%s',
-				'%s'
-			);
+				$location_data = array(
+					'location_label'     => $event_label,
+					'location_street'    => $event_street,
+					'location_street2'   => $event_street2,
+					'location_city'      => $event_city,
+					'location_state'     => $event_state,
+					'location_postcode'  => $event_postcode,
+					'location_region'    => $event_region,
+					'location_country'   => $event_country,
+					'location_url'       => $event_url,
+					'location_longitude' => $event_longitude,
+					'location_latitude'  => $event_latitude,
+					'location_zoom'      => $event_zoom,
+					'location_phone'     => $event_phone,
+					'location_phone2'    => $event_phone2,
+					'location_access'    => ''
+				);			
+				$add_loc = array_map( 'mc_kses_post', $location_data );
+								
+				$loc_formats = array(
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%f',
+					'%f',
+					'%d',
+					'%s',
+					'%s',
+					'%s'
+				);
 
-			$location_id = $wpdb->get_var( "SELECT `location_id` FROM ".my_calendar_locations_table()." WHERE `location_label` = '". sanitize_text_field( $event_label ) ."'"  );
-			if( $location_id > 0 && is_numeric( $location_id ) && !empty( $location_id ) ){
-				
-				$where = array( 'location_id' => (int)$location_id );
-				$loc_where_format = array( '%d' );
-				$wpdb->update( my_calendar_locations_table() , $location_data, $where, $loc_formats, $loc_where_format );	
-			}else{
-				$wpdb->insert( my_calendar_locations_table() , $location_data, $loc_formats );
-				$location_id = $wpdb->insert_id;
+				$location_id = $wpdb->get_var( "SELECT `location_id` FROM ".my_calendar_locations_table()." WHERE `location_label` = '". esc_sql( $event_label ) ."'" );
+				if( $location_id > 0 && is_numeric( $location_id ) && !empty( $location_id ) ){
+					
+					$where = array( 'location_id' => (int)$location_id );
+					$loc_where_format = array( '%d' );
+					$wpdb->update( my_calendar_locations_table() , $location_data, $where, $loc_formats, $loc_where_format );	
+				}else{
+					$wpdb->insert( my_calendar_locations_table() , $location_data, $loc_formats );
+					$location_id = $wpdb->insert_id;
+				}
 			}
 
 			$event_data = array(
@@ -298,7 +307,8 @@ class WP_Event_Aggregator_My_Calendar {
 				'%f'
 			);
 			
-			$db_event_id = $wpdb->get_var( "SELECT `event_id` FROM ".my_calendar_table()." WHERE `event_title` = '". sanitize_text_field( $inserted_event->post_title ) ."' AND `event_post`=". $inserted_event_id ." LIMIT 1");
+			$db_event_id = $wpdb->get_var( $wpdb->prepare( "SELECT `event_id` FROM ".my_calendar_table()." WHERE `event_title` = %s AND `event_post`= %d LIMIT 1", sanitize_text_field( $inserted_event->post_title ), $inserted_event_id ) );
+			
 			if( $db_event_id > 0 && is_numeric( $db_event_id ) && !empty( $db_event_id ) ){
 				
 				$event_where = array( 'event_id' => absint( $db_event_id ) );
