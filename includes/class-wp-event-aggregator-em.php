@@ -193,6 +193,10 @@ class WP_Event_Aggregator_EM {
 				}
 			}
 
+			if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
+				$status_changed = $wpdb->update( $wpdb->posts, array( 'post_status' => sanitize_text_field( $event_args['event_status'] ) ), array( 'ID' => $inserted_event_id ) );
+			}
+
 			if ( $is_exitsing_event ) {
 				do_action( 'wpea_after_update_em_'.$centralize_array["origin"].'_event', $inserted_event_id, $centralize_array );
 				return array(
