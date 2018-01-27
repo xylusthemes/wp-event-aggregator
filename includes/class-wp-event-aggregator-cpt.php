@@ -600,7 +600,7 @@ class WP_Event_Aggregator_Cpt {
 
 		ob_start();
 			
-			include WPEA_PLUGIN_DIR . '/templates/event-meta.php';
+			get_wpea_template( 'wpea-event-meta.php' );			
 
 		$event_meta_details = ob_get_contents();
 		ob_end_clean();
@@ -647,7 +647,8 @@ class WP_Event_Aggregator_Cpt {
 					$end_date_str = '';
 				}
 			}
-						
+
+			
 			if( $start_date_str != '' && $end_date_str != '' ){
 				$eve_args['meta_query'] = array(
 						   'relation' => 'AND',                        
@@ -788,10 +789,12 @@ class WP_Event_Aggregator_Cpt {
 		?>
 		<div class="row_grid wpea_frontend_archive">
 			<?php
+			$template_args = array();
+			$template_args['css_class'] = $css_class;
 			if( $wp_events->have_posts() ):
 				while ( $wp_events->have_posts() ) : $wp_events->the_post();
 					
-					include WPEA_PLUGIN_DIR . '/templates/archive-content.php';
+					get_wpea_template( 'wpea-archive-content.php', $template_args );
 					
 				endwhile; // End of the loop.
 

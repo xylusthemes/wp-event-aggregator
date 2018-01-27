@@ -70,7 +70,15 @@ global $importevents;
 				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
 				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? $_REQUEST['tab'] : 'eventbrite' ?>" />
 				<input type="hidden" name="ntab" value="<?php echo $_REQUEST['ntab'] ?>" />
-				<?php do_action( 'wpea_render_pro_notice' ); ?>
+				<?php 
+				if( wpea_is_pro() ){
+					$listtable = new WP_Event_Aggregator_List_Table();
+					$listtable->prepare_items('meetup');
+					$listtable->display();
+				}else{
+					do_action( 'wpea_render_pro_notice' );
+				}
+				?>
 				</form>
 				<?php
 			} ?>

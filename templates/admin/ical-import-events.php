@@ -34,7 +34,7 @@ global $importevents;
 					        <td>
 					            <select name="ical_import_by" id="ical_import_by">
 					            	<option value="ics_file"><?php esc_attr_e( '.ics File','wp-event-aggregator' ); ?></option>
-			                    	<option value="ical_url"><?php esc_attr_e( 'iCal URL','wp-event-aggregator' ); ?></option>
+			                    	<option value="ical_url" <?php if( wpea_is_pro() ){ echo 'selected="selected"'; } ?> ><?php esc_attr_e( 'iCal URL','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
 			                        <?php _e( 'Select Event source.', 'wp-event-aggregator' ); ?>
@@ -47,7 +47,7 @@ global $importevents;
 					    		<?php esc_attr_e( 'iCal URL','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
-					    		<input class="wpea_text ical_url" name="ical_url" type="text" disabled="disabled" />
+					    		<input class="wpea_text ical_url" name="ical_url" type="text" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled"'; } ?>/>
 			                    <span class="wpea_small">
 			                        <?php _e( 'Enter iCal URL ( Eg. https://www.xyz.com/ical-url.ics )', 'wp-event-aggregator' ); ?>
 			                    </span>
@@ -107,7 +107,15 @@ global $importevents;
 				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
 				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? $_REQUEST['tab'] : 'ical' ?>" />
 				<input type="hidden" name="ntab" value="<?php echo $_REQUEST['ntab'] ?>" />
-				<?php do_action( 'wpea_render_pro_notice' ); ?>
+				<?php 
+				if( wpea_is_pro() ){
+					$listtable = new WP_Event_Aggregator_List_Table();
+					$listtable->prepare_items('ical');
+					$listtable->display();
+				}else{
+					do_action( 'wpea_render_pro_notice' );
+				}				
+				?>
 				</form>
 				<?php
 			} ?>

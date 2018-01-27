@@ -7,6 +7,23 @@
 			changeYear: true,
 			dateFormat: 'yy-mm-dd'
 		});
+		jQuery(document).on("click", ".wpea_datepicker", function(){
+		    jQuery(this).datepicker({
+				changeMonth: true,
+				changeYear: true,
+				dateFormat: 'yy-mm-dd',
+				showOn:'focus'
+			}).focus();
+		});
+
+		jQuery(document).on("click", ".vc_ui-panel .wpea_datepicker input[type='text']", function(){
+		    jQuery(this).datepicker({
+				changeMonth: true,
+				changeYear: true,
+				dateFormat: 'yy-mm-dd',
+				showOn:'focus'
+			}).focus();
+		});
 	});
 	
 	jQuery(document).ready(function(){
@@ -48,6 +65,7 @@
 		jQuery("#import_type").trigger('change');
 		jQuery("#eventbrite_import_by").trigger('change');
 	});	
+
 
 	jQuery(document).ready(function(){
 		jQuery('#facebook_import_by').live('change', function(){
@@ -96,6 +114,7 @@
 		jQuery("#facebook_import_by").trigger('change');
 	});	
 
+
 	jQuery(document).ready(function(){
 		jQuery('#ical_import_by').on('change', function(){
 
@@ -125,9 +144,13 @@
 	    jQuery('.event_plugin').on( 'change', function() {
 
 	    	var event_plugin = jQuery(this).val();
+	    	var taxo_cats = jQuery('#wpea_taxo_cats').val();
+	    	var taxo_tags = jQuery('#wpea_taxo_tags').val();
 	    	var data = {
 	            'action': 'wpea_render_terms_by_plugin',
-	            'event_plugin': event_plugin
+	            'event_plugin': event_plugin,
+	            'taxo_cats': taxo_cats,
+	            'taxo_tags': taxo_tags
 	        };
 
 	        var terms_space = jQuery('.event_taxo_terms_wraper');

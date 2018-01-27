@@ -2,11 +2,9 @@
 /**
  * The template for displaying all single Event meta
  */	
-	global $importevents;
+global $importevents;
 
-	if( $event_id == '' ){
-		$event_id = get_the_ID();
-	}
+$event_id = get_the_ID();
 
 $start_date_str = get_post_meta( $event_id, 'start_ts', true );
 $end_date_str = get_post_meta( $event_id, 'end_ts', true );

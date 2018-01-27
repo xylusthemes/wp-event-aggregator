@@ -1,6 +1,7 @@
 <?php
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) exit;
+global $importevents;
 $wpea_options = get_option( WPEA_OPTIONS );
 $eventbrite_options = isset($wpea_options['eventbrite'])?$wpea_options['eventbrite']:array();
 $meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
@@ -9,41 +10,43 @@ $ical_options = isset($wpea_options['ical'])? $wpea_options['ical'] : array();
 $aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
 $facebook_app_id = isset( $facebook_options['facebook_app_id'] ) ? $facebook_options['facebook_app_id'] : '';
 $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $facebook_options['facebook_app_secret'] : '';
+$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
+$wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
-        
-        <form method="post" id="wpea_setting_form">                
+    	
+    	<form method="post" id="wpea_setting_form">                
 
             <h3 class="setting_bar"><?php esc_attr_e( 'Eventbrite Settings', 'wp-event-aggregator' ); ?></h3>
             <p><?php _e( 'You need a Eventbrite Personal OAuth token to import your events from Eventbrite.','wp-event-aggregator' ); ?> </p>
             <table class="form-table">
-                <tbody>
-                    <tr>
-                        <th scope="row">
-                            <?php _e( 'Eventbrite Personal OAuth token','wp-event-aggregator' ); ?> : 
-                        </th>
-                        <td>
-                            <input class="eventbrite_oauth_token" name="eventbrite[oauth_token]" type="text" value="<?php if ( isset( $eventbrite_options['oauth_token'] ) ) { echo $eventbrite_options['oauth_token']; } ?>" />
-                            <span class="xtei_small">
-                                <?php _e( 'Insert your eventbrite.com Personal OAuth token you can get it from <a href="http://www.eventbrite.com/myaccount/apps/" target="_blank">here</a>.', 'xt-eventbrite-import-pro' ); ?>
-                            </span>
-                        </td>
-                    </tr>       
-                    <tr>
-                        <th scope="row">
-                            <?php _e( 'Display ticket option after event', 'wp-event-aggregator' ); ?> : 
-                        </th>
-                        <td>
-                            <?php 
-                            $enable_ticket_sec = isset( $eventbrite_options['enable_ticket_sec'] ) ? $eventbrite_options['enable_ticket_sec'] : 'no';
-                            ?>
-                            <input type="checkbox" name="eventbrite[enable_ticket_sec]" value="yes" <?php if( $enable_ticket_sec == 'yes' ) { echo 'checked="checked"'; } ?> />
-                            <span class="xtei_small">
-                                <?php _e( 'Check to display ticket option after event.', 'wp-event-aggregator' ); ?>
-                            </span>
-                        </td>
-                    </tr>
+            	<tbody>
+            		<tr>
+            			<th scope="row">
+            				<?php _e( 'Eventbrite Personal OAuth token','wp-event-aggregator' ); ?> : 
+            			</th>
+            			<td>
+            				<input class="eventbrite_oauth_token" name="eventbrite[oauth_token]" type="text" value="<?php if ( isset( $eventbrite_options['oauth_token'] ) ) { echo $eventbrite_options['oauth_token']; } ?>" />
+		                    <span class="xtei_small">
+		                        <?php _e( 'Insert your eventbrite.com Personal OAuth token you can get it from <a href="http://www.eventbrite.com/myaccount/apps/" target="_blank">here</a>.', 'wp-event-aggregator' ); ?>
+		                    </span>
+            			</td>
+            		</tr>		
+            		<tr>
+            			<th scope="row">
+            				<?php _e( 'Display ticket option after event', 'wp-event-aggregator' ); ?> : 
+            			</th>
+            			<td>
+            				<?php 
+            				$enable_ticket_sec = isset( $eventbrite_options['enable_ticket_sec'] ) ? $eventbrite_options['enable_ticket_sec'] : 'no';
+            				?>
+            				<input type="checkbox" name="eventbrite[enable_ticket_sec]" value="yes" <?php if( $enable_ticket_sec == 'yes' ) { echo 'checked="checked"'; } ?> />
+		                    <span class="xtei_small">
+		                        <?php _e( 'Check to display ticket option after event.', 'wp-event-aggregator' ); ?>
+		                    </span>
+            			</td>
+            		</tr>
                     <tr>
                         <th scope="row">
                             <?php _e( 'Update existing events', 'wp-event-aggregator' ); ?> : 
@@ -59,8 +62,8 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
                             </span>
                         </td>
                     </tr>
-                
-                </tbody>
+         		
+            	</tbody>
             </table>
             <br/>
 
@@ -100,6 +103,7 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
             <br/>
 
             <h3 class="setting_bar"><?php esc_attr_e( 'Facebook Settings', 'wp-event-aggregator' ); ?></h3>
+            
             <div class="widefat" style="width: 100%;background-color: #FFFBCC;border: 1px solid #e5e5e5;
 -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);box-shadow: 0 1px 1px rgba(0,0,0,.04);padding: 10px;">
                 <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You have to create a Facebook application before filling the following details.','wp-event-aggregator' ), __( 'Click here','wp-event-aggregator' ),  __( 'to create new Facebook application.','wp-event-aggregator' ) ); ?>
@@ -110,7 +114,6 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
                 <br><?php _e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
                 <b><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'wp-event-aggregator' ); ?></a></b>.
             </div>
-
             
             <table class="form-table">
                 <tbody>
@@ -119,7 +122,7 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
                             <?php _e( 'Facebook App ID','wp-event-aggregator' ); ?> : 
                         </th>
                         <td>
-                            <input class="facebook_app_id" name="facebook[facebook_app_id]" type="text" value="<?php if ( isset( $facebook_options['facebook_app_id'] ) ) { echo $facebook_options['facebook_app_id']; } ?>" />
+                            <input class="facebook_app_id" name="facebook[facebook_app_id]" type="text" value="<?php if ( $facebook_app_id != '' ) { echo $facebook_app_id; } ?>" />
                             <span class="xtei_small">
                                 <?php
                                 printf( '%s <a href="https://developers.facebook.com/apps" target="_blank">%s</a>', 
@@ -136,7 +139,7 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
                             <?php _e( 'Facebook App secret','wp-event-aggregator' ); ?> : 
                         </th>
                         <td>
-                            <input class="facebook_app_secret" name="facebook[facebook_app_secret]" type="text" value="<?php if ( isset( $facebook_options['facebook_app_secret'] ) ) { echo $facebook_options['facebook_app_secret']; } ?>" />
+                            <input class="facebook_app_secret" name="facebook[facebook_app_secret]" type="text" value="<?php if ( $facebook_app_secret != '' ) { echo $facebook_app_secret; } ?>" />
                             <span class="xtei_small">
                                 <?php
                                 printf( '%s <a href="https://developers.facebook.com/apps" target="_blank">%s</a>', 
@@ -192,7 +195,18 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
                             <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
                         </th>
                         <td>
-                            <input type="checkbox" name="" disabled="disabled" />
+                            <?php 
+                            if( wpea_is_pro() ){
+                                $advanced_sync = isset( $ical_options['advanced_sync'] ) ? $ical_options['advanced_sync'] : 'no';
+                                ?>
+                                <input type="checkbox" name="ical[advanced_sync]" value="yes" <?php if( $advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <?php
+                            }else{
+                                ?>
+                                <input type="checkbox" name="" disabled="disabled" />
+                                <?php
+                            }
+                            ?>
                             <span class="xtei_small">
                                 <?php _e( 'Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events.', 'wp-event-aggregator' ); ?>
                             </span>
@@ -207,6 +221,10 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
             <h3 class="setting_bar"><?php esc_attr_e( 'WP Event Aggregator Settings', 'wp-event-aggregator' ); ?></h3>
             <table class="form-table">
                 <tbody>
+                    <?php 
+                    do_action( 'wpea_admin_settings_start' );
+                    ?>
+                    
                     <tr>
                         <th scope="row">
                             <?php _e( 'Disable WP Events', 'wp-event-aggregator' ); ?> : 
@@ -259,15 +277,40 @@ $facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $face
                                     <?php _e( 'Facebook Authorization','wp-event-aggregator' ); ?> : 
                                 </th>
                                 <td>
-                                    <?php 
-                                    $button_value = __('Authorize', 'wp-event-aggregator');
+                                    <?php
+                                    if( wpea_is_pro() ){
+                                        ?>
+                                        <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+                                            <input type="hidden" name="action" value="wpea_facebook_authorize_action"/>
+                                            <?php wp_nonce_field('wpea_facebook_authorize_action', 'wpea_facebook_authorize_nonce'); ?>
+                                            <?php 
+                                            $button_value = __('Authorize', 'wp-event-aggregator');
+                                            if( isset( $wpea_user_token_options['authorize_status'] ) && $wpea_user_token_options['authorize_status'] == 1 && isset(  $wpea_user_token_options['access_token'] ) &&  $wpea_user_token_options['access_token'] != '' ){
+                                                $button_value = __('Reauthorize', 'wp-event-aggregator');
+                                            }
+                                            ?>
+                                            <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" />
+                                            <?php 
+                                            if( !empty( $wpea_fb_authorize_user ) && isset( $wpea_fb_authorize_user['name'] ) && $importevents->common->has_authorized_user_token() ){
+                                                $fbauthname = sanitize_text_field( $wpea_fb_authorize_user['name'] );
+                                                if( $fbauthname != '' ){
+                                                   printf( __(' ( Authorized as: %s )', 'wp-event-aggregator'), '<b>'.$fbauthname.'</b>' );
+                                                }   
+                                            }
+                                            ?>
+                                        </form>
+                                        <?php
+                                    }else{
+                                        $button_value = __('Authorize', 'wp-event-aggregator');
+                                        ?>
+                                        <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" disabled="disabled" />
+                                        <?php 
+                                        do_action( 'wpea_render_pro_notice' );
+                                    }
                                     ?>
-                                    <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" disabled="disabled" />
-                                    <?php 
-                                    do_action( 'wpea_render_pro_notice' );
-                                    ?>
+                                    
                                     <span class="wpea_small">
-                                    <?php _e( 'By Authorize your account you are able to import private facebook events which you can see with your profile and import events by group. Authorization is not require if you want to import only public events.','wp-event-aggregator' ); ?>
+                                        <?php _e( 'By Authorize your account you are able to import private facebook events which you can see with your profile and import events by group. Authorization is not require if you want to import only public events.','wp-event-aggregator' ); ?>
                                     </span>
                                 </td>
                             </tr>

@@ -62,7 +62,10 @@ class WP_Event_Aggregator_My_Calendar {
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
 			if ( 'yes' != $update_events ) {
-				return array( 'status'=> 'skipped' );
+				return array(
+					'status'=> 'skipped',
+					'id' 	=> $is_exitsing_event
+				);
 			}
 		}
 
@@ -85,6 +88,12 @@ class WP_Event_Aggregator_My_Calendar {
 		if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
 			$mc_eventdata['post_status'] = $event_args['event_status'];
 		}
+		
+		if ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable('status') ) {
+			$mc_eventdata['post_status'] = get_post_status( $is_exitsing_event );
+			$event_args['event_status'] = get_post_status( $is_exitsing_event );
+		}
+
 		$inserted_event_id = wp_insert_post( $mc_eventdata, true );
 
 		if ( ! is_wp_error( $inserted_event_id ) ) {
@@ -99,7 +108,9 @@ class WP_Event_Aggregator_My_Calendar {
 				}
 			}
 			if ( ! empty( $ife_cats ) ) {
-				wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy );
+				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
+					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy );
+				}
 			}
 
 			// Assign Featured images
@@ -162,7 +173,6 @@ class WP_Event_Aggregator_My_Calendar {
 				$event_phone2   = '';
 				$event_zoom     = 16;
 
-
 				$location_data = array(
 					'location_label'     => $event_label,
 					'location_street'    => $event_street,
@@ -200,7 +210,7 @@ class WP_Event_Aggregator_My_Calendar {
 					'%s'
 				);
 
-				$location_id = $wpdb->get_var( "SELECT `location_id` FROM ".my_calendar_locations_table()." WHERE `location_label` = '". esc_sql( $event_label ) ."'" );
+				$location_id = $wpdb->get_var( "SELECT `location_id` FROM ".my_calendar_locations_table()." WHERE `location_label` = '".  esc_sql( $event_label ) ."'"  );
 				if( $location_id > 0 && is_numeric( $location_id ) && !empty( $location_id ) ){
 					
 					$where = array( 'location_id' => (int)$location_id );
@@ -209,8 +219,8 @@ class WP_Event_Aggregator_My_Calendar {
 				}else{
 					$wpdb->insert( my_calendar_locations_table() , $location_data, $loc_formats );
 					$location_id = $wpdb->insert_id;
-				}
-			}
+				}	
+			}		
 
 			$event_data = array(
 				// strings
@@ -308,8 +318,15 @@ class WP_Event_Aggregator_My_Calendar {
 			);
 			
 			$db_event_id = $wpdb->get_var( $wpdb->prepare( "SELECT `event_id` FROM ".my_calendar_table()." WHERE `event_title` = %s AND `event_post`= %d LIMIT 1", sanitize_text_field( $inserted_event->post_title ), $inserted_event_id ) );
-			
+
 			if( $db_event_id > 0 && is_numeric( $db_event_id ) && !empty( $db_event_id ) ){
+				
+				if ( !$importevents->common->wpea_is_updatable('category') ){
+					$cat_id = $wpdb->get_var( "SELECT `event_category` FROM ".my_calendar_table()." WHERE `event_id`=". absint( $db_event_id ) );
+					if( $cat_id ){
+						$event_data['event_category'] = $cat_id;
+					}
+				}
 				
 				$event_where = array( 'event_id' => absint( $db_event_id ) );
 				$wpdb->update( my_calendar_table(), $event_data, $event_where, $event_formats );	

@@ -63,7 +63,7 @@ class WP_Event_Aggregator_Eventbrite {
 			$total_pages = $eventbrite_events['pagination']['page_count'];
 			if( $total_pages > 1 ){
 				for( $i = 1; $i <= $total_pages; $i++ ){
-					echo $eventbrite_api = $eventbrite_api_url. '&page=' . $i;
+					$eventbrite_api = $eventbrite_api_url. '&page=' . $i;
 					$eventbrite_response_loop = wp_remote_get( $eventbrite_api );
 					if ( is_wp_error( $eventbrite_response_loop ) ) {
 						$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
@@ -107,30 +107,46 @@ class WP_Event_Aggregator_Eventbrite {
 		global $wpea_errors, $importevents;
 		$options = wpea_get_import_options( 'eventbrite' );
 		$eventbrite_oauth_token = isset( $options['oauth_token'] ) ? $options['oauth_token'] : '';
-		$eventbrite_id = isset( $event_data['eventbrite_event_id'] ) ? $event_data['eventbrite_event_id'] : 0;
-
-		if ( ! $eventbrite_id || $this->oauth_token == '' ) {
+		
+		if ( $this->oauth_token == '' ) {
 			$wpea_errors[] = __( 'Please insert Eventbrite "Personal OAuth token".', 'wp-event-aggregator');
 			return;
 		}
 
-		$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/?token=' .  $this->oauth_token;
-	    $eventbrite_response = wp_remote_get( $eventbrite_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		$imported_events = array();
+		$eventbrite_ids = isset( $event_data['eventbrite_event_id'] ) ? $event_data['eventbrite_event_id'] : 0;
 
-		if ( is_wp_error( $eventbrite_response ) ) {
-			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
-			return;
+		if( !empty( $eventbrite_ids ) ){
+			foreach ($eventbrite_ids as $eventbrite_id ) {
+				if( $eventbrite_id != '' ){
+
+					if( !is_numeric( $eventbrite_id ) ){
+						$wpea_errors[] = sprintf( esc_html__( 'Please provide valid Eventbrite event ID: %s.', 'wp-event-aggregator' ), $eventbrite_id ) ;
+						continue;
+					}
+
+					$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/?token=' .  $this->oauth_token;
+				    $eventbrite_response = wp_remote_get( $eventbrite_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+
+					if ( is_wp_error( $eventbrite_response ) ) {
+
+						$wpea_errors[] = sprintf( esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), $eventbrite_id ) ;
+						continue;
+					}
+
+					$eventbrite_event = json_decode( $eventbrite_response['body'], true );
+					if ( is_array( $eventbrite_event ) && ! isset( $eventbrite_event['error'] ) ) {
+
+						$imported_events[] = $this->save_eventbrite_event( $eventbrite_event, $event_data );
+						
+					}else{
+						$wpea_errors[] = sprintf( esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), $eventbrite_id ) ;
+						continue;
+					}
+				}		
+			}
 		}
-
-		$eventbrite_event = json_decode( $eventbrite_response['body'], true );
-		if ( is_array( $eventbrite_event ) && ! isset( $eventbrite_event['error'] ) ) {
-
-			return $this->save_eventbrite_event( $eventbrite_event, $event_data );
-			
-		}else{
-			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
-			return;
-		}
+		return $imported_events;
 	}
 
 

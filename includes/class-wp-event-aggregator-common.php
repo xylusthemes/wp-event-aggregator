@@ -24,7 +24,9 @@ class WP_Event_Aggregator_Common {
 		add_filter( 'the_content', array( $this, 'wpea_add_em_add_ticket_section') );
 		add_filter( 'mc_event_content', array( $this, 'wpea_add_my_calendar_ticket_section') , 10, 4);
 		add_action( 'wpea_render_pro_notice', array( $this, 'render_pro_notice') );
-
+		if( wpea_is_pro() ){
+			add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
+		}
 	}	
 
 	/**
@@ -34,7 +36,7 @@ class WP_Event_Aggregator_Common {
 	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function render_import_into_and_taxonomy() {
+	public function render_import_into_and_taxonomy( $selected = '', $taxonomy_terms = array() ) {
 
 		$active_plugins = $this->get_active_supported_event_plugins();
 		?>	
@@ -48,7 +50,7 @@ class WP_Event_Aggregator_Common {
 					if( !empty( $active_plugins ) ){
 						foreach ($active_plugins as $slug => $name ) {
 							?>
-							<option value="<?php echo $slug;?>"><?php echo $name; ?></option>
+							<option value="<?php echo $slug;?>" <?php selected( $selected, $slug ); ?>><?php echo $name; ?></option>
 							<?php
 						}
 					}
@@ -62,6 +64,17 @@ class WP_Event_Aggregator_Common {
 				<?php esc_attr_e( 'Event Categories for Event Import','wp-event-aggregator' ); ?> : 
 			</th>
 			<td>
+				<?php 
+				$taxo_cats = $taxo_tags = '';
+				if( !empty( $taxonomy_terms ) && isset( $taxonomy_terms['cats'] ) ){
+					$taxo_cats = implode(',', $taxonomy_terms['cats'] );
+				}
+				if( !empty( $taxonomy_terms ) && isset( $taxonomy_terms['tags'] ) ){
+					$taxo_tags = implode(',', $taxonomy_terms['tags'] );
+				}
+				?>
+				<input type="hidden" id="wpea_taxo_cats" value="<?php echo $taxo_cats;?>">
+				<input type="hidden" id="wpea_taxo_tags" value="<?php echo $taxo_tags;?>">
 				<div class="event_taxo_terms_wraper">
 
 				</div>
@@ -83,7 +96,15 @@ class WP_Event_Aggregator_Common {
 	function wpea_render_terms_by_plugin() {
 		global $importevents;
 		$event_plugin  = esc_attr( $_REQUEST['event_plugin'] );
-		$event_taxonomy = '';
+		$taxo_cats = $taxo_tags = array();
+		if( isset( $_REQUEST['taxo_cats'] ) ){
+			$taxo_cats = explode(',', $_REQUEST['taxo_cats'] );
+		}
+		if( isset( $_REQUEST['taxo_tags'] ) ){
+			$taxo_tags = explode(',', $_REQUEST['taxo_tags'] );	
+		}
+		$event_taxonomy = $event_tag_taxonomy = '';
+		$event_taxonomy2 = '';
 		switch ( $event_plugin ) {
 			case 'wpea':
 				$event_taxonomy = $importevents->wpea->get_taxonomy();
@@ -99,6 +120,9 @@ class WP_Event_Aggregator_Common {
 
 			case 'eventon':
 				$event_taxonomy = $importevents->eventon->get_taxonomy();
+				if( wpea_is_pro() ){
+					$event_taxonomy2 = $importevents->eventon->get_taxonomy2();	
+				}				
 				break;
 
 			case 'event_organizer':
@@ -112,15 +136,23 @@ class WP_Event_Aggregator_Common {
 			case 'my_calendar':
 				$event_taxonomy = $importevents->my_calendar->get_taxonomy();
 				break;
-			
+
+			case 'eventum':
+				if( wpea_is_pro() ){
+					$event_taxonomy = $importevents->eventum->get_taxonomy();
+				}else{
+					$event_taxonomy = '';
+				}
+				break;
+
 			case 'ee4':
 				$event_taxonomy = $importevents->ee4->get_taxonomy();
 				break;
-
+			
 			default:
 				break;
 		}
-		
+
 		$terms = array();
 		if ( $event_taxonomy != '' ) {
 			if( taxonomy_exists( $event_taxonomy ) ){
@@ -128,10 +160,38 @@ class WP_Event_Aggregator_Common {
 			}
 		}
 		if( ! empty( $terms ) ){ ?>
+			<?php if( 'eventon' == $event_plugin && wpea_is_pro() ){ ?>
+				<strong style="display: block;margin-bottom: 5px;">
+					<?php _e( 'Event Type:', 'wp-event-aggregator' );?>
+				</strong>
+			<?php } ?>
 			<select name="event_cats[]" multiple="multiple">
 		        <?php foreach ($terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>">
+					<option value="<?php echo $term->term_id; ?>" <?php if( in_array( $term->term_id, $taxo_cats ) ){ echo 'selected="selected"'; } ?> >
 	                	<?php echo $term->name; ?>                                	
+	                </option>
+				<?php } ?> 
+			</select>
+			<?php
+		}
+
+		// Second Taxonomy (EventON)
+		$terms2 = array();
+		if ( $event_taxonomy2 != '' && wpea_is_pro() ) {
+			if( taxonomy_exists( $event_taxonomy2 ) ){
+				$terms2 = get_terms( $event_taxonomy2, array( 'hide_empty' => false ) );
+			}
+		}
+		if( ! empty( $terms2 ) ){ ?>
+			<?php if( 'eventon' == $event_plugin ){ ?>	
+				<strong style="display: block;margin: 5px 0px;">
+					<?php _e( 'Event Type 2:', 'wp-event-aggregator' );?>
+				</strong>
+			<?php } ?>
+			<select name="event_cats2[]" multiple="multiple">
+		        <?php foreach ($terms2 as $term2 ) { ?>
+					<option value="<?php echo $term2->term_id; ?>">
+	                	<?php echo $term2->name; ?>                                	
 	                </option>
 				<?php } ?> 
 			</select>
@@ -190,9 +250,9 @@ class WP_Event_Aggregator_Common {
 		$wpea_options = get_option( WPEA_OPTIONS );
 		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
 		if( $deactive_wpevents != 'yes' ){
-			$supported_plugins['wpea'] = __( 'WP Event Aggregator', 'wp-event-aggregator-pro' );
+			$supported_plugins['wpea'] = __( 'WP Event Aggregator', 'wp-event-aggregator' );
 		}
-		return $supported_plugins;
+		return apply_filters( 'wpea_supported_plugins', $supported_plugins );
 	}
 
 	/**
@@ -204,6 +264,7 @@ class WP_Event_Aggregator_Common {
 	 * @return void
 	 */
 	public function setup_featured_image_to_event( $event_id, $image_url = '' ) {
+
 		if ( $image_url == '' ) {
 			return;
 		}
@@ -325,8 +386,12 @@ class WP_Event_Aggregator_Common {
 		$xt_post_type =  get_post_type();
 		$event_id = get_the_ID();
 		$event_origin = get_post_meta( $event_id, 'wpea_event_origin', true );
+		$eventum = false;
+		if( wpea_is_pro() ){
+			$eventum = ( $importevents->eventum->get_event_posttype()  == $xt_post_type );
+		}
 		if ( $event_id > 0 && $event_origin == 'eventbrite' ) {
-			if( ( $importevents->em->get_event_posttype()  == $xt_post_type ) || ( $importevents->aioec->get_event_posttype()  == $xt_post_type ) || ( $importevents->wpea->get_event_posttype()  == $xt_post_type ) || ( $importevents->eventon->get_event_posttype()  == $xt_post_type ) ){
+			if( ( $importevents->em->get_event_posttype()  == $xt_post_type ) || ( $importevents->aioec->get_event_posttype()  == $xt_post_type ) || ( $importevents->wpea->get_event_posttype()  == $xt_post_type ) || ( $importevents->eventon->get_event_posttype()  == $xt_post_type ) || $eventum ){
 				$eventbrite_id = get_post_meta( $event_id, 'wpea_event_id', true );
 				if ( $eventbrite_id && $eventbrite_id > 0 && is_numeric( $eventbrite_id ) ) {
 					$ticket_section = $this->wpea_get_ticket_section( $eventbrite_id );
@@ -355,7 +420,7 @@ class WP_Event_Aggregator_Common {
 			ob_start();
 			?>
 			<div class="eventbrite-ticket-section" style="width:100%; text-align:left;">
-				<iframe id="eventbrite-tickets-<?php echo $eventbrite_id; ?>" src="//www.eventbrite.com/tickets-external?eid=<?php echo $eventbrite_id; ?>" style="width:100%;height:300px; border: 0px;"></iframe>
+				<iframe id="eventbrite-tickets-<?php echo $eventbrite_id; ?>" src="http://www.eventbrite.com/tickets-external?eid=<?php echo $eventbrite_id; ?>" style="width:100%;height:300px; border: 0px;" border="0"></iframe>
 			</div>
 			<?php
 			$ticket = ob_get_clean();
@@ -477,6 +542,14 @@ class WP_Event_Aggregator_Common {
 				$import_result = $importevents->my_calendar->import_event( $centralize_array, $event_args );
 				break;
 
+			case 'eventum':
+				if( wpea_is_pro()){
+					$import_result = $importevents->eventum->import_event( $centralize_array, $event_args );
+				}else{
+					$import_result = false;
+				}				
+				break;
+
 			case 'ee4':
 				$import_result = $importevents->ee4->import_event( $centralize_array, $event_args );
 				break;
@@ -493,22 +566,22 @@ class WP_Event_Aggregator_Common {
 	 * @since   1.0.0
 	 * @return  void
 	 */
-	function render_import_frequency(){
+	function render_import_frequency( $selected = 'daily' ){
 		?>
-		<select name="import_frequency" class="import_frequency" disabled="disabled">
-	        <option value='hourly'>
+		<select name="import_frequency" class="import_frequency" <?php if(!wpea_is_pro()){ echo 'disabled="disabled"'; } ?>>
+	        <option value='hourly' <?php selected( $selected, 'hourly' ); ?>>
 	            <?php esc_html_e( 'Once Hourly','wp-event-aggregator' ); ?>
 	        </option>
-	        <option value='twicedaily'>
+	        <option value='twicedaily' <?php selected( $selected, 'twicedaily' ); ?>>
 	            <?php esc_html_e( 'Twice Daily','wp-event-aggregator' ); ?>
 	        </option>
-	        <option value="daily" selected="selected">
+	        <option value="daily" <?php selected( $selected, 'daily' ); ?> >
 	            <?php esc_html_e( 'Once Daily','wp-event-aggregator' ); ?>
 	        </option>
-	        <option value="weekly" >
+	        <option value="weekly" <?php selected( $selected, 'weekly' ); ?> >
 	            <?php esc_html_e( 'Once Weekly','wp-event-aggregator' ); ?>
 	        </option>
-	        <option value="monthly">
+	        <option value="monthly" <?php selected( $selected, 'monthly' ); ?> >
 	            <?php esc_html_e( 'Once a Month','wp-event-aggregator' ); ?>
 	        </option>
 	    </select>
@@ -523,9 +596,9 @@ class WP_Event_Aggregator_Common {
 	 */
 	function render_import_type(){
 		?>
-		<select name="import_type" id="import_type" disabled="disabled">
-	    	<option value="onetime" disabled="disabled"><?php esc_attr_e( 'One-time Import','wp-event-aggregator' ); ?></option>
-	    	<option value="scheduled" disabled="disabled" selected="selected"><?php esc_attr_e( 'Scheduled Import','wp-event-aggregator' ); ?></option>
+		<select name="import_type" id="import_type" <?php if(!wpea_is_pro()){ echo 'disabled="disabled"'; } ?>>
+	    	<option value="onetime" <?php if(!wpea_is_pro()){ echo 'disabled="disabled"'; } ?>><?php esc_attr_e( 'One-time Import','wp-event-aggregator' ); ?></option>
+	    	<option value="scheduled" <?php if(!wpea_is_pro()){ echo 'disabled="disabled" selected="selected"'; } ?>><?php esc_attr_e( 'Scheduled Import','wp-event-aggregator' ); ?></option>
 	    </select>
 	    <span class="hide_frequency">
 	    	<?php $this->render_import_frequency(); ?>
@@ -575,7 +648,7 @@ class WP_Event_Aggregator_Common {
 	 * @since 1.0
 	 * @return void
 	 */
-	function render_eventstatus_input(){
+	function render_eventstatus_input( $selected = 'publish' ){
 		?>
 		<tr class="event_status_wrapper">
 			<th scope="row">
@@ -583,13 +656,13 @@ class WP_Event_Aggregator_Common {
 			</th>
 			<td>
 				<select name="event_status" >
-	                <option value="publish">
+	                <option value="publish" <?php selected( $selected, 'publish' ); ?>>
 	                    <?php esc_html_e( 'Published','wp-event-aggregator' ); ?>
 	                </option>
-	                <option value="pending">
+	                <option value="pending" <?php selected( $selected, 'pending' ); ?>>
 	                    <?php esc_html_e( 'Pending','wp-event-aggregator' ); ?>
 	                </option>
-	                <option value="draft">
+	                <option value="draft" <?php selected( $selected, 'draft' ); ?>>
 	                    <?php esc_html_e( 'Draft','wp-event-aggregator' ); ?>
 	                </option>
 	            </select>
@@ -629,9 +702,8 @@ class WP_Event_Aggregator_Common {
 			'posts_per_page' => -1,
 			'suppress_filters' => true,
 			'meta_key'   => 'wpea_event_id',
-			'meta_value' => $event_id
+			'meta_value' => $event_id,
 		);
-
 		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
 			if( isset( $centralize_array['ID_ical_old'] ) && $centralize_array['ID_ical_old'] != '' ){
 				$meta_query = array(
@@ -646,14 +718,13 @@ class WP_Event_Aggregator_Common {
 				unset( $event_args['meta_value'] );
 			}
 		}
-
 		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
 			remove_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );	
 		}		
 		$events = new WP_Query( $event_args );
 		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
 			add_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );
-		}
+		}		
 		if ( $events->have_posts() ) {
 			while ( $events->have_posts() ) {
 				$events->the_post();
@@ -675,16 +746,70 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Check for user have Authorized user Token
+	 *
+	 * @since    1.2
+	 * @return /boolean
+	 */
+	public function has_authorized_user_token() {
+		$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
+		if( !empty( $wpea_user_token_options ) ){
+			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
+			$access_token = isset( $wpea_user_token_options['access_token'] ) ? $wpea_user_token_options['access_token'] : '';
+			if( 1 == $authorize_status && $access_token != '' ){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if user access token has beed invalidated.
+	 *
+	 * @since    1.2
+	 * @return /boolean
+	 */
+	public function wpea_check_if_access_token_invalidated() {
+		global $wpea_warnings;
+		$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
+		if( !empty( $wpea_user_token_options ) ){
+			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
+			if( 0 == $authorize_status ){
+				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>.', 'wp-event-aggregator' );
+			}
+		}
+	}
+
+	/**
 	 * Display upgrade to pro notice in form.
 	 *
 	 * @since 1.0.0
 	 */
 	public function render_pro_notice(){
+		if( !wpea_is_pro() ){
 		?>
 		<span class="wpea_small">
-	        <?php printf( '<span style="color: red">%s</span> <a href="' . WPEA_PLUGIN_BUY_NOW_URL. '" target="_blank" >%s</a>', __( 'Available in Pro version.', 'wp-event-aggregator' ), __( 'Upgrade to PRO', 'wp-event-aggregator' ) ); ?>
+	        <?php printf( '<span style="color: red">%s</span> <a href="' . WPEA_PLUGIN_BUY_NOW_URL. '" target="_blank" >%s</a>', __( 'Available in Pro Add-on.', 'wp-event-aggregator' ), __( 'Upgrade to PRO', 'wp-event-aggregator' ) ); ?>
 	    </span>
 		<?php
+		}
+	}
+	
+	/**
+	 * Get do not update data fields
+	 *
+	 * @since  1.0.0
+	 * @return array
+	 */
+	public function wpea_is_updatable( $field = '' ) {
+		if( '' == $field ){ return true; }
+		$wpea_options = get_option( WPEA_OPTIONS, array() );
+		$aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
+		$dontupdate = isset( $aggregator_options['dont_update'] ) ? $aggregator_options['dont_update'] : array();
+		if( isset( $dontupdate[$field] ) &&  'yes' == $dontupdate[$field] ){
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -948,4 +1073,102 @@ class WP_Event_Aggregator_Common {
 		return $country;
 	}
 
+}
+
+
+/**
+ * Check if Pro addon is enabled or not.
+ *
+ * @since 1.5.0
+ */
+function wpea_is_pro(){
+	if( !function_exists( 'is_plugin_active' ) ){
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	}
+	if ( is_plugin_active( 'wp-event-aggregator-pro/wp-event-aggregator-pro.php' ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Template Functions
+ *
+ * Template functions specifically created for Event Listings
+ *
+ * @author 		Dharmesh Pate
+ * @version     1.5.0
+ */
+
+/**
+ * Gets and includes template files.
+ *
+ * @since 1.5.0
+ * @param mixed  $template_name
+ * @param array  $args (default: array())
+ * @param string $template_path (default: '')
+ * @param string $default_path (default: '')
+ */
+function get_wpea_template( $template_name, $args = array(), $template_path = 'wp-event-aggregator', $default_path = '' ) {
+	if ( $args && is_array( $args ) ) {
+		extract( $args );
+	}
+	include( locate_wpea_template( $template_name, $template_path, $default_path ) );
+}
+
+/**
+ * Locates a template and return the path for inclusion.
+ *
+ * This is the load order:
+ *
+ *		yourtheme		/	$template_path	/	$template_name
+ *		yourtheme		/	$template_name
+ *		$default_path	/	$template_name
+ *
+ * @since 1.5.0
+ * @param string      $template_name
+ * @param string      $template_path (default: 'wp-event-aggregator')
+ * @param string|bool $default_path (default: '') False to not load a default
+ * @return string
+ */
+function locate_wpea_template( $template_name, $template_path = 'wp-event-aggregator', $default_path = '' ) {
+	// Look within passed path within the theme - this is priority
+	$template = locate_template(
+		array(
+			trailingslashit( $template_path ) . $template_name,
+			$template_name
+		)
+	);
+	// Get default template
+	if ( ! $template && $default_path !== false ) {
+		$default_path = $default_path ? $default_path : WPEA_PLUGIN_DIR . '/templates/';
+		if ( file_exists( trailingslashit( $default_path ) . $template_name ) ) {
+			$template = trailingslashit( $default_path ) . $template_name;
+		}
+	}
+	// Return what we found
+	return apply_filters( 'wepa_locate_template', $template, $template_name, $template_path );
+}
+
+/**
+ * Gets template part (for templates in loops).
+ *
+ * @since 1.0.0
+ * @param string      $slug
+ * @param string      $name (default: '')
+ * @param string      $template_path (default: 'wp-event-aggregator')
+ * @param string|bool $default_path (default: '') False to not load a default
+ */
+function get_wpea_template_part( $slug, $name = '', $template_path = 'wp-event-aggregator', $default_path = '' ) {
+	$template = '';
+	if ( $name ) {
+		$template = locate_wpea_template( "{$slug}-{$name}.php", $template_path, $default_path );
+	}
+	// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/wp-event-aggregator/slug.php
+	if ( ! $template ) {
+		$template = locate_wpea_template( "{$slug}.php", $template_path, $default_path );
+	}
+	if ( $template ) {
+		load_template( $template, false );
+	}
 }

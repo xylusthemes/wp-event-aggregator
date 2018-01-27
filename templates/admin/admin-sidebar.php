@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<p style="text-align:center">
 		<strong><?php esc_html_e( 'Would you like to remove these ads?','wp-bulk-delete'); ?></strong><br>
 		<a href="<?php echo esc_url( WPEA_PLUGIN_BUY_NOW_URL ); ?>" target="_blank">
-			<?php esc_html_e( 'Get Premium','wp-bulk-delete'); ?>
+			<?php esc_html_e( 'Get Premium Add-on','wp-bulk-delete'); ?>
 		</a>
 	</p>
 </div>
