@@ -21,7 +21,7 @@ class WP_Event_Aggregator_Common {
 	public function __construct() {
 		add_action( 'wp_ajax_wpea_render_terms_by_plugin', array( $this,'wpea_render_terms_by_plugin' ) );	
 		add_action( 'tribe_events_single_event_after_the_meta', array( $this, 'wpea_add_tec_ticket_section' ) ) ;
-		add_filter( 'the_content', array( $this, 'wpea_add_em_add_ticket_section') );
+		add_filter( 'the_content', array( $this, 'wpea_add_em_add_ticket_section'), 20 );
 		add_filter( 'mc_event_content', array( $this, 'wpea_add_my_calendar_ticket_section') , 10, 4);
 		add_action( 'wpea_render_pro_notice', array( $this, 'render_pro_notice') );
 		if( wpea_is_pro() ){
