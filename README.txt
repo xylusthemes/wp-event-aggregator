@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.4.1
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,7 +37,7 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 * [Event Organiser](https://wordpress.org/plugins/event-organiser/)
 * [EventON](https://codecanyon.net/item/eventon-wordpress-event-calendar-plugin/1211017)
 * [My Calendar](https://wordpress.org/plugins/my-calendar/)
-* [Eventum (Tevolution-Events)](https://templatic.com/app-themes/eventum-event-directory-theme/) - Pro Version
+* [Eventum (Tevolution-Events)](https://templatic.com/app-themes/eventum-event-directory-theme/) - Pro Add-on
 * [Event Espresso 4 (EE4)](https://wordpress.org/plugins/event-espresso-decaf/)
 * In-built Events Management.
 
@@ -64,6 +64,7 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 * Event Import History Logs when & which Events Imported
 * Option to update existing Events (Syncronize Events)
 * Works with leading WordPress Event Calendar Plug-ins
+* Works with Visual Composer ( WPBackery Page Builder ). Support for more page builders is on the way :)
 
 [1]: https://xylusthemes.com/plugins/wp-event-aggregator/?utm_source=wprepo&utm_campaign=wpaggregator&utm_medium=readme&utm_content=wprepo-readme
 
@@ -124,6 +125,13 @@ You can use `[wp_events]` for display in-built events list.
 15. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.5.0 =
+* ADDED: Element for Visual Composer ( WPBackery Page Builder)
+* ADDED: Template Overrides from Theme
+* ADDED: Merged Pro & Free codebase, Introduced Pro as an add-on
+* IMPROVEMENT: Some Improvements.
+* FIXED: some bug fixes.
 
 = 1.4.1 =
 * ADDED: Support for recurring facebook events.

@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.4.1
+ * Version:           1.5.0
  * Author:            Xylus Themes
  * Author URI:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -94,14 +94,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.4.1' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.0' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.4.1' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.0' ); }
 
 
 	/**
@@ -115,7 +115,7 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.4.1' );
+			define( 'WPEA_VERSION', '1.5.0' );
 		}
 
 		// Plugin folder Path.
