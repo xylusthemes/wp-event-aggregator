@@ -457,7 +457,6 @@ class WP_Event_Aggregator_Ical_Parser {
 			$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
 		}
 		return $ical_event->getProperty( 'UID' ) . $recurrence_id;
-
 	}
 
 	/**

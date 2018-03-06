@@ -2,11 +2,9 @@
 /**
  * The template for displaying all single Event meta
  */	
-	global $importevents;
+global $importevents;
 
-	if( $event_id == '' ){
-		$event_id = get_the_ID();
-	}
+$event_id = get_the_ID();
 
 $start_date_str = get_post_meta( $event_id, 'start_ts', true );
 $end_date_str = get_post_meta( $event_id, 'end_ts', true );
@@ -76,7 +74,7 @@ $website = get_post_meta( $event_id, 'wpea_event_link', true );
 
     <?php if( $website != '' ){ ?>
     	<strong><?php esc_html_e( 'Click to Register','wp-event-aggregator' ); ?>:</strong>
-    	<a href="<?php echo esc_url( $website ); ?>"><?php echo $website; ?></a>
+    	<a href="<?php echo esc_url( $website ); ?>"><?php _e( "Click to Register", 'wp-event-aggregator' ); ?></a>
     <?php } ?>
 
   </div>
@@ -104,7 +102,7 @@ $website = get_post_meta( $event_id, 'wpea_event_link', true );
 		    <?php } ?>
 		    <?php if( $org_url != '' ){ ?>
 		    	<strong style="display: block;"><?php esc_html_e( 'Website','wp-event-aggregator' ); ?>:</strong>
-		    	<a href="<?php echo esc_url( $org_url ); ?>"><?php echo $org_url; ?></a>
+		    	<a href="<?php echo esc_url( $org_url ); ?>"><?php _e( "Organizer's Website", 'wp-event-aggregator' ); ?></a>
 		    <?php }
 		}
     ?>

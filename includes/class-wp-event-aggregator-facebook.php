@@ -5,8 +5,8 @@
  * @link       http://xylusthemes.com/
  * @since      1.0.0
  *
- * @package    WP_Event_Aggregator
- * @subpackage WP_Event_Aggregator/includes
+ * @package    WP_Event_Aggregator_Pro
+ * @subpackage WP_Event_Aggregator_Pro/includes
  */
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -44,7 +44,7 @@ class WP_Event_Aggregator_Facebook {
 		$options = wpea_get_import_options( 'facebook' );
 		$this->fb_app_id = isset( $options['facebook_app_id'] ) ? $options['facebook_app_id'] : '';
 		$this->fb_app_secret = isset( $options['facebook_app_secret'] ) ? $options['facebook_app_secret'] : '';
-		$this->fb_graph_url = 'https://graph.facebook.com/v2.9/';
+		$this->fb_graph_url = 'https://graph.facebook.com/v2.11/';
 
 	}
 
@@ -57,7 +57,7 @@ class WP_Event_Aggregator_Facebook {
 	 */
 	public function import_events( $event_data = array() ){
 
-		global $wpea_errors;
+		global $wpea_errors, $importevents;
 		$imported_events = array();
 		$facebook_event_ids = array();
 
@@ -68,28 +68,37 @@ class WP_Event_Aggregator_Facebook {
 
 		$import_by = isset( $event_data['import_by'] ) ? esc_attr( $event_data['import_by'] ) : '';
 
-		if( 'facebook_organization' == $import_by ){
+		if( 'facebook_organization' == $import_by && wpea_is_pro() ){
 			$page_username = isset( $event_data['page_username'] ) ? $event_data['page_username'] : '';
 			if( $page_username == '' ){
 				$wpea_errors[] = __( 'Please insert valid Facebook page username.', 'wp-event-aggregator');
 				return false;
 			}
-			$facebook_event_ids = $this->get_events_for_facebook_page( $page_username );
+			$facebook_event_ids = $importevents->facebook_pro->get_events_for_facebook_page( $page_username, 'page' );
 
+		} elseif ( 'facebook_group' == $import_by && wpea_is_pro() ){
+				
+			$facebook_group_id = isset( $event_data['facebook_group_id'] ) ? $event_data['facebook_group_id'] : '';
+			if( $facebook_group_id == '' ){
+				$wpea_errors[] = __( 'Please insert valid Facebook Group URL or ID.', 'wp-event-aggregator');
+				return false;
+			}
+			$facebook_event_ids = $importevents->facebook_pro->get_events_for_facebook_page( $facebook_group_id, 'group' );
+			
 		} elseif ( 'facebook_event_id' == $import_by ){
 				
 			$facebook_event_ids = isset( $event_data['event_ids'] ) ? $event_data['event_ids'] : array();
-		}		
+		}
 		
 		if( !empty( $facebook_event_ids ) ){
 			foreach ($facebook_event_ids as $facebook_event_id ) {
 				if( $facebook_event_id != '' ){
-					$imported_event = $this->import_event_by_event_id( $facebook_event_id, $event_data );
-					if( !empty( $imported_event ) ){
-						foreach ($imported_event as $imported_event0 ) {
+					 $imported_event = $this->import_event_by_event_id( $facebook_event_id, $event_data );
+					 if( !empty( $imported_event ) ){
+					 	foreach ($imported_event as $imported_event0 ) {
 							$imported_events[] = $imported_event0;
 						}
-					}
+					 }					 
 				}		
 			}
 		}
@@ -108,23 +117,23 @@ class WP_Event_Aggregator_Facebook {
 		global $wpea_errors, $importevents;
 		$options = wpea_get_import_options( 'facebook' );
 		$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
-		
+				
 		if( $this->fb_app_id == '' || $this->fb_app_secret == '' ){
 			$wpea_errors[] = __( 'Please insert Facebook app ID and app Secret.', 'wp-event-aggregator');
 			return false;
 		}
-
 		if( $facebook_event_id == '' || !is_numeric( $facebook_event_id ) ){
 			$wpea_errors[] = sprintf( esc_html__( 'Please provide valid Facebook event ID: %s.', 'wp-event-aggregator' ), $facebook_event_id ) ;
 			return false;
 		}
 
 		$facebook_event_object = $this->get_facebook_event_by_event_id( $facebook_event_id );
-		if( isset( $facebook_event_object->error ) ){
-			$wpea_errors[] = sprintf( esc_html__( 'We are not able to access Facebook event: %s. Possible reasons: - App Credentials are wrong - Facebook event not exist - Facebook event is not public or some restrictions are there like age,country etc.', 'import-facebook-events-pro' ), $facebook_event_id ) ;
+		if( isset( $facebook_event_object->error->message ) ){
+			$wpea_errors[] = $facebook_event_object->error->message;
 			return false;
 		}
 		return $this->save_facebook_event( $facebook_event_object, $event_data );
+		
 	}
 
 	/**
@@ -174,10 +183,11 @@ class WP_Event_Aggregator_Facebook {
 			$access_token_response_body = wp_remote_retrieve_body( $access_token_response );
 			$access_token_data = json_decode( $access_token_response_body );
 			$access_token = ! empty( $access_token_data->access_token ) ? $access_token_data->access_token : null;
-			$this->fb_access_token = $access_token;
-			return $access_token;
+
+			$this->fb_access_token = apply_filters( 'wpea_facebook_access_token', $access_token );
+			return $this->fb_access_token;
 		}
-		
+
 	}
 	
 	/**
@@ -247,36 +257,6 @@ class WP_Event_Aggregator_Facebook {
 	}
 
 	/**
-	 * get all events for facebook page or organizer
-	 *
-	 * @since 1.0.0
-	 * @return array the events
-	 */
-	public function get_events_for_facebook_page( $facebook_page_id ) {
-		
-		$args = array(
-			'limit' => 4999,
-			'since' => date( 'Y-m-d' ),
-			'fields' => 'id'
-		);
-
-		$url = $this->generate_facebook_api_url( $facebook_page_id . '/events', $args );
-
-		$response = $this->get_json_response_from_url( $url );
-		$response_data = !empty( $response->data ) ? (array) $response->data : array();
-
-		if ( empty( $response_data ) || empty( $response_data[0] ) ) {	
-			return false;
-		}
-
-		$event_ids = array();		
-		foreach ( $response_data as $event ) {
-			$event_ids[] = $event->id;
-		}
-		return array_reverse( $event_ids );
-	}
-
-	/**
 	 * Format events arguments as per TEC
 	 *
 	 * @since    1.0.0
@@ -293,7 +273,7 @@ class WP_Event_Aggregator_Facebook {
 		$end_time = $end_time_utc = time();
 		$utc_offset = '';
 
-		$facebook_id = (int)$facebook_event->id;
+		$facebook_id = $facebook_event->id;
 		$post_title = isset( $facebook_event->name ) ? $facebook_event->name : '';
 		$post_description = isset( $facebook_event->description ) ? $facebook_event->description : '';
 		
@@ -311,7 +291,7 @@ class WP_Event_Aggregator_Facebook {
 			foreach ($event_times_obj as $event_time ) {
 				if( isset( $event_time->start_time ) && isset( $event_time->end_time ) ){
 					$et_temp = array();
-					$et_temp['ID'] = (int)$event_time->id;				
+					$et_temp['ID'] = $event_time->id;				
 					$et_temp['start_time'] = strtotime( $importevents->common->convert_datetime_to_db_datetime( $event_time->start_time ) );
 					$et_temp['end_time'] = strtotime( $importevents->common->convert_datetime_to_db_datetime( $event_time->end_time ) );
 					if( $et_temp['end_time'] > time() ){
@@ -358,7 +338,7 @@ class WP_Event_Aggregator_Facebook {
 			}
 		}
 		return $xt_events;
-		
+
 	}
 
 	/**

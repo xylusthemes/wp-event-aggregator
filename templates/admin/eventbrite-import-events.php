@@ -22,8 +22,8 @@ global $importevents;
 
 		<?php if( $ntab == 'import' ){ ?>
         <div class="wpea-column wpea_well">
-            <h3><?php esc_attr_e( 'Facebook Import', 'wp-event-aggregator' ); ?></h3>
-            <form method="post" id="wpea_facebook_form">
+            <h3><?php esc_attr_e( 'Eventbrite Import', 'wp-event-aggregator' ); ?></h3>
+            <form method="post" enctype="multipart/form-data" id="wpea_eventbrite_form">
            	
                	<table class="form-table">
 		            <tbody>
@@ -32,50 +32,53 @@ global $importevents;
 					        	<?php esc_attr_e( 'Import by','wp-event-aggregator' ); ?> :
 					        </th>
 					        <td>
-					            <select name="facebook_import_by" id="facebook_import_by">
-			                    	<option value="facebook_event_id"><?php esc_attr_e( 'Facebook Event ID','wp-event-aggregator' ); ?></option>
-			                    	<option value="facebook_organization"><?php esc_attr_e( 'Facebook Page','wp-event-aggregator' ); ?></option>
-			                    	<option value="facebook_group"><?php esc_attr_e( 'Facebook Group','wp-event-aggregator' ); ?></option>
+					            <select name="eventbrite_import_by" id="eventbrite_import_by">
+			                    	<option value="event_id"><?php esc_attr_e( 'Event ID','wp-event-aggregator' ); ?></option>
+			                    	<option value="your_events" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled';} ?>"><?php esc_attr_e( 'Your Events','wp-event-aggregator' ); ?></option>
+			                    	<option value="organizer_id"><?php esc_attr_e( 'Organazer ID','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select Event source. 1. by Facebook Event ID, 2. Facebook Page ( import events belonging to a Facebook page ), 3. Facebook Group ( import events belonging to a Facebook group ).', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Select Event source. 1. by Event ID, 2. Your Events ( Events associted with your Eventbrite account ), 3. by Oraganizer ID.', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>
 					    
-					    <tr class="facebook_eventid_wrapper">
+					    <tr class="eventbrite_event_id">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Facebook Event IDs','wp-event-aggregator' ); ?> : 
+					    		<?php 
+					    		if( wpea_is_pro() ){
+					    			esc_attr_e( 'Eventbrite Event IDs','wp-event-aggregator' );
+					    		}else{
+					    			esc_attr_e( 'Eventbrite Event ID','wp-event-aggregator' ); 	
+					    		}					    		
+					    		?> : 
 					    	</th>
 					    	<td>
-					    		<textarea name="facebook_event_ids" class="facebook_event_ids" rows="5" cols="50"></textarea>
-					    		<span class="wpea_small">
-			                        <?php _e( 'One event ID per line, ( Eg. Event ID for https://www.facebook.com/events/123456789/ is "123456789" ).', 'wp-event-aggregator' ); ?>
+					    		<?php if( wpea_is_pro() ){ ?>
+					    			<textarea class="wpea_text" name="wpea_eventbrite_id" rows="5" cols="50"></textarea>
+					    		<?php } else { ?>
+									<input class="wpea_text" name="wpea_eventbrite_id" type="text" />					    		
+					    		<?php }?>
+			                    <span class="wpea_small">
+			                        <?php 
+			                        if( wpea_is_pro() ){
+			                        	_e( 'Insert eventbrite event IDs, One event ID per line ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>  ).', 'wp-event-aggregator' );
+			                        } else {
+			                        	_e( 'Insert Eventbrite event ID ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>  ).', 'wp-event-aggregator' );
+			                        }
+			                        ?>
 			                    </span>
 					    	</td>
 					    </tr>
 
-					    <tr class="facebook_page_wrapper" style="display: none;">
+					    <tr class="eventbrite_organizer_id">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Page username / ID to fetch events from','wp-event-aggregator' ); ?> : 
+					    		<?php esc_attr_e( 'Eventbrite Organizer ID','wp-event-aggregator' ); ?> : 
 					    	</th>
-					    	<td> 
-					    		<input class="wpea_text" name="facebook_page_username" class="facebook_page_username" type="text" disabled="disabled" />
+					    	<td>
+					    		<input class="wpea_text wpea_organizer_id" name="wpea_organizer_id" type="text" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled';} ?> />
 			                    <span class="wpea_small">
-			                        <?php _e( ' Eg. username for https://www.facebook.com/xylusinfo/ is "xylusinfo".', 'wp-event-aggregator' ); ?>
-			                    </span>
-			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
-					    	</td>
-					    </tr>
-
-					    <tr class="facebook_group_wrapper" style="display: none;">
-					    	<th scope="row">
-					    		<?php esc_attr_e( 'Facebook Group URL / Numeric ID to fetch events from', 'wp-event-aggregator' ); ?> : 
-					    	</th>
-					    	<td> 
-					    		<input class="wpea_text facebook_group" name="" type="text" disabled="disabled"/>
-			                    <span class="wpea_small">
-			                        <?php _e( ' Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR "123456789123456"', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Insert eventbrite organizer ID ( Eg. https://www.eventbrite.com/o/cept-university-<span class="borderall">9151813372</span>  ).', 'wp-event-aggregator' ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
@@ -91,16 +94,15 @@ global $importevents;
 					    </tr>
 
 					    <?php 
+						// import into.
 					    $importevents->common->render_import_into_and_taxonomy();
 					    $importevents->common->render_eventstatus_input();
 					    ?>
-
-
 					</tbody>
 		        </table>
                 
                 <div class="wpea_element">
-                	<input type="hidden" name="import_origin" value="facebook" />
+                	<input type="hidden" name="import_origin" value="eventbrite" />
                     <input type="hidden" name="wpea_action" value="wpea_import_submit" />
                     <?php wp_nonce_field( 'wpea_import_form_nonce_action', 'wpea_import_form_nonce' ); ?>
                     <input type="submit" class="button-primary wpea_submit_button" style=""  value="<?php esc_attr_e( 'Import Event', 'wp-event-aggregator' ); ?>" />
@@ -112,7 +114,15 @@ global $importevents;
 				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
 				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? $_REQUEST['tab'] : 'eventbrite' ?>" />
 				<input type="hidden" name="ntab" value="<?php echo $_REQUEST['ntab'] ?>" />
-				<?php do_action( 'wpea_render_pro_notice' ); ?>
+				<?php
+				if( wpea_is_pro() ){
+					$listtable = new WP_Event_Aggregator_List_Table();
+					$listtable->prepare_items('eventbrite');
+					$listtable->display();
+				}else{
+					do_action( 'wpea_render_pro_notice' );	
+				}				
+				?>
 				</form>
 				<?php
 			} ?>

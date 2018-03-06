@@ -61,8 +61,18 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			'wpea_action' => 'wpea_simport_delete',
 			'import_id'  => absint( $item['ID'] ),
 		);
+
+		$page = 'import_events';
+		$tab = 'scheduled';
+		$wp_redirect = admin_url( 'admin.php?page='.$page );
+		$wpea_url_edit_args = array(
+			'tab'    =>  wp_unslash( $tab ),
+			'edit'  => absint( $item['ID'] ),
+		);
+
 		// Build row actions.
 		$actions = array(
+			'edit' => sprintf( '<a href="%1$s">%2$s</a>',esc_url( add_query_arg( $wpea_url_edit_args, $wp_redirect ) ), esc_html__( 'Edit', 'wp-event-aggregator' ) ),
 		    'delete' => sprintf( '<a href="%1$s" onclick="return confirm(\'Warning!! Are you sure to Delete this scheduled import? Scheduled import will be permanatly deleted.\')">%2$s</a>',esc_url( wp_nonce_url( add_query_arg( $wpea_url_delete_args ), 'wpea_delete_import_nonce' ) ), esc_html__( 'Delete', 'wp-event-aggregator' ) ),
 		);
 		
@@ -208,8 +218,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		if ( $importdata_query->have_posts() ) {
 			while ( $importdata_query->have_posts() ) {
 				$importdata_query->the_post();
-
+				
 				$import_id = get_the_ID();
+				$import_title = get_the_title();
 				$import_data = get_post_meta( $import_id, 'import_eventdata', true );
 				$import_origin = get_post_meta( $import_id, 'import_origin', true );
 				$import_plugin = isset( $import_data['import_into'] ) ? $import_data['import_into'] : '';
@@ -291,7 +302,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 
 				$scheduled_import_data['import_data'][] = array(
 					'ID' => $import_id,
-					'title' => get_the_title(),
+					'title' => $import_title,
 					'import_status'   => ucfirst( $import_status ),
 					'import_category' => implode( ', ', $term_names ),
 					'import_frequency'=> isset( $import_data['import_frequency'] ) ? ucfirst( $import_data['import_frequency'] ) : '',

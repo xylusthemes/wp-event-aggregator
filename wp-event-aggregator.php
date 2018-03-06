@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.4.1
+ * Version:           1.5.0
  * Author:            Xylus Themes
  * Author URI:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -60,7 +60,11 @@ class WP_Event_Aggregator{
 			self::$instance->ical_parser = new WP_Event_Aggregator_Ical_Parser();
 			self::$instance->ical = new WP_Event_Aggregator_Ical();
 			self::$instance->admin = new WP_Event_Aggregator_Admin();
-			self::$instance->manage_import = new WP_Event_Aggregator_Manage_Import();
+			if( wpea_is_pro() ){
+				self::$instance->manage_import = new WP_Event_Aggregator_Pro_Manage_Import();
+			}else{
+				self::$instance->manage_import = new WP_Event_Aggregator_Manage_Import();
+			}
 			self::$instance->wpea    = new WP_Event_Aggregator_WPEA();
 			self::$instance->tec = new WP_Event_Aggregator_TEC();
 			self::$instance->em = new WP_Event_Aggregator_EM();
@@ -90,14 +94,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.4.1' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.0' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.4.1' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.0' ); }
 
 
 	/**
@@ -111,7 +115,7 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.4.1' );
+			define( 'WPEA_VERSION', '1.5.0' );
 		}
 
 		// Plugin folder Path.
@@ -152,7 +156,11 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-common.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-list-table.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-admin.php';
-		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';
+		if( wpea_is_pro() ){
+			require_once WPEAPRO_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';
+		}else{
+			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';	
+		}		
 		if( !class_exists( 'vcalendar' ) ){
 			require_once WPEA_PLUGIN_DIR . 'includes/lib/iCalcreator/iCalcreator.php';
 		}
@@ -202,6 +210,7 @@ class WP_Event_Aggregator{
 	public function wpea_enqueue_style() {
 
 		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
+		wp_enqueue_style('font-awesome', $css_dir . 'font-awesome.min.css', false, "" );
 	 	wp_enqueue_style('wp-event-aggregator-front', $css_dir . 'wp-event-aggregator.css', false, "" );		
 	}
 

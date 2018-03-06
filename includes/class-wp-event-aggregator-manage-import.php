@@ -46,10 +46,11 @@ class WP_Event_Aggregator_Manage_Import {
 				$wpea_errors[] = esc_html__( 'Please provide Import into plugin for Event import.', 'wp-event-aggregator' );
 				return;
 			}
-			$event_data['import_type'] = 'onetime';
-			$event_data['import_frequency'] = 'daily';
+			$event_data['import_type'] = isset( $_POST['import_type'] ) ? sanitize_text_field( $_POST['import_type']) : 'onetime';
+			$event_data['import_frequency'] = isset( $_POST['import_frequency'] ) ? sanitize_text_field( $_POST['import_frequency']) : 'daily';
 			$event_data['event_status'] = isset( $_POST['event_status'] ) ? sanitize_text_field( $_POST['event_status']) : 'pending';
 			$event_data['event_cats'] = isset( $_POST['event_cats'] ) ? $_POST['event_cats'] : array();
+			$event_data['event_cats2'] = isset( $_POST['event_cats2'] ) ? $_POST['event_cats2'] : array();
 
 			$event_origin = $_POST['import_origin'];
 			switch ( $event_origin ) {
@@ -148,7 +149,9 @@ class WP_Event_Aggregator_Manage_Import {
 			}
 		}
 
-		if ( isset( $_GET['action'] ) && $_GET['action'] == 'delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-xt_scheduled_imports') ) {
+		$is_bulk_delete = ( ( isset( $_GET['action'] ) && $_GET['action'] == 'delete' ) || ( isset( $_GET['action2'] ) && $_GET['action2'] == 'delete' ) );
+
+		if ( $is_bulk_delete && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-xt_scheduled_imports') ) {
 			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'scheduled';
 			$wp_redirect = get_site_url() . urldecode( $_REQUEST['_wp_http_referer'] );
         	$delete_ids = $_REQUEST['xt_scheduled_import'];
@@ -162,7 +165,7 @@ class WP_Event_Aggregator_Manage_Import {
 			exit;
 		}
 
-		if ( isset( $_GET['action'] ) && $_GET['action'] == 'delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-import_histories') ) {
+		if ( $is_bulk_delete && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-import_histories') ) {
 			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'history';
 			$wp_redirect = get_site_url() . urldecode( $_REQUEST['_wp_http_referer'] );
         	$delete_ids = $_REQUEST['import_history'];
@@ -193,14 +196,16 @@ class WP_Event_Aggregator_Manage_Import {
 
 		$event_data['import_origin'] = 'eventbrite';
 		$event_data['import_by'] = 'event_id';
-		$event_data['eventbrite_event_id'] = isset( $_POST['wpea_eventbrite_id'] ) ? sanitize_text_field( $_POST['wpea_eventbrite_id']) : '';
+		$eventbrite_event_id = array();
+		$eventbrite_event_id[] = isset( $_POST['wpea_eventbrite_id'] ) ? sanitize_text_field( $_POST['wpea_eventbrite_id']) : '';
+		$event_data['eventbrite_event_id'] = $eventbrite_event_id;
 		$event_data['organizer_id'] = '';
 		
-		if( !is_numeric( $event_data['eventbrite_event_id'] ) ){
+		if( !is_numeric( $event_data['eventbrite_event_id'][0] ) ){
 			$wpea_errors[] = esc_html__( 'Please provide valid Eventbrite event ID.', 'wp-event-aggregator' );
 			return;
 		}
-		$import_events[] = $importevents->eventbrite->import_event_by_event_id( $event_data );
+		$import_events = $importevents->eventbrite->import_event_by_event_id( $event_data );
 	
 		if( $import_events && !empty( $import_events ) ){
 			$importevents->common->display_import_success_message( $import_events, $event_data );
@@ -311,7 +316,7 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function setup_success_messages(){
-		global $wpea_success_msg;
+		global $wpea_success_msg, $wpea_errors;
 		if( isset( $_GET['imp_msg'] ) && $_GET['imp_msg'] != '' ){
 			switch ( $_GET['imp_msg'] ) {
 				case 'import_del':
@@ -332,7 +337,11 @@ class WP_Event_Aggregator_Manage_Import {
 
 				case 'history_dels':
 					$wpea_success_msg[] = esc_html__( 'Import histories are deleted successfully.', 'wp-event-aggregator' );
-					break;					
+					break;
+
+				case 'wpsiu_success':
+					$wpea_success_msg[] = esc_html__( 'Scheduled import has been updated successfully.', 'wp-event-aggregator' );
+					break;			
 								
 				default:
 					$wpea_success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );

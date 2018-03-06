@@ -32,7 +32,7 @@
 }
 
 .hide_frequency .import_frequency, .wpea_eventbrite_form tr.eventbrite_organizer_id{
-  display: none;
+    display: none;
 }
 
 .setting_bar {
@@ -116,48 +116,48 @@
 }
 
 .wpea_container * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .wpea_container *:before,
 .wpea_container *:after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .wpea_container {
-  margin-right: auto;
-  margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .wpea_row {
-  margin-left: -15px;
-  margin-right: -15px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .xtei-column{
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
+    position: relative;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .wpea_container:before,
 .wpea_container:after,
 .wpea_row:before,
 .wpea_row:after {
-  content: " ";
-  display: table;
+    content: " ";
+    display: table;
 }
 
 .wpea_container:after,
 .wpea_row:after {
-  clear: both;
+    clear: both;
 }
 
 .wpea_well{
@@ -211,13 +211,13 @@ table.wpea_form_table td, table.wpea_form_table th {
     text-align: left;
 }
 table.wpea_form_table{
-  width: 100%;
+    width: 100%;
 }
 table.wpea_form_table td input[type="text"]{
-  vertical-align: bottom;
+    vertical-align: bottom;
 }
 table.wpea_form_table tr td:nth-child(1) {
-  width: 160px;
+    width: 160px;
 }
 
 .plugin_box {
@@ -266,4 +266,13 @@ table.wpea_form_table tr td:nth-child(1) {
     padding: 0px 15px;
     margin-top: -10px;
     background: #ddd;
+}
+
+.vc_ui-panel .wpea_datepicker .ui-datepicker-inline {
+    display: none !important;
+}
+
+.wpea_admin_panel .nav-tab{
+    margin-left: .4em;
+    padding: 5px 9px;
 }
