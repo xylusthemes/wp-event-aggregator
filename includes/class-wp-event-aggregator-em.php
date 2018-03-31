@@ -164,6 +164,11 @@ class WP_Event_Aggregator_EM {
 			update_post_meta( $inserted_event_id, '_event_all_day', 0 );
 			update_post_meta( $inserted_event_id, '_event_start_date', date( 'Y-m-d', $start_time ) );
 			update_post_meta( $inserted_event_id, '_event_end_date', date( 'Y-m-d', $end_time ) );
+			update_post_meta( $inserted_event_id, '_event_timezone', 'UTC' );
+			update_post_meta( $inserted_event_id, '_event_start', date( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_event_end', date( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $inserted_event_id, '_event_start_local', date( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_event_end_local', date( 'Y-m-d H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, '_location_id', $location_id );
 			update_post_meta( $inserted_event_id, '_event_status', $event_status );
 			update_post_meta( $inserted_event_id, '_event_private', 0 );
@@ -177,19 +182,22 @@ class WP_Event_Aggregator_EM {
 			
 			// Custom table Details
 			$event_array = array(
-				'post_id' 		   => $inserted_event_id,
-				'event_slug' 	   => $inserted_event->post_name,
-				'event_owner' 	   => $inserted_event->post_author,
-				'event_name'       => $inserted_event->post_title,
-				'event_start_time' => date( 'H:i:s', $start_time ),
-				'event_end_time'   => date( 'H:i:s', $end_time ),
-				'event_all_day'    => 0,
-				'event_start_date' => date( 'Y-m-d', $start_time ),
-				'event_end_date'   => date( 'Y-m-d', $end_time ),
-				'post_content' 	   => $inserted_event->post_content,
-				'location_id' 	   => $location_id,
-				'event_status' 	   => $event_status,
-				'event_date_created' => $inserted_event->post_date,
+				'post_id' 		   	=> $inserted_event_id,
+				'event_slug' 	   	=> $inserted_event->post_name,
+				'event_owner' 	   	=> $inserted_event->post_author,
+				'event_name'       	=> $inserted_event->post_title,
+				'event_start_time' 	=> date( 'H:i:s', $start_time ),
+				'event_end_time'   	=> date( 'H:i:s', $end_time ),
+				'event_all_day'    	=> 0,
+				'event_start'		=> date( 'Y-m-d H:i:s', $start_time ),
+				'event_end'		   	=> date( 'Y-m-d H:i:s', $end_time ),
+				'event_timezone'	=> 'UTC',
+				'event_start_date' 	=> date( 'Y-m-d', $start_time ),
+				'event_end_date'   	=> date( 'Y-m-d', $end_time ),
+				'post_content' 	   	=> $inserted_event->post_content,
+				'location_id' 	   	=> $location_id,
+				'event_status' 	   	=> $event_status,
+				'event_date_created'=> $inserted_event->post_date,
 			);
 
 			$event_table = ( defined( 'EM_EVENTS_TABLE' ) ? EM_EVENTS_TABLE : $wpdb->prefix . 'em_events' );
