@@ -232,44 +232,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				if ( $import_terms && ! empty( $import_terms ) ) {
 					foreach ( $import_terms as $term ) {
 						$get_term = '';
-						if( $import_plugin == 'tec' ){
 
-							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'em' ){
-
-							$get_term = get_term( $term, $importevents->em->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'eventon' ){
-
-							$get_term = get_term( $term, $importevents->eventon->get_taxonomy() );
-
-						}elseif( $import_plugin == 'event_organizer' ){
-
-							$get_term = get_term( $term, $importevents->event_organizer->get_taxonomy() );
-
-						}elseif( $import_plugin == 'aioec' ){
-
-							$get_term = get_term( $term, $importevents->aioec->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'my_calendar' ){
-
-							$get_term = get_term( $term, $importevents->my_calendar->get_taxonomy() );
-								
-						}elseif( $import_plugin == 'wpea' ){
-
-							$get_term = get_term( $term, $importevents->wpea->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'eventum' ){
-
-							$get_term = get_term( $term, $importevents->eventum->get_taxonomy() );
-
-						}elseif( $import_plugin == 'ee4' ){
-
-							$get_term = get_term( $term, $importevents->ee4->get_taxonomy() );
-
-						}else{
-							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );
+						if( $import_plugin != '' && !empty( $importevents->$import_plugin ) ){
+							$get_term = get_term( $term, $importevents->$import_plugin->get_taxonomy() );
 						}
 
 						if( !is_wp_error( $get_term ) && !empty( $get_term ) ){
@@ -515,46 +480,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 				if ( $import_terms && ! empty( $import_terms ) ) {
 					foreach ( $import_terms as $term ) {
 						$get_term = '';
-						if( $import_plugin == 'tec' ){
-
-							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'em' ){
-
-							$get_term = get_term( $term, $importevents->em->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'eventon' ){
-
-							$get_term = get_term( $term, $importevents->eventon->get_taxonomy() );
-
-						}elseif( $import_plugin == 'event_organizer' ){
-
-							$get_term = get_term( $term, $importevents->event_organizer->get_taxonomy() );
-
-						}elseif( $import_plugin == 'aioec' ){
-
-							$get_term = get_term( $term, $importevents->aioec->get_taxonomy() );	
-
-						}elseif( $import_plugin == 'my_calendar' ){
-
-							$get_term = get_term( $term, $importevents->my_calendar->get_taxonomy() );
-								
-						}elseif( $import_plugin == 'wpea' ){
-
-							$get_term = get_term( $term, $importevents->wpea->get_taxonomy() );	
-							
-						}elseif( $import_plugin == 'eventum' ){
-
-							$get_term = get_term( $term, $importevents->eventum->get_taxonomy() );
-							
-						}elseif( $import_plugin == 'ee4' ){
-
-							$get_term = get_term( $term, $importevents->ee4->get_taxonomy() );
-							
-						}else{
-							
-							$get_term = get_term( $term, $importevents->tec->get_taxonomy() );
-
+						if( $import_plugin != '' && !empty( $importevents->$import_plugin ) ){
+							$get_term = get_term( $term, $importevents->$import_plugin->get_taxonomy() );
 						}
 						
 						if( !is_wp_error( $get_term ) && !empty( $get_term ) ){

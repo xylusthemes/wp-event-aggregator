@@ -74,7 +74,23 @@ class WP_Event_Aggregator_Facebook {
 				$wpea_errors[] = __( 'Please insert valid Facebook page username.', 'wp-event-aggregator');
 				return false;
 			}
-			$facebook_event_ids = $importevents->facebook_pro->get_events_for_facebook_page( $page_username, 'page' );
+
+			if ( version_compare( WPEAPRO_VERSION, '1.5.0', '<=' ) ) {
+				$facebook_event_ids = $importevents->facebook_pro->get_events_for_facebook_page( $page_username, 'page' );
+			} else {
+				$facebook_events = $importevents->facebook_pro->get_events_for_facebook_page( $page_username, 'page' );
+				if( !empty( $facebook_events ) ){
+					foreach ( $facebook_events as $facebook_event ){
+						$imported_event = $this->save_facebook_event( $facebook_event, $event_data );
+						if( !empty( $imported_event ) ){
+							foreach ($imported_event as $imported_event0 ) {
+								$imported_events[] = $imported_event0;
+							}
+						}
+					}
+					return $imported_events;
+				}
+			}
 
 		} elseif ( 'facebook_group' == $import_by && wpea_is_pro() ){
 				
@@ -83,8 +99,24 @@ class WP_Event_Aggregator_Facebook {
 				$wpea_errors[] = __( 'Please insert valid Facebook Group URL or ID.', 'wp-event-aggregator');
 				return false;
 			}
-			$facebook_event_ids = $importevents->facebook_pro->get_events_for_facebook_page( $facebook_group_id, 'group' );
-			
+
+			if ( version_compare( WPEAPRO_VERSION, '1.5.0', '<=' ) ) {
+				$facebook_event_ids = $importevents->facebook_pro->get_events_for_facebook_page( $facebook_group_id, 'group' );
+			} else {
+				$facebook_events = $importevents->facebook_pro->get_events_for_facebook_page( $facebook_group_id, 'group' );
+				if( !empty( $facebook_events ) ){
+					foreach ( $facebook_events as $facebook_event ){
+						$imported_event = $this->save_facebook_event( $facebook_event, $event_data );
+						if( !empty( $imported_event ) ){
+							foreach ($imported_event as $imported_event0 ) {
+								$imported_events[] = $imported_event0;
+							}
+						}
+					}
+					return $imported_events;
+				}
+			}
+
 		} elseif ( 'facebook_event_id' == $import_by ){
 				
 			$facebook_event_ids = isset( $event_data['event_ids'] ) ? $event_data['event_ids'] : array();

@@ -105,52 +105,13 @@ class WP_Event_Aggregator_Common {
 		}
 		$event_taxonomy = $event_tag_taxonomy = '';
 		$event_taxonomy2 = '';
-		switch ( $event_plugin ) {
-			case 'wpea':
-				$event_taxonomy = $importevents->wpea->get_taxonomy();
-				break;
 
-			case 'tec':
-				$event_taxonomy = $importevents->tec->get_taxonomy();
-				break;
+		if( !empty( $event_plugin ) && !empty( $importevents->$event_plugin ) ){
+			$event_taxonomy = $importevents->$event_plugin->get_taxonomy();
+		}
 
-			case 'em':
-				$event_taxonomy = $importevents->em->get_taxonomy();
-				break;
-
-			case 'eventon':
-				$event_taxonomy = $importevents->eventon->get_taxonomy();
-				if( wpea_is_pro() ){
-					$event_taxonomy2 = $importevents->eventon->get_taxonomy2();	
-				}				
-				break;
-
-			case 'event_organizer':
-				$event_taxonomy = $importevents->event_organizer->get_taxonomy();
-				break;
-
-			case 'aioec':
-				$event_taxonomy = $importevents->aioec->get_taxonomy();
-				break;
-
-			case 'my_calendar':
-				$event_taxonomy = $importevents->my_calendar->get_taxonomy();
-				break;
-
-			case 'eventum':
-				if( wpea_is_pro() ){
-					$event_taxonomy = $importevents->eventum->get_taxonomy();
-				}else{
-					$event_taxonomy = '';
-				}
-				break;
-
-			case 'ee4':
-				$event_taxonomy = $importevents->ee4->get_taxonomy();
-				break;
-			
-			default:
-				break;
+		if( 'eventon' === $event_plugin && wpea_is_pro() ){
+			$event_taxonomy2 = $importevents->eventon->get_taxonomy2();
 		}
 
 		$terms = array();
@@ -294,7 +255,7 @@ class WP_Event_Aggregator_Common {
 				$attachment_id = get_post_thumbnail_id( $event_id );
 				$attach_filename = basename( get_attached_file( $attachment_id ) );
 				if( $attach_filename == $file_array['name'] ){
-					return false;
+					return $attachment_id;
 				}
 			}
 
@@ -513,49 +474,9 @@ class WP_Event_Aggregator_Common {
 		global $importevents;
 		$import_result = array();
 		$event_import_into = isset( $event_args['import_into'] ) ?  $event_args['import_into'] : 'tec';
-		switch ( $event_import_into ) {
-			case 'wpea':
-				$import_result = $importevents->wpea->import_event( $centralize_array, $event_args );
-				break;
 
-			case 'tec':
-				$import_result = $importevents->tec->import_event( $centralize_array, $event_args );
-				break;
-
-			case 'em':
-				$import_result = $importevents->em->import_event( $centralize_array, $event_args );
-				break;
-
-			case 'eventon':
-				$import_result = $importevents->eventon->import_event( $centralize_array, $event_args );
-				break;
-				
-			case 'event_organizer':
-				$import_result = $importevents->event_organizer->import_event( $centralize_array, $event_args );
-				break;
-
-			case 'aioec':
-				$import_result = $importevents->aioec->import_event( $centralize_array, $event_args );
-				break;
-
-			case 'my_calendar':
-				$import_result = $importevents->my_calendar->import_event( $centralize_array, $event_args );
-				break;
-
-			case 'eventum':
-				if( wpea_is_pro()){
-					$import_result = $importevents->eventum->import_event( $centralize_array, $event_args );
-				}else{
-					$import_result = false;
-				}				
-				break;
-
-			case 'ee4':
-				$import_result = $importevents->ee4->import_event( $centralize_array, $event_args );
-				break;
-				
-			default:
-				break;
+		if( !empty( $event_import_into ) && !empty( $importevents->$event_import_into ) ){
+			$import_result = $importevents->$event_import_into->import_event( $centralize_array, $event_args );
 		}
 		return $import_result;
 	}

@@ -159,7 +159,10 @@ class WP_Event_Aggregator_Aioec {
 
 			$venue   = isset( $centralize_array['location'] ) ? $centralize_array['location'] : '';
 			$location_name = isset( $venue['name'] ) ? $venue['name'] : '';
-			$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
+			$address = isset( $venue['full_address'] ) ? $venue['full_address'] : '';
+			if( empty( $address ) ){
+				$address = isset( $venue['address_1'] ) ? $venue['address_1'] : '';
+			}
 			$city 	 = isset( $venue['city'] ) ? $venue['city'] : '';
 			$state   = isset( $venue['state'] ) ? $venue['state'] : '';
 			$zip     = isset( $venue['zip'] ) ? $venue['zip'] : '';
