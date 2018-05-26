@@ -342,6 +342,9 @@ class WP_Event_Aggregator_Ical_Parser {
                 }
 			}		
 		}
+		// Convert the source date/time from the source timezone to our wordpress timezone:
+		$start_time_local = $this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone);
+		$end_time_local = $this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone);
 
 		$xt_event = array(
 			'origin'          => 'ical',
@@ -349,8 +352,8 @@ class WP_Event_Aggregator_Ical_Parser {
 			'ID_ical_old'     => $uid_old,
 			'name'            => $post_title,
 			'description'     => $post_description,
-			'starttime_local' => $start_time,
-			'endtime_local'   => $end_time,
+			'starttime_local' => $start_time_local,
+			'endtime_local'   => $end_time_local,
 			'starttime'       => date('Ymd\THis', $start_time),
 			'endtime'         => date('Ymd\THis', $end_time),
 			'startime_utc'    => '',
@@ -544,4 +547,18 @@ class WP_Event_Aggregator_Ical_Parser {
             return $datetime;
         }
     }
+	public function convert_datetime_to_local_timezone($datetime, $source_timezone, $local_timezone)
+	{
+		if (empty($source_timezone)){
+			$source_timezone = 'UTC';
+		}
+		try {
+            $datetime = new DateTime( $datetime, new DateTimeZone($source_timezone));
+			$datetime->setTimezone(new DateTimeZone( $local_timezone ) );		
+            return $datetime->format( 'Y-m-d H:i:s' );
+        }
+        catch ( Exception $e ) {
+            return $datetime;
+        }
+	}
 }
