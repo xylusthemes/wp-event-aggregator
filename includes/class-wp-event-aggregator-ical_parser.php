@@ -343,8 +343,8 @@ class WP_Event_Aggregator_Ical_Parser {
 			}		
 		}
 		// Convert the source date/time from the source timezone to our wordpress timezone:
-		$start_time_local = $this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone);
-		$end_time_local = $this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone);
+		$start_time_local = strtotime($this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone));
+		$end_time_local = strtotime($this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone));
 
 		$xt_event = array(
 			'origin'          => 'ical',
