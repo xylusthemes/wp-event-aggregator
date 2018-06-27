@@ -51,7 +51,7 @@ class WP_Event_Aggregator_Meetup {
 			return;
 		}
 
-		$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/events?key=' . $this->api_key;
+		$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/events?key=' . $this->api_key.'&fields=featured_photo';
 	    $meetup_response = wp_remote_get( $meetup_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 	    
 	    if ( is_wp_error( $meetup_response ) ) {
@@ -133,6 +133,14 @@ class WP_Event_Aggregator_Meetup {
 		$event_description = isset( $meetup_event['description'] ) ? $meetup_event['description'] : '';
 		$event_url = isset( $meetup_event['link'] ) ? $meetup_event['link'] : '';
 		$image_url = '';
+		if( isset( $meetup_event['featured_photo'] ) ){
+			if( isset( $meetup_event['featured_photo']['highres_link'] ) ){
+				$image_url = $meetup_event['featured_photo']['highres_link'];
+			}
+			if( empty( $image_url ) && isset( $meetup_event['featured_photo']['photo_link'] ) ){
+				$image_url = $meetup_event['featured_photo']['photo_link'];	
+			}
+		}
 
 		$xt_event = array(
 			'origin'          => 'meetup',
