@@ -4,13 +4,22 @@ Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
 
 == Description ==
+<h3>NOTICE (FOR FACEBOOK IMPORT ONLY):</h3>
+>**Plugin is not working currently due Facebook API changes (FOR FACEBOOK IMPORT ONLY, IMPORT FROM OTHER SOURCES ARE WORKING FINE)**
+>
+>**Facebook has restricted access of Events in API from 4th April due to recent Privacy issue. They have new policy & rules to get Event data and restricted events data over API, So You are not able to import events from Facebook for now.**
+>
+>**Facebook is making changes in their Plateform and they will fix these issues soon**
+>
+>**[Here](https://developers.facebook.com/blog/post/2018/04/04/facebook-api-platform-product-changes/) is post from facebook about same.**
+>
 
 WP Event Aggregator allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
 
@@ -97,14 +106,12 @@ You can use `[wp_events]` for display in-built events list.
 
 **Installation (Pro)**
 
-1. Remove basic version of this plugin if you have installed.
-2. Download the “WP Event Aggregator Pro” plugin from your profile on [https://xylusthemes.com/](https://xylusthemes.com/).
-3. Log in and navigate to Plugins & Add New.
-4. Click on Upload plugin button and upload “WP Event Aggregator Pro” zip file and click on install now button.
-5. Locate “WP Event Aggregator Pro” in the list and click the “Activate” link.
+1. Download the “WP Event Aggregator Pro” plugin from your profile on [https://xylusthemes.com/](https://xylusthemes.com/). (Please note that Pro is add-on plugin for this free plugin, so it requires this free plugin installed)
+2. Log in and navigate to Plugins & Add New.
+3. Click on Upload plugin button and upload “WP Event Aggregator Pro” zip file and click on install now button.
+4. Locate “WP Event Aggregator Pro” in the list and click the “Activate” link.
 
 [More Information](http://docs.xylusthemes.com/docs/wp-event-aggregator/plugin-installation-pro/)
-
 
 == Screenshots ==
 
@@ -125,6 +132,10 @@ You can use `[wp_events]` for display in-built events list.
 15. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.5.3 =
+* IMPROVEMENT: Some Improvements.
+* FIXED: some bug fixes.
 
 = 1.5.2 =
 * IMPROVEMENT: Import by FacebookPage now working after Facebook's API restriction and Some other Improvements
