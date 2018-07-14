@@ -252,25 +252,29 @@ class WP_Event_Aggregator_Facebook {
 	 * @since 1.0.0
 	 */
 	public function get_facebook_event_by_event_id( $event_id ) {
+		$fields = array(
+					'id',
+					'name',
+					'description',
+					'start_time',
+					'end_time',
+					'event_times',
+					'cover',
+					'ticket_uri',
+					'timezone',
+					'place',
+				);
+		$include_owner = apply_filters( 'wpea_import_owner', false );
+		if( $include_owner ){
+			$fields[] = 'owner';
+		}
+
 		return $this->get_facebook_response_data(
 			$event_id,
 			array(
 				'fields' => implode(
 					',',
-					array(
-						'id',
-						'name',
-						'description',
-						'start_time',
-						'end_time',
-						'event_times',
-						'updated_time',
-						'cover',
-						'ticket_uri',
-						'timezone',
-						'owner',
-						'place',
-					)
+					$fields
 				),
 			)
 		);
