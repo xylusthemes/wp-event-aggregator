@@ -48,6 +48,7 @@ class WP_Event_Aggregator{
 			self::$instance->setup_constants();
 
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+			add_action( 'plugins_loaded', array( self::$instance, 'load_fbauthorize_class' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_style' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_script' ) );
 
@@ -116,6 +117,11 @@ class WP_Event_Aggregator{
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
 			define( 'WPEA_VERSION', '1.5.4' );
+		}
+
+		// Minimum Pro plugin version.
+		if( ! defined( 'WPEA_MIN_PRO_VERSION' ) ){
+			define( 'WPEA_MIN_PRO_VERSION', '1.5.4' );
 		}
 
 		// Plugin folder Path.
@@ -198,6 +204,24 @@ class WP_Event_Aggregator{
 			basename( dirname( __FILE__ ) ) . '/languages'
 		);
 	
+	}
+
+	/**
+	 * Loads the facebook authorize class
+	 *
+	 * @access public
+	 * @since 1.5
+	 * @return void
+	 */
+	public function load_fbauthorize_class(){
+
+		if( !class_exists( 'WP_Event_Aggregator_Pro_FB_Authorize', false ) ){
+			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-fb-authorize.php';
+			global $importevents;
+			if( class_exists('WP_Event_Aggregator_FB_Authorize', false ) && !empty( $importevents ) ){
+				$importevents->fb_authorize = new WP_Event_Aggregator_FB_Authorize();
+			}
+		}
 	}
 	
 	/**

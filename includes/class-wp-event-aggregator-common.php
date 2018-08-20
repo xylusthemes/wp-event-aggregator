@@ -24,9 +24,8 @@ class WP_Event_Aggregator_Common {
 		add_filter( 'the_content', array( $this, 'wpea_add_em_add_ticket_section'), 20 );
 		add_filter( 'mc_event_content', array( $this, 'wpea_add_my_calendar_ticket_section') , 10, 4);
 		add_action( 'wpea_render_pro_notice', array( $this, 'render_pro_notice') );
-		if( wpea_is_pro() ){
-			add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
-		}
+		add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
+		add_action( 'admin_init', array( $this, 'wpea_check_for_minimum_pro_version' ) );
 	}	
 
 	/**
@@ -721,6 +720,21 @@ class WP_Event_Aggregator_Common {
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
 				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>.', 'wp-event-aggregator' );
+			}
+		}
+	}
+
+	/**
+	 * Check if user has minimum pro version.
+	 *
+	 * @since    1.6
+	 * @return /boolean
+	 */
+	public function wpea_check_for_minimum_pro_version(){
+		if( defined('WPEAPRO_VERSION') ){
+			if ( version_compare( WPEAPRO_VERSION, WPEA_MIN_PRO_VERSION, '<' ) ) {
+				global $ife_warnings;
+				$ife_warnings[] = __( 'Your current "WP Event Aggregator Pro" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly.', 'wp-event-aggregator' );
 			}
 		}
 	}
