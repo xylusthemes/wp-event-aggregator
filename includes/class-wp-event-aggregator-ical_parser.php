@@ -74,8 +74,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$start_date  = strtotime( $start_date );
 		$end_date  = strtotime( $end_date );
 		if( ( $end_date - $start_date ) < 0 ){
-			$wpea_errors[] = esc_html__( 'Please select end
-				date bigger than start date.', 'wp-event-aggregator');
+			$wpea_errors[] = esc_html__( 'Please select end date bigger than start date.', 'wp-event-aggregator');
 			return false;
 		}
 		// Get Start and End date  day,month,year
