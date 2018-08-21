@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,13 +12,13 @@ Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS in
 
 == Description ==
 <h3>NOTICE (FOR FACEBOOK IMPORT ONLY):</h3>
->**Plugin is not working currently due Facebook API changes (FOR FACEBOOK IMPORT ONLY, IMPORT FROM OTHER SOURCES ARE WORKING FINE)**
+>**You need below things to work Facebook Event Importing using API.**
 >
->**Facebook has restricted access of Events in API from 4th April due to recent Privacy issue. They have new policy & rules to get Event data and restricted events data over API, So You are not able to import events from Facebook for now.**
+>* Facebook app ([Here](http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/) is how to create FB app)
+>* Your site need to HTTPS (SSL certificate)
+>* You need to mark events as interested or going on facebook to get imported
 >
->**Facebook is making changes in their Plateform and they will fix these issues soon**
->
->**[Here](https://developers.facebook.com/blog/post/2018/04/04/facebook-api-platform-product-changes/) is post from facebook about same.**
+>**You can also import Facebook events using our plugin with facebook ICS URL. You can check the documentation for how to get iCal URL or download .ics file from Facebook at [Here](http://docs.xylusthemes.com/docs/import-facebook-events/how-to-import-facebook-event-using-ical-url/)**
 >
 
 WP Event Aggregator allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
@@ -132,6 +132,10 @@ You can use `[wp_events]` for display in-built events list.
 15. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+= 1.5.5 =
+* ADDED: Facebook Authorization, so import by facebook event ID possible now (event need to marked as interested or going is mandatory)
+* IMPROVEMENT: Some Improvements
+* FIXED: some bug fixes.
 
 = 1.5.4 =
 * IMPROVEMENT: Some Improvements.

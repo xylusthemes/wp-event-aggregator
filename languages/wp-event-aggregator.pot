@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the WP Event Aggregator package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Event Aggregator 1.5.4\n"
+"Project-Id-Version: WP Event Aggregator 1.5.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-event-"
 "aggregator\n"
-"POT-Creation-Date: 2018-08-21 16:38:46+00:00\n"
+"POT-Creation-Date: 2018-08-21 16:48:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#. #-#-#-#-#  wp-event-aggregator.pot (WP Event Aggregator 1.5.4)  #-#-#-#-#
+#. #-#-#-#-#  wp-event-aggregator.pot (WP Event Aggregator 1.5.5)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-wp-event-aggregator-admin.php:53
 #: includes/class-wp-event-aggregator-admin.php:113
