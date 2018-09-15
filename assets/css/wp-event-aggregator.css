@@ -883,3 +883,11 @@
   color: #039ED7;
   line-height: 1.3em;
 }
+
+.wpea-start-date__dialog .components-popover__content, .wpea-end-date__dialog .components-popover__content {
+  padding: 10px;
+}
+
+.components-panel__row.wpea-start-date.wpea_hidden, .components-panel__row.wpea-end-date.wpea_hidden{
+  display: none;
+}
