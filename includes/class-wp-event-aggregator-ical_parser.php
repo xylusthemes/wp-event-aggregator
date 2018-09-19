@@ -342,6 +342,7 @@ class WP_Event_Aggregator_Ical_Parser {
                 }
 			}		
 		}
+
 		// Convert the source date/time from the source timezone to our wordpress timezone:
 		$start_time_local = strtotime($this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone));
 		$end_time_local = strtotime($this->convert_datetime_to_local_timezone($start, $calendar_timezone, $wordpress_timezone));
@@ -546,19 +547,30 @@ class WP_Event_Aggregator_Ical_Parser {
         catch ( Exception $e ) {
             return $datetime;
         }
-    }
+	}
+
+	/**
+	* Convert date in given source timezone into the local timezone provided.
+	* Assumes that the 'local' timezone will be the local timezone of the computer or wordpress, whatever is set.
+	* 
+	* @param string $datetime           Date string to convert to the local timezone
+	* @param string $source_timezone    Timezone in which the datetime is located. Defaults to UTC
+	* @param string $local_timezone 	The local timezone of the wordpress site or server, into which we're converting.
+	* 
+	* @return DateTime
+	*/
 	public function convert_datetime_to_local_timezone($datetime, $source_timezone, $local_timezone)
 	{
-		if (empty($source_timezone)){
-			$source_timezone = 'UTC';
-		}
-		try {
+        if (empty($source_timezone)){
+            $source_timezone = 'UTC';
+        }
+        try {
             $datetime = new DateTime( $datetime, new DateTimeZone($source_timezone));
-			$datetime->setTimezone(new DateTimeZone( $local_timezone ) );		
-            return $datetime->format( 'Y-m-d H:i:s' );
+            $datetime->setTimezone(new DateTimeZone( $local_timezone ) );		
+			return $datetime->format( 'Y-m-d H:i:s' );
         }
         catch ( Exception $e ) {
             return $datetime;
         }
-	}
+    }
 }
