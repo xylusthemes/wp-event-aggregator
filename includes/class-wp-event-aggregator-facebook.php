@@ -309,8 +309,8 @@ class WP_Event_Aggregator_Facebook {
 	* @since 1.0.0
 	*/
 	public function get_json_response_from_url( $url ) {
-		
-		$response = wp_remote_get( $url );
+		$args = array( 'timeout' => 10 );
+		$response = wp_remote_get( $url, $args );
 		$response = json_decode( wp_remote_retrieve_body( $response ) );
 		return $response;
 	}
