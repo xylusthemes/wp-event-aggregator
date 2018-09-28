@@ -128,7 +128,8 @@ class WP_Event_Aggregator_Event_Organizer {
 			}
 			if ( ! empty( $ife_cats ) ) {
 				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
-					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy );
+					$append = apply_filters('wpea_taxonomy_terms_append', false, $ife_cats, $this->taxonomy, $centralize_array['origin'] );
+					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy, $append );
 				}
 			}
 
