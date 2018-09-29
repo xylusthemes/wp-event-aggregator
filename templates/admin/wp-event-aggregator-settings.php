@@ -78,7 +78,7 @@ $wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
                         <td>
                             <input class="meetup_api_key" name="meetup[meetup_api_key]" type="text" value="<?php if ( isset( $meetup_options['meetup_api_key'] ) ) { echo $meetup_options['meetup_api_key']; } ?>" />
                             <span class="xtei_small">
-                                <?php printf('%s <a href="http://www.eventbrite.com/myaccount/apps/" target="_blank">%s</a>', __( 'Insert your meetup.com API key you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
+                                <?php printf('%s <a href="https://secure.meetup.com/meetup_api/key/" target="_blank">%s</a>', __( 'Insert your meetup.com API key you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>       
