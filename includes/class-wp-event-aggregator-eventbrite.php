@@ -71,7 +71,7 @@ class WP_Event_Aggregator_Eventbrite {
 					}
 					$eventbrite_events_loop = json_decode( $eventbrite_response_loop['body'], true );
 					if ( is_array( $eventbrite_events_loop ) && ! isset( $eventbrite_events_loop['error'] ) ) {
-						$events_loop = $eventbrite_events['events'];
+						$events_loop = $eventbrite_events_loop['events'];
 						if( !empty( $events_loop ) ){
 							foreach( $events_loop as $event_loop ){
 								$imported_events[] = $this->save_eventbrite_event( $event_loop, $event_data );
