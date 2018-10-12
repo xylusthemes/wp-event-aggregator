@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.5.5
+Stable tag: 1.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,21 +117,27 @@ You can use `[wp_events]` for display in-built events list.
 
 1. Events page using '[wp_events posts_per_page="12"]' shortcode
 2. Single Event page (Twenty Sixteen Theme).
-3. Eventbrite event import using Event ID.
-4. Eventbrite event import using Organizer ID (Pro).
-5. Scheduled Imports for Eventbrite (Pro).
-6. Meetup Event import.
-7. Facebook event import using Event IDs.
-8. Facebook event import using Page or Organizer ID (Pro).
-9. iCal events import.
-10. Scheduled Imports (Pro)
-11. Import History
-12. Settings for import events.
-13. Upcoming WP Events widget in backend (Pro)
-14. Upcoming WP Events widget in front-end with Event image(Pro)
-15. Upcoming WP Events widget in front-end without Event image(Pro)
+3. Guternberg Block for WP Events
+4. Eventbrite event import using Event ID.
+5. Eventbrite event import using Organizer ID (Pro).
+6. Scheduled Imports for Eventbrite (Pro).
+7. Meetup Event import.
+8. Facebook event import using Event IDs.
+9. Facebook event import using Page or Organizer ID (Pro).
+10. iCal events import.
+11. Scheduled Imports (Pro)
+12. Import History
+13. Settings for import events.
+14. Upcoming WP Events widget in backend (Pro)
+15. Upcoming WP Events widget in front-end with Event image(Pro)
+16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+= 1.5.6 =
+* ADDED: Gutenberg Block for WP Events.
+* IMPROVEMENT: Some Improvements
+* FIXED: some bug fixes.
+
 = 1.5.5 =
 * ADDED: Facebook Authorization, so import by facebook event ID possible now (event need to marked as interested or going is mandatory)
 * IMPROVEMENT: Some Improvements
