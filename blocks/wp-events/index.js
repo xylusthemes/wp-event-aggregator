@@ -13,7 +13,7 @@ const {
 	ServerSideRender,
 } = wp.components;
 const { InspectorControls } = wp.editor;
-const { dateI18n, getSettings } = wp.date;
+const { dateI18n, __experimentalGetSettings } = wp.date;
 const { createElement } = wp.element;
 
 /**
@@ -74,7 +74,7 @@ registerBlockType( 'wpea-block/wp-events', {
 	// Determines what is displayed in the editor
 	edit: function( props ) {
 		const { attributes, isSelected, setAttributes } = props;
-		const settings = getSettings();
+		const settings = __experimentalGetSettings();
 		const dateClassName = attributes.past_events === 'yes' ? 'wpea_hidden' : '';
 
 		// To know if the current timezone is a 12 hour time with look for "a" in the time format
@@ -203,7 +203,7 @@ registerBlockType( 'wpea-block/wp-events', {
 } );
 
 function eventDateLabel( date, start ) {
-	const settings = getSettings();
+	const settings = __experimentalGetSettings();
 	const defaultLabel = start ? __( 'Select Start Date' ) : __( 'Select End Date' );
 	return date ?
 		dateI18n( settings.formats.datetime, date ) :
