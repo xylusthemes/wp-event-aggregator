@@ -74,8 +74,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$start_date  = strtotime( $start_date );
 		$end_date  = strtotime( $end_date );
 		if( ( $end_date - $start_date ) < 0 ){
-			$wpea_errors[] = esc_html__( 'Please select end
-				date bigger than start date.', 'wp-event-aggregator');
+			$wpea_errors[] = esc_html__( 'Please select end date bigger than start date.', 'wp-event-aggregator');
 			return false;
 		}
 		// Get Start and End date  day,month,year
@@ -213,8 +212,8 @@ class WP_Event_Aggregator_Ical_Parser {
 
 		$start = $event->getProperty( 'dtstart', 1, true );
 		$end   = $event->getProperty( 'dtend',   1, true );
-				
-		if ( empty( $end ) )  {
+
+		if ( empty( $end ) ) {
 			$end = $start;
 		}
 
@@ -456,6 +455,9 @@ class WP_Event_Aggregator_Ical_Parser {
 	public function generate_uid_for_ical_event( $ical_event ) {
 
 		$recurrence_id = $ical_event->getProperty( 'RECURRENCE-ID' );
+		if ( is_array( $recurrence_id) ) {
+			$recurrence_id = implode('-', $recurrence_id);
+		}
 		if ( false === $recurrence_id && false !== $ical_event->getProperty( 'X-RECURRENCE' ) ) {
 			$current_dt_start = $ical_event->getProperty( 'X-CURRENT-DTSTART' );
 			$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;

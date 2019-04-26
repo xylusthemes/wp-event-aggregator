@@ -134,7 +134,8 @@ class WP_Event_Aggregator_TEC {
 				}
 			}
 			if ( ! empty( $wpea_cats ) ) {
-				wp_set_object_terms( $new_event_id, $wpea_cats, $this->taxonomy );
+				$append = apply_filters('wpea_taxonomy_terms_append', false, $wpea_cats, $this->taxonomy, $centralize_array['origin'] );
+				wp_set_object_terms( $new_event_id, $wpea_cats, $this->taxonomy, $append );
 			}
 
 			$event_featured_image  = $centralize_array['image_url'];
@@ -185,7 +186,8 @@ class WP_Event_Aggregator_TEC {
 			}
 			if ( ! empty( $wpea_cats ) ) {
 				if ( $importevents->common->wpea_is_updatable('category') ){
-					wp_set_object_terms( $update_event_id, $wpea_cats, $this->taxonomy );
+					$append = apply_filters('wpea_taxonomy_terms_append', false, $wpea_cats, $this->taxonomy, $centralize_array['origin'] );
+					wp_set_object_terms( $update_event_id, $wpea_cats, $this->taxonomy, $append );
 				}
 			}
 
@@ -193,7 +195,13 @@ class WP_Event_Aggregator_TEC {
 			if( $event_featured_image != '' ){
 				$importevents->common->setup_featured_image_to_event( $update_event_id, $event_featured_image );
 			}else{
-				delete_post_thumbnail( $update_event_id );
+				if( has_post_thumbnail( $update_event_id ) ){
+					$attachment_id = get_post_thumbnail_id( $update_event_id );
+					$imagemeta = get_post_meta( $attachment_id, '_wpea_attachment_source', true );
+					if( !empty( $imagemeta ) ){
+						delete_post_thumbnail( $update_event_id );
+					}
+				}
 			}
 
 			do_action( 'wpea_after_update_tec_'.$centralize_array["origin"].'_event', $update_event_id, $formated_args, $centralize_array );

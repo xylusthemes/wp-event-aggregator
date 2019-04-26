@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.5.2
+ * Version:           1.5.8
  * Author:            Xylus Themes
  * Author URI:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -48,6 +48,7 @@ class WP_Event_Aggregator{
 			self::$instance->setup_constants();
 
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+			add_action( 'plugins_loaded', array( self::$instance, 'load_fbauthorize_class' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_style' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_script' ) );
 
@@ -94,14 +95,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.2' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.8' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.2' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.5.8' ); }
 
 
 	/**
@@ -115,7 +116,12 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.5.2' );
+			define( 'WPEA_VERSION', '1.5.8' );
+		}
+
+		// Minimum Pro plugin version.
+		if( ! defined( 'WPEA_MIN_PRO_VERSION' ) ){
+			define( 'WPEA_MIN_PRO_VERSION', '1.5.4' );
 		}
 
 		// Plugin folder Path.
@@ -181,6 +187,8 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-my-calendar.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ee4.php';
 
+		// Gutenberg Block
+		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';
 	}
 
 	/**
@@ -198,6 +206,24 @@ class WP_Event_Aggregator{
 			basename( dirname( __FILE__ ) ) . '/languages'
 		);
 	
+	}
+
+	/**
+	 * Loads the facebook authorize class
+	 *
+	 * @access public
+	 * @since 1.5
+	 * @return void
+	 */
+	public function load_fbauthorize_class(){
+
+		if( !class_exists( 'WP_Event_Aggregator_Pro_FB_Authorize', false ) ){
+			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-fb-authorize.php';
+			global $importevents;
+			if( class_exists('WP_Event_Aggregator_FB_Authorize', false ) && !empty( $importevents ) ){
+				$importevents->fb_authorize = new WP_Event_Aggregator_FB_Authorize();
+			}
+		}
 	}
 	
 	/**

@@ -78,7 +78,7 @@ $wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
                         <td>
                             <input class="meetup_api_key" name="meetup[meetup_api_key]" type="text" value="<?php if ( isset( $meetup_options['meetup_api_key'] ) ) { echo $meetup_options['meetup_api_key']; } ?>" />
                             <span class="xtei_small">
-                                <?php printf('%s <a href="http://www.eventbrite.com/myaccount/apps/" target="_blank">%s</a>', __( 'Insert your meetup.com API key you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
+                                <?php printf('%s <a href="https://secure.meetup.com/meetup_api/key/" target="_blank">%s</a>', __( 'Insert your meetup.com API key you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>       
@@ -104,17 +104,28 @@ $wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
 
             <h3 class="setting_bar"><?php esc_attr_e( 'Facebook Settings', 'wp-event-aggregator' ); ?></h3>
             
-            <div class="widefat" style="width: 100%;background-color: #FFFBCC;border: 1px solid #e5e5e5;
--webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);box-shadow: 0 1px 1px rgba(0,0,0,.04);padding: 10px;">
-                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You have to create a Facebook application before filling the following details.','wp-event-aggregator' ), __( 'Click here','wp-event-aggregator' ),  __( 'to create new Facebook application.','wp-event-aggregator' ) ); ?>
+            <?php
+            $site_url = get_home_url();
+            if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $site_url, 'https' ) ) {
+                ?>
+                <div class="widefat wpea_settings_error">
+                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account.","import-facebook-events" ), __( 'Click here','import-facebook-events' ), __( 'for more information.','import-facebook-events' ) ); ?>
+                </div>
+            <?php
+            } ?>
+            <div class="widefat wpea_settings_notice">
+                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','import-facebook-events' ), __( 'You have to create a Facebook application before filling the following details.','import-facebook-events' ), __( 'Click here','import-facebook-events' ),  __( 'to create new Facebook application.','import-facebook-events' ) ); ?>
                 <br/>
-                <?php _e( 'In the application page in facebook, navigate to <b>Apps &gt; Settings &gt; Edit settings &gt; Website &gt; Site URL</b>. Set the site url as : ', 'wp-event-aggregator' ); ?>
+                <?php _e( 'For detailed step by step instructions ', 'import-facebook-events' ); ?>
+                <strong><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'import-facebook-events' ); ?></a></strong>.
+                <br/>
+                <?php _e( '<strong>Set the site url as : </strong>', 'import-facebook-events' ); ?>
                 <span style="color: green;"><?php echo get_site_url(); ?></span>
-
-                <br><?php _e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
-                <b><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'wp-event-aggregator' ); ?></a></b>.
+                <br/>
+                <?php _e( '<strong>Set Valid OAuth redirect URI : </strong>', 'import-facebook-events' ); ?>
+                <span style="color: green;"><?php echo admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ?></span>
             </div>
-            
+
             <table class="form-table">
                 <tbody>
                     <tr>
@@ -268,7 +279,7 @@ $wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
             <?php 
             if( $facebook_app_id != '' && $facebook_app_secret != '' ){
                 ?>
-                <h3 class="setting_bar"><?php esc_attr_e( 'Authorize your Facebook Account (Optional)', 'wp-event-aggregator' ); ?></h3>
+                <h3 class="setting_bar"><?php esc_attr_e( 'Authorize your Facebook Account', 'wp-event-aggregator' ); ?></h3>
                 <div class="fb_authorize">
                     <table class="form-table">
                         <tbody>
@@ -277,40 +288,28 @@ $wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
                                     <?php _e( 'Facebook Authorization','wp-event-aggregator' ); ?> : 
                                 </th>
                                 <td>
-                                    <?php
-                                    if( wpea_is_pro() ){
-                                        ?>
-                                        <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
-                                            <input type="hidden" name="action" value="wpea_facebook_authorize_action"/>
-                                            <?php wp_nonce_field('wpea_facebook_authorize_action', 'wpea_facebook_authorize_nonce'); ?>
-                                            <?php 
-                                            $button_value = __('Authorize', 'wp-event-aggregator');
-                                            if( isset( $wpea_user_token_options['authorize_status'] ) && $wpea_user_token_options['authorize_status'] == 1 && isset(  $wpea_user_token_options['access_token'] ) &&  $wpea_user_token_options['access_token'] != '' ){
-                                                $button_value = __('Reauthorize', 'wp-event-aggregator');
-                                            }
-                                            ?>
-                                            <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" />
-                                            <?php 
-                                            if( !empty( $wpea_fb_authorize_user ) && isset( $wpea_fb_authorize_user['name'] ) && $importevents->common->has_authorized_user_token() ){
-                                                $fbauthname = sanitize_text_field( $wpea_fb_authorize_user['name'] );
-                                                if( $fbauthname != '' ){
-                                                   printf( __(' ( Authorized as: %s )', 'wp-event-aggregator'), '<b>'.$fbauthname.'</b>' );
-                                                }   
-                                            }
-                                            ?>
-                                        </form>
-                                        <?php
-                                    }else{
-                                        $button_value = __('Authorize', 'wp-event-aggregator');
-                                        ?>
-                                        <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" disabled="disabled" />
+                                    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+                                        <input type="hidden" name="action" value="wpea_facebook_authorize_action"/>
+                                        <?php wp_nonce_field('wpea_facebook_authorize_action', 'wpea_facebook_authorize_nonce'); ?>
                                         <?php 
-                                        do_action( 'wpea_render_pro_notice' );
-                                    }
-                                    ?>
-                                    
+                                        $button_value = __('Authorize', 'wp-event-aggregator');
+                                        if( isset( $wpea_user_token_options['authorize_status'] ) && $wpea_user_token_options['authorize_status'] == 1 && isset(  $wpea_user_token_options['access_token'] ) &&  $wpea_user_token_options['access_token'] != '' ){
+                                            $button_value = __('Reauthorize', 'wp-event-aggregator');
+                                        }
+                                        ?>
+                                        <input type="submit" class="button" name="wpea_facebook_authorize" value="<?php echo $button_value; ?>" />
+                                        <?php 
+                                        if( !empty( $wpea_fb_authorize_user ) && isset( $wpea_fb_authorize_user['name'] ) && $importevents->common->has_authorized_user_token() ){
+                                            $fbauthname = sanitize_text_field( $wpea_fb_authorize_user['name'] );
+                                            if( $fbauthname != '' ){
+                                               printf( __(' ( Authorized as: %s )', 'wp-event-aggregator'), '<b>'.$fbauthname.'</b>' );
+                                            }   
+                                        }
+                                        ?>
+                                    </form>
+
                                     <span class="wpea_small">
-                                        <?php _e( 'By Authorize your account you are able to import private facebook events which you can see with your profile and import events by group. Authorization is not require if you want to import only public events.','wp-event-aggregator' ); ?>
+                                        <?php _e( 'Please authorize your facebook account for import facebook events.','wp-event-aggregator' ); ?>
                                     </span>
                                 </td>
                             </tr>

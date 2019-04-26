@@ -276,3 +276,24 @@ table.wpea_form_table tr td:nth-child(1) {
     margin-left: .4em;
     padding: 5px 9px;
 }
+
+.wpea_settings_notice{
+    width: 100%;
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    padding: 10px;
+    color: #8a6d3b;
+}
+
+.wpea_settings_error{
+    width: 100%;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    padding: 10px;
+    color: #a94442;
+    margin-bottom: 5px;
+}

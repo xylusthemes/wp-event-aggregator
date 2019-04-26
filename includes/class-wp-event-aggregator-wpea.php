@@ -112,7 +112,8 @@ class WP_Event_Aggregator_WPEA {
 			}
 			if ( ! empty( $ife_cats ) ) {
 				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
-					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy );
+					$append = apply_filters('wpea_taxonomy_terms_append', false, $ife_cats, $this->taxonomy, $centralize_array['origin'] );
+					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy, $append );
 				}
 			}
 
@@ -122,7 +123,13 @@ class WP_Event_Aggregator_WPEA {
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
 			}else{
 				if( $is_exitsing_event ){
-					delete_post_thumbnail( $inserted_event_id );
+					if( has_post_thumbnail( $is_exitsing_event ) ){
+						$attachment_id = get_post_thumbnail_id( $is_exitsing_event );
+						$imagemeta = get_post_meta( $attachment_id, '_wpea_attachment_source', true );
+						if( !empty( $imagemeta ) ){
+							delete_post_thumbnail( $inserted_event_id );
+						}
+					}
 				}
 			}
 

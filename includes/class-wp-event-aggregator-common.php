@@ -24,9 +24,8 @@ class WP_Event_Aggregator_Common {
 		add_filter( 'the_content', array( $this, 'wpea_add_em_add_ticket_section'), 20 );
 		add_filter( 'mc_event_content', array( $this, 'wpea_add_my_calendar_ticket_section') , 10, 4);
 		add_action( 'wpea_render_pro_notice', array( $this, 'render_pro_notice') );
-		if( wpea_is_pro() ){
-			add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
-		}
+		add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
+		add_action( 'admin_init', array( $this, 'wpea_check_for_minimum_pro_version' ) );
 	}	
 
 	/**
@@ -230,7 +229,7 @@ class WP_Event_Aggregator_Common {
 			return;
 		}
 		$event = get_post( $event_id );
-		if( Empty ( $event ) ){
+		if( empty ( $event ) ){
 			return;
 		}
 
@@ -241,15 +240,45 @@ class WP_Event_Aggregator_Common {
 		$event_title = $event->post_title;
 		//$image = media_sideload_image( $image_url, $event_id, $event_title );
 		if ( ! empty( $image_url ) ) {
-
+			$without_ext = false;
 			// Set variables for storage, fix file filename for query strings.
 			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image_url, $matches );
 			if ( ! $matches ) {
-				return new WP_Error( 'image_sideload_failed', __( 'Invalid image URL' ) );
+				if(strpos($image_url, "https://cdn.evbuc.com") === 0 || strpos($image_url, "https://img.evbuc.com") === 0){
+					$without_ext = true;
+				}else{
+					return new WP_Error( 'image_sideload_failed', __( 'Invalid image URL' ) );
+				}
+			}
+
+			$args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'any',
+				'fields'      => 'ids',
+				'meta_query'  => array( // @codingStandardsIgnoreLine.
+					array(
+						'value' => $image_url,
+						'key'   => '_wpea_attachment_source',
+					),
+				),
+			);
+			$id = 0;
+			$ids = get_posts( $args ); // @codingStandardsIgnoreLine.
+			if ( $ids ) {
+				$id = current( $ids );
+			}
+			if( $id && $id > 0 ){
+				set_post_thumbnail( $event_id, $id );
+				return $id;
 			}
 
 			$file_array = array();
-			$file_array['name'] = $event->ID . '_image_'.basename( $matches[0] );
+			$file_array['name'] = $event->ID . '_image';
+			if($without_ext === true){
+				$file_array['name'] .= '.jpg';
+			}else{
+				$file_array['name'] .=  '_'.basename( $matches[0] );
+			}
 			
 			if( has_post_thumbnail( $event_id ) ){
 				$attachment_id = get_post_thumbnail_id( $event_id );
@@ -279,6 +308,9 @@ class WP_Event_Aggregator_Common {
 			if ($att_id) {
 				set_post_thumbnail($event_id, $att_id);
 			}
+
+			// Save attachment source for future reference.
+			update_post_meta( $att_id, '_wpea_attachment_source', $image_url );
 
 			return $att_id;
 		}
@@ -697,6 +729,21 @@ class WP_Event_Aggregator_Common {
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
 				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>.', 'wp-event-aggregator' );
+			}
+		}
+	}
+
+	/**
+	 * Check if user has minimum pro version.
+	 *
+	 * @since    1.6
+	 * @return /boolean
+	 */
+	public function wpea_check_for_minimum_pro_version(){
+		if( defined('WPEAPRO_VERSION') ){
+			if ( version_compare( WPEAPRO_VERSION, WPEA_MIN_PRO_VERSION, '<' ) ) {
+				global $ife_warnings;
+				$ife_warnings[] = __( 'Your current "WP Event Aggregator Pro" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly.', 'wp-event-aggregator' );
 			}
 		}
 	}

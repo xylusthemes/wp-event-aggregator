@@ -44,7 +44,7 @@ class WP_Event_Aggregator_Facebook {
 		$options = wpea_get_import_options( 'facebook' );
 		$this->fb_app_id = isset( $options['facebook_app_id'] ) ? $options['facebook_app_id'] : '';
 		$this->fb_app_secret = isset( $options['facebook_app_secret'] ) ? $options['facebook_app_secret'] : '';
-		$this->fb_graph_url = 'https://graph.facebook.com/v2.11/';
+		$this->fb_graph_url = 'https://graph.facebook.com/v3.0/';
 
 	}
 
@@ -216,6 +216,29 @@ class WP_Event_Aggregator_Facebook {
 			$access_token_data = json_decode( $access_token_response_body );
 			$access_token = ! empty( $access_token_data->access_token ) ? $access_token_data->access_token : null;
 
+			$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
+			if( !empty( $wpea_user_token_options ) && $access_token != '' ){
+				$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
+				$user_access_token = isset( $wpea_user_token_options['access_token'] ) ? $wpea_user_token_options['access_token'] : '';
+				if( 1 == $authorize_status && $user_access_token != '' ){
+
+					$args = array(
+						'input_token' => $user_access_token, 
+						'access_token'  => $access_token,
+						);
+					$access_token_url = add_query_arg( $args, $this->fb_graph_url . 'debug_token' );
+					$access_token_response = wp_remote_get( $access_token_url );
+					$access_token_response_body = wp_remote_retrieve_body( $access_token_response );
+					$access_token_data = json_decode( $access_token_response_body );
+					if( !isset( $access_token_data->error ) && $access_token_data->data->is_valid == 1 ){
+						$access_token = $user_access_token;
+					}else{
+						$wpea_user_token_options['authorize_status'] = 0;
+						update_option( 'wpea_user_token_options', $wpea_user_token_options );
+					}
+				}
+			}
+
 			$this->fb_access_token = apply_filters( 'wpea_facebook_access_token', $access_token );
 			return $this->fb_access_token;
 		}
@@ -252,25 +275,29 @@ class WP_Event_Aggregator_Facebook {
 	 * @since 1.0.0
 	 */
 	public function get_facebook_event_by_event_id( $event_id ) {
+		$fields = array(
+					'id',
+					'name',
+					'description',
+					'start_time',
+					'end_time',
+					'event_times',
+					'cover',
+					'ticket_uri',
+					'timezone',
+					'place',
+				);
+		$include_owner = apply_filters( 'wpea_import_owner', false );
+		if( $include_owner ){
+			$fields[] = 'owner';
+		}
+
 		return $this->get_facebook_response_data(
 			$event_id,
 			array(
 				'fields' => implode(
 					',',
-					array(
-						'id',
-						'name',
-						'description',
-						'start_time',
-						'end_time',
-						'event_times',
-						'updated_time',
-						'cover',
-						'ticket_uri',
-						'timezone',
-						'owner',
-						'place',
-					)
+					$fields
 				),
 			)
 		);
@@ -282,8 +309,8 @@ class WP_Event_Aggregator_Facebook {
 	* @since 1.0.0
 	*/
 	public function get_json_response_from_url( $url ) {
-		
-		$response = wp_remote_get( $url );
+		$args = array( 'timeout' => 10 );
+		$response = wp_remote_get( $url, $args );
 		$response = json_decode( wp_remote_retrieve_body( $response ) );
 		return $response;
 	}
