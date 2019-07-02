@@ -343,4 +343,49 @@ class WP_Event_Aggregator_Eventbrite {
 		}
 		return '';
 	}
+
+	/**
+	 * Get Event description from eventbrite.
+	 *
+	 * @param $eventbrite_id
+	 * @return string description
+	 */
+	function get_eventbrite_event_description($eventbrite_id){
+		$description = '';
+		$eventbrite_desc_url  = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/description/?token=' . $this->oauth_token;
+		$eventbrite_response = wp_remote_get( $eventbrite_desc_url, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		if ( !is_wp_error( $eventbrite_response ) ) {
+			$event_desc = json_decode( wp_remote_retrieve_body($eventbrite_response) );
+			$description = isset( $event_desc->description ) ? $event_desc->description : '';
+		}
+		return $description;
+	}
+
+	/**
+	 * import Eventbrite events by oraganiser or by user in background.
+	 *
+	 * @since    1.0
+	 * @param array $post_id  import event data.
+	 * @return /boolean
+	 */
+	public function background_import_events( $post_id = 0 ){
+		$post = get_post( $post_id );
+		if( !$post || empty( $post ) ){
+			return; 
+		}
+
+		$default_args = array(
+			'import_id'			=> $post_id, // Import_ID
+			'page'				=> 1, // Page Number
+			'event_index'		=> -1, // product index needed incase of memory issuee or timeout
+			'prevent_timeouts'	=> true // Check memory and time usage and abort if reaching limit.
+		);
+
+		$params = $default_args;
+
+		$import = new WPEA_Background_Process();
+		$import->push_to_queue( $params );
+		$import->save()->dispatch();
+		return true;
+	}
 }

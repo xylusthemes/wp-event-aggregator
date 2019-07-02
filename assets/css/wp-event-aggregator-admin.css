@@ -297,3 +297,67 @@ table.wpea_form_table tr td:nth-child(1) {
     color: #a94442;
     margin-bottom: 5px;
 }
+
+.wpea_inprogress_import strong{
+    color: green;
+}
+
+.toplevel_page_import_events #TB_window.thickbox-loading:before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  margin: -10px 0 0 -10px;
+  background: #fcfcfc url(../../../../../wp-admin/images/spinner.gif) no-repeat center;
+  background-size: 20px 20px;
+  transform: translateZ(0);
+}
+
+.toplevel_page_import_events #TB_window {
+  background: #fcfcfc;
+}
+
+.toplevel_page_import_events #TB_title {
+  float: left;
+  height: 1px;
+}
+
+.toplevel_page_import_events #TB_ajaxWindowTitle {
+  display: none;
+}
+
+.toplevel_page_import_events #TB_closeWindowButton {
+  left: auto;
+  right: -30px;
+  color: #eee;
+}
+
+.toplevel_page_import_events #TB_closeWindowButton:hover,
+.toplevel_page_import_events #TB_closeWindowButton:focus {
+  color: #00a0d2;
+  outline: none;
+  box-shadow: none;
+}
+
+.toplevel_page_import_events .tb-close-icon {
+  display: none;
+}
+
+.toplevel_page_import_events #TB_closeWindowButton:after {
+  content: "\f335";
+  font: normal 32px/29px 'dashicons';
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media screen and (max-width: 830px) {
+  .toplevel_page_import_events #TB_closeWindowButton {
+    right: 0;
+    top: -30px;
+  }
+}

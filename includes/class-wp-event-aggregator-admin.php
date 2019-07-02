@@ -40,6 +40,7 @@ class WP_Event_Aggregator_Admin {
 		add_filter( 'submenu_file', array( $this, 'get_selected_tab_submenu' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_event_aggregator_credit' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget') );
+		add_action( 'admin_action_wpea_view_import_history',  array( $this, 'wpea_view_import_history_handler' ) );
 	}
 
 	/**
@@ -404,7 +405,7 @@ class WP_Event_Aggregator_Admin {
 	public function get_xyuls_themes_plugins(){
 		return array(
 			'import-facebook-events' => esc_html__( 'Import Facebook Events', 'wp-event-aggregator' ),
-			'import-eventbrite-events' => esc_html__( 'Import Eventbrite Events', 'wp-event-aggregator' ),
+			'wp-event-aggregator' => esc_html__( 'Import Eventbrite Events', 'wp-event-aggregator' ),
 			'import-meetup-events' => esc_html__( 'Import Meetup Events', 'wp-event-aggregator' ),
 			'wp-bulk-delete' => esc_html__( 'WP Bulk Delete', 'wp-event-aggregator' ),
 			'xt-facebook-events' => esc_html__( 'Facebook Events', 'wp-event-aggregator' ),
@@ -466,5 +467,87 @@ class WP_Event_Aggregator_Admin {
 			}
 		}
 		return $submenu_file;
+	}
+	/**
+	 * Render imported Events in history Page.
+	 *
+	 * @return void
+	 */
+	public function wpea_view_import_history_handler() {
+	    define( 'IFRAME_REQUEST', true );
+	    iframe_header();
+	    $history_id = isset($_GET['history']) ? absint($_GET['history']) : 0;
+	    if( $history_id > 0){
+	    	$imported_data = get_post_meta($history_id, 'imported_data', true);
+	    	if(!empty($imported_data)){
+	    		?>
+			    <table class="widefat fixed striped">
+				<thead>
+					<tr>
+						<th id="title" class="column-title column-primary"><?php esc_html_e( 'Event', 'wp-event-aggregator' ); ?></th>
+						<th id="action" class="column-operation"><?php esc_html_e( 'Created/Updated', 'wp-event-aggregator' ); ?></th>
+						<th id="action" class="column-date"><?php esc_html_e( 'Action', 'wp-event-aggregator' ); ?></th>
+					</tr>
+				</thead>
+				<tbody id="the-list">
+					<?php
+					foreach ($imported_data as $event) {
+						?>
+						<tr>
+							<td class="title column-title">
+								<?php 
+								printf(
+									'<a href="%1$s" target="_blank">%2$s</a>',
+									get_the_permalink($event['id']),
+									get_the_title($event['id'])
+								);
+								?>
+							</td>
+							<td class="title column-title">
+								<?php echo ucfirst($event['status']); ?>
+							</td>
+							<td class="title column-action">
+								<?php 
+								printf(
+									'<a href="%1$s" target="_blank">%2$s</a>',
+									get_edit_post_link($event['id']),
+									__( 'Edit', 'wp-event-aggregator' )
+								);
+								?>
+							</td>
+						</tr>
+						<?php
+					}
+					?>
+					</tbody>
+				</table>
+				<?php
+	    		?>
+	    		<?php
+	    	}else{
+	    		?>
+	    		<div class="wpea_no_import_events">
+		    		<?php esc_html_e( 'No data found', 'wp-event-aggregator' ); ?>
+		    	</div>
+	    		<?php
+	    	}
+	    }else{
+	    	?>
+    		<div class="wpea_no_import_events">
+	    		<?php esc_html_e( 'No data found', 'wp-event-aggregator' ); ?>
+	    	</div>
+    		<?php
+	    }
+	    ?>
+	    <style>
+	    	.wpea_no_import_events{
+				text-align: center;
+				margin-top: 60px;
+				font-size: 1.4em;
+			}
+	    </style>
+	    <?php
+	    iframe_footer();
+	    exit;
 	}
 }

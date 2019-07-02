@@ -339,9 +339,10 @@ class WP_Event_Aggregator_Facebook {
 		$start_time = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) : date( 'Y-m-d H:i:s');
 		$end_time = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : $start_time;
 
-		//$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : 'https://www.facebook.com/events/'.$facebook_id;
-		$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : '';
+		$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : 'https://www.facebook.com/events/'.$facebook_id;
+		//$ticket_uri = isset( $facebook_event->ticket_uri ) ? esc_url( $facebook_event->ticket_uri ) : '';
 		$timezone = $this->get_utc_offset( $facebook_event->start_time );
+		$timezone_name = isset( $facebook_event->timezone ) ? $facebook_event->timezone : $timezone;
 		$cover_image = isset( $facebook_event->cover->source ) ? $importevents->common->clean_url( esc_url( $facebook_event->cover->source ) ) : '';
 
 		$event_times_obj = isset( $facebook_event->event_times ) ? $facebook_event->event_times : array();
@@ -367,9 +368,10 @@ class WP_Event_Aggregator_Facebook {
 			'description'     => $post_description,
 			'starttime_local' => $start_time,
 			'endtime_local'   => $end_time,
-			'startime_utc'    => '',
-			'endtime_utc'     => '',
+			'startime_utc'    => $start_time,
+			'endtime_utc'     => $end_time,
 			'timezone'        => $timezone,
+			'timezone_name'   => $timezone_name,
 			'utc_offset'      => '',
 			'event_duration'  => '',
 			'is_all_day'      => '',
@@ -393,6 +395,8 @@ class WP_Event_Aggregator_Facebook {
 				$xt_event['ID'] = $event_time['ID'];
 				$xt_event['starttime_local'] = $event_time['start_time'];
 				$xt_event['endtime_local'] = $event_time['end_time'];
+				$xt_event['startime_utc'] = $event_time['start_time'];
+				$xt_event['endtime_utc'] = $event_time['end_time'];
 				$xt_events[] = $xt_event;
 			}
 		}
