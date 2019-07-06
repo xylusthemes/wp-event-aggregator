@@ -361,3 +361,13 @@ table.wpea_form_table tr td:nth-child(1) {
     top: -30px;
   }
 }
+
+.wpea_connection_wrapper .img_wrap img {
+    border-radius: 50%;
+    max-width: 54px;
+}
+
+.wpea_connection_wrapper .img_wrap {
+    float: left;
+    margin-right: 10px;
+}

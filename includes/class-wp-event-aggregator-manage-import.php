@@ -19,7 +19,7 @@ class WP_Event_Aggregator_Manage_Import {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'setup_success_messages' ) );
+		add_action( 'admin_init', array( $this, 'setup_success_messages' ) );
 		add_action( 'admin_init', array( $this, 'handle_import_form_submit' ) , 99);
 		add_action( 'admin_init', array( $this, 'handle_import_settings_submit' ), 99 );
 		add_action( 'admin_init', array( $this, 'handle_listtable_oprations' ), 99 );
@@ -220,11 +220,11 @@ class WP_Event_Aggregator_Manage_Import {
 	public function handle_meetup_import_form_submit( $event_data ){
 		global $wpea_errors, $wpea_success_msg, $importevents;
 
-		$meetup_options = wpea_get_import_options('meetup');
+		/*$meetup_options = wpea_get_import_options('meetup');
 		if( !isset( $meetup_options['meetup_api_key'] ) || $meetup_options['meetup_api_key'] == '' ){
 			$wpea_errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
 			return;
-		}
+		}*/
 		
 		$event_data['import_origin'] = 'meetup';
 		$event_data['meetup_url'] = isset( $_POST['meetup_url'] ) ? $_POST['meetup_url'] : '';

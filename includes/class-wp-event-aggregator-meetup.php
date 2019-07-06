@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class WP_Event_Aggregator_Meetup {
 
 	public $api_key;
+	public $access_token;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -25,6 +26,10 @@ class WP_Event_Aggregator_Meetup {
 
 		$options = wpea_get_import_options( 'meetup' );
 		$this->api_key = isset( $options['meetup_api_key'] ) ? $options['meetup_api_key'] : '';
+		if( empty( $this->api_key) ){
+			$auth_token = $this->get_user_auth_token();
+			$this->access_token = $auth_token;
+		}
 	}
 
 	/**
@@ -40,8 +45,8 @@ class WP_Event_Aggregator_Meetup {
 		$imported_events = array();
 		$meetup_url = isset( $event_data['meetup_url'] ) ? $event_data['meetup_url'] : '';
 		
-		if( $this->api_key == '' ){
-			$wpea_errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
+		if( empty($this->api_key) && empty($this->access_token) ){
+			$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
 			return;
 		}
 
@@ -51,7 +56,12 @@ class WP_Event_Aggregator_Meetup {
 			return;
 		}
 
-		$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/events?key=' . $this->api_key.'&fields=featured_photo';
+		if(!empty($this->api_key)){
+			$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/events?key=' . $this->api_key.'&fields=featured_photo';
+		}else{
+			$meetup_api_url = 'https://api.meetup.com/' . $meetup_group_id . '/events?access_token=' . $this->access_token.'&fields=featured_photo';
+		}
+
 	    $meetup_response = wp_remote_get( $meetup_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 	    
 	    if ( is_wp_error( $meetup_response ) ) {
@@ -67,7 +77,7 @@ class WP_Event_Aggregator_Meetup {
 			}			
 			return;
 		}
-		if ( is_array( $meetup_events ) && ! isset( $meetup_events['error'] ) ) {
+		if ( is_array( $meetup_events ) && ! isset( $meetup_events['errors'] ) ) {
 
 			if( !empty( $meetup_events ) ){
 				foreach ($meetup_events as $meetup_event) {
@@ -77,7 +87,19 @@ class WP_Event_Aggregator_Meetup {
 			return $imported_events;
 
 		}else{
-			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			if( isset( $meetup_events['errors'] ) ){
+				foreach ( $meetup_events['errors'] as $meetup_event ) {
+					if( isset($meetup_event['message'] ) ){
+						$message = $meetup_event['message'];
+						if( isset($meetup_event['code']) && $meetup_event['code'] == 'auth_fail'){
+							$message = __( 'Please try again after re-connect your account.', 'wp-event-aggregator');
+						}
+						$wpea_errors[] = $message;
+					}
+				}
+			}else{
+				$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
+			}			
 			return;
 		}
 
@@ -260,20 +282,25 @@ class WP_Event_Aggregator_Meetup {
 	 * @return array
 	 */
 	public function get_meetup_group_name_by_url( $meetup_url ) {
-		
+		global $wpea_errors;
 		if( !$meetup_url || $meetup_url == '' ){
 			return;
 		}
 		
-		if( $this->api_key == '' ){
-			$wpea_errors[] = __( 'Please insert "Meetup API key" in settings.', 'wp-event-aggregator');
+		if( empty($this->api_key) && empty($this->access_token) ){
+			$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
 			return;
 		}
 
 		$url_group_slug = $this->fetch_group_slug_from_url( $meetup_url );
 		if( $url_group_slug == '' ){ return; }
 
-		$get_group = wp_remote_get( 'https://api.meetup.com/' . $url_group_slug .'/?key=' . $this->api_key, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		if(!empty($this->api_key)){
+			$get_group = wp_remote_get( 'https://api.meetup.com/' . $url_group_slug .'/?key=' . $this->api_key, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		}else{
+			$get_group = wp_remote_get( 'https://api.meetup.com/' . $url_group_slug .'/?access_token=' . $this->access_token, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		}
+
 		if ( ! is_wp_error( $get_group ) ) {
 			$group = json_decode( $get_group['body'], true );
 			if ( is_array( $group ) && ! isset( $group['errors'] ) ) {
@@ -304,5 +331,63 @@ class WP_Event_Aggregator_Meetup {
 			$url = substr( $url, 0, $slash_position );
 		}
 		return $url;
+	}
+
+	/*
+	* Refresh Meetup user access token
+	*/
+    function wpea_refresh_user_token() {
+    	$wpea_user_token_options = get_option( 'wpea_muser_token_options', array() );
+    	$wpea_options = get_option( WPEA_OPTIONS );
+		$meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
+		$meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_options['meetup_oauth_key'] : '';
+		$meetup_oauth_secret = isset( $meetup_options['meetup_oauth_secret'] ) ? $meetup_options['meetup_oauth_secret'] : '';
+		$refresh_token = isset($wpea_user_token_options->refresh_token) ? $wpea_user_token_options->refresh_token : '';
+
+		if( $meetup_oauth_key != '' && $meetup_oauth_secret != '' && $refresh_token != '' ){
+			$token_url = 'https://secure.meetup.com/oauth2/access';
+			$args = array(
+				'method' => 'POST',
+				'headers' => array( 'content-type' => 'application/x-www-form-urlencoded'),
+				'body'    => "client_id={$meetup_oauth_key}&client_secret={$meetup_oauth_secret}&grant_type=refresh_token&refresh_token={$refresh_token}"
+			);
+			$access_token = "";
+			$wpea_user_token_options = array();
+			$response = wp_remote_post( $token_url, $args );
+			$body = wp_remote_retrieve_body( $response );
+			$body_response = json_decode( $body );
+			if ($body != '' && isset( $body_response->access_token ) ) {
+				$access_token = $body_response->access_token;
+				delete_transient('wpea_meetup_auth_token');
+			    update_option('wpea_muser_token_options', $body_response);
+			    return $access_token;
+			}else{
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return false;
+    }
+
+	/**
+	 * Get User Auth Token
+	 *
+	 * @return string
+	 */
+	public function get_user_auth_token(){
+		$wpea_transient_key = 'wpea_meetup_auth_token';
+		$auth_token = get_transient( $wpea_transient_key );
+		if ( false === $auth_token ) {
+			$wpea_user_token_options = get_option( 'wpea_muser_token_options', array() );
+			if( !empty( $wpea_user_token_options->refresh_token ) ){
+				$auth_token = $this->wpea_refresh_user_token();
+				if($auth_token){
+					// Set transient.
+					set_transient( $wpea_transient_key, $auth_token, 1800 );
+				}
+			}
+		}
+		return $auth_token;
 	}
 }

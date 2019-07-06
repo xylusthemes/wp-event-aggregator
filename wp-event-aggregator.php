@@ -48,7 +48,7 @@ class WP_Event_Aggregator{
 			self::$instance->setup_constants();
 
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
-			add_action( 'plugins_loaded', array( self::$instance, 'load_fbauthorize_class' ), 20 );
+			add_action( 'plugins_loaded', array( self::$instance, 'load_authorize_class' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_style' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_script' ) );
 
@@ -215,13 +215,17 @@ class WP_Event_Aggregator{
 	 * @since 1.5
 	 * @return void
 	 */
-	public function load_fbauthorize_class(){
+	public function load_authorize_class(){
 
 		if( !class_exists( 'WP_Event_Aggregator_Pro_FB_Authorize', false ) ){
 			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-fb-authorize.php';
+			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-meetup-authorize.php';
 			global $importevents;
 			if( class_exists('WP_Event_Aggregator_FB_Authorize', false ) && !empty( $importevents ) ){
 				$importevents->fb_authorize = new WP_Event_Aggregator_FB_Authorize();
+			}
+			if( class_exists('WP_Event_Aggregator_Meetup_Authorize', false ) && !empty( $importevents ) ){
+				$importevents->meetup_authorize = new WP_Event_Aggregator_Meetup_Authorize();
 			}
 		}
 	}

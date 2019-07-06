@@ -41,6 +41,7 @@ class WP_Event_Aggregator_Admin {
 		add_filter( 'admin_footer_text', array( $this, 'add_event_aggregator_credit' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget') );
 		add_action( 'admin_action_wpea_view_import_history',  array( $this, 'wpea_view_import_history_handler' ) );
+		add_action( 'admin_init', array( $this, 'setup_success_messages' ) );
 	}
 
 	/**
@@ -549,5 +550,23 @@ class WP_Event_Aggregator_Admin {
 	    <?php
 	    iframe_footer();
 	    exit;
+	}
+
+	/**
+	 * Display Success Messages.
+	 *
+	 * @since    1.0.0
+	 */
+	public function setup_success_messages(){
+		global $wpea_success_msg, $wpea_errors;
+		if ( isset( $_GET['wpeam_authorize'] ) && trim( $_GET['wpeam_authorize'] ) != '' ) {
+			if( trim( $_GET['wpeam_authorize'] ) == '1' ){
+				$wpea_success_msg[] = esc_html__( 'Authorized Successfully.', 'wp-event-aggregator' );	
+			} elseif( trim( $_GET['wpeam_authorize'] ) == '2' ){
+				$wpea_errors[] = esc_html__( 'Please insert Meetup Auth Key and Secret.', 'wp-event-aggregator' );	
+			} elseif( trim( $_GET['wpeam_authorize'] ) == '0' ){
+				$wpea_errors[] = esc_html__( 'Something went wrong during authorization. Please try again.', 'wp-event-aggregator' );	
+			}			
+		}
 	}
 }
