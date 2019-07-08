@@ -390,4 +390,33 @@ class WP_Event_Aggregator_Meetup {
 		}
 		return $auth_token;
 	}
+
+	/**
+	 * import Meetup events by group in background.
+	 *
+	 * @since    1.0
+	 * @param array $post_id  import event data.
+	 * @return /boolean
+	 */
+	public function background_import_events( $post_id = 0 ){
+		$post = get_post( $post_id );
+		if( !$post || empty( $post ) ){
+			return; 
+		}
+
+		$default_args = array(
+			'import_id'			=> $post_id, // Import_ID
+			'no_earlier_than'   => 1514768400,
+			'limit'				=> 50,
+			'event_index'		=> -1, // event index needed incase of memory issuee or timeout
+			'prevent_timeouts'	=> true // Check memory and time usage and abort if reaching limit.
+		);
+
+		$params = $default_args;
+
+		$import = new WPEA_Background_Process();
+		$import->push_to_queue( $params );
+		$import->save()->dispatch();
+		return true;
+	}
 }
