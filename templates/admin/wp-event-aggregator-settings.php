@@ -67,6 +67,29 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                             </span>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">
+                            <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
+                        </th>
+                        <td>
+                            <?php 
+                            if( wpea_is_pro() ){
+                                $advanced_esync = isset( $eventbrite_options['advanced_sync'] ) ? $eventbrite_options['advanced_sync'] : 'no';
+                                ?>
+                                <input type="checkbox" name="eventbrite[advanced_sync]" value="yes" <?php if( $advanced_esync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <?php
+                            }else{
+                                ?>
+                                <input type="checkbox" name="" disabled="disabled" />
+                                <?php
+                            }
+                            ?>
+                            <span class="wpea_small">
+                                <?php _e( 'Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php do_action( 'wpea_render_pro_notice' ); ?>
+                        </td>
+                    </tr>
          		
             	</tbody>
             </table>
@@ -205,6 +228,29 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                             </span>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">
+                            <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
+                        </th>
+                        <td>
+                            <?php 
+                            if( wpea_is_pro() ){
+                                $advanced_msync = isset( $meetup_options['advanced_sync'] ) ? $meetup_options['advanced_sync'] : 'no';
+                                ?>
+                                <input type="checkbox" name="meetup[advanced_sync]" value="yes" <?php if( $advanced_msync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <?php
+                            }else{
+                                ?>
+                                <input type="checkbox" name="" disabled="disabled" />
+                                <?php
+                            }
+                            ?>
+                            <span class="wpea_small">
+                                <?php _e( 'Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php do_action( 'wpea_render_pro_notice' ); ?>
+                        </td>
+                    </tr>
                 
                 </tbody>
             </table>
@@ -285,7 +331,30 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                             </span>
                         </td>
                     </tr>
-                
+                    
+                    <tr>
+                        <th scope="row">
+                            <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
+                        </th>
+                        <td>
+                            <?php 
+                            if( wpea_is_pro() ){
+                                $advanced_fsync = isset( $facebook_options['advanced_sync'] ) ? $facebook_options['advanced_sync'] : 'no';
+                                ?>
+                                <input type="checkbox" name="facebook[advanced_sync]" value="yes" <?php if( $advanced_fsync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <?php
+                            }else{
+                                ?>
+                                <input type="checkbox" name="" disabled="disabled" />
+                                <?php
+                            }
+                            ?>
+                            <span class="wpea_small">
+                                <?php _e( 'Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php do_action( 'wpea_render_pro_notice' ); ?>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <br/>
