@@ -1,4 +1,4 @@
-=== WP Event Aggregator: Import Facebook, Eventbrite, Meetup, iCal Events ===
+=== WP Event Aggregator: Import Eventbrite, Meetup, any iCal Events into WordPress ===
 Contributors: xylus,dharm1025
 Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
@@ -48,6 +48,8 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 * [My Calendar](https://wordpress.org/plugins/my-calendar/)
 * [Eventum (Tevolution-Events)](https://templatic.com/app-themes/eventum-event-directory-theme/) - Pro Add-on
 * [Event Espresso 4 (EE4)](https://wordpress.org/plugins/event-espresso-decaf/)
+* GeoDirectory Events - [Addon](https://xylusthemes.com/plugins/wpea-geodirectory-events-addon/)
+* AIT Events (AIT Themes) - [Addon](https://xylusthemes.com/plugins/wpea-ait-events-addon/)
 * In-built Events Management.
 
 

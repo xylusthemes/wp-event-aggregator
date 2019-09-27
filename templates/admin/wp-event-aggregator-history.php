@@ -11,8 +11,8 @@ $listtable->prepare_items();
     <div class="wpea_row">
         <div class="">
 			<form id="import-history" method="get">
-				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? $_REQUEST['tab'] : 'history' ?>" />
+				<input type="hidden" name="page" value="<?php echo sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ); ?>" />
+				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) : 'history' ?>" />
 				<input type="hidden" name="ntab" value="" />
         		<?php
 				$listtable->display();

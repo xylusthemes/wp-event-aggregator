@@ -50,6 +50,8 @@ class WP_Event_Aggregator_Meetup {
 			return;
 		}
 
+
+
 		$meetup_group_id = $this->fetch_group_slug_from_url( $meetup_url );
 		if( $meetup_group_id == '' ){
 			$wpea_errors[] = __( 'Please insert valid meetup group URL.', 'wp-event-aggregator');

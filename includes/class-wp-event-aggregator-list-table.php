@@ -57,7 +57,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 		global $importevents;
 		$wpea_url_delete_args = array(
-			'page'   => wp_unslash( $_REQUEST['page'] ),
+			'page'   => sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
 			'wpea_action' => 'wpea_simport_delete',
 			'import_id'  => absint( $item['ID'] ),
 		);
@@ -113,7 +113,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function column_action( $item ) {
 
 		$xtmi_run_import_args = array(
-			'page'   => wp_unslash( $_REQUEST['page'] ),
+			'page'   => sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
 			'wpea_action' => 'wpea_run_import',
 			'import_id'  => $item['ID'],
 		);
@@ -421,8 +421,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 
 		$wpea_url_delete_args = array(
-			'page'   => wp_unslash( $_REQUEST['page'] ),
-			'tab'   => wp_unslash( $_REQUEST['tab'] ),
+			'page'   => sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
+			'tab'   => sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ),
 			'wpea_action' => 'wpea_history_delete',
 			'history_id'  => absint( $item['ID'] ),
 		);

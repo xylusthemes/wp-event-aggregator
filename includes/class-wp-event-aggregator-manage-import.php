@@ -34,9 +34,9 @@ class WP_Event_Aggregator_Manage_Import {
 		global $wpea_errors; 
 		$event_data = array();
 
-		if ( isset( $_POST['wpea_action'] ) && $_POST['wpea_action'] == 'wpea_import_submit' &&  check_admin_referer( 'wpea_import_form_nonce_action', 'wpea_import_form_nonce' ) ) {
+		if ( isset( $_POST['wpea_action'] ) && sanitize_text_field( wp_unslash( $_POST['wpea_action'] ) ) == 'wpea_import_submit' &&  check_admin_referer( 'wpea_import_form_nonce_action', 'wpea_import_form_nonce' ) ) {
 			
-			if( !isset( $_POST['import_origin'] ) || empty( $_POST['import_origin'] ) ){
+			if( !isset( $_POST['import_origin'] ) || empty( sanitize_text_field( wp_unslash( $_POST['import_origin'] ) ) ) ) {
 				$wpea_errors[] = esc_html__( 'Please provide import origin.', 'wp-event-aggregator' );
 				return;
 			}
@@ -49,10 +49,11 @@ class WP_Event_Aggregator_Manage_Import {
 			$event_data['import_type'] = isset( $_POST['import_type'] ) ? sanitize_text_field( $_POST['import_type']) : 'onetime';
 			$event_data['import_frequency'] = isset( $_POST['import_frequency'] ) ? sanitize_text_field( $_POST['import_frequency']) : 'daily';
 			$event_data['event_status'] = isset( $_POST['event_status'] ) ? sanitize_text_field( $_POST['event_status']) : 'pending';
-			$event_data['event_cats'] = isset( $_POST['event_cats'] ) ? $_POST['event_cats'] : array();
-			$event_data['event_cats2'] = isset( $_POST['event_cats2'] ) ? $_POST['event_cats2'] : array();
 
-			$event_origin = $_POST['import_origin'];
+			$event_data['event_cats'] = isset( $_POST['event_cats'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats'] ) ) : array();
+			$event_data['event_cats2'] = isset( $_POST['event_cats2'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats2'] ) ) : array();
+
+			$event_origin = sanitize_text_field( wp_unslash( $_POST['import_origin'] ) );
 			switch ( $event_origin ) {
 				case 'eventbrite':
 					$this->handle_eventbrite_import_form_submit( $event_data );
@@ -83,14 +84,14 @@ class WP_Event_Aggregator_Manage_Import {
 	 */
 	public function handle_import_settings_submit() {
 		global $wpea_errors, $wpea_success_msg;
-		if ( isset( $_POST['wpea_action'] ) && $_POST['wpea_action'] == 'wpea_save_settings' &&  check_admin_referer( 'wpea_setting_form_nonce_action', 'wpea_setting_form_nonce' ) ) {
+		if ( isset( $_POST['wpea_action'] ) && sanitize_text_field( wp_unslash( $_POST['wpea_action'] ) ) == 'wpea_save_settings' &&  check_admin_referer( 'wpea_setting_form_nonce_action', 'wpea_setting_form_nonce' ) ) {
 				
 			$wpea_options = array();
-			$wpea_options['eventbrite'] = isset( $_POST['eventbrite'] ) ? $_POST['eventbrite'] : array();
-			$wpea_options['meetup'] = isset( $_POST['meetup'] ) ? $_POST['meetup'] : array();
-			$wpea_options['facebook'] = isset( $_POST['facebook'] ) ? $_POST['facebook'] : array();
-			$wpea_options['ical'] = isset( $_POST['ical'] ) ? $_POST['ical'] : array();
-			$wpea_options['wpea'] = isset( $_POST['wpea'] ) ? $_POST['wpea'] : array();
+			$wpea_options['eventbrite'] = isset( $_POST['eventbrite'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['eventbrite'] ) ) : array();
+			$wpea_options['meetup'] = isset( $_POST['meetup'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['meetup'] ) ) : array();
+			$wpea_options['facebook'] = isset( $_POST['facebook'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['facebook'] ) ) : array();
+			$wpea_options['ical'] = isset( $_POST['ical'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['ical'] ) ) : array();
+			$wpea_options['wpea'] = isset( $_POST['wpea'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['wpea'] ) ) : array();
 
 			$is_update = update_option( WPEA_OPTIONS, $wpea_options );
 			if( $is_update ){
@@ -109,8 +110,8 @@ class WP_Event_Aggregator_Manage_Import {
 		global $wpea_success_msg;
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_simport_delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_delete_import_nonce') ) {
 			$import_id = $_GET['import_id'];
-			$page = isset($_GET['page'] ) ? $_GET['page'] : 'import_events';
-			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'scheduled';
+			$page = isset($_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'import_events';
+			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'scheduled';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $import_id > 0 ) {
 				$post_type = get_post_type( $import_id );
@@ -124,9 +125,9 @@ class WP_Event_Aggregator_Manage_Import {
 		}
 
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_history_delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_delete_history_nonce' ) ) {
-			$history_id = (int)$_GET['history_id'];
-			$page = isset($_GET['page'] ) ? $_GET['page'] : 'import_events';
-			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'history';
+			$history_id = (int)sanitize_text_field( wp_unslash( $_GET['history_id'] ) );
+			$page = isset($_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'import_events';
+			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'history';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $history_id > 0 ) {
 				wp_delete_post( $history_id, true );
@@ -138,8 +139,8 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_run_import' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_run_import_nonce') ) {
 			$import_id = (int)$_GET['import_id'];
-			$page = isset($_GET['page'] ) ? $_GET['page'] : 'import_events';
-			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'scheduled';
+			$page = isset($_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'import_events';
+			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'scheduled';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $import_id > 0 ) {
 				do_action( 'xt_run_scheduled_import', $import_id );
@@ -149,12 +150,12 @@ class WP_Event_Aggregator_Manage_Import {
 			}
 		}
 
-		$is_bulk_delete = ( ( isset( $_GET['action'] ) && $_GET['action'] == 'delete' ) || ( isset( $_GET['action2'] ) && $_GET['action2'] == 'delete' ) );
+		$is_bulk_delete = ( ( isset( $_GET['action'] ) && sanitize_text_field( wp_unslash( $_GET['action'] ) ) == 'delete' ) || ( isset( $_GET['action2'] ) && sanitize_text_field( wp_unslash( $_GET['action2'] ) ) == 'delete' ) );
 
 		if ( $is_bulk_delete && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-xt_scheduled_imports') ) {
-			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'scheduled';
-			$wp_redirect = get_site_url() . urldecode( $_REQUEST['_wp_http_referer'] );
-        	$delete_ids = $_REQUEST['xt_scheduled_import'];
+			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'scheduled';
+			$wp_redirect = get_site_url() . urldecode( sanitize_text_field( $_REQUEST['_wp_http_referer'] ) );
+        	$delete_ids = array_map( 'sanitize_text_field', $_REQUEST['xt_scheduled_import'] );
         	if( !empty( $delete_ids ) ){
         		foreach ($delete_ids as $delete_id ) {
         			wp_delete_post( $delete_id, true );
@@ -166,9 +167,8 @@ class WP_Event_Aggregator_Manage_Import {
 		}
 
 		if ( $is_bulk_delete && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-import_histories') ) {
-			$tab = isset($_GET['tab'] ) ? $_GET['tab'] : 'history';
-			$wp_redirect = get_site_url() . urldecode( $_REQUEST['_wp_http_referer'] );
-        	$delete_ids = $_REQUEST['import_history'];
+			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'history';
+			$wp_redirect = get_site_url() . urldecode( sanitize_text_field( $_REQUEST['_wp_http_referer'] ) );        	$delete_ids = array_map( 'sanitize_text_field', $_REQUEST['import_history'] );
         	if( !empty( $delete_ids ) ){
         		foreach ($delete_ids as $delete_id ) {
         			wp_delete_post( $delete_id, true );
@@ -227,7 +227,7 @@ class WP_Event_Aggregator_Manage_Import {
 		}*/
 		
 		$event_data['import_origin'] = 'meetup';
-		$event_data['meetup_url'] = isset( $_POST['meetup_url'] ) ? $_POST['meetup_url'] : '';
+		$event_data['meetup_url'] = isset( $_POST['meetup_url'] ) ? sanitize_text_field( wp_unslash( $_POST['meetup_url'] ) ) : '';
 		
 		if ( filter_var( $event_data['meetup_url'], FILTER_VALIDATE_URL) === false ){
 			$wpea_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
@@ -260,7 +260,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$event_data['import_origin'] = 'facebook';
 		$event_data['import_by'] = 'facebook_event_id';
 
-		$event_data['event_ids'] = isset( $_POST['facebook_event_ids'] ) ? array_map( 'trim', (array) explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', $_POST['facebook_event_ids'] ) ) ) : array();
+		$event_data['event_ids'] = isset( $_POST['facebook_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', $_POST['facebook_event_ids'] ) ) ) ) : array();
 
 		$event_data['page_username'] = '';
 
@@ -281,8 +281,8 @@ class WP_Event_Aggregator_Manage_Import {
 		$event_data['import_origin'] = 'ical';
 		$event_data['import_by'] = 'ics_file';
 		$event_data['ical_url'] = '';
-		$event_data['start_date'] = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
-		$event_data['end_date'] = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
+		$event_data['start_date'] = isset( $_POST['start_date'] ) ? sanitize_text_field( wp_unslash( $_POST['start_date'] ) ) : '';
+		$event_data['end_date'] = isset( $_POST['end_date'] ) ? sanitize_text_field( wp_unslash( $_POST['end_date'] ) ) : '';
 
 		if( $event_data['import_by'] == 'ics_file' ){
 
@@ -317,8 +317,8 @@ class WP_Event_Aggregator_Manage_Import {
 	 */
 	public function setup_success_messages(){
 		global $wpea_success_msg, $wpea_errors;
-		if( isset( $_GET['imp_msg'] ) && $_GET['imp_msg'] != '' ){
-			switch ( $_GET['imp_msg'] ) {
+		if( isset( $_GET['imp_msg'] ) && sanitize_text_field( wp_unslash( $_GET['imp_msg'] ) ) != '' ){
+			switch ( sanitize_text_field( wp_unslash( $_GET['imp_msg'] ) ) ) {
 				case 'import_del':
 					$wpea_success_msg[] = esc_html__( 'Scheduled import deleted successfully.', 'wp-event-aggregator' );
 					break;

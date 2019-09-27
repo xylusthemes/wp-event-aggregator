@@ -60,7 +60,7 @@ class WP_Event_Aggregator_FB_Authorize {
 	*/
     function wpea_facebook_authorize_user_callback() {
     	global $wpea_success_msg;
-		if ( isset( $_COOKIE['wpea_session_state'] ) && isset($_REQUEST['state']) && ( $_COOKIE['wpea_session_state'] === $_REQUEST['state'] ) ) {
+		if ( isset( $_COOKIE['wpea_session_state'] ) && isset($_REQUEST['state']) && ( $_COOKIE['wpea_session_state'] === sanitize_text_field( $_REQUEST['state'] ) ) ) {
                 
     			$code = sanitize_text_field($_GET['code']);
     			$wpea_options = get_option( WPEA_OPTIONS , array() );

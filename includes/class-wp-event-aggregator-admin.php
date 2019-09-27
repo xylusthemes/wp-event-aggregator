@@ -115,8 +115,8 @@ class WP_Event_Aggregator_Admin {
 		    <h2><?php esc_html_e( 'WP Event Aggregator', 'wp-event-aggregator' ); ?></h2>
 		    <?php
 		    // Set Default Tab to Import.
-		    $tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'eventbrite';
-		    $ntab = isset( $_GET[ 'ntab' ] ) ? $_GET[ 'ntab' ] : 'import';
+		    $tab = isset( $_GET[ 'tab' ] ) ? sanitize_text_field( wp_unslash( $_GET[ 'tab' ] ) ) : 'eventbrite';
+		    $ntab = isset( $_GET[ 'ntab' ] ) ? sanitize_text_field( wp_unslash( $_GET[ 'ntab' ] ) ) : 'import';
 		    ?>
 		    <div id="poststuff">
 		        <div id="post-body" class="metabox-holder columns-2">
@@ -460,7 +460,7 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function get_selected_tab_submenu( $submenu_file ){
-		if( !empty( $_GET['page'] ) && $_GET['page'] == 'import_events' ){
+		if( !empty( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) == 'import_events' ){
 			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'settings', 'support' );
 			$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'eventbrite';
 			if( in_array( $tab, $allowed_tabs ) ){
@@ -475,7 +475,9 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function wpea_view_import_history_handler() {
-	    define( 'IFRAME_REQUEST', true );
+		if( ! defined( 'IFRAME_REQUEST' ) ){
+		    define( 'IFRAME_REQUEST', true );
+		}
 	    iframe_header();
 	    $history_id = isset($_GET['history']) ? absint($_GET['history']) : 0;
 	    if( $history_id > 0){
@@ -559,13 +561,13 @@ class WP_Event_Aggregator_Admin {
 	 */
 	public function setup_success_messages(){
 		global $wpea_success_msg, $wpea_errors;
-		if ( isset( $_GET['wpeam_authorize'] ) && trim( $_GET['wpeam_authorize'] ) != '' ) {
-			if( trim( $_GET['wpeam_authorize'] ) == '1' ){
+		if ( isset( $_GET['wpeam_authorize'] ) && trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) != '' ) {
+			if( trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) == '1' ){
 				$wpea_success_msg[] = esc_html__( 'Authorized Successfully.', 'wp-event-aggregator' );	
-			} elseif( trim( $_GET['wpeam_authorize'] ) == '2' ){
+			} elseif( trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) == '2' ){
 				$wpea_errors[] = esc_html__( 'Please insert Meetup Auth Key and Secret.', 'wp-event-aggregator' );	
-			} elseif( trim( $_GET['wpeam_authorize'] ) == '0' ){
-				$wpea_errors[] = esc_html__( 'Something went wrong during authorization. Please try again.', 'wp-event-aggregator' );	
+			} elseif( trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) == '0' ){
+				$wpea_errors[] = esc_html__( 'Something went wrong during authorization. Please try again.', 'wp-event-aggregator' );
 			}			
 		}
 	}
