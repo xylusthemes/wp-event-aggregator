@@ -3,7 +3,7 @@ Contributors: xylus,dharm1025
 Donate link: http://xylusthemes.com
 Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
-Tested up to: 5.2
+Tested up to: 5.3
 Stable tag: 1.5.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -75,7 +75,7 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 * Event Import History Logs when & which Events Imported
 * Option to update existing Events (Syncronize Events)
 * Works with leading WordPress Event Calendar Plug-ins
-* Works with Visual Composer ( WPBackery Page Builder ). Support for more page builders is on the way :)
+* Works with WPBackery Page Builder. Support for more page builders is on the way :)
 
 [1]: https://xylusthemes.com/plugins/wp-event-aggregator/?utm_source=wprepo&utm_campaign=wpaggregator&utm_medium=readme&utm_content=wprepo-readme
 
