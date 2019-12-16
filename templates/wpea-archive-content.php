@@ -23,7 +23,7 @@ if ( '' !== get_the_post_thumbnail() ){
 }
 ?>
 <a href="<?php echo esc_url( get_permalink() ) ?>">	
-	<div class="<?php echo $css_class; ?> archive-event <?php post_class(); ?>">
+	<div <?php post_class( array( $css_class, 'archive-event' ) ); ?>>
 		<div class="wepa_event" >
 			<div class="img_placeholder" style=" background: url('<?php echo $image_url[0]; ?>') no-repeat left top;"></div>
 			<div class="event_details">
