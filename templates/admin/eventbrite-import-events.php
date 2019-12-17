@@ -35,7 +35,7 @@ global $importevents;
 					            <select name="eventbrite_import_by" id="eventbrite_import_by">
 			                    	<option value="event_id"><?php esc_attr_e( 'Event ID','wp-event-aggregator' ); ?></option>
 			                    	<option value="your_events" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled';} ?>><?php esc_attr_e( 'Your Events','wp-event-aggregator' ); ?></option>
-			                    	<option value="organizer_id"><?php esc_attr_e( 'Organazer ID','wp-event-aggregator' ); ?></option>
+			                    	<option value="organizer_id"><?php esc_attr_e( 'Organizer ID','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
 			                        <?php _e( 'Select Event source. 1. by Event ID, 2. Your Events ( Events associted with your Eventbrite account ), 3. by Oraganizer ID.', 'wp-event-aggregator' ); ?>
