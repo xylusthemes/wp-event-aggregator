@@ -12,10 +12,10 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
-        <div class="wrap"style="min-width: 100%;">
+        <div class="wrap" style="width: 100%;">
             <h3 class="setting_bar"><?php esc_attr_e( 'Getting Support', 'wp-event-aggregator' ); ?></h3>
-            <div class="xylus-support-page">
-                <div class="support-block">
+            <div class="xylus-support-page" style="min-width: 110%;">
+                <div class="support-block" >
                     <img src="<?php echo plugin_dir_url( dirname( dirname( __FILE__ ) ) ).'assets/images/target.png'; ?>" alt="Looking for Something?">
                     <h3>Looking for Something?</h3>
                     <p>We have documentation of how to import eventbrite events.</p>
