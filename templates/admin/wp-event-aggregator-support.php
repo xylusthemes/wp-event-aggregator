@@ -16,35 +16,35 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
             <h3 class="setting_bar"><?php esc_attr_e( 'Getting Support', 'wp-event-aggregator' ); ?></h3>
             <div class="xylus-support-page" style="min-width: 110%;">
                 <div class="support-block" >
-                    <img src="<?php echo plugin_dir_url( dirname( dirname( __FILE__ ) ) ).'assets/images/target.png'; ?>" alt="Looking for Something?">
+                    <img src="<?php echo WPEA_PLUGIN_URL.'assets/images/target.png'; ?>" alt="Looking for Something?">
                     <h3>Looking for Something?</h3>
                     <p>We have documentation of how to import eventbrite events.</p>
                     <a target="_blank" class="button button-primary" href="https://docs.xylusthemes.com/docs/wp-event-aggregator/">Visit the Plugin Documentation</a>
                 </div>
 
                 <div class="support-block">
-                    <img src="<?php echo plugin_dir_url( dirname ( dirname( __FILE__ ) ) ).'assets/images/assistance.png'; ?>" alt="Need Any Assistance?">
+                    <img src="<?php echo WPEA_PLUGIN_URL.'assets/images/assistance.png'; ?>" alt="Need Any Assistance?">
                     <h3>Need Any Assistance?</h3>
                     <p>Our EXPERT Support Team is always ready to Help you out.</p>
                     <a target="_blank" class="button button-primary" href="https://xylusthemes.com/support/">Contact Support</a>
                 </div>
 
                 <div class="support-block">
-                    <img src="<?php echo plugin_dir_url( dirname ( dirname( __FILE__ ) ) ).'assets/images/bug.png'; ?>" alt="Found Any Bugs?">
+                    <img src="<?php echo WPEA_PLUGIN_URL.'assets/images/bug.png'; ?>" alt="Found Any Bugs?">
                     <h3>Found Any Bugs?</h3>
                     <p>Report any Bug that you Discovered, Get Instant Solutions.</p>
                     <a target="_blank" class="button button-primary" href="https://github.com/xylusthemes/wp-event-aggregator">Report to GitHub</a>
                 </div>
 
                 <div class="support-block">
-                    <img src="<?php echo plugin_dir_url( dirname ( dirname( __FILE__ ) ) ).'assets/images/tools.png'; ?>" alt="Require Customization?">
+                    <img src="<?php echo WPEA_PLUGIN_URL.'assets/images/tools.png'; ?>" alt="Require Customization?">
                     <h3>Require Customization?</h3>
                     <p>We would Love to hear your Integration and Customization Ideas.</p>
                     <a target="_blank" class="button button-primary" href="https://xylusthemes.com/what-we-do/">Connect Our Service</a>
                 </div>
 
                 <div class="support-block">
-                    <img src="<?php echo plugin_dir_url( dirname ( dirname( __FILE__ ) ) ).'assets/images/like.png'; ?>" alt="Like The Plugin?">
+                    <img src="<?php echo WPEA_PLUGIN_URL.'assets/images/like.png'; ?>" alt="Like The Plugin?">
                     <h3>Like The Plugin?</h3>
                     <p>Your Review is very important to us as it helps us to grow more.</p>
                     <a target="_blank" class="button button-primary" href="https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post">Review US on WP.org</a>
