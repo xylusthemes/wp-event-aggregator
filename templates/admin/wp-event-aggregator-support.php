@@ -2,13 +2,6 @@
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) exit;
 global $importevents;
-$open_source_support_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/';
-$support_url = 'https://xylusthemes.com/support/?utm_source=insideplugin&utm_medium=web&utm_content=sidebar&utm_campaign=freeplugin';
-
-$review_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
-$facebook_url = 'https://www.facebook.com/xylusinfo/';
-$twitter_url = 'https://twitter.com/XylusThemes/';
-
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
