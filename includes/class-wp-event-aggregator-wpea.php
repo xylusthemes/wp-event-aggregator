@@ -203,13 +203,13 @@ class WP_Event_Aggregator_WPEA {
 
 
 			if ( $is_exitsing_event ) {
-				do_action( 'wpea_after_update_em_'.$centralize_array["origin"].'_event', $inserted_event_id, $centralize_array );
+				do_action( 'wpea_after_update_wpea_'.$centralize_array["origin"].'_event', $inserted_event_id, $centralize_array );
 				return array(
 					'status' => 'updated',
 					'id' 	 => $inserted_event_id
 				);
 			}else{
-				do_action( 'wpea_after_create_em_'.$centralize_array["origin"].'_event', $inserted_event_id, $centralize_array );
+				do_action( 'wpea_after_create_wpea_'.$centralize_array["origin"].'_event', $inserted_event_id, $centralize_array );
 				return array(
 					'status' => 'created',
 					'id' 	 => $inserted_event_id
