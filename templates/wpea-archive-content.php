@@ -21,8 +21,14 @@ if ( '' !== get_the_post_thumbnail() ){
 	$image_date = date_i18n('F+d', $event_date );
 	$image_url[] =  "http://placehold.it/420x150?text=".$image_date;
 }
+$organizer_url = esc_url(get_permalink());
+$target = '';
+if ('yes' === $direct_link) {
+    $organizer_url = get_post_meta(get_the_ID(), 'wpea_event_link', true);
+    $target = 'target="_blank"';
+}
 ?>
-<a href="<?php echo esc_url( get_permalink() ) ?>">	
+<a href="<?php echo $organizer_url; ?>" <?php echo $target; ?>>	
 	<div <?php post_class( array( $css_class, 'archive-event' ) ); ?>>
 		<div class="wepa_event" >
 			<div class="img_placeholder" style=" background: url('<?php echo $image_url[0]; ?>') no-repeat left top;"></div>
@@ -32,7 +38,7 @@ if ( '' !== get_the_post_thumbnail() ){
 					<span class="date"> <?php echo date_i18n('d', $event_date) ; ?> </span>
 				</div>
 				<div class="event_desc">
-					<a href="<?php echo esc_url( get_permalink() ) ?>" rel="bookmark">
+					<a href="<?php echo $organizer_url; ?>" <?php echo $target; ?> rel="bookmark">
 					<?php the_title( '<div class="event_title">','</div>' ); ?>
 					</a>
 					<?php if( $event_address != '' ){ ?>
