@@ -22,15 +22,6 @@
 	font-size: 16px !important;
 }
 
-.support_well{
-  background: url('../images/xt_logo.png') no-repeat bottom 7% right 2% #fff;
-  background-size: 10%;
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 8px 20px 25px;
-}
-
 .hide_frequency .import_frequency, .wpea_eventbrite_form tr.eventbrite_organizer_id{
     display: none;
 }
@@ -370,4 +361,101 @@ table.wpea_form_table tr td:nth-child(1) {
 .wpea_connection_wrapper .img_wrap {
     float: left;
     margin-right: 10px;
+}
+
+/* Support page CSS */
+.wpea-support-features-card {
+  display: flex;
+  flex-basis: 32%;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  box-sizing: border-box;
+  margin: .5rem;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px #ccd0d4, 0 1px 1px 1px rgba(0, 0, 0, 0.04)
+}
+
+.wpea-support-features-card:last-child {
+  max-width: 100%
+}
+
+@media (min-width: 661px) {
+  .wpea-support-features-card {
+      margin-bottom: 1%
+  }
+}
+
+@media (max-width: 660px) {
+  .wpea-support-features-card {
+      max-width: 100%;
+      margin-bottom: .5rem
+  }
+}
+
+@media (min-width: 481px) {
+  .wpea-support-features-card {
+      padding: 2rem
+  }
+}
+
+@media (max-width: 480px) {
+  .wpea-support-features-card {
+      padding: 1rem
+  }
+}
+
+.wpea-support-features-list {
+  list-style: initial;
+  margin-left: 1rem
+}
+
+.wpea-support-features-img {
+  width: 5.625rem;
+  margin-right: .5rem;
+  line-height: 1
+}
+
+@media (min-width: 961px) {
+  .wpea-support-features-img {
+      width: 6.5rem;
+      margin-right: 1.125rem
+  }
+}
+
+.wpea-support-features-icon {
+  display: block;
+  max-width: 80%;
+  margin-left: 0px;
+}
+
+@media (min-width: 481px) {
+  .wpea-support-features-icon {
+      max-width: 80%;
+      margin-left: 0px;
+  }
+}
+
+.wpea-support-features-text {
+  flex: 1
+}
+
+.wpea-support-features-title {
+  margin: 0
+}
+
+.wpea-support-features {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  margin-left: -.5rem;
+  margin-right: -.5rem
+}
+
+@media (max-width: 660px) {
+  .wpea-support-features {
+      display: block
+  }
 }
