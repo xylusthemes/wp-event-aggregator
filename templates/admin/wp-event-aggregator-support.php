@@ -31,9 +31,9 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
             </a>
 
             <p><strong><?php _e( 'Enjoying WP Event Aggregator or have feedback?','wp-event-aggregator' ); ?></strong></p>
-            <a class="button button-secondary" href="<?php echo $review_url; ?>" target="_blank" >Leave us a review</a> 
-            <a class="button button-secondary" href="<?php echo $twitter_url; ?>" target="_blank" >Follow us on Twitter</a> 
-            <a class="button button-secondary" href="<?php echo $facebook_url; ?>" target="_blank" >Like us on Facebook</a>
+            <a class="button button-secondary" href="<?php echo $review_url; ?>" target="_blank" ><?php _e( 'Leave us a review', 'wp-event-aggregator' ); ?></a> 
+            <a class="button button-secondary" href="<?php echo $twitter_url; ?>" target="_blank" ><?php _e( 'Follow us on Twitter', 'wp-event-aggregator' ); ?></a> 
+            <a class="button button-secondary" href="<?php echo $facebook_url; ?>" target="_blank" ><?php _e( 'Like us on Facebook', 'wp-event-aggregator' ); ?></a>
         </div>
 
         <?php 
@@ -72,17 +72,17 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
                         </div>
                         <div class="column-updated">
                             <a class="button button-secondary" href="<?php echo admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin->slug . '&TB_iframe=1&width=772&height=600' ); ?>" target="_blank">
-                            <?php _e( 'Install Now', 'import-eventbrite-events' ); ?>
+                            <?php _e( 'Install Now', 'wp-event-aggregator' ); ?>
                             </a>
                             <a class="button button-primary" href="<?php echo $plugin->homepage . '?utm_source=crosssell&utm_medium=web&utm_content=supportpage&utm_campaign=freeplugin'; ?>" target="_blank">
-                            <?php _e( 'Buy Now', 'import-eventbrite-events' ); ?>
+                            <?php _e( 'Buy Now', 'wp-event-aggregator' ); ?>
                             </a> 			
                         </div>
                         <div class="column-downloaded">
-                            <strong><?php echo $plugin->active_installs; ?></strong>+ Active Installations
+                            <strong><?php echo $plugin->active_installs; ?></strong><?php _e( '+ Active Installations', 'wp-event-aggregator' ); ?>
                         </div>
                         <div class="column-compatibility">
-					        <strong>Version:</strong><?php echo $plugin->version;?></span>				
+					        <strong><?php _e('Version:', 'wp-event-aggregator'); ?></strong><?php echo $plugin->version;?></span>				
                         </div>
                     </div>
                 </div>
