@@ -35,7 +35,10 @@ if ('yes' === $direct_link) {
         $event_source_url = $meetup_organizer_link .'events/'.get_post_meta(get_the_ID(), 'wpea_event_id', true);
     }elseif($event_origin =='ical'){
         $event_source_url = get_post_meta(get_the_ID(), 'wpea_event_link', true);
-    }
+	}
+	if( empty($event_source_url )){
+		$event_source_url = esc_url( get_permalink() ); 
+	}
     $target = 'target="_blank"';
 }else{
     $event_source_url = esc_url( get_permalink() ); 
