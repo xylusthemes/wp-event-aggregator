@@ -785,6 +785,8 @@ class WP_Event_Aggregator_Cpt {
 			$temp_paged = $paged;
 			$paged = $curr_paged;
 		}
+		$wpea_options = get_option( WPEA_OPTIONS );
+		$accent_color = isset( $wpea_options['wpea']['accent_color'] ) ? $wpea_options['wpea']['accent_color'] : '#039ED7';
 		ob_start();
 		?>
 		<div class="row_grid wpea_frontend_archive">
@@ -816,6 +818,14 @@ class WP_Event_Aggregator_Cpt {
 
 			?>
 		</div>
+		<style type="text/css">
+			.wpea_frontend_archive .event_date{
+			    background-color: <?php echo $accent_color;?>;
+			}
+			.wpea_frontend_archive .event_desc .event_title{
+			    color: <?php echo $accent_color;?>;
+			}
+		</style>
 		<?php
 		do_action( 'wpea_after_event_list', $wp_events );
 		$wp_list_events = ob_get_contents();
