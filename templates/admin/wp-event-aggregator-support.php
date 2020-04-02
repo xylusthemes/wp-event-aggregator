@@ -8,7 +8,7 @@ $support_url = 'https://xylusthemes.com/support/?utm_source=insideplugin&utm_med
 $review_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
 $facebook_url = 'https://www.facebook.com/xylusinfo/';
 $twitter_url = 'https://twitter.com/XylusThemes/';
-
+add_thickbox();
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
@@ -62,6 +62,9 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
                         </div>
                     </div>
                     <div class="plugin-card-bottom">
+                        <div style="font-size:16px;">
+                            <strong><a class="plugin_name thickbox open-plugin-details-modal" href="<?php echo admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin->slug . '&TB_iframe=1&width=600&height=550'); ?>"><?php echo $plugin->name; ?></strong>
+                        </div><br>
                         <div class="vers column-rating">
                                 <?php wp_star_rating( array(
                                         'rating' => $plugin->rating,
@@ -71,7 +74,7 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
                                 ?>
                         </div>
                         <div class="column-updated">
-                            <a class="button button-secondary" href="<?php echo admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin->slug . '&TB_iframe=1&width=772&height=600' ); ?>" target="_blank">
+                            <a class="button button-secondary thickbox open-plugin-details-modal" href="<?php echo admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin->slug . '&TB_iframe=1&width=772&height=600' ); ?>">
                             <?php _e( 'Install Now', 'wp-event-aggregator' ); ?>
                             </a>
                             <a class="button button-primary" href="<?php echo $plugin->homepage . '?utm_source=crosssell&utm_medium=web&utm_content=supportpage&utm_campaign=freeplugin'; ?>" target="_blank">
@@ -91,6 +94,12 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
             }
             ?>
             <div style="clear: both;">
+            <style>
+            .plugin_name{
+                text-decoration : none;
+                color: #000000;
+            }
+            </style>
         </div>
     </div>
 </div>
