@@ -827,7 +827,7 @@ class WP_Event_Aggregator_Cpt {
 			.wpea_frontend_archive .event_date{
 			    background-color: <?php echo $accent_color;?>;
 			}
-			.wpea_frontend_archive .event_desc .event_title{
+			.wpea_frontend_archive .event_desc .event_title, .wpea_frontend_archive .event_desc a{
 			    color: <?php echo $accent_color;?>;
 			}
 		</style>
