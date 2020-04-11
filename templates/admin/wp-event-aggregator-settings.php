@@ -415,6 +415,22 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                     
                     <tr>
                         <th scope="row">
+                            <?php _e('Direct link to Event Source', 'wp-event-aggregator'); ?> :
+                        </th>
+                        <td>
+                            <?php
+                            $direct_link = isset($aggregator_options['direct_link']) ? $aggregator_options['direct_link'] : 'no';
+                            ?>
+                            <input type="checkbox" name="wpea[direct_link]" value="yes" <?php if ($direct_link == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                            <span class="wpea_small">
+                                <?php _e('Check to enable direct event link to Event Source instead of event detail page.', 'wp-event-aggregator'); ?>
+                            </span>
+                            <?php do_action('wpea_render_pro_notice'); ?>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
                             <?php _e( 'Disable WP Events', 'wp-event-aggregator' ); ?> : 
                         </th>
                         <td>

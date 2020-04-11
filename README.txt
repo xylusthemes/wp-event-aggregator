@@ -1,37 +1,25 @@
-=== WP Event Aggregator: Import Eventbrite, Meetup, any iCal Events into WordPress ===
+=== WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress ===
 Contributors: xylus,dharm1025
 Donate link: http://xylusthemes.com
-Tags: event, aggregator, import, iCal, google, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
+Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
-Tested up to: 5.3
+Tested up to: 5.4
 Stable tag: 1.5.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
+WP Event Aggregator: Easy way to import Facebook Events, Eventbrite events, MeetUp events into your WordPress Event Calendar.
 
 == Description ==
-<h3>NOTICE (FOR FACEBOOK IMPORT ONLY):</h3>
->**You need below things to work Facebook Event Importing using API.**
->
->* Facebook app ([Here](http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/) is how to create FB app)
->* Your site need to HTTPS (SSL certificate)
->* You need to mark events as interested or going on facebook to get imported
->
->**You can also import Facebook events using our plugin with facebook ICS URL. You can check the documentation for how to get iCal URL or download .ics file from Facebook at [Here](http://docs.xylusthemes.com/docs/import-facebook-events/how-to-import-facebook-event-using-ical-url/)**
->
+WP Event Aggregator ([Pro][1]) allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site. You can import Facebook Events, Eventbrite Events, Meetup events and other iCAL supported events into WordPress. 
 
-WP Event Aggregator allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
-
-[Try Now (Admin Demo)](http://testdrive.xylusthemes.com/) | [Documentation](http://docs.xylusthemes.com/docs/wp-event-aggregator/) | [Pro Version][1]
-
-This Plugin is works as a stand alone as well as add-on plugin for below listed Events plugins, which allows you to run imports from multiple sources right from your dashboard, including Facebook, Meetup, Google Calendar( using iCal Url or .ics file ), Outlook Calendar ( using iCal Url or .ics file ), Apple Calendar ( using iCal Url or .ics file ), iCalendar, and ICS into WordPress. As a stand alone plugin this plugin work independently for event import and Event Management.
+WP Event Aggregator works as a stand-alone as well as add-on plugin with leading Event Calendar plugins listed below, which allows you to run imports from multiple sources right from your dashboard, including Facebook, Meetup, Google Calendar( using iCal Url or .ics file ), Outlook Calendar ( using iCal Url or .ics file ), Apple Calendar ( using iCal Url or .ics file ), iCalendar, and ICS into WordPress.  WP Event aggregator is a perfect match for Event, Event Directory, City Directory, Hotel or School website who needs to display events. 
 
 **Import Events from following sources**
 
-* Facebook
-* Eventbrite
-* Meetup
+* Facebook Events (Using Facebook API)
+* Eventbrite Events (Using Eventbrite API)
+* Meetup Events (Using MeetUp API) 
 * iCalendar
 * ICS
 * Google Calendar ( using iCal Url or .ics file )
@@ -77,6 +65,8 @@ This Plugin is works as a stand alone as well as add-on plugin for below listed 
 * Works with leading WordPress Event Calendar Plug-ins
 * Works with WPBackery Page Builder. Support for more page builders is on the way :)
 
+[Try Now (Admin Demo)](http://testdrive.xylusthemes.com/) | [Documentation](http://docs.xylusthemes.com/docs/wp-event-aggregator/) | [Pro Version][1]
+
 [1]: https://xylusthemes.com/plugins/wp-event-aggregator/?utm_source=wprepo&utm_campaign=wpaggregator&utm_medium=readme&utm_content=wprepo-readme
 
 
@@ -87,6 +77,17 @@ You can use `[wp_events]` for display in-built events list.
 `[wp_events col="3" posts_per_page="12"]`
 `[wp_events category="cat1,cat2"]`
 `[wp_events col="2" posts_per_page="12" category="cat1,cat2" past_events="yes" order="desc" orderby="post_title" start_date="2017-12-25" end_date="2018-12-25" ]`
+
+<h3>NOTICE (FOR FACEBOOK IMPORT ONLY):</h3>
+>**You need below things to work Facebook Event Importing using API.**
+>
+>* Facebook app ([Here](http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/) is how to create FB app)
+>* Your site need to HTTPS (SSL certificate)
+>* You need to mark events as interested or going on facebook to get imported
+>
+>**You can also import Facebook events using our plugin with facebook ICS URL. You can check the documentation for how to get iCal URL or download .ics file from Facebook at [Here](http://docs.xylusthemes.com/docs/import-facebook-events/how-to-import-facebook-event-using-ical-url/)**
+>
+
 
 == Installation ==
 
@@ -137,7 +138,7 @@ You can use `[wp_events]` for display in-built events list.
 == Changelog ==
 
 = 1.5.11 =
-* IMPROVEMENT: Some Improvements.
+* IMPROVEMENT: Some Improvements in facebook Events.
 
 = 1.5.10 =
 * FIXED: Ical import issue with aioec.
@@ -145,7 +146,7 @@ You can use `[wp_events]` for display in-built events list.
 
 = 1.5.9 =
 * ADDED: Background import support.
-* ADDED: Advanced Synchronization for FB, Meetup & Eventbrite.
+* ADDED: Advanced Synchronization for Facebook event, Meetup events & Eventbrite.
 * ADDED: Option for Meetup OAuth 2.0 Authorization.
 * ADDED: Import History popup for display all imported events.
 * IMPROVEMENT: Some Improvements.
