@@ -21,27 +21,26 @@ if ( '' !== get_the_post_thumbnail() ){
 	$image_date = date_i18n('F+d', $event_date );
 	$image_url[] =  "http://placehold.it/420x150?text=".$image_date;
 }
-$event_origin = get_post_meta( get_the_ID(), 'wpea_event_origin', true );
 $target = '';
+$event_source_url = esc_url( get_permalink() );
 if ('yes' === $direct_link) { 
-    if( $event_origin =='facebook' ){
+	$event_origin = get_post_meta( get_the_ID(), 'wpea_event_origin', true );
+    if ( $event_origin =='facebook' ) {
         $facebook_event_id = get_post_meta(get_the_ID(), 'wpea_event_id', true);
         $event_source_url = "https://www.facebook.com/events/". $facebook_event_id;
-    }elseif( $event_origin =='eventbrite' ){
+    } elseif( $event_origin =='eventbrite' ) {
         $eventbrite_event_id = get_post_meta(get_the_ID(), 'wpea_event_id', true);
         $event_source_url = "https://www.eventbrite.com/e/". $eventbrite_event_id;
-    }elseif($event_origin =='meetup'){
+    } elseif($event_origin =='meetup') {
         $meetup_organizer_link = get_post_meta(get_the_ID(), 'organizer_url', true);
         $event_source_url = $meetup_organizer_link .'events/'.get_post_meta(get_the_ID(), 'wpea_event_id', true);
-    }elseif($event_origin =='ical'){
+    } elseif($event_origin =='ical') {
         $event_source_url = get_post_meta(get_the_ID(), 'wpea_event_link', true);
 	}
 	if( empty($event_source_url )){
 		$event_source_url = esc_url( get_permalink() ); 
 	}
     $target = 'target="_blank"';
-}else{
-    $event_source_url = esc_url( get_permalink() ); 
 }
 ?>
 <a href="<?php echo $event_source_url; ?>" <?php echo $target; ?>>	
