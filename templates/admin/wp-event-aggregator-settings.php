@@ -457,7 +457,21 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                             </span>
                         </td>
                     </tr>
-                
+                    <tr>
+                        <th scope="row">
+                            <?php esc_attr_e( 'Accent Color', 'wp-event-aggregator' ); ?> :
+                        </th>
+                        <td>
+                        <?php
+                        $accent_color = isset( $aggregator_options['accent_color'] ) ? $aggregator_options['accent_color'] : '#039ED7';
+                        ?>
+                        <input class="wpea_color_field" type="text" name="wpea[accent_color]" value="<?php echo esc_attr( $accent_color ); ?>"/>
+                        <span class="wpea_small">
+                            <?php esc_attr_e( 'Choose accent color for front-end event grid and event widget.', 'wp-event-aggregator' ); ?>
+                        </span>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
             <br/>
