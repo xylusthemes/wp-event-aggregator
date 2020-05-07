@@ -418,7 +418,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$xt_event['organizer'] = $oraganizer_data;
 		$xt_event['location'] = $event_location;
 		
-		return $xt_event;
+		return apply_filters( 'wpea_ical_generate_centralize_array', $xt_event, $event );
 	}
 
 	/**

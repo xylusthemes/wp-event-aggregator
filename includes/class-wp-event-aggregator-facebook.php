@@ -400,8 +400,7 @@ class WP_Event_Aggregator_Facebook {
 				$xt_events[] = $xt_event;
 			}
 		}
-		return $xt_events;
-
+		return apply_filters( 'wpea_facebook_generate_centralize_array', $xt_events, $facebook_event );
 	}
 
 	/**

@@ -190,7 +190,7 @@ class WP_Event_Aggregator_Meetup {
 		if ( array_key_exists( 'venue', $meetup_event ) ) {
 			$xt_event['location'] = $this->get_location( $meetup_event );
 		}
-		return $xt_event;
+		return apply_filters( 'wpea_meetup_generate_centralize_array', $xt_event, $meetup_event );
 	}
 
 	/**

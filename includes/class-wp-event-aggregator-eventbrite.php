@@ -232,7 +232,7 @@ class WP_Event_Aggregator_Eventbrite {
 			$xt_event['location'] = $this->get_location( $eventbrite_event );
 		}
 
-		return $xt_event;
+		return apply_filters( 'wpea_eventbrite_generate_centralize_array', $xt_event, $eventbrite_event );
 	}
 
 	/**
