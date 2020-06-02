@@ -248,7 +248,8 @@ class WP_Event_Aggregator_EM {
 		if ( !isset( $venue['ID'] ) ) {
 			return null;
 		}
-		$existing_venue = $this->get_venue_by_id( $venue['ID'] );
+		$full_address = !empty( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
+		$existing_venue = $this->get_venue_by_id( $venue['ID'], $full_address );
 		
 		if ( $existing_venue && is_numeric( $existing_venue ) && $existing_venue > 0 && !$event_id ) {
 			return get_post_meta( $existing_venue, '_location_id', true );
@@ -364,12 +365,23 @@ class WP_Event_Aggregator_EM {
 	 * @param int $venue_id Venue id.
 	 * @return int/boolean
 	 */
-	public function get_venue_by_id( $venue_id ) {
+	public function get_venue_by_id( $venue_id, $full_address ) {
 		$existing_venue = get_posts( array(
 			'posts_per_page' => 1,
 			'post_type' => $this->venue_posttype,
-			'meta_key' => 'wpea_event_venue_id',
-			'meta_value' => $venue_id,
+			'meta_query' => array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'wpea_event_venue_id',
+					'value'   => $venue_id,
+					'compare' => '='
+				),
+				array(
+					'key'     => '_location_address',
+					'value'   => $full_address,
+					'compare' => '='
+				)
+			),
 			'suppress_filters' => false,
 		) );
 
