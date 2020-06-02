@@ -359,7 +359,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'event_duration'  => '',
 			'is_all_day'      => $is_all_day,
 			'url'             => $event->getProperty( 'URL' ),
-			'image_url'       => $event->getProperty( 'ATTACH'),
+			'image_url'       => $event->getProperty( 'ATTACH' ),
 		);
 
 		$oraganizer_data = null;
