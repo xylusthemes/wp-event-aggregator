@@ -38,7 +38,9 @@
 /**
  *         Do NOT remove or change version!!
  */
-define( 'ICALCREATOR_VERSION', 'iCalcreator 2.22' );
+if( !defined( 'ICALCREATOR_VERSION' )){
+  define( 'ICALCREATOR_VERSION', 'iCalcreator 2.22' );
+}
 /*********************************************************************************/
 if( !defined( 'ICALCREATOR_LIB_DIR' ))
   define( 'ICALCREATOR_LIB_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR );
