@@ -1,6 +1,6 @@
 {
   "name": "wp-event-aggregator",
-  "version": "1.5.11",
+  "version": "1.6.0",
   "license": "GPL-2.0+",
   "main": "blocks/index.js",
   "scripts": {

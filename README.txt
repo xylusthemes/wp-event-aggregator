@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 1.5.11
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,18 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+= 1.6.0 =
+* ADDED: some filters in generate centralize array functions
+* ADDED: Direct link to Event source support
+* ADDED: Support for import organiser for ical/ics imports
+* ADDED: Accent Color Option
+* IMPROVEMENT: Updated Facebook API version to v7.0
+* IMPROVEMENT: Help/Support Page Design
+* FIXED: AIOEC TimeZone issue
+* FIXED: Eventbrite full description for few events not importing issue
+* FIXED: Event get removed before time issue
+* FIXED: CSS class related error
+* FIXED: Some Typos
 
 = 1.5.11 =
 * IMPROVEMENT: Some Improvements in facebook Events.
