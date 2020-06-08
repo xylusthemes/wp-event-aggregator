@@ -435,12 +435,12 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
 						</th>
 						<td>
 						<?php
-                        $time_format = isset( $aggregator_options['time_format'] ) ? $aggregator_options['time_format'] : '';
+                        $time_format = isset( $aggregator_options['time_format'] ) ? $aggregator_options['time_format'] : '12hours';
 						?>
                         <select name="wpea[time_format]">
 								<option value="12hours" <?php selected( '12hours', $time_format ); ?>><?php esc_attr_e( '12 Hours', 'wp-event-aggregator' );  ?></option>
                                 <option value="24hours" <?php selected( '24hours', $time_format ); ?>><?php esc_attr_e( '24 Hours', 'wp-event-aggregator' ); ?></option>						
-                                <option value="wordpress_default" <?php selected( 'wordpress_default', $time_format ); ?>><?php esc_attr_e( 'Wordpress Default', 'wp-event-aggregator' ); ?></option>
+                                <option value="wordpress_default" <?php selected( 'wordpress_default', $time_format ); ?>><?php esc_attr_e( 'WordPress Default', 'wp-event-aggregator' ); ?></option>
                         </select>
 						<span class="wpea_small">
 							<?php esc_attr_e( 'Choose event display time format for front-end.', 'wp-event-aggregator' ); ?>
