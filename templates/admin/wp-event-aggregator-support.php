@@ -1,5 +1,6 @@
 <?php
 // If this file is called directly, abort.
+// Icon Credit: Icon made by Freepik and Vectors Market from www.flaticon.com
 if ( ! defined( 'ABSPATH' ) ) exit;
 global $importevents;
 $open_source_support_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/';
@@ -13,28 +14,60 @@ add_thickbox();
 <div class="wpea_container">
     <div class="wpea_row">
         <div class="wpea-column support_well">
-        	<h3><?php esc_attr_e( 'Getting Support', 'wp-event-aggregator' ); ?></h3>
-            <p><?php _e( 'Thanks you for using WP Event Aggregator, We are sincerely appreciate your support and we’re excited to see you using our plugins.','wp-event-aggregator' ); ?> </p>
-            <p><?php _e( 'Our support team is always around to help you.','wp-event-aggregator' ); ?></p>
-                
-            <p><strong><?php _e( 'Looking for free support?','wp-event-aggregator' ); ?></strong></p>
-            <a class="button button-secondary" href="<?php echo $open_source_support_url; ?>" target="_blank" >
-                <?php _e( 'Open-source forum on WordPress.org','wp-event-aggregator' ); ?>
-            </a>
-
-            <p><strong><?php _e( 'Looking for more immediate support?','wp-event-aggregator' ); ?></strong></p>
-            <p><?php _e( 'We offer premium support on our website with the purchase of our premium plugins.','wp-event-aggregator' ); ?>
-            </p>
-            
-            <a class="button button-primary" href="<?php echo $support_url; ?>" target="_blank" >
-                <?php _e( 'Contact us directly (Premium Support)','wp-event-aggregator' ); ?>
-            </a>
-
-            <p><strong><?php _e( 'Enjoying WP Event Aggregator or have feedback?','wp-event-aggregator' ); ?></strong></p>
-            <a class="button button-secondary" href="<?php echo $review_url; ?>" target="_blank" ><?php _e( 'Leave us a review', 'wp-event-aggregator' ); ?></a> 
-            <a class="button button-secondary" href="<?php echo $twitter_url; ?>" target="_blank" ><?php _e( 'Follow us on Twitter', 'wp-event-aggregator' ); ?></a> 
-            <a class="button button-secondary" href="<?php echo $facebook_url; ?>" target="_blank" ><?php _e( 'Like us on Facebook', 'wp-event-aggregator' ); ?></a>
-        </div>
+        	<h3 class="setting_bar"><?php esc_attr_e( 'Getting Support', 'wp-event-aggregator' ); ?></h3>
+            <div class="wpea-support-features">
+				<div class="wpea-support-features-card">
+					<div class="wpea-support-features-img">
+						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/document.svg'; ?>" alt="<?php esc_attr_e( 'Looking for Something?', 'wp-event-aggregator' ); ?>">
+					</div>
+					<div class="wpea-support-features-text">
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Looking for Something?', 'wp-event-aggregator' ); ?></h3>
+						<p><?php esc_attr_e( 'We have documentation of how to import facebook events.', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="http://docs.xylusthemes.com/docs/wp-event-aggregator/"><?php esc_attr_e( 'Plugin Documentation', 'wp-event-aggregator' ); ?></a>
+					</div>
+				</div>
+				<div class="wpea-support-features-card">
+					<div class="wpea-support-features-img">
+						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/call-center.svg'; ?>" alt="<?php esc_attr_e( 'Need Any Assistance?', 'wp-event-aggregator' ); ?>">
+					</div>
+					<div class="wpea-support-features-text">
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Need Any Assistance?', 'wp-event-aggregator' ); ?></h3>
+						<p><?php esc_attr_e( 'Our EXPERT Support Team is always ready to Help you out.', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="https://xylusthemes.com/support/"><?php esc_attr_e( 'Contact Support', 'wp-event-aggregator' ); ?></a>
+					</div>
+				</div>
+				<div class="wpea-support-features-card">
+					<div class="wpea-support-features-img">
+						<img class="wpea-support-features-icon"  src="<?php echo WPEA_PLUGIN_URL.'assets/images/bug.svg'; ?>" alt="<?php esc_attr_e( 'Found Any Bugs?', 'wp-event-aggregator' ); ?>" />
+					</div>
+					<div class="wpea-support-features-text">
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Found Any Bugs?', 'wp-event-aggregator' ); ?></h3>
+						<p><?php esc_attr_e( 'Report any Bug that you Discovered, Get Instant Solutions.', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="https://github.com/xylusthemes/wp-event-aggregator"><?php esc_attr_e( 'Report to GitHub', 'wp-event-aggregator' ); ?></a>
+					</div>
+				</div>
+				<div class="wpea-support-features-card">
+					<div class="wpea-support-features-img">
+						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/tools.svg'; ?>" alt="<?php esc_attr_e( 'Require Customization?', 'wp-event-aggregator' ); ?>" />
+					</div>
+					<div class="wpea-support-features-text">
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Require Customization?', 'wp-event-aggregator' ); ?></h3>
+						<p><?php esc_attr_e( 'We would Love to hear your Integration and Customization Ideas.', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="https://xylusthemes.com/what-we-do/"><?php esc_attr_e( 'Connect Our Service', 'wp-event-aggregator' ); ?></a>
+					</div>
+				</div>
+				<div class="wpea-support-features-card">
+					<div class="wpea-support-features-img">
+						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/like.svg'; ?>" alt="<?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?>" />
+					</div>
+					<div class="wpea-support-features-text">
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?></h3>
+						<p><?php esc_attr_e( 'Your Review is very important to us as it helps us to grow more.', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post"><?php esc_attr_e( 'Review Us on WP.org', 'wp-event-aggregator' ); ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
 
         <?php 
         $plugins = array();

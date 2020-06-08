@@ -784,13 +784,20 @@ class WP_Event_Aggregator_Cpt {
 			global $paged;
 			$temp_paged = $paged;
 			$paged = $curr_paged;
-		}
+        }
+		$wpea_options = get_option( WPEA_OPTIONS );
+		$accent_color = isset( $wpea_options['wpea']['accent_color'] ) ? $wpea_options['wpea']['accent_color'] : '#039ED7';
+        $direct_link = isset($wpea_options['wpea']['direct_link']) ? $wpea_options['wpea']['direct_link'] : 'no';
+        if (!wpea_is_pro()) {
+            $direct_link = 'no';
+        }
 		ob_start();
 		?>
 		<div class="row_grid wpea_frontend_archive">
 			<?php
 			$template_args = array();
-			$template_args['css_class'] = $css_class;
+            $template_args['css_class'] = $css_class;
+            $template_args['direct_link'] = $direct_link;
 			if( $wp_events->have_posts() ):
 				while ( $wp_events->have_posts() ) : $wp_events->the_post();
 					
@@ -816,6 +823,14 @@ class WP_Event_Aggregator_Cpt {
 
 			?>
 		</div>
+		<style type="text/css">
+			.wpea_frontend_archive .event_date{
+			    background-color: <?php echo $accent_color;?>;
+			}
+			.wpea_frontend_archive .event_desc .event_title, .wpea_frontend_archive .event_desc a{
+			    color: <?php echo $accent_color;?>;
+			}
+		</style>
 		<?php
 		do_action( 'wpea_after_event_list', $wp_events );
 		$wp_list_events = ob_get_contents();

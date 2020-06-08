@@ -352,8 +352,8 @@ class WP_Event_Aggregator_Ical_Parser {
 			'endtime_local'   => $end_time,
 			'starttime'       => date('Ymd\THis', $start_time),
 			'endtime'         => date('Ymd\THis', $end_time),
-			'startime_utc'    => '',
-			'endtime_utc'     => '',
+			'startime_utc'    => $start_time,
+			'endtime_utc'     => $end_time,
 			'timezone'        => $timezone,
 			'utc_offset'      => '',
 			'event_duration'  => '',
@@ -365,7 +365,9 @@ class WP_Event_Aggregator_Ical_Parser {
 		$oraganizer_data = null;
 		$event_location = null;
 
-		$organizer = $event->getProperty( 'ORGANIZER' );
+		$organizer = $event->getProperty( 'ORGANIZER', false, true);
+		$organizer_params = isset($organizer['params']) ? $organizer['params'] : array();
+		$organizer = isset($organizer['value']) ? $organizer['value'] : '';
 		if ( !empty( $organizer ) ) {
 			$params = wp_parse_args( str_replace( ';', '&', $organizer ) );
 			foreach ( $params as $k => $param ) {
@@ -377,6 +379,17 @@ class WP_Event_Aggregator_Ical_Parser {
 				} else {
 					if ( ! empty( $param ) ) {
 						$oraganizer_data[ $k ] = $param;
+					} else {
+						// Check if only email is there.
+						$oraganizer = explode( 'MAILTO:', $k);
+						if(isset($oraganizer[1]) && !empty($oraganizer[1])){
+							$oraganizer_data['ID'] = strtolower( str_replace( ' ','_', trim( preg_replace( '/^"(.*)"$/', '\1', $oraganizer[1] ) ) ) );
+							$oraganizer_data['name'] = preg_replace( '/^"(.*)"$/', '\1', $oraganizer[1] );
+							$oraganizer_data['email'] = preg_replace( '/^"(.*)"$/', '\1', trim( $oraganizer[1]) );
+							if(!empty($organizer_params['CN'])){
+								$oraganizer_data['name'] = $organizer_params['CN'];
+							}
+						}
 					}
 				}
 			}
@@ -405,7 +418,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$xt_event['organizer'] = $oraganizer_data;
 		$xt_event['location'] = $event_location;
 		
-		return $xt_event;
+		return apply_filters( 'wpea_ical_generate_centralize_array', $xt_event, $event );
 	}
 
 	/**

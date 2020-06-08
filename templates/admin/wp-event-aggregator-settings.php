@@ -415,6 +415,56 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                     
                     <tr>
                         <th scope="row">
+                            <?php _e('Direct link to Event Source', 'wp-event-aggregator'); ?> :
+                        </th>
+                        <td>
+                            <?php
+                            $direct_link = isset($aggregator_options['direct_link']) ? $aggregator_options['direct_link'] : 'no';
+                            ?>
+                            <input type="checkbox" name="wpea[direct_link]" value="yes" <?php if ($direct_link == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                            <span class="wpea_small">
+                                <?php _e('Check to enable direct event link to Event Source instead of event detail page.', 'wp-event-aggregator'); ?>
+                            </span>
+                            <?php do_action('wpea_render_pro_notice'); ?>
+                        </td>
+                    </tr>
+
+                    <tr>
+						<th scope="row">
+							<?php esc_attr_e( 'Event Display Time Format', 'wp-event-aggregator' ); ?> :
+						</th>
+						<td>
+						<?php
+                        $time_format = isset( $aggregator_options['time_format'] ) ? $aggregator_options['time_format'] : '12hours';
+						?>
+                        <select name="wpea[time_format]">
+								<option value="12hours" <?php selected( '12hours', $time_format ); ?>><?php esc_attr_e( '12 Hours', 'wp-event-aggregator' );  ?></option>
+                                <option value="24hours" <?php selected( '24hours', $time_format ); ?>><?php esc_attr_e( '24 Hours', 'wp-event-aggregator' ); ?></option>						
+                                <option value="wordpress_default" <?php selected( 'wordpress_default', $time_format ); ?>><?php esc_attr_e( 'WordPress Default', 'wp-event-aggregator' ); ?></option>
+                        </select>
+						<span class="wpea_small">
+							<?php esc_attr_e( 'Choose event display time format for front-end.', 'wp-event-aggregator' ); ?>
+						</span>
+						</td>
+					</tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <?php esc_attr_e( 'Accent Color', 'wp-event-aggregator' ); ?> :
+                        </th>
+                        <td>
+                        <?php
+                        $accent_color = isset( $aggregator_options['accent_color'] ) ? $aggregator_options['accent_color'] : '#039ED7';
+                        ?>
+                        <input class="wpea_color_field" type="text" name="wpea[accent_color]" value="<?php echo esc_attr( $accent_color ); ?>"/>
+                        <span class="wpea_small">
+                            <?php esc_attr_e( 'Choose accent color for front-end event grid and event widget.', 'wp-event-aggregator' ); ?>
+                        </span>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
                             <?php _e( 'Disable WP Events', 'wp-event-aggregator' ); ?> : 
                         </th>
                         <td>
@@ -441,7 +491,7 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                             </span>
                         </td>
                     </tr>
-                
+
                 </tbody>
             </table>
             <br/>

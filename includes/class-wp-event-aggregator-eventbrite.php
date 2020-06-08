@@ -200,7 +200,7 @@ class WP_Event_Aggregator_Eventbrite {
 		
 		$timezone = isset( $eventbrite_event['start']['timezone'] ) ? $eventbrite_event['start']['timezone']:'';
 		$event_name = isset( $eventbrite_event['name']['text']) ? sanitize_text_field( $eventbrite_event['name']['text'] ) : '';
-		$event_description = isset( $eventbrite_event['description']['html'] ) ? $eventbrite_event['description']['html'] : '';
+		$event_description = $this->get_eventbrite_event_description($eventbrite_event['id']);
 		$event_url = array_key_exists( 'url', $eventbrite_event ) ? esc_url($eventbrite_event['url']): '';
 		$event_image  = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
 		$image = explode( '?s=', $event_image );
@@ -232,7 +232,7 @@ class WP_Event_Aggregator_Eventbrite {
 			$xt_event['location'] = $this->get_location( $eventbrite_event );
 		}
 
-		return $xt_event;
+		return apply_filters( 'wpea_eventbrite_generate_centralize_array', $xt_event, $eventbrite_event );
 	}
 
 	/**

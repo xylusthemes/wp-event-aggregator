@@ -179,6 +179,13 @@
 	    jQuery(".event_plugin").trigger('change');                  
 	});
 
+	// Color Picker
+    jQuery(document).ready(function($) {
+        $('.wpea_color_field').each(function() {
+            $(this).wpColorPicker();
+        });
+	});
+	
 })( jQuery );
 
 
