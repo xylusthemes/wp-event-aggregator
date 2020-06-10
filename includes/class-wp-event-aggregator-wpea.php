@@ -61,6 +61,14 @@ class WP_Event_Aggregator_WPEA {
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		
 		if ( $is_exitsing_event ) {
+			if( apply_filters( 'wpea_not_import_trashed_events', false ) ){
+				if( get_post_status( $is_exitsing_event ) === 'trash' ){
+					return array(
+						'status'=> 'skipped',
+						'id' 	=> $is_exitsing_event
+					);
+				}
+			}
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
