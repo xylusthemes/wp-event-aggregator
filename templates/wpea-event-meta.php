@@ -21,7 +21,7 @@ if($time_format === '12hours' ){
 }elseif($time_format === '24hours' ){
     $start_time = date_i18n( 'G:i', $start_date_str );
     $end_time   = date_i18n( 'G:i', $end_date_str );
-}elseif($time_format === 'wordpress_default' ){
+}else{
     $start_time = date_i18n( get_option( 'time_format' ), $start_date_str );
     $end_time   = date_i18n( get_option( 'time_format' ), $end_date_str );
 }
