@@ -68,7 +68,7 @@
 
 
 	jQuery(document).ready(function(){
-		jQuery('#facebook_import_by').live('change', function(){
+		jQuery(document).on('change', '#facebook_import_by', function(){
 			var current_value = jQuery(this).val();
 			
 			if( current_value == 'facebook_event_id' ){
