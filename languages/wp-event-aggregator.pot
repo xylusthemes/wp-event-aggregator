@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the WP Event Aggregator package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Event Aggregator 1.6.0\n"
+"Project-Id-Version: WP Event Aggregator 1.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-event-"
 "aggregator\n"
-"POT-Creation-Date: 2020-06-06 09:30:01+00:00\n"
+"POT-Creation-Date: 2020-08-12 06:00:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#. #-#-#-#-#  wp-event-aggregator.pot (WP Event Aggregator 1.6.0)  #-#-#-#-#
+#. #-#-#-#-#  wp-event-aggregator.pot (WP Event Aggregator 1.6.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-wp-event-aggregator-admin.php:55
 #: includes/class-wp-event-aggregator-admin.php:116
@@ -396,7 +396,7 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:740
+#: includes/class-wp-event-aggregator-common.php:744
 msgid ""
 "The Access Token has been invalidated because the user changed their "
 "password or Facebook has changed the session for security reasons. Can you "
@@ -404,17 +404,17 @@ msgid ""
 "Aggregator</strong> > <strong>Settings</strong>."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:755
+#: includes/class-wp-event-aggregator-common.php:759
 msgid ""
 "Your current \"WP Event Aggregator Pro\" add-on is not competible with Free "
 "plugin. Please Upgrade Pro latest to work event importing Flawlessly."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:769
+#: includes/class-wp-event-aggregator-common.php:773
 msgid "Available in Pro Add-on."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:769
+#: includes/class-wp-event-aggregator-common.php:773
 msgid "Upgrade to PRO"
 msgstr ""
 
@@ -524,7 +524,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:163
 #: includes/class-wp-event-aggregator-cpt.php:165
-#: templates/wpea-event-meta.php:62
+#: templates/wpea-event-meta.php:74
 msgid "Event Category"
 msgstr ""
 
@@ -562,7 +562,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:197
 #: includes/class-wp-event-aggregator-cpt.php:199
-#: templates/wpea-event-meta.php:69
+#: templates/wpea-event-meta.php:81
 msgid "Event Tags"
 msgstr ""
 
@@ -640,7 +640,7 @@ msgid "Location Details"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:298
-#: templates/wpea-event-meta.php:127
+#: templates/wpea-event-meta.php:139
 msgid "Venue"
 msgstr ""
 
@@ -671,7 +671,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:354
 #: includes/class-wp-event-aggregator-cpt.php:391
-#: templates/wpea-event-meta.php:104
+#: templates/wpea-event-meta.php:116
 msgid "Website"
 msgstr ""
 
@@ -684,12 +684,12 @@ msgid "Organizer Name"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:379
-#: templates/wpea-event-meta.php:96
+#: templates/wpea-event-meta.php:108
 msgid "Email"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:385
-#: templates/wpea-event-meta.php:100
+#: templates/wpea-event-meta.php:112
 msgid "Phone"
 msgstr ""
 
@@ -1375,56 +1375,76 @@ msgid ""
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:434
-msgid "Disable WP Events"
+msgid "Event Display Time Format"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:441
+msgid "12 Hours"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:442
+msgid "24 Hours"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:443
+msgid "WordPress Default"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:446
+msgid "Choose event display time format for front-end."
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:453
+msgid "Accent Color"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:461
+msgid "Choose accent color for front-end event grid and event widget."
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:468
+msgid "Disable WP Events"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:476
 msgid "Check to disable inbuilt event management system."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:448
+#: templates/admin/wp-event-aggregator-settings.php:482
 msgid "Delete WP Event Aggregator data on Uninstall"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:456
+#: templates/admin/wp-event-aggregator-settings.php:490
 msgid ""
 "Delete WP Event Aggregator data like settings, scheduled imports, import "
 "history on Uninstall"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:462
-msgid "Accent Color"
-msgstr ""
-
-#: templates/admin/wp-event-aggregator-settings.php:470
-msgid "Choose accent color for front-end event grid and event widget."
-msgstr ""
-
-#: templates/admin/wp-event-aggregator-settings.php:482
+#: templates/admin/wp-event-aggregator-settings.php:502
 msgid "Save Settings"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:489
+#: templates/admin/wp-event-aggregator-settings.php:509
 msgid "Authorize your Facebook Account"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:495
+#: templates/admin/wp-event-aggregator-settings.php:515
 msgid "Facebook Authorization"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:502
+#: templates/admin/wp-event-aggregator-settings.php:522
 msgid "Authorize"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:504
+#: templates/admin/wp-event-aggregator-settings.php:524
 msgid "Reauthorize"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:512
+#: templates/admin/wp-event-aggregator-settings.php:532
 msgid " ( Authorized as: %s )"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:519
+#: templates/admin/wp-event-aggregator-settings.php:539
 msgid "Please authorize your facebook account for import facebook events."
 msgstr ""
 
@@ -1525,35 +1545,35 @@ msgstr ""
 msgid "Buy Now"
 msgstr ""
 
-#: templates/wpea-event-meta.php:19
+#: templates/wpea-event-meta.php:31
 msgid "Details"
 msgstr ""
 
-#: templates/wpea-event-meta.php:24
+#: templates/wpea-event-meta.php:36
 msgid "Date"
 msgstr ""
 
-#: templates/wpea-event-meta.php:27
+#: templates/wpea-event-meta.php:39
 msgid "Time"
 msgstr ""
 
-#: templates/wpea-event-meta.php:37
+#: templates/wpea-event-meta.php:49
 msgid "Start"
 msgstr ""
 
-#: templates/wpea-event-meta.php:40
+#: templates/wpea-event-meta.php:52
 msgid "End"
 msgstr ""
 
-#: templates/wpea-event-meta.php:76 templates/wpea-event-meta.php:77
+#: templates/wpea-event-meta.php:88 templates/wpea-event-meta.php:89
 msgid "Click to Register"
 msgstr ""
 
-#: templates/wpea-event-meta.php:92
+#: templates/wpea-event-meta.php:104
 msgid "Organizer"
 msgstr ""
 
-#: templates/wpea-event-meta.php:105
+#: templates/wpea-event-meta.php:117
 msgid "Organizer's Website"
 msgstr ""
 
