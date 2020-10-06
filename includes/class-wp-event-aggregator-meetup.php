@@ -44,6 +44,16 @@ class WP_Event_Aggregator_Meetup {
 		global $wpea_errors;
 		$imported_events = array();
 		$meetup_url = isset( $event_data['meetup_url'] ) ? $event_data['meetup_url'] : '';
+
+		$remove_country_code = str_replace( 'https://www.meetup.com/', '', $meetup_url );
+		$add_extra = "";
+		$arr_count = explode("/",$remove_country_code);
+		if( count( $arr_count ) >= 2 ){
+			$add_extra = $arr_count[1];
+		}
+		if( $add_extra != '' ){
+			$meetup_url = 'https://www.meetup.com/'.$add_extra;
+		}
 		
 		if( empty($this->api_key) && empty($this->access_token) ){
 			$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
