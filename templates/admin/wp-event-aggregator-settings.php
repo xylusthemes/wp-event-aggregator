@@ -430,6 +430,23 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
                     </tr>
 
                     <tr>
+                        <th scope="row">
+                            <?php _e('Event Slug', 'wp-event-aggregator'); ?> :
+                        </th>
+                        <td>
+                            <?php
+                            $events_slug = isset($aggregator_options['events_slug']) ? $aggregator_options['events_slug'] : 'wp-event';
+                            ?>
+                            <input type="text" name="wpea[events_slug]" value="<?php if ( $events_slug ) { echo $events_slug; } ?>" <?php if (!wpea_is_pro()) { echo 'disabled="disabled"'; } ?> />
+                            <span class="wpea_small">
+                                <?php _e('Slug for the event.', 'wp-event-aggregator'); ?>
+                            </span>
+                            <?php do_action('wpea_render_pro_notice'); ?>
+                        </td>
+                    </tr>
+
+
+                    <tr>
 						<th scope="row">
 							<?php esc_attr_e( 'Event Display Time Format', 'wp-event-aggregator' ); ?> :
 						</th>
