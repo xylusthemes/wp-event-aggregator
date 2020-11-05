@@ -230,7 +230,7 @@ class WP_Event_Aggregator_Eventbrite {
 			$xt_event['organizer'] = $this->get_organizer( $eventbrite_event );
 		}
 
-		if ( array_key_exists( 'venue_id', $eventbrite_event ) ) {
+		if ( array_key_exists( 'venue_id', $eventbrite_event ) && !empty( $eventbrite_event['venue_id'] ) ) {
 			$xt_event['location'] = $this->get_location( $eventbrite_event );
 		}
 
