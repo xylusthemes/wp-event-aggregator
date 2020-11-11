@@ -214,7 +214,7 @@ class WP_Event_Aggregator_EventON {
 			 	}
 			}
 
-			if( $centralize_array['organizer']['name'] != '' ){
+			if( isset( $centralize_array['organizer']['name'] ) && $centralize_array['organizer']['name'] != ''  ){
 
 				$org_contact = $centralize_array['organizer']['phone'];
 				if(  $centralize_array['organizer']['email'] != '' ){
