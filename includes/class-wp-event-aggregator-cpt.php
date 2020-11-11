@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class WP_Event_Aggregator_Cpt {
 
 	// The Events Calendar Event Taxonomy
-	protected $event_slug;
+	public $event_slug;
 
 	// Event post type.
 	protected $event_posttype;
@@ -39,6 +39,9 @@ class WP_Event_Aggregator_Cpt {
 		$this->event_tag = 'event_tag';
 
 		$wpea_options = get_option( WPEA_OPTIONS );
+		if( wpea_is_pro() ){
+			$this->event_slug = isset( $wpea_options['wpea']['events_slug'] ) ? $wpea_options['wpea']['events_slug'] : 'wp-event';
+		}
 		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
 		if( $deactive_wpevents != 'yes' ){
 			add_action( 'init', array( $this, 'register_event_post_type' ) );
