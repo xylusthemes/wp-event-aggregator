@@ -185,7 +185,18 @@
             $(this).wpColorPicker();
         });
 	});
-	
+	// ticket section 
+	jQuery(document).ready(function() {
+	    jQuery('.enable_ticket_sec').on( 'change', function() {
+			var ischecked= jQuery(this).is(':checked');
+			if(ischecked){
+				jQuery('.checkout_model_option').show();
+			}else{
+				jQuery('.checkout_model_option').hide();
+			}
+	    });
+	    jQuery(".enable_ticket_sec").trigger('change');
+	});	
 })( jQuery );
 
 

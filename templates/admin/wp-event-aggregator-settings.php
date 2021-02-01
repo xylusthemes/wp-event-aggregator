@@ -43,14 +43,23 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
             				<?php _e( 'Display ticket option after event', 'wp-event-aggregator' ); ?> : 
             			</th>
             			<td>
-            				<?php 
-            				$enable_ticket_sec = isset( $eventbrite_options['enable_ticket_sec'] ) ? $eventbrite_options['enable_ticket_sec'] : 'no';
-            				?>
-            				<input type="checkbox" name="eventbrite[enable_ticket_sec]" value="yes" <?php if( $enable_ticket_sec == 'yes' ) { echo 'checked="checked"'; } ?> />
-		                    <span class="wpea_small">
-		                        <?php _e( 'Check to display ticket option after event.', 'wp-event-aggregator' ); ?>
-		                    </span>
-            			</td>
+							<?php
+							$enable_ticket_sec = isset( $eventbrite_options['enable_ticket_sec'] ) ? $eventbrite_options['enable_ticket_sec'] : 'no';
+							$ticket_model = isset( $eventbrite_options['ticket_model'] ) ? $eventbrite_options['ticket_model'] : '0';
+							?>
+							<input type="checkbox" class="enable_ticket_sec" name="eventbrite[enable_ticket_sec]" value="yes" <?php if ( $enable_ticket_sec == 'yes' ) { echo 'checked="checked"'; } ?> />
+							<span>
+								<?php _e( 'Check to display ticket option after event.', 'wp-event-aggregator' ); ?>
+							</span>
+							<?php if(is_ssl()){ ?>
+							<div class="wpea_small checkout_model_option">
+								<input type="radio" name="eventbrite[ticket_model]" value="0" <?php checked( $ticket_model, '0'); ?>>
+									<?php _e( 'Non-Modal Checkout', 'wp-event-aggregator' ); ?><br/>
+								<input type="radio" name="eventbrite[ticket_model]" value="1" <?php checked( $ticket_model, '1'); ?>>
+									<?php _e( 'Popup Checkout Widget (Display your checkout as a modal popup)', 'wp-event-aggregator' ); ?><br/>
+							</div>
+							<?php } ?>
+						</td>
             		</tr>
                     <tr>
                         <th scope="row">
