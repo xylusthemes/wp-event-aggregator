@@ -29,7 +29,7 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
             	<tbody>
             		<tr>
             			<th scope="row">
-            				<?php _e( 'Eventbrite Personal OAuth token','wp-event-aggregator' ); ?> : 
+            				<?php _e( 'Eventbrite Private token','wp-event-aggregator' ); ?> : 
             			</th>
             			<td>
             				<input class="eventbrite_oauth_token" name="eventbrite[oauth_token]" type="text" value="<?php if ( isset( $eventbrite_options['oauth_token'] ) ) { echo $eventbrite_options['oauth_token']; } ?>" />
