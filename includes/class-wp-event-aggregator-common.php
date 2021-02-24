@@ -658,7 +658,7 @@ class WP_Event_Aggregator_Common {
 		global $wpdb;
 		$event_id = $centralize_array['ID'];
 		$post_status = array( 'pending', 'draft', 'publish', 'private' );
-		if( apply_filters( 'wpea_not_import_trashed_events', false ) ){
+		if( apply_filters( 'wpea_not_import_trashed_events', true ) ){
 			$post_status[] = 'trash';
 		}
 		$event_args = array(
