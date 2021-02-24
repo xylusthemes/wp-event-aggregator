@@ -61,7 +61,7 @@ class WP_Event_Aggregator_WPEA {
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		
 		if ( $is_exitsing_event ) {
-			if( apply_filters( 'wpea_not_import_trashed_events', false ) ){
+			if( apply_filters( 'wpea_not_import_trashed_events', true ) ){
 				if( get_post_status( $is_exitsing_event ) === 'trash' ){
 					return array(
 						'status'=> 'skipped',
