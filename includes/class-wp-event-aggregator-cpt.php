@@ -347,7 +347,7 @@ class WP_Event_Aggregator_Cpt {
 			</tr>
 
 			<tr>
-				<td><?php _e('Latitude', 'wp-event-aggregator'); ?>:</td>
+				<td><?php _e('longitude', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_lon" id="venue_lon" value="<?php echo get_post_meta($post->ID, 'venue_lon', true); ?>" />
 				</td>
