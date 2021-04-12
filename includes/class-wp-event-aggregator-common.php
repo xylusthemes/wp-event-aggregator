@@ -103,7 +103,7 @@ class WP_Event_Aggregator_Common {
 			$taxo_tags = explode(',', sanitize_text_field( $_REQUEST['taxo_tags'] ) );	
 		}
 		$event_taxonomy = $event_tag_taxonomy = '';
-		$event_taxonomy2 = '';
+		$event_taxonomy2 = $event_taxonomy3 = '';
 
 		if( !empty( $event_plugin ) && !empty( $importevents->$event_plugin ) ){
 			$event_taxonomy = $importevents->$event_plugin->get_taxonomy();
@@ -111,6 +111,9 @@ class WP_Event_Aggregator_Common {
 
 		if( 'eventon' === $event_plugin && wpea_is_pro() ){
 			$event_taxonomy2 = $importevents->eventon->get_taxonomy2();
+		}
+		if( 'wem_event' === $event_plugin && wpea_is_pro() ){
+			$event_taxonomy3 = $importevents->wem_event->get_type_taxonomy();
 		}
 
 		$terms = array();
@@ -152,6 +155,29 @@ class WP_Event_Aggregator_Common {
 		        <?php foreach ($terms2 as $term2 ) { ?>
 					<option value="<?php echo $term2->term_id; ?>">
 	                	<?php echo $term2->name; ?>                                	
+	                </option>
+				<?php } ?> 
+			</select>
+			<?php
+		}
+
+		// Second Taxonomy (WP Event Manager)
+		$terms3 = array();
+		if ( $event_taxonomy3 != '' && wpea_is_pro() ) {
+			if( taxonomy_exists( $event_taxonomy3 ) ){
+				$terms3 = get_terms( $event_taxonomy3, array( 'hide_empty' => false ) );
+			}
+		}
+		if( ! empty( $terms3 ) ){ ?>
+			<?php if( 'wem_event' == $event_plugin ){ ?>	
+				<strong style="display: block;margin: 5px 0px;">
+					<?php _e( 'Select Event Type:', 'wp-event-aggregator' );?>
+				</strong>
+			<?php } ?>
+			<select name="event_cats3[]" multiple="multiple">
+		        <?php foreach ($terms3 as $term3 ) { ?>
+					<option value="<?php echo $term3->term_id; ?>">
+	                	<?php echo $term3->name; ?>                                	
 	                </option>
 				<?php } ?> 
 			</select>
