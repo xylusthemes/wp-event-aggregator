@@ -459,3 +459,10 @@ table.wpea_form_table tr td:nth-child(1) {
       display: block
   }
 }
+#wpea_setting_form .checkout_model_option{
+  margin-left: 20px;
+}
+
+#wpea_setting_form .checkout_model_option input[type="radio"]{
+  margin: 2px;
+}

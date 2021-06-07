@@ -174,7 +174,8 @@ class WP_Event_Aggregator_EE4 {
 			/*
 			 * Add Venue.
 			 */
-			$venue_id = $this->add_ee4_venue( $centralize_array['location'], $inserted_event_id );
+			$location = isset( $centralize_array['location'] ) ? $centralize_array['location'] : '';
+			$venue_id = $this->add_ee4_venue( $location, $inserted_event_id );
 
 			if( !empty( $venue_id ) && $venue_id > 0 ){
 				// Connect venue with Event

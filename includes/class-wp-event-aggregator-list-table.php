@@ -87,8 +87,8 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			<span>%3$s</span></br>
 			<span style="color:silver">(id:%4$s)</span>%5$s',
 			$item['title'],
-			__('Origin', 'import-eventbrite-events') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
-			__('Import Into', 'import-eventbrite-events') . ': <b>' . $import_into . '</b>',
+			__('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
+			__('Import Into', 'wp-event-aggregator') . ': <b>' . $import_into . '</b>',
 			$item['ID'],
 			$this->row_actions( $actions )
 		);
@@ -120,20 +120,20 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 
 		$current_import = '';
 		if(isset($item['current_import'])){
-			$cimport = '<strong>'.esc_html__( 'Import is running in Background', 'import-eventbrite-events' ).'</strong>';
+			$cimport = '<strong>'.esc_html__( 'Import is running in Background', 'wp-event-aggregator' ).'</strong>';
 			if(!empty($item['current_import'])){
 				$stats = array();
 				if( $item['current_import']['created'] > 0 ){
-					$stats[] = sprintf( __( '%d Created', 'import-eventbrite-events' ), $item['current_import']['created']);
+					$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $item['current_import']['created']);
 				}
 				if( $item['current_import']['updated'] > 0 ){
-					$stats[] = sprintf( __( '%d Updated', 'import-eventbrite-events' ), $item['current_import']['updated'] );
+					$stats[] = sprintf( __( '%d Updated', 'wp-event-aggregator' ), $item['current_import']['updated'] );
 				}
 				if( $item['current_import']['skipped'] > 0 ){
-					$stats[] = sprintf( __( '%d Skipped', 'import-eventbrite-events' ), $item['current_import']['skipped'] );
+					$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $item['current_import']['skipped'] );
 				}
 				if( !empty( $stats ) ){
-					$stats = esc_html__( 'Stats: ', 'import-eventbrite-events' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
+					$stats = esc_html__( 'Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
 					$cimport .= '<br/>'.$stats;
 				}
 			}
@@ -324,26 +324,26 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				$history = get_posts( $history_args );
 
 				if( !empty( $history ) ){
-					$last_import_history_date = sprintf( __( 'Last Import: %s ago', 'import-eventbrite-events' ), human_time_diff( get_the_date( 'U', $history[0] ), current_time( 'timestamp' ) ) );
+					$last_import_history_date = sprintf( __( 'Last Import: %s ago', 'wp-event-aggregator' ), human_time_diff( get_the_date( 'U', $history[0] ), current_time( 'timestamp' ) ) );
 					$created = get_post_meta( $history[0], 'created', true );
 					$updated = get_post_meta( $history[0], 'updated', true );
 					$skipped = get_post_meta( $history[0], 'skipped', true );
 					$stats = array();
 					if( $created > 0 ){
-						$stats[] = sprintf( __( '%d Created', 'import-eventbrite-events' ), $created );
+						$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $created );
 					}
 					if( $updated > 0 ){
-						$stats[] = sprintf( __( '%d Updated', 'import-eventbrite-events' ), $updated );
+						$stats[] = sprintf( __( '%d Updated', 'wp-event-aggregator' ), $updated );
 					}
 					if( $skipped > 0 ){
-						$stats[] = sprintf( __( '%d Skipped', 'import-eventbrite-events' ), $skipped );
+						$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped );
 					}
 					if( !empty( $stats ) ){
-						$stats = esc_html__( 'Last Import Stats: ', 'import-eventbrite-events' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
+						$stats = esc_html__( 'Last Import Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
 					}else{
 						$nothing_to_import = get_post_meta( $history[0], 'nothing_to_import', true );
 						if( $nothing_to_import ){
-							$stats = '<span style="color: silver">'.__( 'No events are imported.', 'import-eventbrite-events' ).'</span>';	
+							$stats = '<span style="color: silver">'.__( 'No events are imported.', 'wp-event-aggregator' ).'</span>';	
 						}else{
 							$stats = '';
 						}
@@ -464,7 +464,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 			$success_message .= sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped ) ."<br>";
 		}
 		if( $nothing_to_import ){
-			$success_message .= __( 'No events are imported.', 'import-eventbrite-events' ) . '<br>';	
+			$success_message .= __( 'No events are imported.', 'wp-event-aggregator' ) . '<br>';	
 		}
 		$success_message .= "</strong></span>";
 

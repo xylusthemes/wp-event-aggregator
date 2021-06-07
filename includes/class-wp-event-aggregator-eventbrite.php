@@ -205,6 +205,7 @@ class WP_Event_Aggregator_Eventbrite {
 		$event_image  = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
 		$image = explode( '?s=', $event_image );
 		$image_url = esc_url( urldecode( str_replace('https://img.evbuc.com/', '', $image[0] ) ) );
+		$online_event = isset( $eventbrite_event['online_event'] ) ? $eventbrite_event['online_event'] : false;
 
 
 		$xt_event = array(
@@ -222,13 +223,14 @@ class WP_Event_Aggregator_Eventbrite {
 			'is_all_day'      => '',
 			'url'             => $event_url,
 			'image_url'       => $image_url,
+			'online_event'    => $online_event,
 		);
 
 		if ( array_key_exists( 'organizer_id', $eventbrite_event ) ) {
 			$xt_event['organizer'] = $this->get_organizer( $eventbrite_event );
 		}
 
-		if ( array_key_exists( 'venue_id', $eventbrite_event ) ) {
+		if ( array_key_exists( 'venue_id', $eventbrite_event ) && !empty( $eventbrite_event['venue_id'] ) ) {
 			$xt_event['location'] = $this->get_location( $eventbrite_event );
 		}
 
