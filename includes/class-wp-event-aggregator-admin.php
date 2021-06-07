@@ -160,6 +160,11 @@ class WP_Event_Aggregator_Admin {
 		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'settings', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'settings' ) { echo 'nav-tab-active'; } ?>">
 		                        <?php esc_html_e( 'Settings', 'wp-event-aggregator' ); ?>
 		                    </a>
+
+							<a href="<?php echo esc_url( add_query_arg( 'tab', 'shortcodes', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'shortcodes' ) { echo 'nav-tab-active'; } ?>">
+								<?php esc_html_e( 'Shortcodes', 'wp-event-aggregator' ); ?>
+							</a>
+
 		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'support', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'support' ) { echo 'nav-tab-active'; } ?>">
 		                        <?php esc_html_e( 'Support & Help', 'wp-event-aggregator' ); ?>
 		                    </a>
@@ -203,7 +208,11 @@ class WP_Event_Aggregator_Admin {
 		                		
 		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-support.php';
 
-		                	}
+		                	}elseif ( $tab == 'shortcodes' ) {
+
+								require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-shortcode.php';
+							
+							}
 
 			                ?>
 		                	<div style="clear: both"></div>
