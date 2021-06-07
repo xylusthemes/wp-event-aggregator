@@ -205,7 +205,7 @@ class WP_Event_Aggregator_Eventbrite {
 		$event_image  = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
 		$image = explode( '?s=', $event_image );
 		$image_url = esc_url( urldecode( str_replace('https://img.evbuc.com/', '', $image[0] ) ) );
-		$online_event = isset( $eventbrite_event['online_event'] ) ? $eventbrite_event['online_event'] : '';
+		$online_event = isset( $eventbrite_event['online_event'] ) ? $eventbrite_event['online_event'] : false;
 
 
 		$xt_event = array(
