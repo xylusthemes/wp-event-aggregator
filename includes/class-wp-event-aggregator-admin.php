@@ -407,7 +407,7 @@ class WP_Event_Aggregator_Admin {
 	public function get_xyuls_themes_plugins(){
 		return array(
 			'import-facebook-events' => esc_html__( 'Import Facebook Events', 'wp-event-aggregator' ),
-			'wp-event-aggregator' => esc_html__( 'Import Eventbrite Events', 'wp-event-aggregator' ),
+			'import-eventbrite-events' => esc_html__( 'Import Eventbrite Events', 'wp-event-aggregator' ),
 			'import-meetup-events' => esc_html__( 'Import Meetup Events', 'wp-event-aggregator' ),
 			'wp-bulk-delete' => esc_html__( 'WP Bulk Delete', 'wp-event-aggregator' ),
 			'xt-facebook-events' => esc_html__( 'Facebook Events', 'wp-event-aggregator' ),
