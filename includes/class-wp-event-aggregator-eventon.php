@@ -153,7 +153,9 @@ class WP_Event_Aggregator_EventON {
 			if( $event_image != '' ){
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
 			}
+			
 			$address = !empty( $centralize_array['location']['address_1'] ) ? $centralize_array['location']['address_1']: '' ;
+			$address = !empty( $centralize_array['location']['full_address'] ) ? $centralize_array['location']['full_address']: $address;
 			$city = isset( $centralize_array['location']['city'] ) ? sanitize_text_field($centralize_array['location']['city']) : '';
 			$state = isset( $centralize_array['location']['state'] ) ? sanitize_text_field($centralize_array['location']['state']) : '';
 			$country = isset( $centralize_array['location']['country'] ) ? sanitize_text_field($centralize_array['location']['country']) : '';
