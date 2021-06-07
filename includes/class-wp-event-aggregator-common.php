@@ -1213,7 +1213,7 @@ function wpea_model_checkout_markup( $eventbrite_id ){
 	ob_start();
 	?>
 	<button id="wpea-eventbrite-checkout-trigger" type="button">
-		<?php esc_html_e( 'Buy Tickets', 'import-eventbrite-events' ); ?>
+		<?php esc_html_e( 'Buy Tickets', 'wp-event-aggregator' ); ?>
 	</button>
 	<script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script>
 	<script type="text/javascript">

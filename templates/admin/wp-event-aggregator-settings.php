@@ -272,20 +272,20 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
             if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $site_url, 'https' ) ) {
                 ?>
                 <div class="widefat wpea_settings_error">
-                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account.","import-facebook-events" ), __( 'Click here','import-facebook-events' ), __( 'for more information.','import-facebook-events' ) ); ?>
+                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account.","import-facebook-events" ), __( 'Click here','wp-event-aggregator' ), __( 'for more information.','wp-event-aggregator' ) ); ?>
                 </div>
             <?php
             } ?>
             <div class="widefat wpea_settings_notice">
-                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','import-facebook-events' ), __( 'You have to create a Facebook application before filling the following details.','import-facebook-events' ), __( 'Click here','import-facebook-events' ),  __( 'to create new Facebook application.','import-facebook-events' ) ); ?>
+                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You have to create a Facebook application before filling the following details.','wp-event-aggregator' ), __( 'Click here','wp-event-aggregator' ),  __( 'to create new Facebook application.','wp-event-aggregator' ) ); ?>
                 <br/>
-                <?php _e( 'For detailed step by step instructions ', 'import-facebook-events' ); ?>
-                <strong><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'import-facebook-events' ); ?></a></strong>.
+                <?php _e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
+                <strong><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'wp-event-aggregator' ); ?></a></strong>.
                 <br/>
-                <?php _e( '<strong>Set the site url as : </strong>', 'import-facebook-events' ); ?>
+                <?php _e( '<strong>Set the site url as : </strong>', 'wp-event-aggregator' ); ?>
                 <span style="color: green;"><?php echo get_site_url(); ?></span>
                 <br/>
-                <?php _e( '<strong>Set Valid OAuth redirect URI : </strong>', 'import-facebook-events' ); ?>
+                <?php _e( '<strong>Set Valid OAuth redirect URI : </strong>', 'wp-event-aggregator' ); ?>
                 <span style="color: green;"><?php echo admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ?></span>
             </div>
 
