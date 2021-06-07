@@ -47,11 +47,11 @@ class WP_Event_Aggregator_FB_Authorize {
 				header("Location: " . $dialog_url);
 
 			}else{
-				die( __( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator-pro' ) );
+				die( __( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
 			}			
 
         } else {
-            die( __('You have not access to doing this operations.', 'wp-event-aggregator-pro' ) );
+            die( __('You have not access to doing this operations.', 'wp-event-aggregator' ) );
         }
     }	
 
@@ -114,11 +114,11 @@ class WP_Event_Aggregator_FB_Authorize {
 					$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wauthorize=2');
 					wp_redirect($redirect_url);
 					exit();
-					die( __( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator-pro' ) );
+					die( __( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
 				}
 
             } else {
-            	die( __('You have not access to doing this operations.', 'wp-event-aggregator-pro' ) );
+            	die( __('You have not access to doing this operations.', 'wp-event-aggregator' ) );
             }
     }	
 }

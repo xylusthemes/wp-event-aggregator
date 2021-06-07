@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-06-07T18:08:51+00:00\n"
+"POT-Creation-Date: 2021-06-07T18:18:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -756,6 +756,18 @@ msgstr ""
 msgid "Please provide valid Facebook event ID: %s."
 msgstr ""
 
+#: includes/class-wp-event-aggregator-fb-authorize.php:50
+#: includes/class-wp-event-aggregator-fb-authorize.php:117
+msgid "Please insert Facebook App ID and Secret."
+msgstr ""
+
+#: includes/class-wp-event-aggregator-fb-authorize.php:54
+#: includes/class-wp-event-aggregator-fb-authorize.php:121
+#: includes/class-wp-event-aggregator-meetup-authorize.php:46
+#: includes/class-wp-event-aggregator-meetup-authorize.php:115
+msgid "You have not access to doing this operations."
+msgstr ""
+
 #: includes/class-wp-event-aggregator-ical.php:44
 msgid "Please provide iCal URL."
 msgstr ""
@@ -926,11 +938,6 @@ msgstr ""
 msgid "Please insert Meetup Oauth Key and Secret."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-meetup-authorize.php:46
-#: includes/class-wp-event-aggregator-meetup-authorize.php:115
-msgid "You have not access to doing this operations."
-msgstr ""
-
 #: includes/class-wp-event-aggregator-meetup.php:49
 #: includes/class-wp-event-aggregator-meetup.php:293
 msgid "Please insert \"Meetup API key\" Or OAuth key and secret in settings."
@@ -1015,6 +1022,31 @@ msgstr ""
 
 #: includes/class-wpea-plugin-deactivation.php:258
 msgid "If you have a moment, please let us know why you are deactivating:"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:16
+#: templates/admin/admin-sidebar.php:19
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:17
+msgid "Unlock more power to events import operation, enable scheduled imports today, Upgrade today!!"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:24
+msgid "Custom WordPress Development Services"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:27
+msgid "Hire Us"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:33
+msgid "Would you like to remove these ads?"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:35
+msgid "Get Premium Add-on"
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:32
