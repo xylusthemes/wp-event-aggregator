@@ -86,7 +86,7 @@ class WP_Event_Aggregator_WPEA {
 		$start_time = $centralize_array['starttime_local'];
 		$end_time = $centralize_array['endtime_local'];
 		$ticket_uri = $centralize_array['url'];
-		$online_event = isset( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : '';
+		$online_event = !empty( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : false ;
 
 		$emeventdata = array(
 			'post_title'  => $post_title,
