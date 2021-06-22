@@ -342,6 +342,20 @@ class WP_Event_Aggregator_Ical_Parser {
 			}		
 		}
 
+		$event_img = $event->getProperty( 'ATTACH', false, true );	
+		if( !empty( $event_img ) && (  $event_img['params']['FMTTYPE'] == 'image/jpeg'  || $event_img['params']['FMTTYPE'] == 'image/gif'  || $event_img['params']['FMTTYPE'] == 'image/png' ) ){
+			$event_image =  $event_img['value'];
+		}
+
+		$event_imgs = $event->getProperty('X-WP-IMAGES-URL');
+		if( !empty( $event_imgs ) ){
+			$event_image =  $event_imgs[1];
+		}
+		
+		if( empty( $event_img ) && empty( $event_imgs ) ){
+			$event_image = null;
+		}
+		
 		$xt_event = array(
 			'origin'          => 'ical',
 			'ID'              => $uid,
@@ -359,7 +373,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'event_duration'  => '',
 			'is_all_day'      => $is_all_day,
 			'url'             => $event->getProperty( 'URL' ),
-			'image_url'       => $event->getProperty( 'ATTACH' ),
+			'image_url'       => $event_image,
 		);
 
 		$oraganizer_data = null;
