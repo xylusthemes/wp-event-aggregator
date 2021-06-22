@@ -615,7 +615,7 @@ class WP_Event_Aggregator_Cpt {
 	 *
 	 */
 	public function wp_events_archive( $atts = array() ){
-		//[wp_events col='2' posts_per_page='12' category="cat1,cat2" past_events="yes" order="desc" orderby="" start_date="" end_date="" ]
+		//[wp_events col='2' upcoming_events="1 week" posts_per_page='12' category="cat1,cat2" past_events="yes" order="desc" orderby="" start_date="" end_date="" ]
 		$current_date = current_time('timestamp');
 		$paged = ( get_query_var('paged') ? get_query_var('paged') : 1 );
 		if( is_front_page() ){
@@ -708,6 +708,30 @@ class WP_Event_Aggregator_Cpt {
 						        )
 				            );
 			}
+		}
+
+		//Upcoming events displayed by day
+		if ( isset( $atts['upcoming_events'] ) && !empty ( $atts['upcoming_events'] ) ) {
+			$upcoming_events = $atts['upcoming_events'];
+			$upcoming_event_time  = strtotime( '+'.$upcoming_events, current_time( 'timestamp' ) );
+
+			if( is_numeric( $upcoming_events ) ){
+				$upcoming_event_time  = date( current_time( 'timestamp' )+( 60*60*24*$upcoming_events ) );
+			}
+
+			$eve_args['meta_query'] = array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'end_ts',
+					'compare' => '>=',
+					'value'   => $current_date,
+				),
+				array(
+					'key'     => 'start_ts',
+					'compare' => '<=',
+					'value'   => $upcoming_event_time,
+				),
+			);
 		}
 		
 		if( isset( $atts['category'] ) && $atts['category'] != '' ){
