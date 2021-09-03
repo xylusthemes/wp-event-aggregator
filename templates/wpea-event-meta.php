@@ -132,8 +132,9 @@ $venue['zipcode'] = get_post_meta( $event_id, 'venue_zipcode', true );
 $venue['lat'] = get_post_meta( $event_id, 'venue_lat', true );
 $venue['lon'] = get_post_meta( $event_id, 'venue_lon', true );
 $venue_url = esc_url( get_post_meta( $event_id, 'venue_url', true ) );
+$vanue_marge = !empty( $venue_address ) ? $venue_address : $venue_name;
 
-if ( ! empty( $venue_address ) || ( ! empty( $venue['lat'] ) && ! empty( $venue['lon'] ) ) ) {
+if ( ! empty( $vanue_marge ) || ( ! empty( $venue['lat'] ) && ! empty( $venue['lon'] ) ) ) {
 	?>
 	<div class="wpea_organizer library">
 		<div class="venue">
@@ -163,8 +164,8 @@ if ( ! empty( $venue_address ) || ( ! empty( $venue['lat'] ) && ! empty( $venue[
 		if ( ! empty( $venue_address ) ) {
 			$q = esc_attr( $venue_address );
 		}
-		if ( ! empty( $venue_name ) && ! empty( $venue_address ) ) {
-			$q = esc_attr( $venue_name ) . ',' . esc_attr( $venue_address );
+		if ( ! empty( $venue_name )  ) {
+			$q = esc_attr( $venue_name );
 		}
 		if(empty($q)){
 			$q = $lat_lng;
