@@ -238,11 +238,11 @@ class WP_Event_Aggregator_Common {
 		require_once(ABSPATH . 'wp-admin/includes/image.php');
 
 		$event_title = $event->post_title;
-		//$image = media_sideload_image( $image_url, $event_id, $event_title );
-		$ical_url  = explode('/', $image_url);
-		$ical_url2 = $ical_url[2];
-		if( $ical_url2 == 'drive.google.com' ){
-			$image_url = 'https://drive.google.com/uc?export=download&id='.$ical_url[5];
+		if(strpos($image_url, "https://drive.google.com/") === 0 ){
+			$ical_image_id = explode('/', str_replace('https://drive.google.com/', '', $image_url))[2];
+			if(!empty($ical_image_id)){
+				$image_url = 'https://drive.google.com/uc?export=download&id='.$ical_image_id;
+			}
 		}
 		if ( ! empty( $image_url ) ) {
 			$without_ext = false;

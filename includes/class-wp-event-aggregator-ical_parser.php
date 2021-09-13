@@ -342,18 +342,19 @@ class WP_Event_Aggregator_Ical_Parser {
 			}		
 		}
 
-		$event_img = $event->getProperty( 'ATTACH', false, true );	
-		if( !empty( $event_img ) && (  $event_img['params']['FMTTYPE'] == 'image/jpeg'  || $event_img['params']['FMTTYPE'] == 'image/gif'  || $event_img['params']['FMTTYPE'] == 'image/png' ) ){
-			$event_image =  $event_img['value'];
+		$event_image = '';
+		$ical_attachment = $event->getProperty( 'ATTACH', false, true );
+		if( isset($ical_attachment['params']) && isset($ical_attachment['params']['FMTTYPE']) ) {
+			$attachment_type = $ical_attachment['params']['FMTTYPE'];
+			$image_types = array('image/jpeg', 'image/gif', 'image/png', 'image/jpg');
+			if( in_array($attachment_type, $image_types ) && !empty($ical_attachment['value']) ){
+				$event_image =  $ical_attachment['value'];
+			}
 		}
 
-		$event_imgs = $event->getProperty('X-WP-IMAGES-URL');
-		if( !empty( $event_imgs ) ){
-			$event_image =  $event_imgs[1];
-		}
-		
-		if( empty( $event_img ) && empty( $event_imgs ) ){
-			$event_image = null;
+		$ical_wp_images = $event->getProperty('X-WP-IMAGES-URL');
+		if( !empty( $ical_wp_images ) && !empty( $ical_wp_images[1]) ){
+			$event_image =  $ical_wp_images[1];
 		}
 		
 		$xt_event = array(
