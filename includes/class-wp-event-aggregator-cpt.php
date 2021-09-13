@@ -399,6 +399,26 @@ class WP_Event_Aggregator_Cpt {
 			</tbody>
 		</table>
 
+		<div style="clear: both;"></div>
+		<table class="wpea_form_table">
+			<thead>
+				<tr>
+					<th colspan="2">
+						<?php _e( 'Event Source Link', 'wp-event-aggregator' ); ?>
+						<hr>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><?php _e( 'Source Link', 'wp-event-aggregator' ); ?>:</td>
+					<td>
+						<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo get_post_meta( $post->ID, 'wpea_event_link', true ); ?>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<?php
 	}
 
@@ -515,6 +535,9 @@ class WP_Event_Aggregator_Cpt {
 		$organizer_phone = isset( $_POST['organizer_phone'] ) ? sanitize_text_field( $_POST['organizer_phone'] ) : '';
 		$organizer_url   = isset( $_POST['organizer_url'] ) ? esc_url( $_POST['organizer_url'] ) : '';
 
+		// Event Source Link
+		$wpea_event_link   = isset( $_POST['wpea_event_link'] ) ? esc_url( $_POST['wpea_event_link'] ) : '';
+
 		// Save Event Data
 		// Date & Time
 		update_post_meta( $post_id, 'event_start_date', $event_start_date );
@@ -544,6 +567,9 @@ class WP_Event_Aggregator_Cpt {
 		update_post_meta( $post_id, 'organizer_email', $organizer_email );
 		update_post_meta( $post_id, 'organizer_phone', $organizer_phone );
 		update_post_meta( $post_id, 'organizer_url', $organizer_url );
+
+		// Event Source Link
+		update_post_meta( $post_id, 'wpea_event_link', $wpea_event_link );
 	}
 
 	/**
