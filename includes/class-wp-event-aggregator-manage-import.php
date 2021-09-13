@@ -180,12 +180,11 @@ class WP_Event_Aggregator_Manage_Import {
 		}
 
 		// Delete All History Data 
-		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_all_history_delete' && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'wpea_delete_all_history_nonce' ) ) {
+		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] === 'wpea_all_history_delete' && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'wpea_delete_all_history_nonce' ) ) {
 			$page        = isset( $_GET['page'] ) ? $_GET['page'] : 'import_events';
 			$tab         = isset( $_GET['tab'] ) ? $_GET['tab'] : 'history';
 			$wp_redirect = admin_url( 'admin.php?page=' . $page );
-
-			$delete_ids  = get_posts( array( 'numberposts' => -1,'fields' => 'ids', 'post_type'   => 'wpea_import_history' ) );
+			$delete_ids  = get_posts( array( 'numberposts' => -1,'fields' => 'ids', 'post_type' => 'wpea_import_history' ) );
 
 			if ( ! empty( $delete_ids ) ) {
 				foreach ( $delete_ids as $delete_id ) {
