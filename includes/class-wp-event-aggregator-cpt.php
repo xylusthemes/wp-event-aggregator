@@ -412,10 +412,10 @@ class WP_Event_Aggregator_Cpt {
 			<tbody>
 				<tr>
 					<td><?php _e( 'Source Link', 'wp-event-aggregator' ); ?>:</td>
-				<td>
-					<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo get_post_meta( $post->ID, 'wpea_event_link', true ); ?>" />
-				</td>
-			</tr>
+					<td>
+						<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo get_post_meta( $post->ID, 'wpea_event_link', true ); ?>" />
+					</td>
+				</tr>
 			</tbody>
 		</table>
 
