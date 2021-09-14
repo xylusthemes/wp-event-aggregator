@@ -238,13 +238,18 @@ class WP_Event_Aggregator_Common {
 		require_once(ABSPATH . 'wp-admin/includes/image.php');
 
 		$event_title = $event->post_title;
-		//$image = media_sideload_image( $image_url, $event_id, $event_title );
+		if(strpos($image_url, "https://drive.google.com/") === 0 ){
+			$ical_image_id = explode('/', str_replace('https://drive.google.com/', '', $image_url))[2];
+			if(!empty($ical_image_id)){
+				$image_url = 'https://drive.google.com/uc?export=download&id='.$ical_image_id;
+			}
+		}
 		if ( ! empty( $image_url ) ) {
 			$without_ext = false;
 			// Set variables for storage, fix file filename for query strings.
 			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image_url, $matches );
 			if ( ! $matches ) {
-				if(strpos($image_url, "https://cdn.evbuc.com") === 0 || strpos($image_url, "https://img.evbuc.com") === 0){
+				if(strpos($image_url, "https://cdn.evbuc.com") === 0 || strpos($image_url, "https://img.evbuc.com") === 0 || strpos($image_url, "https://drive.google.com") === 0 ){
 					$without_ext = true;
 				}else{
 					return new WP_Error( 'image_sideload_failed', __( 'Invalid image URL' ) );
