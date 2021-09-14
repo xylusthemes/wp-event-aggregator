@@ -655,7 +655,7 @@ msgid "Location Details"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:301
-#: templates/wpea-event-meta.php:140
+#: templates/wpea-event-meta.php:141
 msgid "Venue"
 msgstr ""
 
