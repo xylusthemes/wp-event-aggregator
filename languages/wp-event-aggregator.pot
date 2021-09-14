@@ -748,7 +748,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-facebook.php:65
 #: includes/class-wp-event-aggregator-facebook.php:154
-#: includes/class-wp-event-aggregator-manage-import.php:256
+#: includes/class-wp-event-aggregator-manage-import.php:276
 msgid "Please insert Facebook app ID and app Secret."
 msgstr ""
 
@@ -873,15 +873,23 @@ msgstr ""
 msgid "Import Stats"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:666
+#: includes/class-wp-event-aggregator-list-table.php:556
+msgid "Warning!! Are you sure to delete all these import history? Import history will be permanatly deleted."
+msgstr ""
+
+#: includes/class-wp-event-aggregator-list-table.php:559
+msgid "Clear Import History"
+msgstr ""
+
+#: includes/class-wp-event-aggregator-list-table.php:695
 msgid "ID"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:667
+#: includes/class-wp-event-aggregator-list-table.php:696
 msgid "Title"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:668
+#: includes/class-wp-event-aggregator-list-table.php:697
 msgid "Shortcode"
 msgstr ""
 
@@ -897,48 +905,48 @@ msgstr ""
 msgid "Import settings has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:193
+#: includes/class-wp-event-aggregator-manage-import.php:213
 msgid "Please insert Eventbrite \"Personal OAuth token\" in settings."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:205
+#: includes/class-wp-event-aggregator-manage-import.php:225
 msgid "Please provide valid Eventbrite event ID."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:233
+#: includes/class-wp-event-aggregator-manage-import.php:253
 msgid "Please provide valid Meetup group URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:293
+#: includes/class-wp-event-aggregator-manage-import.php:313
 msgid "Please upload .ics file"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:306
+#: includes/class-wp-event-aggregator-manage-import.php:326
 msgid "Nothing to import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:323
+#: includes/class-wp-event-aggregator-manage-import.php:343
 msgid "Scheduled import deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:327
 #: includes/class-wp-event-aggregator-manage-import.php:347
+#: includes/class-wp-event-aggregator-manage-import.php:367
 msgid "Scheduled imports are deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:331
+#: includes/class-wp-event-aggregator-manage-import.php:351
 msgid "Scheduled import has been run successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:335
+#: includes/class-wp-event-aggregator-manage-import.php:355
 msgid "Import history deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:339
+#: includes/class-wp-event-aggregator-manage-import.php:359
 msgid "Import histories are deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:343
+#: includes/class-wp-event-aggregator-manage-import.php:363
 msgid "Scheduled import has been updated successfully."
 msgstr ""
 
