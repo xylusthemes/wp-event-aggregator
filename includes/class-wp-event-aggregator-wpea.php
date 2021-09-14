@@ -61,7 +61,7 @@ class WP_Event_Aggregator_WPEA {
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		
 		if ( $is_exitsing_event ) {
-			if( apply_filters( 'wpea_not_import_trashed_events', false ) ){
+			if( apply_filters( 'wpea_not_import_trashed_events', true ) ){
 				if( get_post_status( $is_exitsing_event ) === 'trash' ){
 					return array(
 						'status'=> 'skipped',
@@ -86,6 +86,7 @@ class WP_Event_Aggregator_WPEA {
 		$start_time = $centralize_array['starttime_local'];
 		$end_time = $centralize_array['endtime_local'];
 		$ticket_uri = $centralize_array['url'];
+		$online_event = !empty( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : false ;
 
 		$emeventdata = array(
 			'post_title'  => $post_title,
@@ -185,6 +186,7 @@ class WP_Event_Aggregator_WPEA {
 			update_post_meta( $inserted_event_id, 'event_end_meridian', $event_end_meridian );
 			update_post_meta( $inserted_event_id, 'start_ts', $start_time );
 			update_post_meta( $inserted_event_id, 'end_ts', $end_time );
+			update_post_meta( $inserted_event_id, 'online_event', $online_event );
 
 			// Venue
 			update_post_meta( $inserted_event_id, 'venue_name', $venue_name );

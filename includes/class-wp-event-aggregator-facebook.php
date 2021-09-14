@@ -457,9 +457,9 @@ class WP_Event_Aggregator_Facebook {
 	 */
 	public function get_location( $facebook_event ) {
 
-		if ( !isset( $facebook_event->place->id ) ) {
-			return null;
-		}
+		// if ( !isset( $facebook_event->place->id ) ) {
+		// 	return null;
+		// }
 		$event_venue = $facebook_event->place;
 		$event_location = array(
 			'ID'           => isset( $facebook_event->place->id ) ? $facebook_event->place->id : '',

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class WP_Event_Aggregator_Cpt {
 
 	// The Events Calendar Event Taxonomy
-	protected $event_slug;
+	public $event_slug;
 
 	// Event post type.
 	protected $event_posttype;
@@ -39,6 +39,9 @@ class WP_Event_Aggregator_Cpt {
 		$this->event_tag = 'event_tag';
 
 		$wpea_options = get_option( WPEA_OPTIONS );
+		if( wpea_is_pro() ){
+			$this->event_slug = isset( $wpea_options['wpea']['events_slug'] ) ? $wpea_options['wpea']['events_slug'] : 'wp-event';
+		}
 		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
 		if( $deactive_wpevents != 'yes' ){
 			add_action( 'init', array( $this, 'register_event_post_type' ) );
@@ -344,7 +347,7 @@ class WP_Event_Aggregator_Cpt {
 			</tr>
 
 			<tr>
-				<td><?php _e('Latitude', 'wp-event-aggregator'); ?>:</td>
+				<td><?php _e('Longitude', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_lon" id="venue_lon" value="<?php echo get_post_meta($post->ID, 'venue_lon', true); ?>" />
 				</td>
@@ -393,6 +396,26 @@ class WP_Event_Aggregator_Cpt {
 					<input type="text" name="organizer_url" id="organizer_url" value="<?php echo get_post_meta($post->ID, 'organizer_url', true); ?>" />
 				</td>
 			</tr>
+			</tbody>
+		</table>
+
+		<div style="clear: both;"></div>
+		<table class="wpea_form_table">
+			<thead>
+				<tr>
+					<th colspan="2">
+						<?php _e( 'Event Source Link', 'wp-event-aggregator' ); ?>
+						<hr>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><?php _e( 'Source Link', 'wp-event-aggregator' ); ?>:</td>
+					<td>
+						<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo get_post_meta( $post->ID, 'wpea_event_link', true ); ?>" />
+					</td>
+				</tr>
 			</tbody>
 		</table>
 
@@ -512,6 +535,9 @@ class WP_Event_Aggregator_Cpt {
 		$organizer_phone = isset( $_POST['organizer_phone'] ) ? sanitize_text_field( $_POST['organizer_phone'] ) : '';
 		$organizer_url   = isset( $_POST['organizer_url'] ) ? esc_url( $_POST['organizer_url'] ) : '';
 
+		// Event Source Link
+		$wpea_event_link   = isset( $_POST['wpea_event_link'] ) ? esc_url( $_POST['wpea_event_link'] ) : '';
+
 		// Save Event Data
 		// Date & Time
 		update_post_meta( $post_id, 'event_start_date', $event_start_date );
@@ -541,6 +567,9 @@ class WP_Event_Aggregator_Cpt {
 		update_post_meta( $post_id, 'organizer_email', $organizer_email );
 		update_post_meta( $post_id, 'organizer_phone', $organizer_phone );
 		update_post_meta( $post_id, 'organizer_url', $organizer_url );
+
+		// Event Source Link
+		update_post_meta( $post_id, 'wpea_event_link', $wpea_event_link );
 	}
 
 	/**

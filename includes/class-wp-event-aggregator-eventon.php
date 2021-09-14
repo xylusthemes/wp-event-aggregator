@@ -149,14 +149,13 @@ class WP_Event_Aggregator_EventON {
 			}
 
 			// Assign Featured images
-			$event_image = $centralize_array['image_url'];
+			$event_image = isset( $centralize_array['image_url'] ) ? $centralize_array['image_url'] : '';
 			if( $event_image != '' ){
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
 			}
-			$address = $centralize_array['location']['address_1'];
-			if(  $centralize_array['location']['full_address'] != '' ){
-				$address = $centralize_array['location']['full_address'];
-			}
+			
+			$address = !empty( $centralize_array['location']['address_1'] ) ? $centralize_array['location']['address_1']: '' ;
+			$address = !empty( $centralize_array['location']['full_address'] ) ? $centralize_array['location']['full_address']: $address;
 			$city = isset( $centralize_array['location']['city'] ) ? sanitize_text_field($centralize_array['location']['city']) : '';
 			$state = isset( $centralize_array['location']['state'] ) ? sanitize_text_field($centralize_array['location']['state']) : '';
 			$country = isset( $centralize_array['location']['country'] ) ? sanitize_text_field($centralize_array['location']['country']) : '';
@@ -170,7 +169,7 @@ class WP_Event_Aggregator_EventON {
 			update_post_meta( $inserted_event_id, 'evcal_erow', $end_time );
 			update_post_meta( $inserted_event_id, 'evcal_lmlink', $centralize_array['url'] );
 
-			if( $centralize_array['location']['name'] != '' ){
+			if( !empty( $centralize_array['location']['name'] ) ){
 				$loc_term = term_exists( $centralize_array['location']['name'], $this->location_taxonomy );
 				if ($loc_term !== 0 && $loc_term !== null) {
 				  if( is_array( $loc_term ) ){
@@ -214,7 +213,7 @@ class WP_Event_Aggregator_EventON {
 			 	}
 			}
 
-			if( $centralize_array['organizer']['name'] != '' ){
+			if( isset( $centralize_array['organizer']['name'] ) && $centralize_array['organizer']['name'] != ''  ){
 
 				$org_contact = $centralize_array['organizer']['phone'];
 				if(  $centralize_array['organizer']['email'] != '' ){

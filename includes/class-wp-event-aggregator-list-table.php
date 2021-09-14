@@ -87,8 +87,8 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			<span>%3$s</span></br>
 			<span style="color:silver">(id:%4$s)</span>%5$s',
 			$item['title'],
-			__('Origin', 'import-eventbrite-events') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
-			__('Import Into', 'import-eventbrite-events') . ': <b>' . $import_into . '</b>',
+			__('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
+			__('Import Into', 'wp-event-aggregator') . ': <b>' . $import_into . '</b>',
 			$item['ID'],
 			$this->row_actions( $actions )
 		);
@@ -120,20 +120,20 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 
 		$current_import = '';
 		if(isset($item['current_import'])){
-			$cimport = '<strong>'.esc_html__( 'Import is running in Background', 'import-eventbrite-events' ).'</strong>';
+			$cimport = '<strong>'.esc_html__( 'Import is running in Background', 'wp-event-aggregator' ).'</strong>';
 			if(!empty($item['current_import'])){
 				$stats = array();
 				if( $item['current_import']['created'] > 0 ){
-					$stats[] = sprintf( __( '%d Created', 'import-eventbrite-events' ), $item['current_import']['created']);
+					$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $item['current_import']['created']);
 				}
 				if( $item['current_import']['updated'] > 0 ){
-					$stats[] = sprintf( __( '%d Updated', 'import-eventbrite-events' ), $item['current_import']['updated'] );
+					$stats[] = sprintf( __( '%d Updated', 'wp-event-aggregator' ), $item['current_import']['updated'] );
 				}
 				if( $item['current_import']['skipped'] > 0 ){
-					$stats[] = sprintf( __( '%d Skipped', 'import-eventbrite-events' ), $item['current_import']['skipped'] );
+					$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $item['current_import']['skipped'] );
 				}
 				if( !empty( $stats ) ){
-					$stats = esc_html__( 'Stats: ', 'import-eventbrite-events' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
+					$stats = esc_html__( 'Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
 					$cimport .= '<br/>'.$stats;
 				}
 			}
@@ -324,26 +324,26 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				$history = get_posts( $history_args );
 
 				if( !empty( $history ) ){
-					$last_import_history_date = sprintf( __( 'Last Import: %s ago', 'import-eventbrite-events' ), human_time_diff( get_the_date( 'U', $history[0] ), current_time( 'timestamp' ) ) );
+					$last_import_history_date = sprintf( __( 'Last Import: %s ago', 'wp-event-aggregator' ), human_time_diff( get_the_date( 'U', $history[0] ), current_time( 'timestamp' ) ) );
 					$created = get_post_meta( $history[0], 'created', true );
 					$updated = get_post_meta( $history[0], 'updated', true );
 					$skipped = get_post_meta( $history[0], 'skipped', true );
 					$stats = array();
 					if( $created > 0 ){
-						$stats[] = sprintf( __( '%d Created', 'import-eventbrite-events' ), $created );
+						$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $created );
 					}
 					if( $updated > 0 ){
-						$stats[] = sprintf( __( '%d Updated', 'import-eventbrite-events' ), $updated );
+						$stats[] = sprintf( __( '%d Updated', 'wp-event-aggregator' ), $updated );
 					}
 					if( $skipped > 0 ){
-						$stats[] = sprintf( __( '%d Skipped', 'import-eventbrite-events' ), $skipped );
+						$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped );
 					}
 					if( !empty( $stats ) ){
-						$stats = esc_html__( 'Last Import Stats: ', 'import-eventbrite-events' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
+						$stats = esc_html__( 'Last Import Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
 					}else{
 						$nothing_to_import = get_post_meta( $history[0], 'nothing_to_import', true );
 						if( $nothing_to_import ){
-							$stats = '<span style="color: silver">'.__( 'No events are imported.', 'import-eventbrite-events' ).'</span>';	
+							$stats = '<span style="color: silver">'.__( 'No events are imported.', 'wp-event-aggregator' ).'</span>';	
 						}else{
 							$stats = '';
 						}
@@ -464,7 +464,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 			$success_message .= sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped ) ."<br>";
 		}
 		if( $nothing_to_import ){
-			$success_message .= __( 'No events are imported.', 'import-eventbrite-events' ) . '<br>';	
+			$success_message .= __( 'No events are imported.', 'wp-event-aggregator' ) . '<br>';	
 		}
 		$success_message .= "</strong></span>";
 
@@ -532,6 +532,35 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
         );
 
     }
+
+	/**
+	 * Add Clear History button
+	 * 
+	 * @param [string] $which
+	 * @return void
+	 */
+	public function extra_tablenav( $which ) {
+
+		if ( 'top' !== $which ) {
+			return;
+		}	
+		$wpea_url_all_delete_args = array(
+			'page'       => wp_unslash( $_REQUEST['page'] ),
+			'tab'        => wp_unslash( $_REQUEST['tab'] ),
+			'wpea_action' => 'wpea_all_history_delete',
+		);
+
+		$delete_ids  = get_posts( array( 'numberposts' => 1,'fields' => 'ids', 'post_type'   => 'wpea_import_history' ) );
+		if( !empty( $delete_ids ) ){
+			$wp_delete_nonce_url = esc_url( wp_nonce_url( add_query_arg( $wpea_url_all_delete_args, admin_url( 'admin.php' ) ), 'wpea_delete_all_history_nonce' ) );
+			$confirmation_message = esc_html__( "Warning!! Are you sure to delete all these import history? Import history will be permanatly deleted.", "wp-event-aggregator" );
+			?>
+			<a class="button apply" href="<?php echo $wp_delete_nonce_url; ?>" onclick="return confirm('<?php echo $confirmation_message; ?>')">
+				<?php esc_html_e( 'Clear Import History', 'wp-event-aggregator' ); ?>
+			</a>
+			<?php
+		}
+	}
 
 	/**
 	 * Prepare Meetup url data.
@@ -630,4 +659,134 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		wp_reset_postdata();
 		return $scheduled_import_data;
 	}
+}
+
+class WPEA_Shortcode_List_Table extends WP_List_Table {
+
+    public function prepare_items() {
+
+        $columns 	= $this->get_columns();
+        $hidden 	= $this->get_hidden_columns();
+        $sortable 	= $this->get_sortable_columns();
+        $data 		= $this->table_data();
+
+        $perPage 		= 10;
+        $currentPage 	= $this->get_pagenum();
+        $totalItems 	= count( $data );
+
+        $this->set_pagination_args( array(
+            'total_items' => $totalItems,
+            'per_page'    => $perPage
+        ) );
+
+        $data = array_slice( $data, ( ( $currentPage-1 ) * $perPage ), $perPage );
+
+        $this->_column_headers = array( $columns, $hidden, $sortable );
+        $this->items = $data;
+    }
+
+    /**
+     * Override the parent columns method. Defines the columns to use in your listing table
+     *
+     * @return Array
+     */
+    public function get_columns() {
+        $columns = array(
+            'id'            => __( 'ID', 'wp-event-aggregator' ),
+            'how_to_use'    => __( 'Title', 'wp-event-aggregator' ),
+            'shortcode'     => __( 'Shortcode', 'wp-event-aggregator' ),
+			'action'    	=> __( 'Action', 'wp-event-aggregators' ),
+        );
+
+        return $columns;
+    }
+
+    /**
+     * Define which columns are hidden
+     *
+     * @return Array
+     */
+    public function get_hidden_columns() {
+        return array();
+    }
+
+    /**
+     * Get the table data
+     *
+     * @return Array
+     */
+    private function table_data() {
+        $data = array();
+
+        $data[] = array(
+                    'id'            => 1,
+                    'how_to_use'    => 'Display All Events',
+                    'shortcode'     => '<p class="wpea_short_code">[wp_events]</p>',
+                    'action'     	=> '<button class="wpea-btn-copy-shortcode button-primary"  data-value="[wp_events]">Copy</button>',
+                    );
+        $data[] = array(            
+                    'id'            => 2,
+                    'how_to_use'    => 'Display with column',
+					'shortcode'     => '<p class="wpea_short_code">[wp_events col="2"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events col=\"2\"]' >Copy</button>",
+                    );
+        $data[] = array(
+                    'id'            => 3,
+                    'how_to_use'    => 'Limit for display events',
+					'shortcode'     => '<p class="wpea_short_code">[wp_events posts_per_page="12"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events posts_per_page=\"12\"]' >Copy</button>",
+		);
+        $data[] = array(
+                    'id'            => 4,
+                    'how_to_use'    => 'Display Events based on order',
+					'shortcode'     => '<p class="wpea_short_code">[wp_events order="asc"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events order=\"asc\"]' >Copy</button>",
+                    );
+        $data[] = array(
+                    'id'            => 5,
+                    'how_to_use'    => 'Display events based on category',
+					'shortcode'     => '<p class="wpea_short_code" >[wp_events category="cat1"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events category=\"cat1\"]' >Copy</button>",
+                    );
+        $data[] = array(
+                    'id'            => 6,
+                    'how_to_use'    => 'Display Past events',
+					'shortcode'     => '<p class="wpea_short_code">[wp_events past_events="yes"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events past_events=\"yes\"]' >Copy</button>",
+                    );
+        $data[] = array(
+                    'id'            => 7,
+                    'how_to_use'    => 'Display Events based on orderby',
+					'shortcode'     => '<p class="wpea_short_code">[wp_events order="asc" orderby="post_title"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events order=\"asc\" orderby=\"post_title\"]' >Copy</button>",
+                    );
+        $data[] = array(
+                    'id'            => 8,
+                    'how_to_use'    => 'Full Short-code',
+					'shortcode'     => '<p class="wpea_short_code">[wp_events  col="2" posts_per_page="12" category="cat1" past_events="yes" order="desc" orderby="post_title" start_date="YYYY-MM-DD" end_date="YYYY-MM-DD"]</p>',
+					'action'     	=> "<button class='wpea-btn-copy-shortcode button-primary' data-value='[wp_events col=\"2\" posts_per_page=\"12\" category=\"cat1\" past_events=\"yes\" order=\"desc\" orderby=\"post_title\" start_date=\"YYYY-MM-DD\" end_date=\"YYYY-MM-DD\"]' >Copy</button>",
+                    );       
+        return $data;
+    }
+	
+    /**
+     * Define what data to show on each column of the table
+     *
+     * @param  Array $item        Data
+     * @param  String $column_name - Current column name
+     *
+     */
+    public function column_default( $item, $column_name )
+    {
+        switch( $column_name ) {
+            case 'id':
+            case 'how_to_use':
+            case 'shortcode':
+			case 'action':
+                return $item[ $column_name ];
+
+            default:
+                return print_r( $item, true ) ;
+        }
+    }
 }
