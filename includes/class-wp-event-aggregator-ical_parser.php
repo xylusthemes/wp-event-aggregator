@@ -409,9 +409,11 @@ class WP_Event_Aggregator_Ical_Parser {
 				}
 			}
 		}		
-
-		$location = str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( !empty( $location ) ) {
+		$geo 		= $event->getProperty( 'geo' );
+		$latitude 	= isset( $geo['latitude'] ) ? $geo['latitude'] : '';	
+		$longitude 	= isset( $geo['longitude'] ) ? $geo['longitude'] : '';	
+		$location 	= str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
+		if ( !empty( $location ) || !empty( $geo ) ) {
 			$event_location = array(
 				'ID'           => strtolower( trim( stripslashes( $location ) ) ),
 				'name'         => isset( $location ) ? stripslashes( $location ) : '',
@@ -422,8 +424,8 @@ class WP_Event_Aggregator_Ical_Parser {
 				'state'        => '',
 				'country'      => '',
 				'zip'	       => '',
-				'lat'     	   => '',
-				'long'		   => '',
+				'lat'     	   => $latitude,
+				'long'		   => $longitude,
 				'full_address' => isset( $location ) ? stripslashes( $location ) : '',
 				'url'          => '',
 				'image_url'    => ''
