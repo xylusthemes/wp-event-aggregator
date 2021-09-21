@@ -1387,6 +1387,10 @@ msgid "Facebook Settings"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:275
+msgid "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account."
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:275
 msgid "for more information."
 msgstr ""
 
