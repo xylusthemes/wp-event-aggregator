@@ -272,7 +272,7 @@ $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
             if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $site_url, 'https' ) ) {
                 ?>
                 <div class="widefat wpea_settings_error">
-                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account.","import-facebook-events" ), __( 'Click here','wp-event-aggregator' ), __( 'for more information.','wp-event-aggregator' ) ); ?>
+                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account.","wp-event-aggregator" ), __( 'Click here','wp-event-aggregator' ), __( 'for more information.','wp-event-aggregator' ) ); ?>
                 </div>
             <?php
             } ?>
