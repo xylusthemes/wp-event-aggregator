@@ -409,9 +409,9 @@ class WP_Event_Aggregator_Ical_Parser {
 				}
 			}
 		}		
-		$geo 		= $event->getProperty( 'geo' );
-		$latitude 	= isset( $geo['latitude'] ) ? $geo['latitude'] : '';	
-		$longitude 	= isset( $geo['longitude'] ) ? $geo['longitude'] : '';	
+		$geo 		= $event->getProperty( 'GEO' );
+		$latitude 	= isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
+		$longitude 	= isset( $geo['longitude'] ) ? (float)$geo['longitude'] : '';	
 		$location 	= str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
 		if ( !empty( $location ) || !empty( $geo ) ) {
 			$event_location = array(
