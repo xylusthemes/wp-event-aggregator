@@ -199,19 +199,18 @@ class WP_Event_Aggregator_Ical_Parser {
 		}
 		global $importevents;
 		
-		$is_recurrence_event = $event->getProperty( 'X-RECURRENCE' );
-		$post_title = str_replace('\n', ' ', $event->getProperty( 'SUMMARY' ) );
-		$post_description = str_replace('\n', '<br/>', $event->getProperty( 'DESCRIPTION' ) );
-		$uid = $this->generate_uid_for_ical_event( $event );
-		$uid_old = $this->generate_uid_for_ical_event_old_support( $event );
-		$is_all_day = false;
-		
-		$system_timezone = date_default_timezone_get();
-		$wordpress_timezone = $this->wordpress_timezone();
-		$calendar_timezone = $this->timezone;
-
-		$start = $event->getProperty( 'dtstart', 1, true );
-		$end   = $event->getProperty( 'dtend',   1, true );
+		$is_recurrence_event	= $event->getProperty( 'X-RECURRENCE' );
+		$post_title 			= str_replace('\n', ' ', $event->getProperty( 'SUMMARY' ) );
+		$post_description 		= str_replace('\n', '<br/>', $event->getProperty( 'DESCRIPTION' ) );
+		$uid 					= $this->generate_uid_for_ical_event( $event );
+		$uid_old				= $this->generate_uid_for_ical_event_old_support( $event );
+		$url 					= $event->getProperty( 'URL' );
+		$is_all_day 			= false;
+		$system_timezone 		= date_default_timezone_get();
+		$wordpress_timezone 	= $this->wordpress_timezone();
+		$calendar_timezone 		= $this->timezone;
+		$start 					= $event->getProperty( 'dtstart', 1, true );
+		$end   					= $event->getProperty( 'dtend',   1, true );
 
 		if ( empty( $end ) ) {
 			$end = $start;
@@ -254,9 +253,6 @@ class WP_Event_Aggregator_Ical_Parser {
 		if( $is_all_day || empty( $timezone ) ){
 			$timezone = $system_timezone;
 		}
-		/*if( empty( $timezone ) ){
-			$timezone = $system_timezone;
-		}*/
 
 		$start = $start['value'];
 		$end = $end['value'];
@@ -356,6 +352,26 @@ class WP_Event_Aggregator_Ical_Parser {
 		if( !empty( $ical_wp_images ) && !empty( $ical_wp_images[1]) ){
 			$event_image =  $ical_wp_images[1];
 		}
+
+		$fetch_image = apply_filters( 'wpea_ical_fetch_event_image', true );
+		if( $fetch_image ) {
+			$check_recurring = explode("?",$url);
+			if( !empty( $check_recurring[1] ) ){ 
+				$facebook_event_id = str_replace( 'event_time_id=', '', $check_recurring[1] );
+			}else{ 
+				$facebook_event_id = str_replace( 'https://www.facebook.com/events/', '', $url );
+			}
+			if ( ! empty( $facebook_event_id )  ) {
+				$facebook_event 		= $importevents->facebook->get_facebook_event_by_event_id( $facebook_event_id );
+				if( empty( $facebook_event->error ) ){
+					$event_image 		= $facebook_event->cover->source;
+					$event_venue    	= $facebook_event->place;
+					$start_time 		= isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) : date( 'Y-m-d H:i:s');
+					$end_time 			= isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : $start_time;
+					$timezone   	  	= $facebook_event->timezone;
+				}
+			}
+		}
 		
 		$xt_event = array(
 			'origin'          => 'ical',
@@ -373,7 +389,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'utc_offset'      => '',
 			'event_duration'  => '',
 			'is_all_day'      => $is_all_day,
-			'url'             => $event->getProperty( 'URL' ),
+			'url'             => $url,
 			'image_url'       => $event_image,
 		);
 
@@ -408,32 +424,10 @@ class WP_Event_Aggregator_Ical_Parser {
 					}
 				}
 			}
-		}		
-		$geo 		= $event->getProperty( 'GEO' );
-		$latitude 	= isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
-		$longitude 	= isset( $geo['longitude'] ) ? (float)$geo['longitude'] : '';	
-		$location 	= str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( !empty( $location ) || !empty( $geo ) ) {
-			$event_location = array(
-				'ID'           => strtolower( trim( stripslashes( $location ) ) ),
-				'name'         => isset( $location ) ? stripslashes( $location ) : '',
-				'description'  => '',
-				'address_1'    => isset( $location ) ? stripslashes( $location ) : '',
-				'address_2'    => '',
-				'city'         => '',
-				'state'        => '',
-				'country'      => '',
-				'zip'	       => '',
-				'lat'     	   => $latitude,
-				'long'		   => $longitude,
-				'full_address' => isset( $location ) ? stripslashes( $location ) : '',
-				'url'          => '',
-				'image_url'    => ''
-			);
 		}
 		
 		$xt_event['organizer'] = $oraganizer_data;
-		$xt_event['location'] = $event_location;
+		$xt_event['location'] = $this->get_location( $event, $event_venue );
 		
 		return apply_filters( 'wpea_ical_generate_centralize_array', $xt_event, $event );
 	}
@@ -445,29 +439,47 @@ class WP_Event_Aggregator_Ical_Parser {
 	 * @param array $event iCal vevent.
 	 * @return array
 	 */
-	public function get_location( $event ) {
+	public function get_location( $event, $event_venue ) {
 
-		$location = str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( empty( $location ) ) {
-			return null;
+		if ( ! empty( $event_venue ) ) {
+			$event_location = array(
+				'ID'           => isset( $event_venue->id ) ? $event_venue->id : '',
+				'name'         => isset( $event_venue->name ) ? $event_venue->name : '',
+				'description'  => '',
+				'address_1'    => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
+				'address_2'    => '',
+				'city'         => isset( $event_venue->location->city ) ? $event_venue->location->city : '',
+				'state'        => isset( $event_venue->location->state ) ? $event_venue->location->state : '',
+				'country'      => isset( $event_venue->location->country ) ? $event_venue->location->country : '',
+				'zip'          => isset( $event_venue->location->zip ) ? $event_venue->location->zip : '',
+				'lat'          => isset( $event_venue->location->latitude ) ? $event_venue->location->latitude : '',
+				'long'         => isset( $event_venue->location->longitude ) ? $event_venue->location->longitude : '',
+				'full_address' => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
+				'url'          => '',
+				'image_url'    => '',
+			);	
+		} else {
+			$location = str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
+			if ( empty( $location ) ) {
+				return null;
+			}
+
+			$event_location = array(
+				'ID'           => strtolower( trim( stripslashes( $location ) ) ),
+				'name'         => isset( $location ) ? stripslashes( $location ) : '',
+				'description'  => '',
+				'address_1'    => '',
+				'address_2'    => '',
+				'city'         => '',
+				'state'        => '',
+				'country'      => '',
+				'zip'	       => '',
+				'lat'     	   => '',
+				'long'		   => '',
+				'full_address' => ''
+			);
 		}
 
-		$event_location = array(
-			'ID'           => strtolower( trim( stripslashes( $location ) ) ),
-			'name'         => isset( $location ) ? stripslashes( $location ) : '',
-			'description'  => '',
-			'address_1'    => isset( $location ) ? stripslashes( $location ) : '',
-			'address_2'    => '',
-			'city'         => '',
-			'state'        => '',
-			'country'      => '',
-			'zip'	       => '',
-			'lat'     	   => '',
-			'long'		   => '',
-			'full_address' => isset( $location ) ? stripslashes( $location ) : '',
-			'url'          => '',
-			'image_url'    => ''
-		);
 		return $event_location;
 	}
 
