@@ -191,7 +191,6 @@ class WP_Event_Aggregator_Meetup {
 			'email'       => isset( $organizer['emailListAddress'] ) ? $organizer['emailListAddress'] : '',
 			'phone'       => '',
 			'url'         => isset( $organizer['urlname'] ) ? "https://www.meetup.com/".$organizer['urlname']."/":'',
-			'image_url'   => isset( $organizer['logo']->baseUrl ) ? $organizer['logo']->baseUrl : '',
 		);
 		return $event_organizer;
 	}
