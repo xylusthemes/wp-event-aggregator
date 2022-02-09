@@ -25,6 +25,37 @@
 			}).focus();
 		});
 	});
+
+	jQuery(document).ready(function(){
+        jQuery('#meetup_import_by').on('change', function(){
+    
+            if( jQuery(this).val() == 'event_id' ){
+                jQuery('.import_type_wrapper').hide();
+                jQuery('.meetup_group_url').hide();
+                jQuery('.meetup_group_url .meetup_url').removeAttr( 'required' );
+                jQuery('.meetup_event_id').show();
+                jQuery('.meetup_event_id .ime_event_ids').attr('required', 'required');
+            
+            }else if( jQuery(this).val() == 'group_url' ){
+                jQuery('.import_type_wrapper').show();
+                jQuery('.meetup_group_url').show();
+                jQuery('.meetup_group_url .meetup_url').attr('required', 'required');
+                jQuery('.meetup_event_id').hide();
+                jQuery('.meetup_event_id .ime_event_ids').removeAttr( 'required' );
+            }
+        });
+    
+        jQuery('#import_type').on('change', function(){
+            if( jQuery(this).val() != 'onetime' ){
+                jQuery('.hide_frequency .import_frequency').show();
+            }else{
+                jQuery('.hide_frequency .import_frequency').hide();
+            }
+        });
+    
+        jQuery("#import_type").trigger('change');
+        jQuery("#meetup_import_by").trigger('change');
+    });
 	
 	jQuery(document).ready(function(){
 		jQuery('#eventbrite_import_by').on('change', function(){

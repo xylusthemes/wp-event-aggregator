@@ -173,6 +173,7 @@ class WP_Event_Aggregator_WPEA {
 			$organizer_email = isset( $organizer_array['email'] ) ? sanitize_text_field( $organizer_array['email'] ) : '';
 			$organizer_phone = isset( $organizer_array['phone'] ) ? sanitize_text_field( $organizer_array['phone'] ) : '';
 			$organizer_url   = isset( $organizer_array['url'] ) ? sanitize_text_field( $organizer_array['url'] ) : '';
+			$organizer_photo = isset( $organizer_array['image_url'] ) ? sanitize_text_field( $organizer_array['image_url'] ) : '';
 
 			// Save Event Data
 			// Date & Time
@@ -189,21 +190,24 @@ class WP_Event_Aggregator_WPEA {
 			update_post_meta( $inserted_event_id, 'online_event', $online_event );
 
 			// Venue
-			update_post_meta( $inserted_event_id, 'venue_name', $venue_name );
-			update_post_meta( $inserted_event_id, 'venue_address', $venue_address );
-			update_post_meta( $inserted_event_id, 'venue_city', $venue_city );
-			update_post_meta( $inserted_event_id, 'venue_state', $venue_state );
-			update_post_meta( $inserted_event_id, 'venue_country', $venue_country );
-			update_post_meta( $inserted_event_id, 'venue_zipcode', $venue_zipcode );
-			update_post_meta( $inserted_event_id, 'venue_lat', $venue_lat );
-			update_post_meta( $inserted_event_id, 'venue_lon', $venue_lon );
-			update_post_meta( $inserted_event_id, 'venue_url', $venue_url );
+			if( $venue_name != 'Online event' ){
+				update_post_meta( $inserted_event_id, 'venue_name', $venue_name );
+				update_post_meta( $inserted_event_id, 'venue_address', $venue_address );
+				update_post_meta( $inserted_event_id, 'venue_city', $venue_city );
+				update_post_meta( $inserted_event_id, 'venue_state', $venue_state );
+				update_post_meta( $inserted_event_id, 'venue_country', $venue_country );
+				update_post_meta( $inserted_event_id, 'venue_zipcode', $venue_zipcode );
+				update_post_meta( $inserted_event_id, 'venue_lat', $venue_lat );
+				update_post_meta( $inserted_event_id, 'venue_lon', $venue_lon );
+				update_post_meta( $inserted_event_id, 'venue_url', $venue_url );
+			}
 
 			// Organizer
 			update_post_meta( $inserted_event_id, 'organizer_name', $organizer_name );
 			update_post_meta( $inserted_event_id, 'organizer_email', $organizer_email );
 			update_post_meta( $inserted_event_id, 'organizer_phone', $organizer_phone );
 			update_post_meta( $inserted_event_id, 'organizer_url', $organizer_url );
+			update_post_meta( $inserted_event_id, 'organizer_photo', $organizer_photo );
 
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $ticket_uri ) );
