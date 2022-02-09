@@ -189,6 +189,7 @@ class WP_Event_Aggregator_EventON {
 				$loc_term_meta = array();
 				$loc_term_meta['location_lon'] = (!empty($centralize_array['location']['long']))? $centralize_array['location']['long']: null;
 				$loc_term_meta['location_lat'] = (!empty($centralize_array['location']['lat']))? $centralize_array['location']['lat']: null;
+				$loc_term_meta['evcal_location_link'] = (isset($centralize_array['location']['url']))?$centralize_array['location']['url']:null;
 				$loc_term_meta['location_address'] = $address;
 				$loc_term_meta['location_city'] = $city;
 				$loc_term_meta['location_state'] = $state;

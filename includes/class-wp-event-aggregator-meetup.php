@@ -56,7 +56,10 @@ class WP_Event_Aggregator_Meetup {
 		if( 'group_url' === $import_by ){
 
 			$meetup_group_id = $this->fetch_group_slug_from_url( $meetup_url );
-			if( $meetup_group_id == '' ){ return; }
+			if( $meetup_group_id == '' ){ 
+				$wpea_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );	
+				return; 
+			}
 							
 				$itemsnum       = 50;
 				$endcursor      = null;
@@ -217,6 +220,9 @@ class WP_Event_Aggregator_Meetup {
 			'lat'          => isset( $venue['lat'] ) ? $venue['lat'] : '',
 			'long'         => isset( $venue['lng'] ) ? $venue['lng'] : '',
 			'zip'          => isset( $venue['postalCode'] ) ? $venue['postalCode'] : '',
+			'url'          => '',
+			'image_url'    => '',
+			'description'  => '',
 		);
 		return $event_location;
 	}
@@ -341,19 +347,19 @@ class WP_Event_Aggregator_Meetup {
 	 * @return string
 	 */
 	public function convert_datetime_to_timezone_wise_datetime( $datetime, $timezone = false ) {
-        try {
-            $datetime = new DateTime( $datetime );
-            if( $timezone && $timezone !='' ){
-                try{
-                    $datetime->setTimezone(new DateTimeZone( $timezone ) );
-                }catch ( Exception $ee ){ }
-            }
-            return $datetime->format( 'Y-m-d H:i:s' );
-        }
-        catch ( Exception $e ) {
-            return $datetime;
-        }
-    }
+		try {
+			$datetime = new DateTime( $datetime );
+			if( $timezone && $timezone !='' ){
+				try{
+					$datetime->setTimezone(new DateTimeZone( $timezone ) );
+				}catch ( Exception $ee ){ }
+			}
+			return $datetime->format( 'Y-m-d H:i:s' );
+		}
+		catch ( Exception $e ) {
+		return $datetime;
+		}
+	}
 
 	/**
 	 * Get UTC offset for given timezone.
@@ -383,6 +389,7 @@ class WP_Event_Aggregator_Meetup {
 		$default_args = array(
 			'import_id'			=> $post_id, // Import_ID
 			'limit'				=> 50,
+			'no_earlier_than'   => 1514768400,
 			'event_index'		=> -1, // event index needed incase of memory issuee or timeout
 			'prevent_timeouts'	=> true // Check memory and time usage and abort if reaching limit.
 		);
