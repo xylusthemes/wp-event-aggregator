@@ -130,16 +130,6 @@ class WP_Event_Aggregator_WPEA {
 			$event_image = $centralize_array['image_url'];
 			if( $event_image != '' ){
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
-			}else{
-				if( $is_exitsing_event ){
-					if( has_post_thumbnail( $is_exitsing_event ) ){
-						$attachment_id = get_post_thumbnail_id( $is_exitsing_event );
-						$imagemeta = get_post_meta( $attachment_id, '_wpea_attachment_source', true );
-						if( !empty( $imagemeta ) ){
-							delete_post_thumbnail( $inserted_event_id );
-						}
-					}
-				}
 			}
 
 			//////////////////////////////////////////////

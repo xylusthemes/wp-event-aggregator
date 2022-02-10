@@ -140,10 +140,6 @@ class WP_Event_Aggregator_Aioec {
 			$event_image = $centralize_array['image_url'];
 			if( $event_image != '' ){
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
-			}else{
-				if( $is_exitsing_event ){
-					delete_post_thumbnail( $inserted_event_id );
-				}
 			}
 
 			// Save Meta.

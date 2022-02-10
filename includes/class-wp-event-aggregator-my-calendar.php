@@ -118,10 +118,6 @@ class WP_Event_Aggregator_My_Calendar {
 			$event_image = $centralize_array['image_url'];
 			if( $event_image != '' ){
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
-			}else{
-				if( $is_exitsing_event ){
-					delete_post_thumbnail( $inserted_event_id );
-				}
 			}
 
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
