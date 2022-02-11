@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-10T15:38:23+00:00\n"
+"POT-Creation-Date: 2022-02-11T07:37:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -733,7 +733,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-eventbrite.php:69
 #: includes/class-wp-event-aggregator-eventbrite.php:93
 #: includes/class-wp-event-aggregator-tec.php:153
-#: includes/class-wp-event-aggregator-tec.php:205
+#: includes/class-wp-event-aggregator-tec.php:213
 msgid "Something went wrong, please try again."
 msgstr ""
 
