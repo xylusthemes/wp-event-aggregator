@@ -362,14 +362,20 @@ class WP_Event_Aggregator_Ical_Parser {
 		
 		$check_facebook = explode( '/', $url);
 		if( $check_facebook[2] == 'www.facebook.com' ){
-			$start_time = strtotime( $this->convert_facebook_ical_to_website( $start ) );
-			$end_time   = strtotime( $this->convert_facebook_ical_to_website( $end ) );
 			$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
-			
+
 			if( !empty( $event_data ) ){
 				$event_image = $event_data['image'];
 				$event_venue = $event_data['location'];
 				$timezone    = $event_data['timezone'];
+				$start_time  = $event_data['start_time'];
+				$end_time    = $event_data['end_time'];
+			}
+
+			if( empty( $event_data['start_time'] ) ){
+				$timezone   = isset( $event_data['timezone'] ) ? $event_data['timezone'] : '' ;
+				$start_time = strtotime( $this->convert_fb_ical_timezone( $start, $timezone ) );
+				$end_time   = strtotime( $this->convert_fb_ical_timezone( $end, $timezone ) );
 			}
 		}
 		
@@ -558,32 +564,35 @@ class WP_Event_Aggregator_Ical_Parser {
 	 *
 	 * @since 1.0.0
 	 */
-	public function convert_facebook_ical_to_website( $event_datetime ) {
-
+	public function convert_fb_ical_timezone( $event_datetime = '', $timezone = '' ) {
+		
 		$timezone_string = get_option( 'timezone_string' );
 		$offset  = (float) get_option( 'gmt_offset' );
+		if( $timezone != '' ){
+			$tz = $timezone;
+		}else{
 
-		if ( ! empty( $timezone_string ) ) {
-			$tz        = $timezone_string;
-		} else {
+			if ( ! empty( $timezone_string ) ) {
+				$tz        = $timezone_string;
+			} else {
 
-			$hours     = (int) $offset;
-			$minutes   = ( $offset - $hours );
-			$sign      = ( $offset < 0 ) ? '-' : '+';
-			$abs_hour  = abs( $hours );
-			$abs_mins  = abs( $minutes * 60 );
-			$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
-			
-			list($hours, $minutes) = explode(':', $tz_offset);
-			$seconds = $hours * 60 * 60 + $minutes * 60;
-			$tz = timezone_name_from_abbr('', $seconds, 1);
-			if($tz === false) $tz = timezone_name_from_abbr('', $seconds, 0);
+				$hours     = (int) $offset;
+				$minutes   = ( $offset - $hours );
+				$sign      = ( $offset < 0 ) ? '-' : '+';
+				$abs_hour  = abs( $hours );
+				$abs_mins  = abs( $minutes * 60 );
+				$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+				
+				list($hours, $minutes) = explode(':', $tz_offset);
+				$seconds = $hours * 60 * 60 + $minutes * 60;
+				$tz = timezone_name_from_abbr('', $seconds, 1);
+				if($tz === false) $tz = timezone_name_from_abbr('', $seconds, 0);
+			}
 		}
-		date_default_timezone_set('UTC');
-		$datetime = new DateTime( $event_datetime );
-		$datetime->format('Y-m-d H:i:s');
-		$time_timezone = new DateTimeZone($tz);
-		$datetime->setTimezone($time_timezone);
+		$utc_tz         = new DateTimeZone( 'UTC' );
+		$datetime       = new DateTime( $event_datetime, $utc_tz );
+		$event_timezone = new DateTimeZone( $tz );
+		$datetime->setTimezone( $event_timezone );
 
 		return $datetime->format('Y-m-d H:i:s');
 	}
@@ -611,18 +620,18 @@ class WP_Event_Aggregator_Ical_Parser {
 			if( $fetch_image ) {
 				$facebook_event = $importevents->facebook->get_facebook_event_by_event_id( $event_id['ID'] );
 				if ( ! empty( $facebook_event->cover )  ) {
-					$event_data['image']    = $facebook_event->cover->source;
-					$event_data['location'] = $facebook_event->place;
-					$event_data['timezone'] = $facebook_event->timezone;
+					$event_data['image']      = $facebook_event->cover->source;
+					$event_data['location']   = $facebook_event->place;
+					$event_data['timezone']   = $facebook_event->timezone;
+					$event_data['start_time'] = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) :'';
+					$event_data['end_time']   = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : '';
 				}
 			}
 		} else {
-			if( has_post_thumbnail( $is_exitsing_event ) ){
-				$attachment_id = get_post_thumbnail_id( $is_exitsing_event );
-				$imagesource = get_post_meta( $attachment_id, '_wpea_attachment_source', true );				
-				if( !empty( $imagesource ) ){
-					$event_data['image'] = $imagesource;
-				}
+			$attachment_id = get_post_thumbnail_id( $is_exitsing_event );
+			$imagesource = get_post_meta( $attachment_id, '_wpea_attachment_source', true );				
+			if( !empty( $imagesource ) ){
+				$event_data['image'] = $imagesource;
 			}
 			$event_timezone   = get_post_meta( $is_exitsing_event, 'timezone', true );
 			if( !empty( $event_timezone ) ){

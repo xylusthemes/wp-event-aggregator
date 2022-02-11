@@ -40,7 +40,7 @@ class WP_Event_Aggregator_Meetup {
 	 * @return /boolean
 	 */
 	public function import_events( $event_data = array() ){
-
+		
 		global $wpea_errors;
 		$imported_events = array();
 		$import_by       = isset( $event_data['import_by'] ) ? $event_data['import_by'] : '';
@@ -54,30 +54,30 @@ class WP_Event_Aggregator_Meetup {
 		}
 
 		if( 'group_url' === $import_by ){
-
+			
 			$meetup_group_id = $this->fetch_group_slug_from_url( $meetup_url );
 			if( $meetup_group_id == '' ){ 
 				$wpea_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );	
 				return; 
 			}
-							
-				$itemsnum       = 50;
-				$endcursor      = null;
-				$have_next_page = true;
 
-				while( true === $have_next_page ){
-					$meetup_event_data   = $api->getGroupEvents( $meetup_group_id, $itemsnum, $endcursor );
-					$get_upcoming_events = $meetup_event_data['data']['groupByUrlname']['upcomingEvents'];
-					$meetup_events       = $get_upcoming_events['edges'];
-
-					if( !empty( $meetup_events ) ){
-						foreach ($meetup_events as $meetup_event) {
-							$imported_events[] = $this->save_meetup_event( $meetup_event['node'], $event_data );
-						}	
-					}
-					$endcursor      = $get_upcoming_events['pageInfo']['endCursor'];
-					$have_next_page = $get_upcoming_events['pageInfo']['hasNextPage'];
+			$itemsnum       = 50;
+			$endcursor      = null;
+			$have_next_page = true;
+			
+			while( true === $have_next_page ){
+				$meetup_event_data   = $api->getGroupEvents( $meetup_group_id, $itemsnum, $endcursor );
+				$get_upcoming_events = $meetup_event_data['data']['groupByUrlname']['upcomingEvents'];
+				$meetup_events       = $get_upcoming_events['edges'];
+			
+				if( !empty( $meetup_events ) ){
+					foreach ($meetup_events as $meetup_event) {
+						$imported_events[] = $this->save_meetup_event( $meetup_event['node'], $event_data );
+					}	
 				}
+				$endcursor      = $get_upcoming_events['pageInfo']['endCursor'];
+				$have_next_page = $get_upcoming_events['pageInfo']['hasNextPage'];
+			}
 
 			return $imported_events;
 
@@ -220,6 +220,7 @@ class WP_Event_Aggregator_Meetup {
 			'lat'          => isset( $venue['lat'] ) ? $venue['lat'] : '',
 			'long'         => isset( $venue['lng'] ) ? $venue['lng'] : '',
 			'zip'          => isset( $venue['postalCode'] ) ? $venue['postalCode'] : '',
+			'phone'        => isset( $venue['phone'] ) ? $venue['phone'] : '',
 			'url'          => '',
 			'image_url'    => '',
 			'description'  => '',
@@ -387,11 +388,11 @@ class WP_Event_Aggregator_Meetup {
 		}
 
 		$default_args = array(
-			'import_id'			=> $post_id, // Import_ID
-			'limit'				=> 50,
-			'no_earlier_than'   => 1514768400,
-			'event_index'		=> -1, // event index needed incase of memory issuee or timeout
-			'prevent_timeouts'	=> true // Check memory and time usage and abort if reaching limit.
+			'import_id'        => $post_id, // Import_ID
+			'limit'            => 50,
+			'no_earlier_than'  => 1514768400,
+			'event_index'      => -1, // event index needed incase of memory issuee or timeout
+			'prevent_timeouts' => true // Check memory and time usage and abort if reaching limit.
 		);
 
 		$params = $default_args;
