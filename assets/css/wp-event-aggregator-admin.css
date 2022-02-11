@@ -466,3 +466,8 @@ table.wpea_form_table tr td:nth-child(1) {
 #wpea_setting_form .checkout_model_option input[type="radio"]{
   margin: 2px;
 }
+
+/*Upgrade to pro link CSS*/
+.wpea_upgrade_pro {
+  background: #1da867;
+}

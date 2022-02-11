@@ -308,11 +308,13 @@ class WP_Event_Aggregator_TEC {
 	public function get_venue_args( $venue ) {
 		global $importevents; 
 
-		if ( !isset( $venue['ID'] ) ) {
-			return null;
+		$venue_id = !empty( $venue['ID'] ) ? $venue['ID'] : '';
+		if( !empty( $venue['ID'] ) ){
+			$existing_venue = $this->get_venue_by_id( $venue_id );
 		}
-		$existing_venue = $this->get_venue_by_id( $venue['ID'] );
-
+		if( empty( $existing_venue ) ){
+			$existing_venue = $this->get_venue_by_name( $venue['name'] );
+		}
 		if ( $existing_venue && is_numeric( $existing_venue ) && $existing_venue > 0 ) {
 			return array(
 				'VenueID' => $existing_venue,
@@ -336,7 +338,8 @@ class WP_Event_Aggregator_TEC {
 		) );
 
 		if ( $create_venue ) {
-			update_post_meta( $create_venue, 'wpea_event_venue_id', $venue['ID'] );
+			update_post_meta( $create_venue, 'wpea_event_venue_name', $venue['name'] );
+			update_post_meta( $create_venue, 'wpea_event_venue_id', $venue_id );
 			return array(
 				'VenueID' => $create_venue,
 			);
@@ -381,6 +384,30 @@ class WP_Event_Aggregator_TEC {
 			'meta_value' => $venue_id,
 			'suppress_filters' => false,
 		) );
+
+		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
+			return $existing_organizer[0]->ID;
+		}
+		return false;
+	}
+
+	/**
+	 * Check for Existing TEC Venue Name
+	 *
+	 * @since    1.0.0
+	 * @param int $venue_name Venue Name.
+	 * @return int/boolean
+	 */
+	public function get_venue_by_name( $venue_name ) {
+		$existing_organizer = get_posts(
+			array(
+				'posts_per_page'   => 1,
+				'post_type'        => $this->venue_posttype,
+				'meta_key'         => 'wpea_event_venue_name', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Ignore.
+				'meta_value'       => $venue_name, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Ignore.
+				'suppress_filters' => false,
+			)
+		);
 
 		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
 			return $existing_organizer[0]->ID;
