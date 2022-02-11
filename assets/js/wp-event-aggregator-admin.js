@@ -27,7 +27,7 @@
 	});
 
 	jQuery(document).ready(function(){
-        jQuery('#meetup_import_by').on('change', function(){
+        jQuery('#wpea_meetup_import_by').on('change', function(){
     
             if( jQuery(this).val() == 'event_id' ){
                 jQuery('.import_type_wrapper').hide();
@@ -54,7 +54,7 @@
         });
     
         jQuery("#import_type").trigger('change');
-        jQuery("#meetup_import_by").trigger('change');
+        jQuery("#wpea_meetup_import_by").trigger('change');
     });
 	
 	jQuery(document).ready(function(){

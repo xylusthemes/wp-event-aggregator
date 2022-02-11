@@ -32,7 +32,7 @@ global $importevents;
 								<?php esc_attr_e( 'Import by', 'wp-event-aggregator' ); ?> :
 							</th>
 							<td>
-								<select name="meetup_import_by" id="meetup_import_by">
+								<select name="meetup_import_by" id="wpea_meetup_import_by">
 									<option value="event_id"><?php esc_attr_e( 'Event ID', 'wp-event-aggregator' ); ?></option>
 									<option value="group_url"><?php esc_attr_e( 'Group URL', 'wp-event-aggregator' ); ?></option>
 								</select>
