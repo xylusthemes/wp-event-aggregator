@@ -359,7 +359,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			$event_image =  $ical_wp_images[1];
 		}
 
-		
+		// Only for facebook ical imports.
 		$check_facebook = explode( '/', $url);
 		if( $check_facebook[2] == 'www.facebook.com' ){
 			$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
@@ -373,9 +373,10 @@ class WP_Event_Aggregator_Ical_Parser {
 			}
 
 			if( empty( $event_data['start_time'] ) ){
-				$timezone   = isset( $event_data['timezone'] ) ? $event_data['timezone'] : '' ;
-				$start_time = strtotime( $this->convert_fb_ical_timezone( $start, $timezone ) );
-				$end_time   = strtotime( $this->convert_fb_ical_timezone( $end, $timezone ) );
+				$start_time = strtotime( $this->convert_fb_ical_timezone( $start, $event_data['timezone'] ) );
+			}
+			if( empty( $event_data['end_time'] ) ){
+				$end_time   = strtotime( $this->convert_fb_ical_timezone( $end, $event_data['timezone'] ) );
 			}
 		}
 		

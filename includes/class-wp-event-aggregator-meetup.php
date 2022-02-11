@@ -389,8 +389,7 @@ class WP_Event_Aggregator_Meetup {
 
 		$default_args = array(
 			'import_id'        => $post_id, // Import_ID
-			'limit'            => 50,
-			'no_earlier_than'  => 1514768400,
+			'limit'            => 25,
 			'event_index'      => -1, // event index needed incase of memory issuee or timeout
 			'prevent_timeouts' => true // Check memory and time usage and abort if reaching limit.
 		);

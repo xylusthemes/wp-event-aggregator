@@ -309,12 +309,13 @@ class WP_Event_Aggregator_TEC {
 		global $importevents; 
 
 		$venue_id = !empty( $venue['ID'] ) ? $venue['ID'] : '';
-		if( !empty( $venue['name'] ) ){
-			$existing_venue = $this->get_venue_by_name( $venue['name'] );
-		}else{
+		if( !empty( $venue['ID'] ) ){
 			$existing_venue = $this->get_venue_by_id( $venue_id );
 		}
-		if ( !empty( $existing_venue ) ) {
+		if( empty( $existing_venue ) ){
+			$existing_venue = $this->get_venue_by_name( $venue['name'] );
+		}
+		if ( $existing_venue && is_numeric( $existing_venue ) && $existing_venue > 0 ) {
 			return array(
 				'VenueID' => $existing_venue,
 			);
@@ -391,10 +392,10 @@ class WP_Event_Aggregator_TEC {
 	}
 
 	/**
-	 * Check for Existing TEC Venue
+	 * Check for Existing TEC Venue Name
 	 *
 	 * @since    1.0.0
-	 * @param int $venue_id Venue id.
+	 * @param int $venue_name Venue Name.
 	 * @return int/boolean
 	 */
 	public function get_venue_by_name( $venue_name ) {
