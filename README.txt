@@ -137,7 +137,7 @@ You can use `[wp_events]` for display in-built events list.
 == Changelog ==
 
 = 1.6.4 =
-* ADDED: GraphQL Support
+* ADDED: GraphQL Support on Meetup
 * FIXED: Facebook iCal Image, Time, and Location issues
 * IMPROVEMENTS: Support for WP 5.9
 
