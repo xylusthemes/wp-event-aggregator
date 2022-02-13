@@ -217,9 +217,19 @@ class WP_Event_Aggregator{
 	 * @return void
 	 */
 	public function wpea_setting_doc_links ( $links ) {
-		$wpea_setting_link = array('<a href='.admin_url( "admin.php?page=import_events&tab=settings" ).' target="_blank">' . __('Setting', 'import-eventbrite-events') . '</a>');
-		$wpea_docs_link = array('<a href="https://docs.xylusthemes.com/docs/wp-event-aggregator/" target="_blank">' . __('Docs', 'import-eventbrite-events') . '</a>');
-		return array_merge( $links, $wpea_setting_link, $wpea_docs_link );
+		$wpea_setting_doc_link = array(
+			'wpea-event-setting' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( admin_url( 'admin.php?page=import_events&tab=settings' ) ),
+				esc_html__( 'Setting', 'wp-event-aggregator' )
+			),
+			'wpea-event-docs' => sprintf(
+				'<a target="_blank" href="%s">%s</a>',
+				esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ),
+				esc_html__( 'Docs', 'wp-event-aggregator' )
+		),
+		);
+		return array_merge( $links, $wpea_setting_doc_link );
 	}
 
 	/**
