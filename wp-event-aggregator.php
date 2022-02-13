@@ -227,7 +227,7 @@ class WP_Event_Aggregator{
 				'<a target="_blank" href="%s">%s</a>',
 				esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ),
 				esc_html__( 'Docs', 'wp-event-aggregator' )
-		),
+			),
 		);
 		return array_merge( $links, $wpea_setting_doc_link );
 	}
