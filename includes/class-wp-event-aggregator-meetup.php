@@ -213,6 +213,7 @@ class WP_Event_Aggregator_Meetup {
 		$event_location = array(
 			'ID'           => isset( $venue['id'] ) ? $venue['id'] : '',
 			'name'         => isset( $venue['name'] ) ? $venue['name'] : '',
+			'address_1'    => isset( $venue['address']) ? $venue['address'] : '',
 			'full_address' => isset( $venue['address'] ) ? $venue['address'] : '',
 			'city'         => isset( $venue['city'] ) ? $venue['city'] : '',
 			'state'        => isset( $venue['state'] ) ? $venue['state'] : '',
