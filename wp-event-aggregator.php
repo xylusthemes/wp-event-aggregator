@@ -51,6 +51,7 @@ class WP_Event_Aggregator{
 			add_action( 'plugins_loaded', array( self::$instance, 'load_authorize_class' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_style' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_script' ) );
+			add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( self::$instance, 'wpea_setting_doc_links' ) );
 
 			self::$instance->includes();
 			self::$instance->common = new WP_Event_Aggregator_Common();
@@ -208,6 +209,28 @@ class WP_Event_Aggregator{
 			basename( dirname( __FILE__ ) ) . '/languages'
 		);
 	
+	}
+
+	/**
+	 * WPEA setting And docs link add in plugin page.
+	 *
+	 * @since 1.0
+	 * @return void
+	 */
+	public function wpea_setting_doc_links ( $links ) {
+		$wpea_setting_doc_link = array(
+			'wpea-event-setting' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( admin_url( 'admin.php?page=import_events&tab=settings' ) ),
+				esc_html__( 'Setting', 'wp-event-aggregator' )
+			),
+			'wpea-event-docs' => sprintf(
+				'<a target="_blank" href="%s">%s</a>',
+				esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ),
+				esc_html__( 'Docs', 'wp-event-aggregator' )
+			),
+		);
+		return array_merge( $links, $wpea_setting_doc_link );
 	}
 
 	/**
