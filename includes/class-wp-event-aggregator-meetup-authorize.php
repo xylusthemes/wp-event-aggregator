@@ -92,9 +92,15 @@ class WP_Event_Aggregator_Meetup_Authorize {
 						$access_token = $body_response->access_token;
 					    update_option('wpea_muser_token_options', $body_response);
 
-						$profile_call= wp_remote_get("https://api.meetup.com/members/self?access_token=$access_token");
-						$profile = wp_remote_retrieve_body( $profile_call );
-						$profile = json_decode( $profile );
+						$api       = new WP_Event_Aggregator_Meetup_API( $access_token );
+						$auth_user = $api->getAuthUser();
+						$user_data = $auth_user['data']['self'];
+
+						$profile  = array(
+							'ID'	=> $user_data['id'],
+							'name'  => $user_data['name'],
+							'email' => $user_data['email']
+						);
 						update_option('wpea_mauthorized_user', $profile );
 
 						$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=1');

@@ -163,7 +163,7 @@ class WP_Event_Aggregator_Ical_Parser {
 					// Fitered Events
 					foreach ( $day_arr as $event ) {
 						
-						$centralize_event = $this->generate_centralize_event_array( $event );
+						$centralize_event = $this->generate_centralize_event_array( $event, $event_data );
 						if( !empty( $centralize_event ) ){
 							$centralize_events[$centralize_event['ID']] = $centralize_event;
 						}
@@ -193,7 +193,7 @@ class WP_Event_Aggregator_Ical_Parser {
 	 * @param 	 array $event iCal vevent Object.
 	 * @return 	 array
 	 */
-	public function generate_centralize_event_array( $event ) {
+	public function generate_centralize_event_array( $event, $event_data = array() ) {
 		if( empty( $event ) ){
 			return false;
 		}
@@ -204,6 +204,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$post_description = str_replace('\n', '<br/>', $event->getProperty( 'DESCRIPTION' ) );
 		$uid = $this->generate_uid_for_ical_event( $event );
 		$uid_old = $this->generate_uid_for_ical_event_old_support( $event );
+		$url = $event->getProperty( 'URL' );
 		$is_all_day = false;
 		
 		$system_timezone = date_default_timezone_get();
@@ -343,6 +344,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		}
 
 		$event_image = '';
+		$event_venue = null;
 		$ical_attachment = $event->getProperty( 'ATTACH', false, true );
 		if( isset($ical_attachment['params']) && isset($ical_attachment['params']['FMTTYPE']) ) {
 			$attachment_type = $ical_attachment['params']['FMTTYPE'];
@@ -355,6 +357,27 @@ class WP_Event_Aggregator_Ical_Parser {
 		$ical_wp_images = $event->getProperty('X-WP-IMAGES-URL');
 		if( !empty( $ical_wp_images ) && !empty( $ical_wp_images[1]) ){
 			$event_image =  $ical_wp_images[1];
+		}
+
+		// Only for facebook ical imports.
+		$check_facebook = explode( '/', $url);
+		if( $check_facebook[2] == 'www.facebook.com' ){
+			$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
+
+			if( !empty( $event_data ) ){
+				$event_image = $event_data['image'];
+				$event_venue = $event_data['location'];
+				$timezone    = $event_data['timezone'];
+				$start_time  = $event_data['start_time'];
+				$end_time    = $event_data['end_time'];
+			}
+
+			if( empty( $event_data['start_time'] ) ){
+				$start_time = strtotime( $this->convert_fb_ical_timezone( $start, $event_data['timezone'] ) );
+			}
+			if( empty( $event_data['end_time'] ) ){
+				$end_time   = strtotime( $this->convert_fb_ical_timezone( $end, $event_data['timezone'] ) );
+			}
 		}
 		
 		$xt_event = array(
@@ -373,7 +396,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'utc_offset'      => '',
 			'event_duration'  => '',
 			'is_all_day'      => $is_all_day,
-			'url'             => $event->getProperty( 'URL' ),
+			'url'             => $url,
 			'image_url'       => $event_image,
 		);
 
@@ -409,31 +432,9 @@ class WP_Event_Aggregator_Ical_Parser {
 				}
 			}
 		}		
-		$geo 		= $event->getProperty( 'GEO' );
-		$latitude 	= isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
-		$longitude 	= isset( $geo['longitude'] ) ? (float)$geo['longitude'] : '';	
-		$location 	= str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( !empty( $location ) || !empty( $geo ) ) {
-			$event_location = array(
-				'ID'           => strtolower( trim( stripslashes( $location ) ) ),
-				'name'         => isset( $location ) ? stripslashes( $location ) : '',
-				'description'  => '',
-				'address_1'    => isset( $location ) ? stripslashes( $location ) : '',
-				'address_2'    => '',
-				'city'         => '',
-				'state'        => '',
-				'country'      => '',
-				'zip'	       => '',
-				'lat'     	   => $latitude,
-				'long'		   => $longitude,
-				'full_address' => isset( $location ) ? stripslashes( $location ) : '',
-				'url'          => '',
-				'image_url'    => ''
-			);
-		}
 		
 		$xt_event['organizer'] = $oraganizer_data;
-		$xt_event['location'] = $event_location;
+		$xt_event['location'] = $this->get_location( $event, $event_venue );
 		
 		return apply_filters( 'wpea_ical_generate_centralize_array', $xt_event, $event );
 	}
@@ -445,30 +446,52 @@ class WP_Event_Aggregator_Ical_Parser {
 	 * @param array $event iCal vevent.
 	 * @return array
 	 */
-	public function get_location( $event ) {
-
-		$location = str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( empty( $location ) ) {
-			return null;
-		}
-
-		$event_location = array(
-			'ID'           => strtolower( trim( stripslashes( $location ) ) ),
-			'name'         => isset( $location ) ? stripslashes( $location ) : '',
-			'description'  => '',
-			'address_1'    => isset( $location ) ? stripslashes( $location ) : '',
-			'address_2'    => '',
-			'city'         => '',
-			'state'        => '',
-			'country'      => '',
-			'zip'	       => '',
-			'lat'     	   => '',
-			'long'		   => '',
-			'full_address' => isset( $location ) ? stripslashes( $location ) : '',
-			'url'          => '',
-			'image_url'    => ''
-		);
+	public function get_location( $event, $event_venue ) {
+		if ( ! empty( $event_venue ) ) {
+			$event_location = array(
+				'ID'           => isset( $event_venue->id ) ? $event_venue->id : '',
+				'name'         => isset( $event_venue->name ) ? $event_venue->name : '',
+				'description'  => '',
+				'address_1'    => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
+				'address_2'    => '',
+				'city'         => isset( $event_venue->location->city ) ? $event_venue->location->city : '',
+				'state'        => isset( $event_venue->location->state ) ? $event_venue->location->state : '',
+				'country'      => isset( $event_venue->location->country ) ? $event_venue->location->country : '',
+				'zip'          => isset( $event_venue->location->zip ) ? $event_venue->location->zip : '',
+				'lat'          => isset( $event_venue->location->latitude ) ? $event_venue->location->latitude : '',
+				'long'         => isset( $event_venue->location->longitude ) ? $event_venue->location->longitude : '',
+				'full_address' => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
+				'url'          => '',
+				'image_url'    => '',
+			);	
+		}else{
+			$geo       = $event->getProperty( 'GEO' );
+			$latitude  = isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
+			$longitude = isset( $geo['longitude'] ) ? (float)$geo['longitude'] : '';
+			$location  = str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
+			if ( empty( $location ) ) {
+				return null;
+			}
+			if ( !empty( $location ) || !empty( $geo ) ) {
+				$event_location = array(
+					'ID'           => strtolower( trim( stripslashes( $location ) ) ),
+					'name'         => isset( $location ) ? stripslashes( $location ) : '',
+					'description'  => '',
+					'address_1'    => '',
+					'address_2'    => '',
+					'city'         => '',
+					'state'        => '',
+					'country'      => '',
+					'zip'	       => '',
+					'lat'     	   => $latitude,
+					'long'		   => $longitude,
+					'full_address' => '',
+					'url'          => '',
+					'image_url'    => ''
+				);
+			}
 		return $event_location;
+		}
 	}
 
 	/**
@@ -488,7 +511,10 @@ class WP_Event_Aggregator_Ical_Parser {
 			$current_dt_start = $ical_event->getProperty( 'X-CURRENT-DTSTART' );
 			$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
 		}
-		return $ical_event->getProperty( 'UID' ) . $recurrence_id;
+		$event_id = $ical_event->getProperty( 'UID' ) . $recurrence_id;
+		$event_id = explode( '@facebook', $event_id );
+		$ical_event_id = str_replace('e', '', $event_id[0]);
+		return $ical_event_id;
 	}
 
 	/**
@@ -528,6 +554,92 @@ class WP_Event_Aggregator_Ical_Parser {
 			return 'UTC' . $utc_offset;
 		}
 		return 'UTC+' . $utc_offset;
+	}
+
+	/**
+	 * Convert datetime to desired timezone.
+	 *
+	 * @param string $event_datetime     Date string to possibly convert
+	 *
+	 * @return string
+	 *
+	 * @since 1.0.0
+	 */
+	public function convert_fb_ical_timezone( $event_datetime = '', $timezone = '' ) {
+		
+		$timezone_string = get_option( 'timezone_string' );
+		$offset  = (float) get_option( 'gmt_offset' );
+		if( $timezone != '' ){
+			$tz = $timezone;
+		}else{
+
+			if ( ! empty( $timezone_string ) ) {
+				$tz        = $timezone_string;
+			} else {
+
+				$hours     = (int) $offset;
+				$minutes   = ( $offset - $hours );
+				$sign      = ( $offset < 0 ) ? '-' : '+';
+				$abs_hour  = abs( $hours );
+				$abs_mins  = abs( $minutes * 60 );
+				$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+				
+				list($hours, $minutes) = explode(':', $tz_offset);
+				$seconds = $hours * 60 * 60 + $minutes * 60;
+				$tz = timezone_name_from_abbr('', $seconds, 1);
+				if($tz === false) $tz = timezone_name_from_abbr('', $seconds, 0);
+			}
+		}
+		$utc_tz         = new DateTimeZone( 'UTC' );
+		$datetime       = new DateTime( $event_datetime, $utc_tz );
+		$event_timezone = new DateTimeZone( $tz );
+		$datetime->setTimezone( $event_timezone );
+
+		return $datetime->format('Y-m-d H:i:s');
+	}
+
+	/**
+     * Check and Update event image.
+     *
+     * @param string $import_into
+     * @param int $event_id
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+	public function get_event_image_and_location( $import_into, $facebook_event_id = 0 ){
+		global $importevents;
+		$event_data        = array();
+		$event_id          = array( 'ID' => $facebook_event_id );
+		$post_type         = $importevents->{$import_into}->get_event_posttype();
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $post_type, $event_id );
+		$has_event_image   = get_post_meta( $is_exitsing_event, '_thumbnail_id', true );
+
+		if ( empty( $has_event_image ) ){
+			$fetch_image = apply_filters( 'wpea_ical_fetch_event_image', true );
+			if( $fetch_image ) {
+				$facebook_event = $importevents->facebook->get_facebook_event_by_event_id( $event_id['ID'] );
+				if ( ! empty( $facebook_event->cover )  ) {
+					$event_data['image']      = $facebook_event->cover->source;
+					$event_data['location']   = $facebook_event->place;
+					$event_data['timezone']   = $facebook_event->timezone;
+					$event_data['start_time'] = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) :'';
+					$event_data['end_time']   = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : '';
+				}
+			}
+		} else {
+			$attachment_id = get_post_thumbnail_id( $is_exitsing_event );
+			$imagesource = get_post_meta( $attachment_id, '_wpea_attachment_source', true );				
+			if( !empty( $imagesource ) ){
+				$event_data['image'] = $imagesource;
+			}
+			$event_timezone   = get_post_meta( $is_exitsing_event, 'timezone', true );
+			if( !empty( $event_timezone ) ){
+				$event_data['timezone'] = $event_timezone;
+			}
+		}
+		return $event_data;
 	}
 
 	/**

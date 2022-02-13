@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.6.3
+ * Version:           1.6.4
  * Author:            Xylus Themes
  * Author URI:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -96,14 +96,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.6.3' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.6.4' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.6.3' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.6.4' ); }
 
 
 	/**
@@ -117,12 +117,12 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.6.3' );
+			define( 'WPEA_VERSION', '1.6.4' );
 		}
 
 		// Minimum Pro plugin version.
 		if( ! defined( 'WPEA_MIN_PRO_VERSION' ) ){
-			define( 'WPEA_MIN_PRO_VERSION', '1.6.3' );
+			define( 'WPEA_MIN_PRO_VERSION', '1.6.4' );
 		}
 
 		// Plugin folder Path.
@@ -188,6 +188,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-my-calendar.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ee4.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wpea-plugin-deactivation.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-api.php';
 
 		// Gutenberg Block
 		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';
