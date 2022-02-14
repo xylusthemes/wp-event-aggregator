@@ -17,6 +17,11 @@ $meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_optio
 $meetup_oauth_secret = isset( $meetup_options['meetup_oauth_secret'] ) ? $meetup_options['meetup_oauth_secret'] : '';
 $meetup_user_token_options = get_option( 'wpea_muser_token_options', array() );
 $meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
+
+if( !is_array( $meetup_authorized_user ) ){
+    $meetup_authorized_user = (array)$meetup_authorized_user;
+}
+
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
