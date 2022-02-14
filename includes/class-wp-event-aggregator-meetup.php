@@ -146,7 +146,7 @@ class WP_Event_Aggregator_Meetup {
 
 		$xt_event = array(
 			'origin'          => 'meetup',
-			'ID'              => isset( $meetup_event['id'] ) ? $meetup_event['id'] : '',
+			'ID'              => $event_id,
 			'name'            => $event_name,
 			'description'     => $event_description,
 			'starttime_local' => $start_time,
