@@ -98,17 +98,25 @@ class WP_Event_Aggregator_EM {
 		$end_time = $centralize_array['endtime_local'];
 		$ticket_uri = $centralize_array['url'];
 
+		if( !empty( $is_exitsing_event ) ){
+			$event_status = get_post_status( $is_exitsing_event );
+		}else{
+			$event_status = 'pending';
+		}
+
 		$emeventdata = array(
 			'post_title'  => $post_title,
 			'post_content' => $post_description,
 			'post_type'   => $this->event_posttype,
-			'post_status' => 'pending',
+			'post_status' => $event_status,
 		);
 		if ( $is_exitsing_event ) {
 			$emeventdata['ID'] = $is_exitsing_event;
 		}
-		if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
-			$emeventdata['post_status'] = $event_args['event_status'];
+		if( empty( $is_exitsing_event ) ){
+			if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
+				$emeventdata['post_status'] = $event_args['event_status'];
+			}
 		}
 
 		if ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable('status') ) {
@@ -122,17 +130,22 @@ class WP_Event_Aggregator_EM {
 			$inserted_event = get_post( $inserted_event_id );
 			if ( empty( $inserted_event ) ) { return '';}
 
-			// Asign event category.
-			$ife_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
-			if ( ! empty( $ife_cats ) ) {
-				foreach ( $ife_cats as $ife_catk => $ife_catv ) {
-					$ife_cats[ $ife_catk ] = (int) $ife_catv;
-				}
+			if( !empty( $is_exitsing_event ) ){
+				$check_category = get_the_terms( $is_exitsing_event, $this->taxonomy );
 			}
-			if ( ! empty( $ife_cats ) ) {
-				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
-					$append = apply_filters('wpea_taxonomy_terms_append', false, $ife_cats, $this->taxonomy, $centralize_array['origin'] );
-					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy, $append );
+			// Asign event category.
+			if( empty( $check_category ) ){
+				$ife_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
+				if ( ! empty( $ife_cats ) ) {
+					foreach ( $ife_cats as $ife_catk => $ife_catv ) {
+						$ife_cats[ $ife_catk ] = (int) $ife_catv;
+					}
+				}
+				if ( ! empty( $ife_cats ) ) {
+					if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
+						$append = apply_filters('wpea_taxonomy_terms_append', false, $ife_cats, $this->taxonomy, $centralize_array['origin'] );
+						wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy, $append );
+					}
 				}
 			}
 
@@ -211,9 +224,10 @@ class WP_Event_Aggregator_EM {
 					update_post_meta( $inserted_event_id, '_event_id', $wpdb->insert_id );
 				}
 			}
-
-			if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
-				$status_changed = $wpdb->update( $wpdb->posts, array( 'post_status' => sanitize_text_field( $event_args['event_status'] ) ), array( 'ID' => $inserted_event_id ) );
+			if( empty( $is_exitsing_event ) ){
+				if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
+					$status_changed = $wpdb->update( $wpdb->posts, array( 'post_status' => sanitize_text_field( $event_args['event_status'] ) ), array( 'ID' => $inserted_event_id ) );
+				}
 			}
 
 			if ( $is_exitsing_event ) {

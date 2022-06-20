@@ -463,7 +463,8 @@ class WP_Event_Aggregator_Ical_Parser {
 				'full_address' => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
 				'url'          => '',
 				'image_url'    => '',
-			);	
+			); 
+		return $event_location;
 		}else{
 			$geo       = $event->getProperty( 'GEO' );
 			$latitude  = isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	

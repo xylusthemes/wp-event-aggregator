@@ -82,8 +82,15 @@ class WP_Event_Aggregator_TEC {
 
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
 		$formated_args = $this->format_event_args_for_tec( $centralize_array );
-		if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
-			$formated_args['post_status'] = $event_args['event_status'];
+		if( !empty( $is_exitsing_event ) ){
+			$event_status = get_post_status( $is_exitsing_event );
+		}else{
+			$event_status = $event_args['event_status'];
+		}
+		if( empty( $is_exitsing_event ) ){
+			if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
+				$formated_args['post_status'] = $event_status;
+			}
 		}
 
 		if ( $is_exitsing_event && is_numeric( $is_exitsing_event ) && $is_exitsing_event > 0 ) {
@@ -176,18 +183,22 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $update_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $update_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
+
+			$check_category = get_the_terms( $update_event_id, $this->taxonomy, false );
 			
 			// Asign event category.
-			$wpea_cats = isset( $event_args['event_cats'] ) ? (array) $event_args['event_cats'] : array();
-			if ( ! empty( $wpea_cats ) ) {
-				foreach ( $wpea_cats as $wpea_catk => $wpea_catv ) {
-					$wpea_cats[ $wpea_catk ] = (int) $wpea_catv;
+			if( empty( $check_category ) ){
+				$wpea_cats = isset( $event_args['event_cats'] ) ? (array) $event_args['event_cats'] : array();
+				if ( ! empty( $wpea_cats ) ) {
+					foreach ( $wpea_cats as $wpea_catk => $wpea_catv ) {
+						$wpea_cats[ $wpea_catk ] = (int) $wpea_catv;
+					}
 				}
-			}
-			if ( ! empty( $wpea_cats ) ) {
-				if ( $importevents->common->wpea_is_updatable('category') ){
-					$append = apply_filters('wpea_taxonomy_terms_append', false, $wpea_cats, $this->taxonomy, $centralize_array['origin'] );
-					wp_set_object_terms( $update_event_id, $wpea_cats, $this->taxonomy, $append );
+				if ( ! empty( $wpea_cats ) ) {
+					if ( $importevents->common->wpea_is_updatable('category') ){
+						$append = apply_filters('wpea_taxonomy_terms_append', false, $wpea_cats, $this->taxonomy, $centralize_array['origin'] );
+						wp_set_object_terms( $update_event_id, $wpea_cats, $this->taxonomy, $append );
+					}
 				}
 			}
 
@@ -233,7 +244,6 @@ class WP_Event_Aggregator_TEC {
 		$event_args  = array(
 			'post_type'             => $this->event_posttype,
 			'post_title'            => $centralize_array['name'],
-			'post_status'           => 'pending',
 			'post_content'          => $centralize_array['description'],
 			'EventStartDate'        => date( 'Y-m-d', $start_time ),
 			'EventStartHour'        => date( 'h', $start_time ),
