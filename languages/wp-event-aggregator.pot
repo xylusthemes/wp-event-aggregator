@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-14T11:35:39+00:00\n"
+"POT-Creation-Date: 2022-06-28T13:17:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -960,7 +960,7 @@ msgid "Please insert Meetup Oauth Key and Secret."
 msgstr ""
 
 #: includes/class-wp-event-aggregator-meetup.php:52
-#: includes/class-wp-event-aggregator-meetup.php:246
+#: includes/class-wp-event-aggregator-meetup.php:247
 msgid "Please insert \"Meetup API key\" Or OAuth key and secret in settings."
 msgstr ""
 
@@ -1681,10 +1681,10 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: wp-event-aggregator.php:225
+#: wp-event-aggregator.php:226
 msgid "Setting"
 msgstr ""
 
-#: wp-event-aggregator.php:230
+#: wp-event-aggregator.php:231
 msgid "Docs"
 msgstr ""
