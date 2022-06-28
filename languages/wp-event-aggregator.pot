@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-14T11:35:39+00:00\n"
+"POT-Creation-Date: 2022-06-28T10:33:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -395,47 +395,47 @@ msgstr ""
 msgid "Once a Month"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:575
+#: includes/class-wp-event-aggregator-common.php:615
 msgid "One-time Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:576
+#: includes/class-wp-event-aggregator-common.php:616
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:630
+#: includes/class-wp-event-aggregator-common.php:670
 msgid "Status"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:635
+#: includes/class-wp-event-aggregator-common.php:675
 msgid "Published"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:638
+#: includes/class-wp-event-aggregator-common.php:678
 msgid "Pending"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:641
+#: includes/class-wp-event-aggregator-common.php:681
 msgid "Draft"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:758
+#: includes/class-wp-event-aggregator-common.php:798
 msgid "The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:773
+#: includes/class-wp-event-aggregator-common.php:813
 msgid "Your current \"WP Event Aggregator Pro\" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:787
+#: includes/class-wp-event-aggregator-common.php:827
 msgid "Available in Pro Add-on."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:787
+#: includes/class-wp-event-aggregator-common.php:827
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1221
+#: includes/class-wp-event-aggregator-common.php:1261
 msgid "Buy Tickets"
 msgstr ""
 
