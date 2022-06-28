@@ -189,6 +189,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ee4.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wpea-plugin-deactivation.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-api.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/parsedown.php';
 
 		// Gutenberg Block
 		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';
