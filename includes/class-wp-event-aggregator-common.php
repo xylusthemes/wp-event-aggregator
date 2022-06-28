@@ -564,6 +564,46 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Display schedule import source 
+	 *
+	 * @since   1.6.5
+	 * @return  void
+	 */
+	function render_import_source( $schedule_eventdata = '' ){
+		if( !empty( $schedule_eventdata['page_username'] ) ){
+			$event_source  = $schedule_eventdata['page_username'];
+			$event_origins = 'Facebook Page ID';
+			$name          = 'page_username';
+		}elseif( !empty( $schedule_eventdata['facebook_group_id'] ) ){
+			$event_source  = $schedule_eventdata['facebook_group_id'];
+			$event_origins = 'Facebook Group ID';
+			$name          = 'facebook_group_id';
+		}elseif( !empty( $schedule_eventdata['meetup_url'] ) ){
+			$event_source  = $schedule_eventdata['meetup_url'];
+			$event_origins = 'Meetup Group URL';
+			$name          = 'meetup_url';
+		}elseif( !empty( $schedule_eventdata['organizer_id'] ) ){
+			$event_source  = $schedule_eventdata['organizer_id'];
+			$event_origins = 'Eventbrite Organizer ID';
+			$name          = 'organizer_id';
+		}elseif( !empty( $schedule_eventdata['ical_url'] ) ){
+			$event_source  = $schedule_eventdata['ical_url'];
+			$event_origins = 'iCal URL';
+			$name          = 'ical_url';
+		}else{
+			$event_source  = '';
+			$event_origins = 'Please create a new schedule after deleting this';
+			$name          = '';
+		}
+		?>
+		<td>
+			<input type="text" name="<?php echo $name; ?>" required="required" value="<?php echo $event_source; ?>">
+			<span><?php echo $event_origins; ?></span>
+		</td>
+		<?php
+	}
+
+	/**
 	 * Render import type, one time or scheduled
 	 *
 	 * @since   1.0.0
