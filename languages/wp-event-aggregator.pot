@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-14T11:35:39+00:00\n"
+"POT-Creation-Date: 2022-07-08T05:01:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -1047,6 +1047,10 @@ msgstr ""
 
 #: templates/admin/admin-sidebar.php:24
 msgid "Custom WordPress Development Services"
+msgstr ""
+
+#: templates/admin/admin-sidebar.php:25
+msgid "From small blog to complex web apps, we push the limits of what's possible with WordPress."
 msgstr ""
 
 #: templates/admin/admin-sidebar.php:27
