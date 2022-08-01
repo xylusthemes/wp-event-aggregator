@@ -169,7 +169,7 @@ class WP_Event_Aggregator{
 			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';	
 		}		
 		if( !class_exists( 'vcalendar' ) ){
-			require_once WPEA_PLUGIN_DIR . 'includes/lib/iCalcreator/iCalcreator.php';
+			require_once WPEA_PLUGIN_DIR . 'includes/lib/icalcreator/autoload.php';
 		}
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-cpt.php';
 
