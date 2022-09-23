@@ -28,7 +28,7 @@ WP Event Aggregator works as a stand-alone as well as add-on plugin with leading
 
 **Import Events into following plugins**
 
-* [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/)
+* [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/) - supported with the latest version 6.0. 
 * [Events manager](https://wordpress.org/plugins/events-manager/)
 * [Event Organiser](https://wordpress.org/plugins/event-organiser/)
 * [EventON](https://codecanyon.net/item/eventon-wordpress-event-calendar-plugin/1211017)
