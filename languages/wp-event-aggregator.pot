@@ -1049,6 +1049,10 @@ msgstr ""
 msgid "Custom WordPress Development Services"
 msgstr ""
 
+#: templates/admin/admin-sidebar.php:25
+msgid "From small blog to complex web apps, we push the limits of what's possible with WordPress."
+msgstr ""
+
 #: templates/admin/admin-sidebar.php:27
 msgid "Hire Us"
 msgstr ""
