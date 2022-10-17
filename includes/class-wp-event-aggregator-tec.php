@@ -330,10 +330,13 @@ class WP_Event_Aggregator_TEC {
 	 */
 	public function get_organizer_args( $centralize_org_array ) {
 
-		if ( !isset( $centralize_org_array['ID'] ) ) {
-			return null;
+		$organizer_id = isset( $centralize_org_array['ID'] ) ? $centralize_org_array['ID'] : '';
+		if( !empty( $organizer_id ) && $organizer_id != 'noreply@facebookmail.com' ){
+			$existing_organizer = $this->get_organizer_by_id( $organizer_id );
 		}
-		$existing_organizer = $this->get_organizer_by_id( $centralize_org_array['ID'] );
+		if( empty( $existing_organizer ) ){
+			$existing_organizer = $this->get_organizer_by_name( $centralize_org_array['name'] );
+		}
 		if ( $existing_organizer && is_numeric( $existing_organizer ) && $existing_organizer > 0 ) {
 			return array(
 				'OrganizerID' => $existing_organizer,
@@ -349,6 +352,7 @@ class WP_Event_Aggregator_TEC {
 
 		if ( $create_organizer ) {
 			update_post_meta( $create_organizer, 'wpea_event_organizer_id', $centralize_org_array['ID'] );
+			update_post_meta( $create_organizer, 'wpea_event_organizer_name', $centralize_org_array['name'] );
 			return array(
 				'OrganizerID' => $create_organizer,
 			);
@@ -418,6 +422,28 @@ class WP_Event_Aggregator_TEC {
 			'post_type' => $this->oraganizer_posttype,
 			'meta_key' => 'wpea_event_organizer_id',
 			'meta_value' => $organizer_id,
+			'suppress_filters' => false,
+		) );
+
+		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
+			return $existing_organizer[0]->ID;
+		}
+		return false;
+	}
+
+	/**
+	 * Check for Existing TEC Organizer
+	 *
+	 * @since    1.0.0
+	 * @param int $organizer_id Organizer id.
+	 * @return int/boolean
+	 */
+	public function get_organizer_by_name( $organizer_name ) {
+		$existing_organizer = get_posts( array(
+			'posts_per_page' => 1,
+			'post_type' => $this->oraganizer_posttype,
+			'meta_key' => 'wpea_event_organizer_name',
+			'meta_value' => $organizer_name,
 			'suppress_filters' => false,
 		) );
 
