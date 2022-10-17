@@ -332,7 +332,9 @@ class WP_Event_Aggregator_TEC {
 
 		$organizer_id = isset( $centralize_org_array['ID'] ) ? $centralize_org_array['ID'] : '';
 		if( !empty( $organizer_id ) && $organizer_id != 'noreply@facebookmail.com' ){
-			$existing_organizer = $this->get_organizer_by_id( $organizer_id );
+			if( $organizer_id != 'noreply@facebookmail_com' ){
+				$existing_organizer = $this->get_organizer_by_id( $organizer_id );
+			}
 		}
 		if( empty( $existing_organizer ) ){
 			$existing_organizer = $this->get_organizer_by_name( $centralize_org_array['name'] );
@@ -370,6 +372,9 @@ class WP_Event_Aggregator_TEC {
 	public function get_venue_args( $venue ) {
 		global $importevents; 
 
+		if( empty( $venue ) ){
+			return false;
+		}
 		$venue_id = !empty( $venue['ID'] ) ? $venue['ID'] : '';
 		if( !empty( $venue['ID'] ) ){
 			$existing_venue = $this->get_venue_by_id( $venue_id );
