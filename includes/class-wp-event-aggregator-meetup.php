@@ -130,6 +130,7 @@ class WP_Event_Aggregator_Meetup {
 			return false;
 		}
 
+		$parsedown         = new ParsedownWpea();
 		$timezone          = isset( $meetup_event['timezone'] ) ? $meetup_event['timezone'] : '';
 		$start             = isset( $meetup_event['dateTime'] ) ? $meetup_event['dateTime'] : ''; 
 		$end               = isset( $meetup_event['endTime'] ) ? $meetup_event['endTime'] : '';
@@ -138,7 +139,7 @@ class WP_Event_Aggregator_Meetup {
 		$event_name        = isset( $meetup_event['title']) ? sanitize_text_field( $meetup_event['title'] ) : '';
 		$event_url         = isset( $meetup_event['eventUrl'] ) ? $meetup_event['eventUrl'] : '';
 		$image_url         = isset( $meetup_event['imageUrl'] ) ? $meetup_event['imageUrl'] : '';
-		$event_description = isset( $meetup_event['description'] ) ? $meetup_event['description'] : '';
+		$event_description = isset( $meetup_event['description'] ) ? $parsedown->text($meetup_event['description']) : '';
 		$shortDescription  = isset( $meetup_event['shortDescription'] ) ? $meetup_event['shortDescription'] : '';
 		$status            = isset( $meetup_event['status'] ) ? $meetup_event['status'] : '';
 		$isOnline          = isset( $meetup_event['isOnline'] ) ? $meetup_event['isOnline'] : '';
