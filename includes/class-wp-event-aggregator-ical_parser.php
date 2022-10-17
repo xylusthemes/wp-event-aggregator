@@ -464,6 +464,7 @@ class WP_Event_Aggregator_Ical_Parser {
 				'url'          => '',
 				'image_url'    => '',
 			);	
+			return $event_location;
 		}else{
 			$geo       = $event->getProperty( 'GEO' );
 			$latitude  = isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
