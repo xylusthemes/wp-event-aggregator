@@ -9,9 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-09-09T17:59:02+00:00\n"
+"POT-Creation-Date: 2022-10-17T07:57:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.7.0\n"
 "X-Domain: wp-event-aggregator\n"
 
 #. Plugin Name of the plugin
@@ -732,8 +732,8 @@ msgstr ""
 #: includes/class-wp-event-aggregator-eventbrite.php:56
 #: includes/class-wp-event-aggregator-eventbrite.php:69
 #: includes/class-wp-event-aggregator-eventbrite.php:93
-#: includes/class-wp-event-aggregator-tec.php:153
-#: includes/class-wp-event-aggregator-tec.php:213
+#: includes/class-wp-event-aggregator-tec.php:168
+#: includes/class-wp-event-aggregator-tec.php:233
 msgid "Something went wrong, please try again."
 msgstr ""
 
