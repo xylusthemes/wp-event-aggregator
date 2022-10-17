@@ -81,14 +81,25 @@ class WP_Event_Aggregator_TEC {
 		global $importevents;
 
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
-		$formated_args = $this->format_event_args_for_tec( $centralize_array );
-		if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
-			$formated_args['post_status'] = $event_args['event_status'];
+		if( function_exists( 'tribe_events' ) ){
+			$formated_args = $this->format_event_args_for_tec_orm( $centralize_array );
+			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
+				$formated_args['status'] = $event_args['event_status'];
+			}
+		}else{
+			$formated_args = $this->format_event_args_for_tec( $centralize_array );
+			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
+				$formated_args['post_status'] = $event_args['event_status'];
+			}
 		}
 
 		if ( $is_exitsing_event && is_numeric( $is_exitsing_event ) && $is_exitsing_event > 0 ) {
 			if ( ! $importevents->common->wpea_is_updatable('status') ) {
-				$formated_args['post_status'] = get_post_status( $is_exitsing_event );
+				if( function_exists( 'tribe_events' ) ){
+					$formated_args['status'] = get_post_status( $is_exitsing_event );
+				} else {
+					$formated_args['post_status'] = get_post_status( $is_exitsing_event );
+				}
 			}
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
@@ -118,7 +129,11 @@ class WP_Event_Aggregator_TEC {
 	public function create_event( $centralize_array = array(), $formated_args = array(), $event_args = array() ) {
 		// Create event using TEC advanced functions.
 		global $importevents;
-		$new_event_id = tribe_create_event( $formated_args );
+		if( function_exists( 'tribe_events' ) ){
+			$new_event_id = tribe_events()->set_args( $formated_args )->create()->ID;
+		}else{
+			$new_event_id = tribe_create_event( $formated_args );
+		}
 		if ( $new_event_id ) {
 			update_post_meta( $new_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $new_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
@@ -169,7 +184,12 @@ class WP_Event_Aggregator_TEC {
 		// Update event using TEC advanced functions.
 		global $importevents;
 
-		$update_event_id =  tribe_update_event( $event_id, $formated_args );
+		if( function_exists( 'tribe_events' ) ){
+			$update_event_id = tribe_events()->where( 'id', $event_id )->set_args( $formated_args )->save();
+			$update_event_id = $event_id;
+		}else{
+			$update_event_id = tribe_update_event( $event_id, $formated_args );
+		}
 		if ( $update_event_id ) {
 			update_post_meta( $update_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $update_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
@@ -217,10 +237,48 @@ class WP_Event_Aggregator_TEC {
 
 
 	/**
+	 * Format events arguments as per TEC ORM
+	 *
+	 * @since    1.0.0
+	 * @param array $centralize_array WP Events event.
+	 * @return array
+	 */
+	public function format_event_args_for_tec_orm( $centralize_array ) {
+
+		if ( empty( $centralize_array ) ) {
+			return;
+		}
+		$start_time = $centralize_array['starttime_local'];
+		$end_time   = $centralize_array['endtime_local'];
+		$timezone   = isset( $centralize_array['timezone'] ) ? $centralize_array['timezone'] : 'UTC'; 
+		$event_args = array(
+			'title'             => $centralize_array['name'],
+			'post_content'      => $centralize_array['description'],
+			'status'            => 'pending',
+			'url'               => $centralize_array['url'],
+			'timezone'          => $timezone,
+			'start_date'        => date( 'Y-m-d H:i:s', $start_time ),
+			'end_date'          => date( 'Y-m-d H:i:s', $end_time ),
+		);
+
+		if ( array_key_exists( 'organizer', $centralize_array ) ) {
+			$organizer               = $this->get_organizer_args( $centralize_array['organizer'] );      
+			$event_args['organizer'] = $organizer['OrganizerID'];
+		}
+
+		if ( array_key_exists( 'location', $centralize_array ) ) {
+			$venue               = $this->get_venue_args( $centralize_array['location'] );
+			$event_args['venue'] = $venue['VenueID'];
+		}
+		return $event_args;
+	}
+
+
+	/**
 	 * Format events arguments as per TEC
 	 *
 	 * @since    1.0.0
-	 * @param array $centralize_array Eventbrite event.
+	 * @param array $centralize_array WP Events event.
 	 * @return array
 	 */
 	public function format_event_args_for_tec( $centralize_array ) {
