@@ -284,8 +284,8 @@ class WP_Event_Aggregator_EM {
 			$city 	 = isset( $venue['city'] ) ? $venue['city'] : '';
 			$state   = isset( $venue['state'] ) ? $venue['state'] : '';
 			$zip     = isset( $venue['zip'] ) ? $venue['zip'] : '';
-			$lat     = isset( $venue['lat'] ) ? round( $venue['lat'], 6 ) : 0.000000;
-			$lon     = isset( $venue['long'] ) ? round( $venue['long'], 6 ) : 0.000000;
+			$lat     = !empty( $venue['lat'] ) ? round( $venue['lat'], 6 ) : 0.000000;
+			$lon     = !empty( $venue['long'] ) ? round( $venue['long'], 6 ) : 0.000000;
 
 			// Save metas.
 			update_post_meta( $location_id, '_blog_id', $blog_id );
