@@ -294,6 +294,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		if( !empty( $ical_wp_images ) && !empty( $ical_wp_images[1]) ){
 			$event_image =  $ical_wp_images[1];
 		}
+		$timezone = $calendar_timezone;
 
 		// Only for facebook ical imports.
 		$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
@@ -312,10 +313,10 @@ class WP_Event_Aggregator_Ical_Parser {
 						$end_time    = $event_data['end_time'];
 					}
 
-					if( empty( $event_data['start_time'] ) ){
+					if( isset( $event_data['timezone'] ) && empty( $event_data['start_time'] ) ){
 						$start_time = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
 					}
-					if( empty( $event_data['end_time'] ) ){
+					if( isset( $event_data['timezone'] ) && empty( $event_data['end_time'] ) ){
 						$end_time   = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
 					}
 				}

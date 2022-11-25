@@ -168,7 +168,7 @@ class WP_Event_Aggregator{
 		}else{
 			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';	
 		}		
-		if( !class_exists( 'vcalendar' ) ){
+		if( !class_exists( 'Kigkonsult\Icalcreator\Vcalendar' ) ){
 			require_once WPEA_PLUGIN_DIR . 'includes/lib/icalcreator/autoload.php';
 		}
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-cpt.php';
