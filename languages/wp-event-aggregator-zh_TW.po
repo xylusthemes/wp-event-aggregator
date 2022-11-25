@@ -1,0 +1,1749 @@
+# Translation of Plugins - WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress - Stable (latest release) in Chinese (Taiwan)
+# This file is distributed under the same license as the Plugins - WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: +0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"Language: zh_TW\n"
+"Project-Id-Version: Plugins - WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress - Stable (latest release)\n"
+
+#: templates/admin/meetup-import-events.php:71
+msgid "Insert meetup group url ( Eg. -<span class=\"borderall\">https://www.meetup.com/xxxx-xxx-xxxx/</span>  )."
+msgstr "插入 meetup 組網址（例如 -<span class=\"borderall\">https://www.meetup.com/xxxx-xxx-xxxx/</span> ）."
+
+#: templates/admin/meetup-import-events.php:58
+msgid "Insert meetup event ID ( Eg. https://www.meetup.com/xxxx-xxx-xxxx/events/<span class=\"borderall\">xxxxxxxxx</span>  )."
+msgstr "輸入 meetup 活動 ID ( 例如. https://www.meetup.com/xxxx-xxx-xxxx/events/<span class=\"borderall\">xxxxxxxxx</span>  )."
+
+#: templates/admin/meetup-import-events.php:53
+msgid "One event ID per line, ( Eg. Event ID for https://www.meetup.com/xxxx-xxx-xxxx/events/xxxxxxxxx is <span class=\"borderall\">xxxxxxxxx</span> ).<br> "
+msgstr "每行一個活動 ID, ( 例如.  https://www.meetup.com/xxxx-xxx-xxxx/events/xxxxxxxxx 的活動 ID 是 <span class=\"borderall\">xxxxxxxxx</span> ).<br> "
+
+#: templates/admin/meetup-import-events.php:47
+msgid "Meetup Event ID"
+msgstr "Meetup 活動 ID"
+
+#: templates/admin/meetup-import-events.php:40
+msgid "Select Event source. 1. by Event ID, 2. by Group URL"
+msgstr "選擇活動來源。 1. 按活動 ID，2. 按群組網址"
+
+#: templates/admin/meetup-import-events.php:37
+msgid "Group URL"
+msgstr "群組網址"
+
+#: includes/class-wp-event-aggregator-meetup.php:93
+msgid "Please insert valid Meetup Event ID."
+msgstr "請插入有效的 Meetup 活動 ID."
+
+#: includes/class-wp-event-aggregator-list-table.php:559
+msgid "Clear Import History"
+msgstr "清除匯入歷史"
+
+#: includes/class-wp-event-aggregator-list-table.php:556
+msgid "Warning!! Are you sure to delete all these import history? Import history will be permanatly deleted."
+msgstr "警告！！您確定要刪除這些匯入歷史記錄嗎？匯入歷史記錄將被永久刪除."
+
+#: includes/class-wp-event-aggregator-cpt.php:414
+msgid "Source Link"
+msgstr "來源連結"
+
+#: includes/class-wp-event-aggregator-cpt.php:407
+msgid "Event Source Link"
+msgstr "活動來源連結"
+
+#: templates/admin/wp-event-aggregator-shortcode.php:12
+msgid "WP Event Aggregator Shortcodes"
+msgstr "WP Event Aggregato 短代碼"
+
+#: templates/admin/eventbrite-import-events.php:40
+msgid "Select Event source. 1. by Event ID, 2. by Oraganizer ID."
+msgstr "選擇活動來源。 1. 按活動 ID，2. 按主辦方 ID."
+
+#: templates/admin/wp-event-aggregator-settings.php:447
+msgid "Slug for the event."
+msgstr "活動別名  Slug."
+
+#: templates/admin/wp-event-aggregator-settings.php:439
+msgid "Event Slug"
+msgstr "活動別名 Slug"
+
+#: templates/admin/wp-event-aggregator-settings.php:59
+msgid "Popup Checkout Widget (Display your checkout as a modal popup)"
+msgstr "彈出結帳小工具(將您的結帳顯示為模式彈出視窗)"
+
+#: templates/admin/wp-event-aggregator-settings.php:57
+msgid "Non-Modal Checkout"
+msgstr "非模式結帳"
+
+#: templates/admin/wp-event-aggregator-settings.php:32
+msgid "Eventbrite Private token"
+msgstr "Eventbrite Private token"
+
+#: includes/class-wp-event-aggregator-common.php:1221
+msgid "Buy Tickets"
+msgstr "購買門票"
+
+#: includes/class-wp-event-aggregator-admin.php:168
+msgid "Shortcodes"
+msgstr "短代碼"
+
+#: includes/class-wp-event-aggregator-cpt.php:350
+msgid "Longitude"
+msgstr "經度"
+
+#: includes/class-wp-event-aggregator-list-table.php:697
+msgid "Shortcode"
+msgstr "短代碼"
+
+#: includes/class-wp-event-aggregator-list-table.php:696
+msgid "Title"
+msgstr "標題"
+
+#: includes/class-wp-event-aggregator-list-table.php:695
+msgid "ID"
+msgstr "ID"
+
+#: includes/class-wpea-plugin-deactivation.php:258
+msgid "If you have a moment, please let us know why you are deactivating:"
+msgstr "如果您有時間，請告訴我們您停用的原因:"
+
+#: includes/class-wpea-plugin-deactivation.php:233
+#: includes/class-wpea-plugin-deactivation.php:271
+msgid "Write your query here"
+msgstr "在這邊寫下您的查詢"
+
+#: includes/class-wpea-plugin-deactivation.php:230
+msgid "Can you please let us know more about your requirement"
+msgstr "您能告訴我們更多關於您的要求嗎"
+
+#: includes/class-wpea-plugin-deactivation.php:227
+msgid "Can you please let us know more about the feature you want"
+msgstr "您能告訴我們更多關於您想要的功能嗎"
+
+#: includes/class-wpea-plugin-deactivation.php:224
+msgid "Can you please let us know which plugin you found helpful"
+msgstr "您能告訴我們您覺得哪個外掛挺有用的嗎"
+
+#: includes/class-wpea-plugin-deactivation.php:221
+msgid "Can you please let us know about the bug/issue in detail?"
+msgstr "您能否詳細告訴我們有關錯誤/問題的詳細資訊?"
+
+#: includes/class-wpea-plugin-deactivation.php:217
+msgid "Can you let us know the reason for deactivation (Required)"
+msgstr "您能否告訴我們停用的原因 (必填)"
+
+#: includes/class-wpea-plugin-deactivation.php:214
+msgid "Finding it confusing? let us know so that we can improve the interface"
+msgstr "感到令人困惑？請讓我們知道，以便我們改進操作介面"
+
+#: includes/class-wpea-plugin-deactivation.php:197
+msgid "Skip"
+msgstr "跳過"
+
+#: includes/class-wpea-plugin-deactivation.php:169
+msgid "Submit & Deactivate"
+msgstr "傳送並停用"
+
+#: includes/class-wpea-plugin-deactivation.php:56
+msgid "Other reasons"
+msgstr "其他原因"
+
+#: includes/class-wpea-plugin-deactivation.php:55
+msgid "It's temporary deactivatation, for debug an issue"
+msgstr "這是臨時停用，用於偵錯用途"
+
+#: includes/class-wpea-plugin-deactivation.php:54
+msgid "Plugin didn't work as expected"
+msgstr "外掛運作不如預期"
+
+#: includes/class-wpea-plugin-deactivation.php:53
+msgid "It's not what I was looking for"
+msgstr "這不是我想要的"
+
+#: includes/class-wpea-plugin-deactivation.php:52
+msgid "Plugin has bugs and it's not working"
+msgstr "外掛出現錯誤沒有正常運作"
+
+#: includes/class-wpea-plugin-deactivation.php:51
+msgid "The plugin is great, but I need specific feature that you don't support"
+msgstr "這個外掛很棒，但沒有我想要的功能"
+
+#: includes/class-wpea-plugin-deactivation.php:50
+msgid "I found a better plugin"
+msgstr "我找到更好的外掛"
+
+#: includes/class-wpea-plugin-deactivation.php:49
+msgid "I couldn't understand how to make it work"
+msgstr "我不明白如何讓它運作"
+
+#: templates/admin/wp-event-aggregator-settings.php:468
+msgid "Choose event display time format for front-end."
+msgstr "選擇前端的活動顯示時間格式."
+
+#: templates/admin/wp-event-aggregator-settings.php:465
+msgid "WordPress Default"
+msgstr "WordPress 預設"
+
+#: templates/admin/wp-event-aggregator-settings.php:464
+msgid "24 Hours"
+msgstr "24小時制"
+
+#: templates/admin/wp-event-aggregator-settings.php:463
+msgid "12 Hours"
+msgstr "12小時制"
+
+#: templates/admin/wp-event-aggregator-settings.php:456
+msgid "Event Display Time Format"
+msgstr "活動顯示時間格式"
+
+#: templates/admin/wp-event-aggregator-support.php:66
+msgid "Review Us on WP.org"
+msgstr "在 WP.org 上幫我們留個評論"
+
+#: templates/admin/wp-event-aggregator-support.php:65
+msgid "Your Review is very important to us as it helps us to grow more."
+msgstr "您的評論對我們非常重要，因為它能幫助我們成長."
+
+#: templates/admin/wp-event-aggregator-support.php:61
+#: templates/admin/wp-event-aggregator-support.php:64
+msgid "Like The Plugin?"
+msgstr "喜歡這個外掛?"
+
+#: templates/admin/wp-event-aggregator-support.php:56
+msgid "Connect Our Service"
+msgstr "連接我們的服務"
+
+#: templates/admin/wp-event-aggregator-support.php:55
+msgid "We would Love to hear your Integration and Customization Ideas."
+msgstr "我們很想聽到您對於整合與客製化的點子."
+
+#: templates/admin/wp-event-aggregator-support.php:51
+#: templates/admin/wp-event-aggregator-support.php:54
+msgid "Require Customization?"
+msgstr "需要客製化?"
+
+#: templates/admin/wp-event-aggregator-support.php:46
+msgid "Report to GitHub"
+msgstr "回報至 GitHub"
+
+#: templates/admin/wp-event-aggregator-support.php:45
+msgid "Report any Bug that you Discovered, Get Instant Solutions."
+msgstr "回報您發現的任何錯誤，獲取即時解決方案."
+
+#: templates/admin/wp-event-aggregator-support.php:41
+#: templates/admin/wp-event-aggregator-support.php:44
+msgid "Found Any Bugs?"
+msgstr "發現任何錯誤?"
+
+#: templates/admin/wp-event-aggregator-support.php:36
+msgid "Contact Support"
+msgstr "聯繫技術支援"
+
+#: templates/admin/wp-event-aggregator-support.php:35
+msgid "Our EXPERT Support Team is always ready to Help you out."
+msgstr "我們的專業支援團隊隨時準備為您提供協助."
+
+#: templates/admin/wp-event-aggregator-support.php:31
+#: templates/admin/wp-event-aggregator-support.php:34
+msgid "Need Any Assistance?"
+msgstr "需要任何協助嗎?"
+
+#: templates/admin/wp-event-aggregator-support.php:26
+msgid "Plugin Documentation"
+msgstr "外掛說明文件"
+
+#: templates/admin/wp-event-aggregator-support.php:25
+msgid "We have documentation of how to import facebook events."
+msgstr "我們有關於如何匯入 facebook 活動的說明文件."
+
+#: templates/admin/wp-event-aggregator-support.php:21
+#: templates/admin/wp-event-aggregator-support.php:24
+msgid "Looking for Something?"
+msgstr "找些什麼東西?"
+
+#: templates/admin/wp-event-aggregator-settings.php:483
+msgid "Choose accent color for front-end event grid and event widget."
+msgstr "為前端活動網格和活動小工具選擇強調色."
+
+#: templates/admin/wp-event-aggregator-settings.php:475
+msgid "Accent Color"
+msgstr "強調色"
+
+#: templates/admin/wp-event-aggregator-settings.php:431
+msgid "Check to enable direct event link to Event Source instead of event detail page."
+msgstr "勾選以啟用直接導向活動來源，而不是活動詳細資訊頁面."
+
+#: templates/admin/wp-event-aggregator-settings.php:423
+msgid "Direct link to Event Source"
+msgstr "直接連結到活動來源"
+
+#: templates/admin/wp-event-aggregator-settings.php:207
+msgid " - OR -"
+msgstr " - 或者 -"
+
+#: templates/admin/wp-event-aggregator-settings.php:200
+msgid "Insert your meetup.com OAuth Secret you can get it from"
+msgstr "輸入您的 meetup.com OAuth 密鑰，您可以從這邊獲取"
+
+#: templates/admin/wp-event-aggregator-settings.php:195
+msgid "Meetup OAuth Secret"
+msgstr "Meetup OAuth 密鑰"
+
+#: templates/admin/wp-event-aggregator-settings.php:188
+msgid "Insert your meetup.com OAuth Key you can get it from"
+msgstr "輸入您的 meetup.com OAuth 密鑰，您可以在這找到它自"
+
+#: templates/admin/wp-event-aggregator-settings.php:183
+msgid "Meetup OAuth Key"
+msgstr "Meetup OAuth 金鑰"
+
+#: templates/admin/wp-event-aggregator-settings.php:166
+msgid "Please connect your meetup account for import meetup events."
+msgstr "請連接您的 meetup 帳號以進行匯入 meetup 活動."
+
+#: templates/admin/wp-event-aggregator-settings.php:163
+msgid "Connect"
+msgstr "連接"
+
+#: templates/admin/wp-event-aggregator-settings.php:155
+msgid "Remove Connection"
+msgstr "移除連接"
+
+#: templates/admin/wp-event-aggregator-settings.php:150
+msgid "Connected as: %s"
+msgstr "連接為: %s"
+
+#: templates/admin/wp-event-aggregator-settings.php:140
+msgid "Meetup Authorization"
+msgstr "Meetup 授權"
+
+#: templates/admin/wp-event-aggregator-settings.php:134
+msgid "Connect your Meetup Account"
+msgstr "連接您的 Meetup 帳號"
+
+#: templates/admin/wp-event-aggregator-settings.php:127
+msgid "<strong>Set Redirect URI : </strong>"
+msgstr "<strong>設定重新導向 URI ：</strong>"
+
+#: templates/admin/wp-event-aggregator-settings.php:124
+msgid "<strong>Set the Application Website as : </strong>"
+msgstr "<strong>將應用程式網站設定為：</strong>"
+
+#: templates/admin/wp-event-aggregator-settings.php:119
+msgid "to create new OAuth Consumer"
+msgstr "以建立新的 OAuth Consumer"
+
+#: templates/admin/wp-event-aggregator-settings.php:119
+msgid "You have to create a Meetup OAuth Consumer before filling the following details."
+msgstr "在填寫以下詳細資訊之前，您必須建立一個 Meetup OAuth Consumer."
+
+#: templates/admin/wp-event-aggregator-settings.php:113
+msgid "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your meetup account."
+msgstr "您的網站上似乎沒有啟用 HTTPS。請啟用它。授權您的 meetup 帳號需要 HTTPS."
+
+#: includes/class-wp-event-aggregator-admin.php:583
+msgid "Something went wrong during authorization. Please try again."
+msgstr "授權階段出現問題。請再試一次."
+
+#: includes/class-wp-event-aggregator-admin.php:581
+msgid "Please insert Meetup Auth Key and Secret."
+msgstr "請輸入 Meetup Auth 金鑰與密鑰."
+
+#: includes/class-wp-event-aggregator-admin.php:579
+msgid "Authorized Successfully."
+msgstr "授權成功."
+
+#: includes/class-wp-event-aggregator-admin.php:546
+#: includes/class-wp-event-aggregator-admin.php:553
+msgid "No data found"
+msgstr "沒有找到資料"
+
+#: includes/class-wp-event-aggregator-admin.php:504
+msgid "Created/Updated"
+msgstr "已建立/已更新"
+
+#: includes/class-wp-event-aggregator-list-table.php:496
+msgid "View Imported Events"
+msgstr "檢視匯入的活動"
+
+#: includes/class-wp-event-aggregator-list-table.php:346
+#: includes/class-wp-event-aggregator-list-table.php:467
+msgid "No events are imported."
+msgstr "並未匯入任何活動."
+
+#: includes/class-wp-event-aggregator-list-table.php:342
+msgid "Last Import Stats: "
+msgstr "上次匯入狀態: "
+
+#: includes/class-wp-event-aggregator-list-table.php:136
+msgid "Stats: "
+msgstr "狀態: "
+
+#: includes/class-wp-event-aggregator-list-table.php:123
+msgid "Import is running in Background"
+msgstr "匯入正在背景執行"
+
+#: includes/class-wp-event-aggregator-list-table.php:91
+msgid "Import Into"
+msgstr "匯入到"
+
+#: includes/class-wp-event-aggregator-meetup.php:52
+#: includes/class-wp-event-aggregator-meetup.php:245
+msgid "Please insert \"Meetup API key\" Or OAuth key and secret in settings."
+msgstr "請在設定中輸入「Meetup API 密鑰」或 OAuth 密鑰和密鑰."
+
+#: includes/class-wp-event-aggregator-meetup-authorize.php:43
+msgid "Please insert Meetup Oauth Key and Secret."
+msgstr "請輸入 Meetup Oauth 金鑰與密鑰."
+
+#: blocks/wp-events/index.js:207
+msgid "Select End Date"
+msgstr "選擇結束日期"
+
+#: blocks/wp-events/index.js:207
+msgid "Select Start Date"
+msgstr "選擇開始日期"
+
+#: blocks/wp-events/index.js:163
+msgid "End Date"
+msgstr "結束日期"
+
+#: blocks/wp-events/index.js:137
+msgid "Start Date"
+msgstr "開始日期"
+
+#: blocks/wp-events/index.js:127
+msgid "Display past events"
+msgstr "顯示過去的活動"
+
+#: blocks/wp-events/index.js:122
+msgid "Descending"
+msgstr "降序"
+
+#: blocks/wp-events/index.js:121
+msgid "Ascending"
+msgstr "升序"
+
+#: blocks/wp-events/index.js:118
+msgid "Order"
+msgstr "訂單"
+
+#: blocks/wp-events/index.js:101
+msgid "Events per page"
+msgstr "每頁活動"
+
+#: blocks/wp-events/index.js:94
+msgid "Columns"
+msgstr "欄位"
+
+#: blocks/wp-events/index.js:92
+msgid "WP Events Setting"
+msgstr "WP 活動設定"
+
+#: blocks/wp-events/index.js:35
+msgid "wp events"
+msgstr "wp活動"
+
+#: blocks/wp-events/index.js:34
+msgid "WP"
+msgstr "WP"
+
+#: blocks/wp-events/index.js:25
+msgid "Block for Display WP Events"
+msgstr "顯示 WP 活動區塊"
+
+#: templates/admin/wp-event-aggregator-settings.php:284
+msgid "<strong>Set Valid OAuth redirect URI : </strong>"
+msgstr "<strong>設定有效的 OAuth 重新導向 URI：</strong>"
+
+#: templates/admin/wp-event-aggregator-settings.php:281
+msgid "<strong>Set the site url as : </strong>"
+msgstr "<strong>將網站網址設定為：</strong>"
+
+#: templates/admin/wp-event-aggregator-settings.php:271
+msgid "for more information."
+msgstr "了解更多資訊."
+
+#: templates/admin/wp-event-aggregator-settings.php:271
+msgid "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account."
+msgstr "您的網站上似乎沒有啟用 HTTPS。請啟用它。授權您的 Facebook 帳號會需要使用到 HTTPS."
+
+#: includes/class-wp-event-aggregator-fb-authorize.php:54
+#: includes/class-wp-event-aggregator-fb-authorize.php:121
+#: includes/class-wp-event-aggregator-meetup-authorize.php:46
+#: includes/class-wp-event-aggregator-meetup-authorize.php:121
+msgid "You have not access to doing this operations."
+msgstr "您無權執行此操作."
+
+#: includes/class-wp-event-aggregator-fb-authorize.php:50
+#: includes/class-wp-event-aggregator-fb-authorize.php:117
+msgid "Please insert Facebook App ID and Secret."
+msgstr "請輸入 Facebook App ID 和密鑰."
+
+#: includes/class-wp-event-aggregator-common.php:773
+msgid "Your current \"WP Event Aggregator Pro\" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly."
+msgstr "您當前的“WP Event Aggregator Pro”外掛與免費外掛不相容。請升級最新版本的專業版以完美匯入活動."
+
+#: templates/admin/wp-event-aggregator-settings.php:561
+msgid "Please authorize your facebook account for import facebook events."
+msgstr "請授權您的 facebook 帳號以匯入 facebook 活動."
+
+#: templates/admin/wp-event-aggregator-settings.php:531
+msgid "Authorize your Facebook Account"
+msgstr "授權您的 Facebook 帳號"
+
+#: templates/admin/facebook-import-events.php:53
+msgid "<strong>3. Facebook Group</strong> (Import events from facebook group), <strong>4. My Events</strong> (Import events which you have marked intrested or going on facebook, this also include your events on facebook)"
+msgstr "<strong>3.  Facebook 社團</strong>（從 facebook 社團匯入活動），<strong>4. 我的活動</strong>(匯入您標記為感興趣或在 facebook 上進行的活動，這也包括您在 facebook 上的活動)"
+
+#: templates/admin/facebook-import-events.php:44
+msgid "My Events"
+msgstr "我的活動"
+
+#: templates/admin/eventbrite-import-events.php:64
+msgid "Insert eventbrite event IDs, One event ID per line ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class=\"borderall\">12265498440</span>  )."
+msgstr "輸入 eventbrite 活動 ID，每行一個活動 ID ( 例如 https://www.eventbrite.com/e/event-import-with-wordpress-<span class=\"borderall\">12265498440</span>   )."
+
+#: templates/wpea-event-meta.php:118
+msgid "Organizer's Website"
+msgstr "主辦方網站"
+
+#: templates/admin/wp-event-aggregator-settings.php:554
+msgid " ( Authorized as: %s )"
+msgstr " ( 授權為：%s )"
+
+#: templates/admin/wp-event-aggregator-settings.php:546
+msgid "Reauthorize"
+msgstr "重新授權"
+
+#: templates/admin/eventbrite-import-events.php:49
+msgid "Eventbrite Event IDs"
+msgstr "Eventbrite 活動 ID"
+
+#: templates/admin/admin-sidebar.php:35
+msgid "Get Premium Add-on"
+msgstr "獲取 Premium 外掛"
+
+#: includes/class-wp-event-aggregator-manage-import.php:361
+msgid "Scheduled import has been updated successfully."
+msgstr "排程匯入已成功更新."
+
+#: includes/class-wp-event-aggregator-admin.php:530
+#: includes/class-wp-event-aggregator-list-table.php:75
+msgid "Edit"
+msgstr "編輯"
+
+#: includes/class-wp-event-aggregator-facebook.php:99
+msgid "Please insert valid Facebook Group URL or ID."
+msgstr "請輸入有效的 Facebook 社團網址或 ID."
+
+#: includes/class-wp-event-aggregator-eventbrite.php:133
+#: includes/class-wp-event-aggregator-eventbrite.php:143
+msgid "Something went wrong with Eventbrite event ID: %s, please try again."
+msgstr "Eventbrite 活動 ID 出現問題：%s，請再試一次."
+
+#: includes/class-wp-event-aggregator-eventbrite.php:124
+msgid "Please provide valid Eventbrite event ID: %s."
+msgstr "請提供有效的 Eventbrite 活動 ID: %s."
+
+#: includes/class-wp-event-aggregator-common.php:758
+msgid "The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>."
+msgstr "存取權杖已失效，因為使用者更改了密碼或 Facebook 出於安全原因更改了會話階段。您能否從 <strong>WP Event Aggregator</strong> > <strong>設定</strong> 授權/重新授權您的 Facebook 帳號."
+
+#: includes/class-wp-event-aggregator-common.php:148
+msgid "Event Type 2:"
+msgstr "活動類型 2:"
+
+#: includes/class-wp-event-aggregator-common.php:125
+msgid "Event Type:"
+msgstr "活動類型:"
+
+#: includes/class-wp-event-aggregator-cpt.php:850
+msgid "No Events are found."
+msgstr "未找到任何活動."
+
+#: includes/class-wp-event-aggregator-common.php:207
+msgid "Event Espresso (EE4)"
+msgstr "Event Espresso (EE4)"
+
+#: templates/admin/wp-event-aggregator-settings.php:544
+msgid "Authorize"
+msgstr "授權"
+
+#: templates/admin/wp-event-aggregator-settings.php:537
+msgid "Facebook Authorization"
+msgstr "Facebook 授權"
+
+#: templates/admin/wp-event-aggregator-settings.php:97
+#: templates/admin/wp-event-aggregator-settings.php:254
+#: templates/admin/wp-event-aggregator-settings.php:358
+#: templates/admin/wp-event-aggregator-settings.php:404
+msgid "Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events."
+msgstr "勾選以啟用進階同步，當來源日曆中刪除活動被，這邊的活動也同樣會被刪除。此外，如果來源日曆僅提供即將舉辦發生的活動，它會刪除已舉辦過的活動."
+
+#: templates/admin/wp-event-aggregator-settings.php:81
+#: templates/admin/wp-event-aggregator-settings.php:238
+#: templates/admin/wp-event-aggregator-settings.php:342
+#: templates/admin/wp-event-aggregator-settings.php:388
+msgid "Advanced Synchronization"
+msgstr "進階同步"
+
+#: templates/admin/wp-event-aggregator-settings.php:121
+#: templates/admin/wp-event-aggregator-settings.php:278
+msgid "For detailed step by step instructions "
+msgstr "有關詳細步驟說明 "
+
+#: templates/admin/wp-event-aggregator-settings.php:276
+msgid "to create new Facebook application."
+msgstr "建立新的 Facebook 應用程式."
+
+#: templates/admin/wp-event-aggregator-settings.php:119
+#: templates/admin/wp-event-aggregator-settings.php:122
+#: templates/admin/wp-event-aggregator-settings.php:271
+#: templates/admin/wp-event-aggregator-settings.php:276
+#: templates/admin/wp-event-aggregator-settings.php:279
+msgid "Click here"
+msgstr "點擊這裡"
+
+#: templates/admin/wp-event-aggregator-settings.php:276
+msgid "You have to create a Facebook application before filling the following details."
+msgstr "在填寫以下詳細資訊之前，您必須建立一個 Facebook 應用程式."
+
+#: templates/admin/wp-event-aggregator-settings.php:119
+#: templates/admin/wp-event-aggregator-settings.php:276
+msgid "Note : "
+msgstr "備註 : "
+
+#: templates/admin/facebook-import-events.php:91
+msgid " Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR \"123456789123456\""
+msgstr " 例如，https://www.facebook.com/groups/123456789123456/ 輸入數值 <br/>https://www.facebook.com/groups/123456789123456/ 或 \"123456789123456\""
+
+#: templates/admin/facebook-import-events.php:86
+msgid "Facebook Group URL / Numeric ID to fetch events from"
+msgstr "透過 Facebook 社團網址 / 數字 ID 以獲取活動自"
+
+#: templates/admin/facebook-import-events.php:73
+msgid "Page username / ID to fetch events from"
+msgstr "用來獲取活動的頁面使用者名稱 / ID"
+
+#: templates/admin/facebook-import-events.php:50
+msgid "Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> ( import events belonging to a Facebook page ), 3. Facebook Group ( import events belonging to a Facebook group )."
+msgstr "選擇活動來源。 <strong>1. 透過 Facebook 活動 ID</strong>，<strong>2. Facebook 專頁</strong>（匯入屬於某個 Facebook 頁面的活動），3. Facebook 社團（匯入屬於某個 Facebook 社團的活動）."
+
+#: templates/admin/facebook-import-events.php:43
+msgid "Facebook Group"
+msgstr "臉書社團"
+
+#: templates/admin/facebook-import-events.php:38
+msgid "Facebook Page"
+msgstr "臉書專頁"
+
+#: includes/class-wp-event-aggregator-facebook.php:74
+msgid "Please insert valid Facebook page username."
+msgstr "請輸入有效的 Facebook 頁面使用者名稱."
+
+#: templates/admin/wp-event-aggregator-settings.php:512
+msgid "Delete WP Event Aggregator data like settings, scheduled imports, import history on Uninstall"
+msgstr "移除時一併刪除 WP Event Aggregator 資料，如設定、排程匯入、匯入歷史記錄"
+
+#: templates/admin/wp-event-aggregator-settings.php:504
+msgid "Delete WP Event Aggregator data on Uninstall"
+msgstr "在移除時刪除 WP Event Aggregator 資料"
+
+#: templates/admin/wp-event-aggregator-settings.php:498
+msgid "Check to disable inbuilt event management system."
+msgstr "勾選以停用內建活動管理系統."
+
+#: templates/admin/wp-event-aggregator-settings.php:490
+msgid "Disable WP Events"
+msgstr "停用 WP 活動"
+
+#: templates/admin/wp-event-aggregator-settings.php:414
+msgid "WP Event Aggregator Settings"
+msgstr "WP Event Aggregator 設定"
+
+#: templates/admin/wp-event-aggregator-settings.php:75
+#: templates/admin/wp-event-aggregator-settings.php:232
+#: templates/admin/wp-event-aggregator-settings.php:335
+#: templates/admin/wp-event-aggregator-settings.php:381
+msgid "Not Recommend"
+msgstr "不推薦"
+
+#: templates/admin/ical-import-events.php:75
+msgid "Select date range from which you want to import events. Default startdate is Today"
+msgstr "選擇要從中匯入活動的日期範圍。預設開始日期是今天"
+
+#: templates/wpea-event-meta.php:89 templates/wpea-event-meta.php:90
+msgid "Click to Register"
+msgstr "點擊註冊"
+
+#: includes/class-wp-event-aggregator-list-table.php:145
+msgid "Total imported Events:"
+msgstr "全部已匯入活動:"
+
+#: includes/class-wp-event-aggregator-ical_parser.php:77
+msgid "Please select end date bigger than start date."
+msgstr "請選擇大於開始日期的結束日期."
+
+#: includes/class-wp-event-aggregator-ical.php:120
+msgid "Unable to retrieve content from the provided URL."
+msgstr "無法從提供的 URL 檢索內容."
+
+#: includes/class-wp-event-aggregator-facebook.php:158
+msgid "Please provide valid Facebook event ID: %s."
+msgstr "請提供有效的 Facebook 活動 ID：%s."
+
+#: includes/class-wp-event-aggregator-cpt.php:581
+msgid "Event Origin"
+msgstr "活動來源"
+
+#: includes/class-wp-event-aggregator-common.php:255
+msgid "Invalid image URL"
+msgstr "圖片網址無效"
+
+#: includes/class-wp-event-aggregator-admin.php:426
+msgid "Event Schema / Structured Data: Google Rich Snippet Schema for Event"
+msgstr "活動 Schema/結構化資料：用於活動的 Google Rich Snippet Schema"
+
+#: includes/class-wp-event-aggregator-admin.php:425
+msgid "Facebook Events"
+msgstr "Facebook 活動"
+
+#: templates/admin/wp-event-aggregator-support.php:82
+msgid "Plugins you should try"
+msgstr "您應該嘗試的外掛"
+
+#: templates/admin/wp-event-aggregator-support.php:117
+msgid "Buy Now"
+msgstr "立即購買"
+
+#: templates/admin/wp-event-aggregator-support.php:114
+msgid "Install Now"
+msgstr "立即安裝"
+
+#: templates/admin/wp-event-aggregator-support.php:109
+msgid "Active Installs:"
+msgstr "啟用安裝:"
+
+#: templates/admin/wp-event-aggregator-support.php:105
+msgid "WordPress "
+msgstr "WordPress "
+
+#: templates/admin/wp-event-aggregator-support.php:105
+msgid "Requires:"
+msgstr "需求:"
+
+#: templates/admin/wp-event-aggregator-support.php:101
+msgid "Version:"
+msgstr "版本:"
+
+#: templates/admin/wp-event-aggregator-support.php:17
+msgid "Getting Support"
+msgstr "獲得支援"
+
+#: templates/wpea-event-meta.php:105
+msgid "Organizer"
+msgstr "主辦方"
+
+#: templates/wpea-event-meta.php:53
+msgid "End"
+msgstr "結束"
+
+#: templates/wpea-event-meta.php:50
+msgid "Start"
+msgstr "開始"
+
+#: templates/wpea-event-meta.php:40
+msgid "Time"
+msgstr "時間"
+
+#: templates/wpea-event-meta.php:37
+msgid "Date"
+msgstr "日期"
+
+#: templates/wpea-event-meta.php:32
+msgid "Details"
+msgstr "詳情"
+
+#: includes/class-wp-event-aggregator-manage-import.php:357
+msgid "Import histories are deleted successfully."
+msgstr "成功刪除匯入歷史."
+
+#: includes/class-wp-event-aggregator-manage-import.php:353
+msgid "Import history deleted successfully."
+msgstr "已成功刪除匯入歷史記錄."
+
+#: includes/class-wp-event-aggregator-manage-import.php:349
+msgid "Scheduled import has been run successfully."
+msgstr "排程匯入已成功運行."
+
+#: includes/class-wp-event-aggregator-manage-import.php:213
+msgid "Please insert Eventbrite \"Personal OAuth token\" in settings."
+msgstr "請在設定中插入 Eventbrite「Personal OAuth token」."
+
+#: includes/class-wp-event-aggregator-manage-import.php:46
+msgid "Please provide Import into plugin for Event import."
+msgstr "請為活動匯入提供匯入外掛."
+
+#: includes/class-wp-event-aggregator-list-table.php:522
+msgid "Import Stats"
+msgstr "匯入狀態"
+
+#: includes/class-wp-event-aggregator-list-table.php:521
+msgid "Import Date"
+msgstr "匯入日期"
+
+#: includes/class-wp-event-aggregator-list-table.php:519
+msgid "Import"
+msgstr "匯入"
+
+#: includes/class-wp-event-aggregator-list-table.php:133
+#: includes/class-wp-event-aggregator-list-table.php:339
+#: includes/class-wp-event-aggregator-list-table.php:464
+msgid "%d Skipped"
+msgstr "%d 個已跳過"
+
+#: includes/class-wp-event-aggregator-list-table.php:327
+msgid "Last Import: %s ago"
+msgstr "上次匯入：%s 前"
+
+#: includes/class-wp-event-aggregator-admin.php:505
+#: includes/class-wp-event-aggregator-list-table.php:178
+#: includes/class-wp-event-aggregator-list-table.php:523
+#: includes/class-wp-event-aggregator-list-table.php:698
+msgid "Action"
+msgstr "動作"
+
+#: includes/class-wp-event-aggregator-list-table.php:177
+msgid "Import Frequency"
+msgstr "匯入頻率"
+
+#: includes/class-wp-event-aggregator-list-table.php:176
+#: includes/class-wp-event-aggregator-list-table.php:520
+msgid "Import Category"
+msgstr "匯入分類"
+
+#: includes/class-wp-event-aggregator-list-table.php:175
+msgid "Import Event Status"
+msgstr "匯入活動狀態"
+
+#: includes/class-wp-event-aggregator-list-table.php:174
+msgid "Scheduled import"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-cpt.php:580
+msgid "Event Date"
+msgstr "活動日期"
+
+#: includes/class-wp-event-aggregator-cpt.php:388
+#: templates/wpea-event-meta.php:113
+msgid "Phone"
+msgstr "電話"
+
+#: includes/class-wp-event-aggregator-cpt.php:382
+#: templates/wpea-event-meta.php:109
+msgid "Email"
+msgstr "電子郵件"
+
+#: includes/class-wp-event-aggregator-cpt.php:376
+msgid "Organizer Name"
+msgstr "主辦方名稱"
+
+#: includes/class-wp-event-aggregator-cpt.php:369
+msgid "Organizer Details"
+msgstr "主辦方詳情"
+
+#: includes/class-wp-event-aggregator-cpt.php:357
+#: includes/class-wp-event-aggregator-cpt.php:394
+#: templates/wpea-event-meta.php:117
+msgid "Website"
+msgstr "網站"
+
+#: includes/class-wp-event-aggregator-cpt.php:343
+msgid "Latitude"
+msgstr "緯度"
+
+#: includes/class-wp-event-aggregator-cpt.php:336
+msgid "Zipcode"
+msgstr "郵遞區號"
+
+#: includes/class-wp-event-aggregator-cpt.php:329
+msgid "Country"
+msgstr "國家"
+
+#: includes/class-wp-event-aggregator-cpt.php:322
+msgid "State"
+msgstr "州"
+
+#: includes/class-wp-event-aggregator-cpt.php:315
+msgid "City"
+msgstr "城市"
+
+#: includes/class-wp-event-aggregator-cpt.php:308
+msgid "Address"
+msgstr "地址"
+
+#: includes/class-wp-event-aggregator-cpt.php:301
+#: templates/wpea-event-meta.php:141
+msgid "Venue"
+msgstr "場地"
+
+#: includes/class-wp-event-aggregator-cpt.php:293
+msgid "Location Details"
+msgstr "位置詳情"
+
+#: includes/class-wp-event-aggregator-cpt.php:276
+msgid "End Date & Time"
+msgstr "結束日期和時間"
+
+#: includes/class-wp-event-aggregator-cpt.php:265
+msgid "Start Date & Time"
+msgstr "開始日期和時間"
+
+#: includes/class-wp-event-aggregator-cpt.php:258
+msgid "Time & Date"
+msgstr "時間和日期"
+
+#: includes/class-wp-event-aggregator-cpt.php:231
+msgid "Events Details"
+msgstr "活動詳情"
+
+#: includes/class-wp-event-aggregator-cpt.php:215
+msgid "No tags found"
+msgstr "未找到標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:214
+msgid "Choose from the most used tags"
+msgstr "從最常用的標籤中選擇"
+
+#: includes/class-wp-event-aggregator-cpt.php:213
+msgid "Add or remove tags"
+msgstr "新增或移除標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:212
+msgid "Separate tags with commas"
+msgstr "用逗號分隔標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:211
+msgid "New Tag Name"
+msgstr "新標籤名稱"
+
+#: includes/class-wp-event-aggregator-cpt.php:210
+msgid "Add New Tag"
+msgstr "新增標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:209
+msgid "Update Tag"
+msgstr "更新標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:208
+msgid "View Tag"
+msgstr "檢視標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:207
+msgid "Edit Tag"
+msgstr "編輯標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:206
+msgid "All Tags"
+msgstr "所有標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:205
+msgid "Popular Tags"
+msgstr "熱門標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:204
+msgid "Search Tags"
+msgstr "搜尋標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:201
+#: includes/class-wp-event-aggregator-cpt.php:203
+msgid "Event Tag"
+msgstr "活動標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:200
+#: includes/class-wp-event-aggregator-cpt.php:202
+#: templates/wpea-event-meta.php:82
+msgid "Event Tags"
+msgstr "活動標籤"
+
+#: includes/class-wp-event-aggregator-cpt.php:176
+msgid "New Category Name"
+msgstr "新分類名稱"
+
+#: includes/class-wp-event-aggregator-cpt.php:175
+msgid "Add New Category"
+msgstr "新增分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:174
+msgid "Update Category"
+msgstr "更新分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:173
+msgid "View Category"
+msgstr "檢視分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:172
+msgid "Edit Category"
+msgstr "編輯分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:171
+msgid "All Categories"
+msgstr "所有分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:170
+msgid "Popular Categories"
+msgstr "熱門分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:169
+msgid "Search Categories"
+msgstr "搜尋分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:166
+#: includes/class-wp-event-aggregator-cpt.php:168
+#: templates/wpea-event-meta.php:75
+msgid "Event Category"
+msgstr "活動分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:165
+#: includes/class-wp-event-aggregator-cpt.php:167
+msgid "Event Categories"
+msgstr "活動分類"
+
+#: includes/class-wp-event-aggregator-cpt.php:133
+msgid "Post type for Events"
+msgstr "活動文章類型"
+
+#: includes/class-wp-event-aggregator-cpt.php:122
+msgid "Filter Event items list"
+msgstr "篩選活動項目清單"
+
+#: includes/class-wp-event-aggregator-cpt.php:121
+msgid "Event Items list navigation"
+msgstr "活動項目清單導覽"
+
+#: includes/class-wp-event-aggregator-cpt.php:120
+msgid "Event Items list"
+msgstr "活動項目清單"
+
+#: includes/class-wp-event-aggregator-cpt.php:119
+msgid "Uploaded to this Event"
+msgstr "已上傳至本次活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:118
+msgid "Insert into Event"
+msgstr "插入至活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:117
+msgid "Use as featured image"
+msgstr "用作特色圖片"
+
+#: includes/class-wp-event-aggregator-cpt.php:116
+msgid "Remove featured image"
+msgstr "刪除特色圖片"
+
+#: includes/class-wp-event-aggregator-cpt.php:115
+msgid "Set featured image"
+msgstr "設定特色圖片"
+
+#: includes/class-wp-event-aggregator-cpt.php:114
+msgid "Featured Image"
+msgstr "特色圖片"
+
+#: includes/class-wp-event-aggregator-cpt.php:113
+msgid "Not found in Trash"
+msgstr "未在回收桶中找到"
+
+#: includes/class-wp-event-aggregator-cpt.php:112
+msgid "Not found"
+msgstr "未找到"
+
+#: includes/class-wp-event-aggregator-cpt.php:111
+msgid "Search Event"
+msgstr "搜尋活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:110
+msgid "View Event"
+msgstr "檢視活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:109
+msgid "Update Event"
+msgstr "更新活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:108
+msgid "Edit Event"
+msgstr "編輯活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:107
+msgid "New Event"
+msgstr "新活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:105
+msgid "Add New Event"
+msgstr "新增活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:104
+#: includes/class-wp-event-aggregator-cpt.php:132 blocks/wp-events/index.js:33
+msgid "Events"
+msgstr "活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:103
+msgid "Parent Event:"
+msgstr "主要活動:"
+
+#: includes/class-wp-event-aggregator-cpt.php:102
+msgid "Event Archives"
+msgstr "活動封存"
+
+#: includes/class-wp-event-aggregator-admin.php:503
+#: includes/class-wp-event-aggregator-cpt.php:101
+msgid "Event"
+msgstr "活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:100 blocks/wp-events/index.js:24
+msgid "WP Events"
+msgstr "WP活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:99
+msgctxt "Post Type Singular Name"
+msgid "Event"
+msgstr "活動"
+
+#: includes/class-wp-event-aggregator-cpt.php:98
+msgctxt "Post Type General Name"
+msgid "Events"
+msgstr "活動"
+
+#: includes/class-wp-event-aggregator-common.php:484
+msgid "%d Skipped (Already exists)"
+msgstr "%d 個已跳過 (已存在)"
+
+#: includes/class-wp-event-aggregator-common.php:481
+#: includes/class-wp-event-aggregator-list-table.php:130
+#: includes/class-wp-event-aggregator-list-table.php:336
+#: includes/class-wp-event-aggregator-list-table.php:461
+msgid "%d Updated"
+msgstr "%d 個已更新"
+
+#: includes/class-wp-event-aggregator-common.php:478
+#: includes/class-wp-event-aggregator-list-table.php:127
+#: includes/class-wp-event-aggregator-list-table.php:333
+#: includes/class-wp-event-aggregator-list-table.php:458
+msgid "%d Created"
+msgstr "%d 已建立"
+
+#: includes/class-wp-event-aggregator-common.php:202
+msgid "My Calendar"
+msgstr "My Calendar"
+
+#: includes/class-wp-event-aggregator-common.php:197
+msgid "All in one Event Calendar"
+msgstr "多合一活動日曆"
+
+#: includes/class-wp-event-aggregator-common.php:192
+msgid "EventON"
+msgstr "EventON"
+
+#: includes/class-wp-event-aggregator-common.php:187
+msgid "Event Organiser"
+msgstr "活動主辦方"
+
+#: includes/class-wp-event-aggregator-common.php:182
+msgid "Events Manager"
+msgstr "活動管理"
+
+#: includes/class-wp-event-aggregator-common.php:177
+msgid "The Events Calendar"
+msgstr "活動日曆"
+
+#: includes/class-wp-event-aggregator-common.php:44
+msgid "Import into"
+msgstr "匯入到"
+
+#: includes/class-wp-event-aggregator-admin.php:424
+msgid "WP Bulk Delete"
+msgstr "WP Bulk Delete"
+
+#: includes/class-wp-event-aggregator-admin.php:423
+msgid "Import Meetup Events"
+msgstr "Import Meetup Events"
+
+#: includes/class-wp-event-aggregator-admin.php:422
+msgid "Import Eventbrite Events"
+msgstr "Import Eventbrite Events"
+
+#: includes/class-wp-event-aggregator-admin.php:421
+msgid "Import Facebook Events"
+msgstr "Import Facebook Events"
+
+#: includes/class-wp-event-aggregator-admin.php:404
+msgid " Rate %1$sWP Event Aggregator%2$s %3$s"
+msgstr " 評價 %1$sWP Event Aggregator%2$s %3$s"
+
+#: includes/class-wp-event-aggregator-admin.php:377
+msgid "News from Xylus Themes"
+msgstr "來自 Xylus 佈景主題的新消息"
+
+#: includes/class-wp-event-aggregator-admin.php:346
+msgid "No History found in Trash."
+msgstr "未在回收桶中找到歷史記錄."
+
+#: includes/class-wp-event-aggregator-admin.php:345
+msgid "No History found."
+msgstr "未找到歷史記錄."
+
+#: includes/class-wp-event-aggregator-admin.php:344
+msgid "Parent History:"
+msgstr "主要歷史記錄:"
+
+#: includes/class-wp-event-aggregator-admin.php:343
+msgid "Search History"
+msgstr "搜尋歷史記錄"
+
+#: includes/class-wp-event-aggregator-admin.php:342
+msgid "All Import History"
+msgstr "所有匯入歷史"
+
+#: includes/class-wp-event-aggregator-admin.php:341
+msgid "View History"
+msgstr "檢視歷史記錄"
+
+#: includes/class-wp-event-aggregator-admin.php:340
+msgid "Edit History"
+msgstr "編輯歷史記錄"
+
+#: includes/class-wp-event-aggregator-admin.php:339
+msgid "New History"
+msgstr "新歷史記錄"
+
+#: includes/class-wp-event-aggregator-admin.php:338
+#: includes/class-wp-event-aggregator-cpt.php:106
+msgid "Add New"
+msgstr "新增"
+
+#: includes/class-wp-event-aggregator-admin.php:336
+msgctxt "add new on admin bar"
+msgid "Import History"
+msgstr "匯入歷史"
+
+#: includes/class-wp-event-aggregator-admin.php:335
+msgctxt "admin menu"
+msgid "Import History"
+msgstr "匯入歷史"
+
+#: includes/class-wp-event-aggregator-admin.php:334
+msgctxt "post type singular name"
+msgid "Import History"
+msgstr "匯入歷史"
+
+#: includes/class-wp-event-aggregator-admin.php:333
+msgctxt "post type general name"
+msgid "Import History"
+msgstr "匯入歷史"
+
+#: includes/class-wp-event-aggregator-admin.php:172
+msgid "Support & Help"
+msgstr "支援與說明"
+
+#: includes/class-wp-event-aggregator-admin.php:160
+#: includes/class-wp-event-aggregator-admin.php:351
+msgid "Import History"
+msgstr "匯入歷史"
+
+#: includes/class-wp-event-aggregator-admin.php:63
+msgid "Support & help"
+msgstr "支援與說明"
+
+#: includes/class-wp-event-aggregator-admin.php:61
+msgid "iCalendar/.ics Import"
+msgstr "iCalendar / .ics 匯入"
+
+#. Author URI of the plugin
+msgid "http://xylusthemes.com"
+msgstr "http://xylusthemes.com"
+
+#. Author of the plugin
+msgid "Xylus Themes"
+msgstr "Xylus  佈景主題"
+
+#. Description of the plugin
+msgid "Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site."
+msgstr "從任何地方匯入活動 - Facebook、Eventbrite、Meetup、iCalendar 和 ICS 匯入到您的 WordPress 網站."
+
+#. Plugin URI of the plugin
+msgid "http://xylusthemes.com/plugins/wp-event-aggregator/"
+msgstr "http://xylusthemes.com/plugins/wp-event-aggregator/"
+
+#: wp-event-aggregator.php:98 wp-event-aggregator.php:105
+msgid "Cheatin&#8217; huh?"
+msgstr "哦，作弊是吧?"
+
+#: templates/admin/wp-event-aggregator-settings.php:524
+msgid "Save Settings"
+msgstr "儲存設定"
+
+#: templates/admin/wp-event-aggregator-settings.php:367
+msgid "iCal Settings"
+msgstr "iCal 設定"
+
+#: templates/admin/wp-event-aggregator-settings.php:309
+msgid "Facebook App secret"
+msgstr "Facebook 應用程式密鑰"
+
+#: templates/admin/wp-event-aggregator-settings.php:300
+#: templates/admin/wp-event-aggregator-settings.php:317
+msgid "from here"
+msgstr "從這裡"
+
+#: templates/admin/wp-event-aggregator-settings.php:299
+#: templates/admin/wp-event-aggregator-settings.php:316
+msgid "You can veiw or create your Facebook Apps"
+msgstr "您可以檢視或建立您的 Facebook 應用程式"
+
+#: templates/admin/wp-event-aggregator-settings.php:292
+msgid "Facebook App ID"
+msgstr "Facebook 應用程式 ID"
+
+#: templates/admin/wp-event-aggregator-settings.php:264
+msgid "Facebook Settings"
+msgstr "Facebook 設定"
+
+#: templates/admin/wp-event-aggregator-settings.php:188
+#: templates/admin/wp-event-aggregator-settings.php:200
+#: templates/admin/wp-event-aggregator-settings.php:217
+msgid "here"
+msgstr "這裡"
+
+#: templates/admin/wp-event-aggregator-settings.php:217
+msgid "Insert your meetup.com API key you can get it from"
+msgstr "輸入您的 meetup.com API 密鑰，您可以獲取它從"
+
+#: templates/admin/wp-event-aggregator-settings.php:212
+msgid "Meetup API key"
+msgstr "Meetup API 密鑰"
+
+#: templates/admin/wp-event-aggregator-settings.php:107
+msgid "Meetup Settings"
+msgstr "Meetup 設定"
+
+#: templates/admin/wp-event-aggregator-settings.php:74
+#: templates/admin/wp-event-aggregator-settings.php:231
+#: templates/admin/wp-event-aggregator-settings.php:334
+#: templates/admin/wp-event-aggregator-settings.php:380
+msgid "Check to updates existing events."
+msgstr "勾選以更新現有活動."
+
+#: templates/admin/wp-event-aggregator-settings.php:66
+#: templates/admin/wp-event-aggregator-settings.php:223
+#: templates/admin/wp-event-aggregator-settings.php:326
+#: templates/admin/wp-event-aggregator-settings.php:372
+msgid "Update existing events"
+msgstr "更新現有活動"
+
+#: templates/admin/wp-event-aggregator-settings.php:52
+msgid "Check to display ticket option after event."
+msgstr "勾選以在活動後顯示門票選項."
+
+#: templates/admin/wp-event-aggregator-settings.php:43
+msgid "Display ticket option after event"
+msgstr "活動後方顯示門票選項"
+
+#: templates/admin/wp-event-aggregator-settings.php:37
+msgid "Insert your eventbrite.com Personal OAuth token you can get it from <a href=\"http://www.eventbrite.com/myaccount/apps/\" target=\"_blank\">here</a>."
+msgstr "輸入您的 eventbrite.com Personal OAuth token，您可以從<a href=\"http://www.eventbrite.com/myaccount/apps/\" target=\"_blank\">此處</a>獲取它."
+
+#: templates/admin/wp-event-aggregator-settings.php:27
+msgid "You need a Eventbrite Personal OAuth token to import your events from Eventbrite."
+msgstr "您需要 Eventbrite 的 Personal OAuth token 才能從 Eventbrite 匯入您的活動."
+
+#: templates/admin/wp-event-aggregator-settings.php:26
+msgid "Eventbrite Settings"
+msgstr "Eventbrite 設定"
+
+#: templates/admin/meetup-import-events.php:66
+msgid "Meetup Group URL"
+msgstr "Meetup 群團網址"
+
+#: includes/class-wp-event-aggregator-admin.php:59
+#: templates/admin/meetup-import-events.php:25
+msgid "Meetup Import"
+msgstr "Meetup 匯入"
+
+#: templates/admin/ical-import-events.php:73
+msgid "Select end date"
+msgstr "選擇結束日期"
+
+#: templates/admin/ical-import-events.php:72
+msgid "Select start date"
+msgstr "選擇開始日期"
+
+#: templates/admin/ical-import-events.php:69
+msgid "Events date range"
+msgstr "活動日期範圍"
+
+#: templates/admin/ical-import-events.php:52
+msgid "Enter iCal URL ( Eg. https://www.xyz.com/ical-url.ics )"
+msgstr "輸入 iCal URL ( 例如 https://www.xyz.com/ical-url.ics )"
+
+#: templates/admin/ical-import-events.php:40
+msgid "Select Event source."
+msgstr "選擇活動來源."
+
+#: templates/admin/ical-import-events.php:37
+#: templates/admin/ical-import-events.php:47
+msgid "iCal URL"
+msgstr "iCal 網址"
+
+#: templates/admin/ical-import-events.php:36
+#: templates/admin/ical-import-events.php:60
+msgid ".ics File"
+msgstr ".ics 檔案"
+
+#: templates/admin/ical-import-events.php:25
+msgid "iCal / .ics Import"
+msgstr "iCal / .ics 匯入"
+
+#: templates/admin/facebook-import-events.php:78
+msgid " Eg. username for https://www.facebook.com/xylusinfo/ is \"xylusinfo\"."
+msgstr " 例如.  https://www.facebook.com/xylusinfo/ 的使用者名稱是「xylusinfo」."
+
+#: templates/admin/facebook-import-events.php:66
+msgid "One event ID per line, ( Eg. Event ID for https://www.facebook.com/events/123456789/ is \"123456789\" )."
+msgstr "每行一個活動 ID，( 例如. https://www.facebook.com/events/123456789/  的活動 ID 是 「123456789」 )."
+
+#: templates/admin/facebook-import-events.php:61
+msgid "Facebook Event IDs"
+msgstr "Facebook 活動 ID"
+
+#: templates/admin/facebook-import-events.php:36
+msgid "Facebook Event ID"
+msgstr "Facebook 活動 ID"
+
+#: includes/class-wp-event-aggregator-admin.php:60
+#: templates/admin/facebook-import-events.php:25
+msgid "Facebook Import"
+msgstr "Facebook 匯入"
+
+#: templates/admin/eventbrite-import-events.php:107
+#: templates/admin/facebook-import-events.php:118
+#: templates/admin/ical-import-events.php:101
+#: templates/admin/meetup-import-events.php:99
+msgid "Import Event"
+msgstr "匯入活動"
+
+#: templates/admin/eventbrite-import-events.php:88
+#: templates/admin/facebook-import-events.php:99
+#: templates/admin/ical-import-events.php:82
+#: templates/admin/meetup-import-events.php:79
+msgid "Import type"
+msgstr "匯入類型"
+
+#: templates/admin/eventbrite-import-events.php:80
+msgid "Insert eventbrite organizer ID ( Eg. https://www.eventbrite.com/o/cept-university-<span class=\"borderall\">9151813372</span>  )."
+msgstr "插入 eventbrite 主辦方 ID ( 例如. https://www.eventbrite.com/o/cept-university-<span class=\"borderall\">9151813372</span>  )."
+
+#: templates/admin/eventbrite-import-events.php:75
+msgid "Eventbrite Organizer ID"
+msgstr "Eventbrite 主辦方 ID"
+
+#: templates/admin/eventbrite-import-events.php:66
+msgid "Insert Eventbrite event ID ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class=\"borderall\">12265498440</span>  )."
+msgstr "插入 Eventbrite 活動 ID ( 例如. https://www.eventbrite.com/e/event-import-with-wordpress-<span class=\"borderall\">12265498440</span>  )."
+
+#: templates/admin/eventbrite-import-events.php:51
+msgid "Eventbrite Event ID"
+msgstr "Eventbrite 活動 ID"
+
+#: templates/admin/eventbrite-import-events.php:37
+msgid "Organizer ID"
+msgstr "主辦方 ID"
+
+#: templates/admin/eventbrite-import-events.php:36
+#: templates/admin/meetup-import-events.php:36
+msgid "Event ID"
+msgstr "活動 ID"
+
+#: templates/admin/eventbrite-import-events.php:32
+#: templates/admin/facebook-import-events.php:32
+#: templates/admin/ical-import-events.php:32
+#: templates/admin/meetup-import-events.php:32
+msgid "Import by"
+msgstr "匯入由"
+
+#: includes/class-wp-event-aggregator-admin.php:58
+#: templates/admin/eventbrite-import-events.php:25
+msgid "Eventbrite Import"
+msgstr "Eventbrite 匯入"
+
+#: templates/admin/admin-sidebar.php:33
+msgid "Would you like to remove these ads?"
+msgstr "您想要移除這些廣告嗎?"
+
+#: templates/admin/admin-sidebar.php:27
+msgid "Hire Us"
+msgstr "僱用我們"
+
+#: templates/admin/admin-sidebar.php:25
+msgid "From small blog to complex web apps, we push the limits of what's possible with WordPress."
+msgstr "從小型部落格到複雜的網路應用程式，我們不斷突破 WordPress 的極限."
+
+#: templates/admin/admin-sidebar.php:24
+msgid "Custom WordPress Development Services"
+msgstr "客製化 WordPress 開發服務"
+
+#: templates/admin/admin-sidebar.php:17
+msgid "Unlock more power to events import operation, enable scheduled imports today, Upgrade today!!"
+msgstr "解鎖更多活動匯入的功能，今天啟用排程匯入，今天就來升級!!"
+
+#: includes/class-wp-event-aggregator-admin.php:65
+#: templates/admin/admin-sidebar.php:16 templates/admin/admin-sidebar.php:19
+msgid "Upgrade to Pro"
+msgstr "升級到專業版"
+
+#: includes/class-wp-event-aggregator-common.php:787
+msgid "Upgrade to PRO"
+msgstr "升級到專業版"
+
+#: includes/class-wp-event-aggregator-common.php:787
+msgid "Available in Pro Add-on."
+msgstr "可在專業版附加組件中使用."
+
+#: includes/class-wp-event-aggregator-common.php:576
+msgid "Scheduled Import"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-common.php:575
+msgid "One-time Import"
+msgstr "一次性匯入"
+
+#: includes/class-wp-event-aggregator-common.php:554
+msgid "Once Daily"
+msgstr "每天一次"
+
+#: includes/class-wp-event-aggregator-common.php:551
+msgid "Twice Daily"
+msgstr "每天兩次"
+
+#: includes/class-wp-event-aggregator-common.php:548
+msgid "Once Hourly"
+msgstr "每小時一次"
+
+#: includes/class-wp-event-aggregator-common.php:641
+msgid "Draft"
+msgstr "草稿"
+
+#: includes/class-wp-event-aggregator-common.php:638
+msgid "Pending"
+msgstr "待審核"
+
+#: includes/class-wp-event-aggregator-common.php:635
+msgid "Published"
+msgstr "發佈"
+
+#: includes/class-wp-event-aggregator-common.php:630
+msgid "Status"
+msgstr "狀態"
+
+#: includes/class-wp-event-aggregator-common.php:81
+msgid "These categories are assign to imported event."
+msgstr "這些分類將用來指配給匯入的活動."
+
+#: includes/class-wp-event-aggregator-common.php:63
+msgid "Event Categories for Event Import"
+msgstr "活動匯入的活動分類"
+
+#: includes/class-wp-event-aggregator-manage-import.php:324
+msgid "Nothing to import."
+msgstr "並未匯入任何資料."
+
+#: includes/class-wp-event-aggregator-manage-import.php:311
+msgid "Please upload .ics file"
+msgstr "請上傳 .ics 檔案"
+
+#: includes/class-wp-event-aggregator-common.php:476
+msgid "Event(s) are imported successfully."
+msgstr "活動已成功匯入."
+
+#: includes/class-wp-event-aggregator-manage-import.php:250
+#: includes/class-wp-event-aggregator-meetup.php:60
+msgid "Please provide valid Meetup group URL."
+msgstr "請提供有效的Meetup 群組網址."
+
+#: includes/class-wp-event-aggregator-manage-import.php:225
+msgid "Please provide valid Eventbrite event ID."
+msgstr "請提供有效的 Eventbrite 活動 ID."
+
+#: includes/class-wp-event-aggregator-manage-import.php:345
+#: includes/class-wp-event-aggregator-manage-import.php:365
+msgid "Scheduled imports are deleted successfully."
+msgstr "排程匯入已成功刪除."
+
+#: includes/class-wp-event-aggregator-manage-import.php:341
+msgid "Scheduled import deleted successfully."
+msgstr "排程匯入已成功刪除."
+
+#: includes/class-wp-event-aggregator-manage-import.php:98
+msgid "Import settings has been saved successfully."
+msgstr "匯入設定已成功儲存."
+
+#: includes/class-wp-event-aggregator-manage-import.php:40
+msgid "Please provide import origin."
+msgstr "請提供匯入來源."
+
+#: includes/class-wp-event-aggregator-list-table.php:150
+msgid "Import Now"
+msgstr "立即匯入"
+
+#: includes/class-wp-event-aggregator-list-table.php:90
+#: includes/class-wp-event-aggregator-list-table.php:101
+#: includes/class-wp-event-aggregator-list-table.php:438
+msgid "Origin"
+msgstr "來源"
+
+#: includes/class-wp-event-aggregator-list-table.php:76
+#: includes/class-wp-event-aggregator-list-table.php:186
+#: includes/class-wp-event-aggregator-list-table.php:431
+#: includes/class-wp-event-aggregator-list-table.php:531
+msgid "Delete"
+msgstr "刪除"
+
+#: includes/class-wp-event-aggregator-ical.php:44
+msgid "Please provide iCal URL."
+msgstr "請提供 iCal 網址."
+
+#: includes/class-wp-event-aggregator-facebook.php:65
+#: includes/class-wp-event-aggregator-facebook.php:154
+#: includes/class-wp-event-aggregator-manage-import.php:274
+msgid "Please insert Facebook app ID and app Secret."
+msgstr "請輸入 Facebook 應用程式 ID 和應用程式密鑰."
+
+#: includes/class-wp-event-aggregator-eventbrite.php:112
+msgid "Please insert Eventbrite \"Personal OAuth token\"."
+msgstr "請輸入 Eventbrite「Personal OAuth token」."
+
+#: includes/class-wp-event-aggregator-eventbrite.php:56
+#: includes/class-wp-event-aggregator-eventbrite.php:69
+#: includes/class-wp-event-aggregator-eventbrite.php:93
+#: includes/class-wp-event-aggregator-tec.php:153
+#: includes/class-wp-event-aggregator-tec.php:213
+msgid "Something went wrong, please try again."
+msgstr "出了點問題，請重試一次."
+
+#: includes/class-wp-event-aggregator-common.php:560
+msgid "Once a Month"
+msgstr "每月一次"
+
+#: includes/class-wp-event-aggregator-common.php:557
+msgid "Once Weekly"
+msgstr "每週一次"
+
+#: includes/class-wp-event-aggregator-admin.php:307
+msgid "Scheduled Imports."
+msgstr "排程匯入."
+
+#: includes/class-wp-event-aggregator-admin.php:302
+msgid "No Imports found in Trash."
+msgstr "在回收桶中找不到匯入資訊."
+
+#: includes/class-wp-event-aggregator-admin.php:301
+msgid "No Imports found."
+msgstr "未找到匯入資訊."
+
+#: includes/class-wp-event-aggregator-admin.php:300
+msgid "Parent Imports:"
+msgstr "主要匯入:"
+
+#: includes/class-wp-event-aggregator-admin.php:299
+msgid "Search Scheduled Imports"
+msgstr "搜尋排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:298
+msgid "All Scheduled Imports"
+msgstr "所有排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:297
+msgid "View Import"
+msgstr "檢視匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:296
+msgid "Edit Import"
+msgstr "編輯匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:295
+#: templates/admin/eventbrite-import-events.php:12
+#: templates/admin/facebook-import-events.php:12
+#: templates/admin/ical-import-events.php:12
+#: templates/admin/meetup-import-events.php:12
+msgid "New Import"
+msgstr "新增匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:294
+msgid "Add New Import"
+msgstr "增加新匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:293
+#: includes/class-wp-event-aggregator-admin.php:337
+msgctxt "book"
+msgid "Add New"
+msgstr "新增"
+
+#: includes/class-wp-event-aggregator-admin.php:292
+msgctxt "add new on admin bar"
+msgid "Scheduled Import"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:291
+msgctxt "admin menu"
+msgid "Scheduled Imports"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:290
+msgctxt "post type singular name"
+msgid "Scheduled Import"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:289
+msgctxt "post type general name"
+msgid "Scheduled Import"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:62
+#: includes/class-wp-event-aggregator-admin.php:164
+msgid "Settings"
+msgstr "設定"
+
+#: includes/class-wp-event-aggregator-admin.php:156
+#: templates/admin/eventbrite-import-events.php:17
+#: templates/admin/facebook-import-events.php:17
+#: templates/admin/ical-import-events.php:17
+#: templates/admin/meetup-import-events.php:17
+msgid "Scheduled Imports"
+msgstr "排程匯入"
+
+#: includes/class-wp-event-aggregator-admin.php:152
+msgid "iCalendar / .ics"
+msgstr "iCalendar / .ics"
+
+#: includes/class-wp-event-aggregator-admin.php:148
+msgid "Facebook"
+msgstr "Facebook"
+
+#: includes/class-wp-event-aggregator-admin.php:144
+msgid "Meetup"
+msgstr "Meetup"
+
+#: includes/class-wp-event-aggregator-admin.php:140
+msgid "Eventbrite"
+msgstr "Eventbrite"
+
+#. Plugin Name of the plugin
+#: includes/class-wp-event-aggregator-admin.php:55
+#: includes/class-wp-event-aggregator-admin.php:119
+#: includes/class-wp-event-aggregator-common.php:213
+#: includes/class-wpea-plugin-deactivation.php:38
+msgid "WP Event Aggregator"
+msgstr "WP Event Aggregator"
