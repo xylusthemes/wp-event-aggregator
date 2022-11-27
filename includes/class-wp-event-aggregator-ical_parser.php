@@ -317,7 +317,7 @@ class WP_Event_Aggregator_Ical_Parser {
 						$start_time = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
 					}
 					if( empty( $event_data['end_time'] ) ){
-						$end_time   = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
+						$end_time   = strtotime( $this->convert_fb_ical_timezone(  $end->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
 					}
 				}
 			}
@@ -530,7 +530,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		
 		$timezone_string = get_option( 'timezone_string' );
 		$offset  = (float) get_option( 'gmt_offset' );
-		if( $timezone != '' ){
+		if( !empty( $timezone ) ){
 			$tz = $timezone;
 		}else{
 
