@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 6.1
-Stable tag: 1.6.6
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,14 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.7.0 =
+* FIXED: All Day events bug.
+* FIXED: Events manager location bug.
+* FIXED: Event organiser location bug.
+* IMPROVEMENTS: Upgraded iCal library to v2.30
+* IMPROVEMENTS: Updated Facebook API version to v14.0
+* IMPROVEMENTS: Support for PHP 8
 
 = 1.6.6 =
 * ADDED: Compatibility with The Events Calendar 6.0
