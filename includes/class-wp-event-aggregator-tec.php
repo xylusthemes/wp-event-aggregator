@@ -261,6 +261,10 @@ class WP_Event_Aggregator_TEC {
 			'end_date'          => date( 'Y-m-d H:i:s', $end_time ),
 		);
 
+		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
+			$event_args['_EventAllDay'] = 'yes';
+		}
+
 		if ( array_key_exists( 'organizer', $centralize_array ) ) {
 			$organizer               = $this->get_organizer_args( $centralize_array['organizer'] );      
 			$event_args['organizer'] = $organizer['OrganizerID'];
@@ -307,6 +311,11 @@ class WP_Event_Aggregator_TEC {
 			'EventShowMap' 			=> 1,
 			'EventShowMapLink'		=> 1,
 		);
+
+		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
+			$event_args['_EventAllDay']      = 'yes';
+		}
+		
 		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
 			$event_args['EventAllDay'] = 'yes';
 		}
