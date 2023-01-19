@@ -759,7 +759,7 @@ class WP_Event_Aggregator_Common {
 		if( !empty( $wpea_user_token_options ) ){
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
-				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>.', 'wp-event-aggregator' );
+				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
 			}
 		}
 	}
