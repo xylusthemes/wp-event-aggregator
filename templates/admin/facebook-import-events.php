@@ -41,7 +41,6 @@ global $importevents;
 			                    	if( wpea_is_pro() ){
 				                    	if( $importevents->common->has_authorized_user_token() ){ ?>
 				                    		<option value="facebook_group"><?php esc_attr_e( 'Facebook Group','wp-event-aggregator' ); ?></option>
-				                    		<option value="my_events"><?php esc_attr_e( 'My Events','wp-event-aggregator' ); ?></option>
 				                    	<?php } 
 			                    	} ?>
 
@@ -50,7 +49,7 @@ global $importevents;
 			                        <?php _e( 'Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> ( import events belonging to a Facebook page ), 3. Facebook Group ( import events belonging to a Facebook group ).', 'wp-event-aggregator' ); ?>
 			                        <?php
 									if( $importevents->common->has_authorized_user_token() ){
-									_e( '<strong>3. Facebook Group</strong> (Import events from facebook group), <strong>4. My Events</strong> (Import events which you have marked intrested or going on facebook, this also include your events on facebook)', 'wp-event-aggregator' );
+									_e( '<strong>3. Facebook Group</strong> ( Import events from facebook group )', 'wp-event-aggregator' );
 									} ?>
 			                    </span>
 					        </td>
