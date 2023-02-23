@@ -232,6 +232,8 @@ class WP_Event_Aggregator_Common {
 			$source = '<a href="https://eventbrite.com/o/' . $source_data['organizer_id'] . '" target="_blank" >' . $schedule_title . '</a>';
 		}elseif( $source_data['import_by'] == 'ical_url' ){
 			$source = '<a href="' . $source_data['ical_url'] . '" target="_blank" >iCal URL</a>';
+		}elseif( $source_data['import_by'] == 'facebook_group' ){
+			$source = '<a href="https://www.facebook.com/groups/' . $source_data['facebook_group_id'] . '" target="_blank" >Facebook Group</a>';
 		}elseif( $source_data['import_by'] == 'group_url' ){
 			$source = '<a href="' . $source_data['meetup_url'] . '" target="_blank" >' . $schedule_title . '</a>';
 		}else{
