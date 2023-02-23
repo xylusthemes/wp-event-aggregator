@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Xylus Themes
+# Copyright (C) 2023 Xylus Themes
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-14T07:36:31+00:00\n"
+"POT-Creation-Date: 2023-02-23T13:40:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: wp-event-aggregator\n"
@@ -353,89 +353,89 @@ msgstr ""
 msgid "Event Espresso (EE4)"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:501
+#: includes/class-wp-event-aggregator-common.php:503
 msgid "Event(s) are imported successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:503
+#: includes/class-wp-event-aggregator-common.php:505
 #: includes/class-wp-event-aggregator-list-table.php:132
 #: includes/class-wp-event-aggregator-list-table.php:338
 #: includes/class-wp-event-aggregator-list-table.php:463
 msgid "%d Created"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:506
+#: includes/class-wp-event-aggregator-common.php:508
 #: includes/class-wp-event-aggregator-list-table.php:135
 #: includes/class-wp-event-aggregator-list-table.php:341
 #: includes/class-wp-event-aggregator-list-table.php:466
 msgid "%d Updated"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:509
+#: includes/class-wp-event-aggregator-common.php:511
 msgid "%d Skipped (Already exists)"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:573
+#: includes/class-wp-event-aggregator-common.php:575
 msgid "Once Hourly"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:576
+#: includes/class-wp-event-aggregator-common.php:578
 msgid "Twice Daily"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:579
+#: includes/class-wp-event-aggregator-common.php:581
 msgid "Once Daily"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:582
+#: includes/class-wp-event-aggregator-common.php:584
 msgid "Once Weekly"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:585
+#: includes/class-wp-event-aggregator-common.php:587
 msgid "Once a Month"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:600
+#: includes/class-wp-event-aggregator-common.php:602
 msgid "One-time Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:601
+#: includes/class-wp-event-aggregator-common.php:603
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:655
+#: includes/class-wp-event-aggregator-common.php:657
 msgid "Status"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:660
+#: includes/class-wp-event-aggregator-common.php:662
 msgid "Published"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:663
+#: includes/class-wp-event-aggregator-common.php:665
 msgid "Pending"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:666
+#: includes/class-wp-event-aggregator-common.php:668
 msgid "Draft"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:787
+#: includes/class-wp-event-aggregator-common.php:789
 msgid "The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:802
+#: includes/class-wp-event-aggregator-common.php:804
 msgid "Your current \"WP Event Aggregator Pro\" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:816
+#: includes/class-wp-event-aggregator-common.php:818
 msgid "Available in Pro Add-on."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:816
+#: includes/class-wp-event-aggregator-common.php:818
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1250
+#: includes/class-wp-event-aggregator-common.php:1252
 msgid "Buy Tickets"
 msgstr ""
 
