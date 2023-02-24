@@ -216,6 +216,33 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Get Sourse data.
+	 *
+	 * @since  1.7.1
+	 * @return array
+	 */
+	public function get_source_data( $source_data = array(), $schedule_title = '' ) {
+		
+		$source = '';
+		if( $source_data['import_by'] == 'facebook_organization' ){
+			if( $source_data['page_username'] != 'me' ){
+				$source = '<a href="https://facebook.com/' . $source_data['page_username'] . '" target="_blank" >' . $schedule_title . '</a>';
+			}
+		}elseif( $source_data['import_by'] == 'organizer_id' ){
+			$source = '<a href="https://eventbrite.com/o/' . $source_data['organizer_id'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}elseif( $source_data['import_by'] == 'ical_url' ){
+			$source = '<a href="' . $source_data['ical_url'] . '" target="_blank" >iCal URL</a>';
+		}elseif( $source_data['import_by'] == 'facebook_group' ){
+			$source = '<a href="https://www.facebook.com/groups/' . $source_data['facebook_group_id'] . '" target="_blank" >Facebook Group</a>';
+		}elseif( $source_data['import_by'] == 'group_url' ){
+			$source = '<a href="' . $source_data['meetup_url'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}else{
+			$source = 'No Data Found';
+		}
+		return $source;
+	}
+
+	/**
 	 * Setup Featured image to events
 	 *
 	 * @since    1.0.0
@@ -564,6 +591,46 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Display schedule import source 
+	 *
+	 * @since   1.6.5
+	 * @return  void
+	 */
+	function render_import_source( $schedule_eventdata = '' ){
+		if( !empty( $schedule_eventdata['page_username'] ) ){
+			$event_source  = $schedule_eventdata['page_username'];
+			$event_origins = 'Facebook Page ID';
+			$name          = 'page_username';
+		}elseif( !empty( $schedule_eventdata['facebook_group_id'] ) ){
+			$event_source  = $schedule_eventdata['facebook_group_id'];
+			$event_origins = 'Facebook Group ID';
+			$name          = 'facebook_group_id';
+		}elseif( !empty( $schedule_eventdata['meetup_url'] ) ){
+			$event_source  = $schedule_eventdata['meetup_url'];
+			$event_origins = 'Meetup Group URL';
+			$name          = 'meetup_url';
+		}elseif( !empty( $schedule_eventdata['organizer_id'] ) ){
+			$event_source  = $schedule_eventdata['organizer_id'];
+			$event_origins = 'Eventbrite Organizer ID';
+			$name          = 'organizer_id';
+		}elseif( !empty( $schedule_eventdata['ical_url'] ) ){
+			$event_source  = $schedule_eventdata['ical_url'];
+			$event_origins = 'iCal URL';
+			$name          = 'ical_url';
+		}else{
+			$event_source  = '';
+			$event_origins = 'Please create a new schedule after deleting this';
+			$name          = '';
+		}
+		?>
+		<td>
+			<input type="text" name="<?php echo $name; ?>" required="required" value="<?php echo $event_source; ?>">
+			<span><?php echo $event_origins; ?></span>
+		</td>
+		<?php
+	}
+
+	/**
 	 * Render import type, one time or scheduled
 	 *
 	 * @since   1.0.0
@@ -759,7 +826,7 @@ class WP_Event_Aggregator_Common {
 		if( !empty( $wpea_user_token_options ) ){
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
-				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>.', 'wp-event-aggregator' );
+				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
 			}
 		}
 	}
