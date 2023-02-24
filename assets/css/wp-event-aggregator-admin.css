@@ -471,3 +471,10 @@ table.wpea_form_table tr td:nth-child(1) {
 .wpea_upgrade_pro {
   background: #1da867;
 }
+
+#wpea_edit_scheduled_import .form-table td input{
+  width: 100%;
+}
+#wpea_edit_scheduled_import .form-table td select{
+  width: 100%;
+}
