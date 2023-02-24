@@ -1,10 +1,10 @@
 === WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress ===
-Contributors: xylus,dharm1025
+Contributors: xylus,dharm1025,rajat1192
 Donate link: http://xylusthemes.com
 Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 6.1
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,8 @@ WP Event Aggregator works as a stand-alone as well as add-on plugin with leading
 
 **Features**
 
+* Upcoming Events Widget On Elementor Editor ([Pro][1]).
+* New Event listing Grid view Layout ([Pro][1]).
 * Easy and seemless Event import from Facebook, Eventbrite, Meetup, iCalendar and ICS to WordPres.
 * Import Eventrite event by Event ID, organiser ID ([Pro][1]) and from your Eventbrite account ([Pro][1]).
 * Import Facebook event by Event ID, Facebook page ID ([Pro][1]), Facebook group ([Pro][1]).
@@ -135,6 +137,16 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.7.1 =
+* ADDED: Events Grid List New Layout ( PRO )
+* ADDED: Upcoming Events Elementor Widget ( PRO )
+* ADDED: Setting Page link in notice.
+* ADDED: Schedule import Edit Source Data.
+* ADDED: Schedule import Source Data On schedule row.
+* FIXED: iCal Outlook import Timezone issue.
+* FIXED: Duplicate Event issue in TEC.
+* FIXED: Duplicate Event issue in My Calendar.
 
 = 1.7.0 =
 * FIXED: All Day events bug.
