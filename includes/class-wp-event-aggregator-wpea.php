@@ -80,6 +80,7 @@ class WP_Event_Aggregator_WPEA {
 		$ticket_uri = $centralize_array['url'];
 		$online_event = !empty( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : false ;
 		$timezone     = isset( $centralize_array['timezone'] ) ? sanitize_text_field(  $centralize_array['timezone'] ) : '';
+		$timezone_name = isset( $centralize_array['timezone_name'] ) ? sanitize_text_field(  $centralize_array['timezone_name'] ) : '';
 
 		$emeventdata = array(
 			'post_title'  => $post_title,
@@ -182,6 +183,7 @@ class WP_Event_Aggregator_WPEA {
 			update_post_meta( $inserted_event_id, 'end_ts', $end_time );
 			update_post_meta( $inserted_event_id, 'online_event', $online_event );
 			update_post_meta( $inserted_event_id, 'timezone', $timezone );
+			update_post_meta( $inserted_event_id, 'timezone_name', $timezone_name );
 
 			// Venue
 			update_post_meta( $inserted_event_id, 'venue_name', $venue_name );
