@@ -182,9 +182,9 @@ class HttpFactory
             }
             break;
         } while( true );
-        if( ! empty( $no )) {
-            throw new InvalidArgumentException( sprintf( $MSG, $no, $url ));
-        }
+        // if( ! empty( $no )) {
+        //     throw new InvalidArgumentException( sprintf( $MSG, $no, $url ));
+        // }
     }
 
     /**

@@ -216,6 +216,33 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Get Sourse data.
+	 *
+	 * @since  1.7.1
+	 * @return array
+	 */
+	public function get_source_data( $source_data = array(), $schedule_title = '' ) {
+		
+		$source = '';
+		if( $source_data['import_by'] == 'facebook_organization' ){
+			if( $source_data['page_username'] != 'me' ){
+				$source = '<a href="https://facebook.com/' . $source_data['page_username'] . '" target="_blank" >' . $schedule_title . '</a>';
+			}
+		}elseif( $source_data['import_by'] == 'organizer_id' ){
+			$source = '<a href="https://eventbrite.com/o/' . $source_data['organizer_id'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}elseif( $source_data['import_by'] == 'ical_url' ){
+			$source = '<a href="' . $source_data['ical_url'] . '" target="_blank" >iCal URL</a>';
+		}elseif( $source_data['import_by'] == 'facebook_group' ){
+			$source = '<a href="https://www.facebook.com/groups/' . $source_data['facebook_group_id'] . '" target="_blank" >Facebook Group</a>';
+		}elseif( $source_data['import_by'] == 'group_url' ){
+			$source = '<a href="' . $source_data['meetup_url'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}else{
+			$source = 'No Data Found';
+		}
+		return $source;
+	}
+
+	/**
 	 * Setup Featured image to events
 	 *
 	 * @since    1.0.0
@@ -564,6 +591,46 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Display schedule import source 
+	 *
+	 * @since   1.6.5
+	 * @return  void
+	 */
+	function render_import_source( $schedule_eventdata = '' ){
+		if( !empty( $schedule_eventdata['page_username'] ) ){
+			$event_source  = $schedule_eventdata['page_username'];
+			$event_origins = 'Facebook Page ID';
+			$name          = 'page_username';
+		}elseif( !empty( $schedule_eventdata['facebook_group_id'] ) ){
+			$event_source  = $schedule_eventdata['facebook_group_id'];
+			$event_origins = 'Facebook Group ID';
+			$name          = 'facebook_group_id';
+		}elseif( !empty( $schedule_eventdata['meetup_url'] ) ){
+			$event_source  = $schedule_eventdata['meetup_url'];
+			$event_origins = 'Meetup Group URL';
+			$name          = 'meetup_url';
+		}elseif( !empty( $schedule_eventdata['organizer_id'] ) ){
+			$event_source  = $schedule_eventdata['organizer_id'];
+			$event_origins = 'Eventbrite Organizer ID';
+			$name          = 'organizer_id';
+		}elseif( !empty( $schedule_eventdata['ical_url'] ) ){
+			$event_source  = $schedule_eventdata['ical_url'];
+			$event_origins = 'iCal URL';
+			$name          = 'ical_url';
+		}else{
+			$event_source  = '';
+			$event_origins = 'Please create a new schedule after deleting this';
+			$name          = '';
+		}
+		?>
+		<td>
+			<input type="text" name="<?php echo $name; ?>" required="required" value="<?php echo $event_source; ?>">
+			<span><?php echo $event_origins; ?></span>
+		</td>
+		<?php
+	}
+
+	/**
 	 * Render import type, one time or scheduled
 	 *
 	 * @since   1.0.0
@@ -672,50 +739,20 @@ class WP_Event_Aggregator_Common {
 		global $wpdb;
 		$event_id = $centralize_array['ID'];
 		$post_status = array( 'pending', 'draft', 'publish', 'private' );
-		if( apply_filters( 'wpea_not_import_trashed_events', true ) ){
-			$post_status[] = 'trash';
-		}
-		$event_args = array(
-			'post_type' => $post_type,
-			'post_status' => $post_status,
-			'posts_per_page' => -1,
-			'suppress_filters' => true,
-			'meta_key'   => 'wpea_event_id',
-			'meta_value' => $event_id,
+
+		$get_post_id = $wpdb->get_col(
+			$wpdb->prepare(
+				'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND ' . $wpdb->prefix . 'posts.post_status != %s AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
+				$post_type,
+				'trash',
+				'wpea_event_id',
+				$event_id
+			)
 		);
-		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
-			if( isset( $centralize_array['ID_ical_old'] ) && $centralize_array['ID_ical_old'] != '' ){
-				$meta_query = array(
-					array(
-						'key'     => 'wpea_event_id',
-						'value'   => array( $event_id, $centralize_array['ID_ical_old'] ),
-						'compare' => 'IN',
-					)
-				);
-				$event_args['meta_query'] = $meta_query;
-				unset( $event_args['meta_key'] );
-				unset( $event_args['meta_value'] );
-			}
+
+		if ( !empty( $get_post_id[0] ) ) {
+			return $get_post_id[0];
 		}
-		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
-			$event_args['tribe_suppress_query_filters'] = true;
-			if( method_exists( "Tribe__Events__Query", "pre_get_posts" ) ){
-				remove_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );
-			}
-		}		
-		$events = new WP_Query( $event_args );
-		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
-			if( method_exists( "Tribe__Events__Query", "pre_get_posts" ) ){
-				add_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );
-			}
-		}		
-		if ( $events->have_posts() ) {
-			while ( $events->have_posts() ) {
-				$events->the_post();
-				return get_the_ID();
-			}
-		}
-		wp_reset_postdata();
 
 		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
 			
@@ -759,7 +796,7 @@ class WP_Event_Aggregator_Common {
 		if( !empty( $wpea_user_token_options ) ){
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
-				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong>Settings</strong>.', 'wp-event-aggregator' );
+				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
 			}
 		}
 	}

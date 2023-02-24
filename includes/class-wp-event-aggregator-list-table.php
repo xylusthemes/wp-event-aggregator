@@ -82,13 +82,18 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			$import_into = $active_plugins[$item["import_into"]];
 		}
 
+		$source_data = get_post_meta( $item['ID'], 'import_eventdata', true );
+		$source = $importevents->common->get_source_data( $source_data, $item['title'] );
+
 		return sprintf( '<strong>%1$s</strong>
 			<span>%2$s</span></br>
 			<span>%3$s</span></br>
-			<span style="color:silver">(id:%4$s)</span>%5$s',
+			<span>%4$s</span></br>
+			<span style="color:silver">(id:%5$s)</span>%6$s',
 			$item['title'],
 			__('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
 			__('Import Into', 'wp-event-aggregator') . ': <b>' . $import_into . '</b>',
+			__('Source', 'wp-event-aggregator') . ': <b>' . $source . '</b>',
 			$item['ID'],
 			$this->row_actions( $actions )
 		);
