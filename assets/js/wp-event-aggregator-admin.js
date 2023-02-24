@@ -138,18 +138,6 @@
 
 				jQuery('.facebook_page_wrapper').show();
 				jQuery('.facebook_page_wrapper .facebook_page_username').attr('required', 'required');
-			} else if( current_value == 'my_events' ){
-
-				jQuery('.import_type_wrapper').show();
-
-				jQuery('.facebook_eventid_wrapper').hide();
-				jQuery('.facebook_eventid_wrapper .facebook_event_ids').removeAttr( 'required' );
-
-				jQuery('.facebook_group_wrapper').hide();
-				jQuery('.facebook_group_wrapper .facebook_group').removeAttr( 'required' );
-
-				jQuery('.facebook_page_wrapper').hide();
-				jQuery('.facebook_page_wrapper .facebook_page_username').removeAttr( 'required' );
 			}
 
 		});
