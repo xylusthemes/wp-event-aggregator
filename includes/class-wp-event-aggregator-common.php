@@ -739,50 +739,20 @@ class WP_Event_Aggregator_Common {
 		global $wpdb;
 		$event_id = $centralize_array['ID'];
 		$post_status = array( 'pending', 'draft', 'publish', 'private' );
-		if( apply_filters( 'wpea_not_import_trashed_events', true ) ){
-			$post_status[] = 'trash';
-		}
-		$event_args = array(
-			'post_type' => $post_type,
-			'post_status' => $post_status,
-			'posts_per_page' => -1,
-			'suppress_filters' => true,
-			'meta_key'   => 'wpea_event_id',
-			'meta_value' => $event_id,
+
+		$get_post_id = $wpdb->get_col(
+			$wpdb->prepare(
+				'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND ' . $wpdb->prefix . 'posts.post_status != %s AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
+				$post_type,
+				'trash',
+				'wpea_event_id',
+				$event_id
+			)
 		);
-		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
-			if( isset( $centralize_array['ID_ical_old'] ) && $centralize_array['ID_ical_old'] != '' ){
-				$meta_query = array(
-					array(
-						'key'     => 'wpea_event_id',
-						'value'   => array( $event_id, $centralize_array['ID_ical_old'] ),
-						'compare' => 'IN',
-					)
-				);
-				$event_args['meta_query'] = $meta_query;
-				unset( $event_args['meta_key'] );
-				unset( $event_args['meta_value'] );
-			}
+
+		if ( !empty( $get_post_id[0] ) ) {
+			return $get_post_id[0];
 		}
-		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
-			$event_args['tribe_suppress_query_filters'] = true;
-			if( method_exists( "Tribe__Events__Query", "pre_get_posts" ) ){
-				remove_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );
-			}
-		}		
-		$events = new WP_Query( $event_args );
-		if( $post_type == 'tribe_events' && class_exists( 'Tribe__Events__Query' ) ){
-			if( method_exists( "Tribe__Events__Query", "pre_get_posts" ) ){
-				add_action( 'pre_get_posts', array( 'Tribe__Events__Query', 'pre_get_posts' ), 50 );
-			}
-		}		
-		if ( $events->have_posts() ) {
-			while ( $events->have_posts() ) {
-				$events->the_post();
-				return get_the_ID();
-			}
-		}
-		wp_reset_postdata();
 
 		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
 			

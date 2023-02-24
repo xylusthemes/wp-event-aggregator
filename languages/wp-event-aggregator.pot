@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-02-24T10:10:43+00:00\n"
+"POT-Creation-Date: 2023-02-24T10:15:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: wp-event-aggregator\n"
@@ -419,23 +419,23 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:829
+#: includes/class-wp-event-aggregator-common.php:799
 msgid "The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style=\"text-decoration: none;\" href=\""
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:844
+#: includes/class-wp-event-aggregator-common.php:814
 msgid "Your current \"WP Event Aggregator Pro\" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:858
+#: includes/class-wp-event-aggregator-common.php:828
 msgid "Available in Pro Add-on."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:858
+#: includes/class-wp-event-aggregator-common.php:828
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1292
+#: includes/class-wp-event-aggregator-common.php:1262
 msgid "Buy Tickets"
 msgstr ""
 
