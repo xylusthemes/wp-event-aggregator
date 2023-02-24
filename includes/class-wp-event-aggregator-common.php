@@ -216,6 +216,33 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Get Sourse data.
+	 *
+	 * @since  1.7.1
+	 * @return array
+	 */
+	public function get_source_data( $source_data = array(), $schedule_title = '' ) {
+		
+		$source = '';
+		if( $source_data['import_by'] == 'facebook_organization' ){
+			if( $source_data['page_username'] != 'me' ){
+				$source = '<a href="https://facebook.com/' . $source_data['page_username'] . '" target="_blank" >' . $schedule_title . '</a>';
+			}
+		}elseif( $source_data['import_by'] == 'organizer_id' ){
+			$source = '<a href="https://eventbrite.com/o/' . $source_data['organizer_id'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}elseif( $source_data['import_by'] == 'ical_url' ){
+			$source = '<a href="' . $source_data['ical_url'] . '" target="_blank" >iCal URL</a>';
+		}elseif( $source_data['import_by'] == 'facebook_group' ){
+			$source = '<a href="https://www.facebook.com/groups/' . $source_data['facebook_group_id'] . '" target="_blank" >Facebook Group</a>';
+		}elseif( $source_data['import_by'] == 'group_url' ){
+			$source = '<a href="' . $source_data['meetup_url'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}else{
+			$source = 'No Data Found';
+		}
+		return $source;
+	}
+
+	/**
 	 * Setup Featured image to events
 	 *
 	 * @since    1.0.0
