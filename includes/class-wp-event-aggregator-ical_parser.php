@@ -306,18 +306,19 @@ class WP_Event_Aggregator_Ical_Parser {
 					$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
 
 					if( !empty( $event_data ) ){
-						$event_image = $event_data['image'];
-						$event_venue = $event_data['location'];
-						$timezone    = $event_data['timezone'];
-						$start_time  = $event_data['start_time'];
-						$end_time    = $event_data['end_time'];
+						$event_image   = $event_data['image'];
+						$event_venue   = $event_data['location'];
+						$timezone      = $event_data['timezone'];
+						$timezone_name = $event_data['timezone_name'];
+						$start_time    = $event_data['start_time'];
+						$end_time      = $event_data['end_time'];
 					}
 
 					if( empty( $event_data['start_time'] ) ){
-						$start_time = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
+						$start_time = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone_name'] ) );
 					}
 					if( empty( $event_data['end_time'] ) ){
-						$end_time   = strtotime( $this->convert_fb_ical_timezone(  $end->format('Y-m-d H:i:s'), $event_data['timezone'] ) );
+						$end_time   = strtotime( $this->convert_fb_ical_timezone(  $end->format('Y-m-d H:i:s'), $event_data['timezone_name'] ) );
 					}
 				}
 			}
@@ -336,6 +337,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'startime_utc'    => '',
 			'endtime_utc'     => '',
 			'timezone'        => $timezone,
+			'timezone_name'   => $timezone_name,
 			'utc_offset'      => '',
 			'event_duration'  => '',
 			'is_all_day'      => $is_all_day,
@@ -582,11 +584,12 @@ class WP_Event_Aggregator_Ical_Parser {
 			if( $fetch_image ) {
 				$facebook_event = $importevents->facebook->get_facebook_event_by_event_id( $event_id['ID'] );
 				if ( ! empty( $facebook_event->cover )  ) {
-					$event_data['image']      = $facebook_event->cover->source;
-					$event_data['location']   = $facebook_event->place;
-					$event_data['timezone']   = $facebook_event->timezone;
-					$event_data['start_time'] = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) :'';
-					$event_data['end_time']   = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : '';
+					$event_data['image']         = $facebook_event->cover->source;
+					$event_data['location']      = $facebook_event->place;
+					$event_data['timezone_name'] = $facebook_event->timezone;
+					$event_data['start_time']    = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) :'';
+					$event_data['end_time']      = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : '';
+					$event_data['timezone']      = $importevents->common->get_utc_offset( $facebook_event->start_time );
 				}
 			}
 		} else {
@@ -595,9 +598,9 @@ class WP_Event_Aggregator_Ical_Parser {
 			if( !empty( $imagesource ) ){
 				$event_data['image'] = $imagesource;
 			}
-			$event_timezone   = get_post_meta( $is_exitsing_event, 'timezone', true );
+			$event_timezone   = get_post_meta( $is_exitsing_event, 'timezone_name', true );
 			if( !empty( $event_timezone ) ){
-				$event_data['timezone'] = $event_timezone;
+				$event_data['timezone_name'] = $event_timezone;
 			}
 		}
 		return $event_data;
