@@ -77,7 +77,22 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="eventbrite[update_events]" value="yes" <?php if( $update_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "(<em>%s</em>)", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <?php _e( 'Import Private Events', 'wp-event-aggregator' ); ?> : 
+                        </th>
+                        <td>
+                            <?php 
+                            $private_eventbrite_events = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
+                            ?>
+                            <input type="checkbox" name="eventbrite[private_events]" value="yes" <?php if( $private_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php _e( 'Tick to import Private events, Untick to not import private event.', 'wp-event-aggregator' ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -234,7 +249,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="meetup[update_events]" value="yes" <?php if( $update_meetup_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "(<em>%s</em>)", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -337,7 +352,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="facebook[update_events]" value="yes" <?php if( $update_facebook_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "(<em>%s</em>)", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -383,7 +398,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="ical[update_events]" value="yes" <?php if( $update_ical_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "(<em>%s</em>)", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
