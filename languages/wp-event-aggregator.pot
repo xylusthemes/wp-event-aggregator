@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-02-24T12:40:17+00:00\n"
+"POT-Creation-Date: 2023-02-28T09:03:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: wp-event-aggregator\n"
@@ -752,7 +752,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-facebook.php:65
 #: includes/class-wp-event-aggregator-facebook.php:154
-#: includes/class-wp-event-aggregator-manage-import.php:274
+#: includes/class-wp-event-aggregator-manage-import.php:275
 msgid "Please insert Facebook app ID and app Secret."
 msgstr ""
 
@@ -788,7 +788,7 @@ msgstr ""
 msgid "Unable to retrieve content from the provided URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-ical_parser.php:80
+#: includes/class-wp-event-aggregator-ical_parser.php:96
 msgid "Please select end date bigger than start date."
 msgstr ""
 
@@ -909,53 +909,53 @@ msgstr ""
 msgid "Please provide Import into plugin for Event import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:98
+#: includes/class-wp-event-aggregator-manage-import.php:99
 msgid "Import settings has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:213
+#: includes/class-wp-event-aggregator-manage-import.php:214
 msgid "Please insert Eventbrite \"Personal OAuth token\" in settings."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:225
+#: includes/class-wp-event-aggregator-manage-import.php:226
 msgid "Please provide valid Eventbrite event ID."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:250
+#: includes/class-wp-event-aggregator-manage-import.php:251
 #: includes/class-wp-event-aggregator-meetup.php:60
 msgid "Please provide valid Meetup group URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:311
+#: includes/class-wp-event-aggregator-manage-import.php:313
 msgid "Please upload .ics file"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:324
+#: includes/class-wp-event-aggregator-manage-import.php:326
 msgid "Nothing to import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:341
+#: includes/class-wp-event-aggregator-manage-import.php:343
 msgid "Scheduled import deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:345
-#: includes/class-wp-event-aggregator-manage-import.php:365
+#: includes/class-wp-event-aggregator-manage-import.php:347
+#: includes/class-wp-event-aggregator-manage-import.php:367
 msgid "Scheduled imports are deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:349
+#: includes/class-wp-event-aggregator-manage-import.php:351
 msgid "Scheduled import has been run successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:353
+#: includes/class-wp-event-aggregator-manage-import.php:355
 msgid "Import history deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:357
+#: includes/class-wp-event-aggregator-manage-import.php:359
 msgid "Import histories are deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:361
+#: includes/class-wp-event-aggregator-manage-import.php:363
 msgid "Scheduled import has been updated successfully."
 msgstr ""
 
@@ -1115,14 +1115,14 @@ msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:88
 #: templates/admin/facebook-import-events.php:98
-#: templates/admin/ical-import-events.php:82
+#: templates/admin/ical-import-events.php:91
 #: templates/admin/meetup-import-events.php:79
 msgid "Import type"
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:107
 #: templates/admin/facebook-import-events.php:117
-#: templates/admin/ical-import-events.php:101
+#: templates/admin/ical-import-events.php:110
 #: templates/admin/meetup-import-events.php:99
 msgid "Import Event"
 msgstr ""
@@ -1197,16 +1197,32 @@ msgstr ""
 msgid "Events date range"
 msgstr ""
 
-#: templates/admin/ical-import-events.php:72
-msgid "Select start date"
+#: templates/admin/ical-import-events.php:73
+msgid "6 Months"
 msgstr ""
 
-#: templates/admin/ical-import-events.php:73
-msgid "Select end date"
+#: templates/admin/ical-import-events.php:74
+msgid "1 Year"
 msgstr ""
 
 #: templates/admin/ical-import-events.php:75
-msgid "Select date range from which you want to import events. Default startdate is Today"
+msgid "2 Years"
+msgstr ""
+
+#: templates/admin/ical-import-events.php:76
+msgid "Custom"
+msgstr ""
+
+#: templates/admin/ical-import-events.php:80
+msgid "Select start date"
+msgstr ""
+
+#: templates/admin/ical-import-events.php:81
+msgid "Select end date"
+msgstr ""
+
+#: templates/admin/ical-import-events.php:84
+msgid "Select date range from which you want to import events."
 msgstr ""
 
 #: templates/admin/meetup-import-events.php:37
