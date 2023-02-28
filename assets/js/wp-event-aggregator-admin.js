@@ -168,7 +168,18 @@
 		});
 
 		jQuery("#ical_import_by").trigger('change');
-	});	
+	});
+
+	jQuery(document).ready(function(){
+		jQuery('#ical_import_by_date').on('change', function(){
+			if( jQuery(this).val() == 'custom_date_range' ){
+				jQuery('#custom_date_range_se').show();
+			}else{
+				jQuery('#custom_date_range_se').hide();
+			}
+		});
+		jQuery("#ical_import_by_date").trigger('change');
+	});
 
 	// Render Dynamic Terms.
 	jQuery(document).ready(function() {
