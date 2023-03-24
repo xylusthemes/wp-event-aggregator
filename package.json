@@ -4,26 +4,11 @@
   "license": "GPL-2.0+",
   "main": "blocks/index.js",
   "scripts": {
-    "dev": "cross-env BABEL_ENV=default webpack --watch",
-    "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack -p"
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "lint:js": "wp-scripts lint-js blocks/"
   },
-  "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@wordpress/babel-preset-default": "^2.1.0",
-    "babel-eslint": "^9.0.0",
-    "babel-loader": "^8.0.2",
-    "classnames": "^2.2.6",
-    "cross-env": "^5.2.0",
-    "css-loader": "^1.0.0",
-    "eslint": "^5.5.0",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "node-sass": "^7.0.0",
-    "npm-check": "^5.9.2",
-    "postcss-loader": "^3.0.0",
-    "raw-loader": "^0.5.1",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.0",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.1.0"
+  "dependencies": {
+    "@wordpress/scripts": "^26.0.0"
   }
 }

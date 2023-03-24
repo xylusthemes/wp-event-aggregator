@@ -21,7 +21,7 @@ function wpea_register_gutenberg_block() {
 	global $importevents;
 	if ( function_exists( 'register_block_type' ) ) {
 		// Register block editor script.
-		$js_dir = WPEA_PLUGIN_URL . 'assets/js/';
+		$js_dir = WPEA_PLUGIN_URL . 'assets/js/blocks/';
 		wp_register_script(
 			'wpea-wp-events-block',
 			$js_dir . 'gutenberg.blocks.js',
@@ -38,19 +38,27 @@ function wpea_register_gutenberg_block() {
 			WPEA_VERSION
 		);
 
+		wp_register_style(
+			'wpea-wp-events-block-style2',
+			$css_dir . 'grid-style2.css',
+			array(),
+			WPEA_VERSION
+		);
+
 		// Register our block.
 		register_block_type( 'wpea-block/wp-events', array(
 			'attributes'      => array(
 				'col'            => array(
 					'type'    => 'number',
-					'default' => 3,
+					'default' => 2,
 				),
 				'posts_per_page' => array(
 					'type'    => 'number',
 					'default' => 12,
 				),
 				'past_events'    => array(
-					'type' => 'string',
+					'type'    => 'boolean',
+					'default' => false,
 				),
 				'start_date'     => array(
 					'type'    => 'string',
@@ -68,10 +76,15 @@ function wpea_register_gutenberg_block() {
 					'type'    => 'string',
 					'default' => 'event_start_date',
 				),
+				'layout'        => array(
+					'type'    => 'string',
+					'default' => '',
+				),
 
 			),
 			'editor_script'   => 'wpea-wp-events-block', // The script name we gave in the wp_register_script() call.
 			'editor_style'    => 'wpea-wp-events-block-style', // The script name we gave in the wp_register_style() call.
+			'style'           => 'wpea-wp-events-block-style2',
 			'render_callback' => array( $importevents->cpt, 'wp_events_archive' ),
 		) );
 	}
