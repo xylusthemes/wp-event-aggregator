@@ -88,9 +88,9 @@ class CalAddressFactory
         static $DOT    = '.';
         static $XDOT   = 'x.';
         static $ERRMSG = 'Invalid email %s';
-        if( false == strpos( $calAddress, self::$AT )) {
-            throw new InvalidArgumentException( sprintf( $ERRMSG, $calAddress ));
-        }
+        // if( false == strpos( $calAddress, self::$AT )) {
+        //     throw new InvalidArgumentException( sprintf( $ERRMSG, $calAddress ));
+        // }
         $domain = StringFactory::after( self::$AT, $calAddress );
         if( false === strpos( StringFactory::before( self::$AT, $calAddress ), $DOT )) {
             $namePart    = self::extractNamepartFromEmail( $calAddress );
