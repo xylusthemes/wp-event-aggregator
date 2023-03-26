@@ -122,7 +122,7 @@ class WP_Event_Aggregator{
 
 		// Minimum Pro plugin version.
 		if( ! defined( 'WPEA_MIN_PRO_VERSION' ) ){
-			define( 'WPEA_MIN_PRO_VERSION', '1.7.2' );
+			define( 'WPEA_MIN_PRO_VERSION', '1.7.1' );
 		}
 
 		// Plugin folder Path.
