@@ -1,5 +1,6 @@
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
+const { dateI18n, getSettings } = wp.date;
 const {
 	PanelBody,
 	PanelRow,
@@ -10,17 +11,10 @@ const {
 	ToggleControl,
 	RadioControl,
 	DateTimePicker,
-	ServerSideRender,
 } = wp.components;
-const { InspectorControls } = wp.editor;
-const { dateI18n, __experimentalGetSettings } = wp.date;
-const { createElement } = wp.element;
+var InspectorControls = wp.blockEditor.InspectorControls;
 
-/**
- * Register: Facebook Events Gutenberg Block.
- */
 registerBlockType( 'wpea-block/wp-events', {
-	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __( 'WP Events' ),
 	description: __( 'Block for Display WP Events' ),
 	// icon: 'wordpress',
@@ -34,24 +28,18 @@ registerBlockType( 'wpea-block/wp-events', {
 		__( 'WP' ),
 		__( 'wp events' ),
 	],
-
-	// Enable or disable support for features
-	supports: {
-		html: false,
-	},
-
-	// Set for each piece of dynamic data used in your block
-	attributes: {
-		col: {
+    attributes: {
+        col: {
 			type: 'number',
-			default: 3,
+			default: 2,
 		},
 		posts_per_page: {
 			type: 'number',
 			default: 12,
 		},
 		past_events: {
-			type: 'string',
+			type: 'boolean',
+     		default: false
 		},
 		start_date: {
 			type: 'string',
@@ -69,44 +57,65 @@ registerBlockType( 'wpea-block/wp-events', {
 			type: 'string',
 			default: 'event_start_date',
 		},
-	},
+		layout: {
+			type: 'string',
+			default: '',
+		},
+    },
+    edit: ( { attributes, setAttributes } ) => {
+        const { col, posts_per_page, past_events, start_date, end_date, order, orderby, layout } = attributes;
+		const settings = getSettings();
+		const dateClassName = past_events === true ? 'wpea_hidden' : '';
+		const { serverSideRender: ServerSideRender } = wp;
 
-	// Determines what is displayed in the editor
-	edit: function( props ) {
-		const { attributes, isSelected, setAttributes } = props;
-		const settings = __experimentalGetSettings();
-		const dateClassName = attributes.past_events === 'yes' ? 'wpea_hidden' : '';
-
-		// To know if the current timezone is a 12 hour time with look for "a" in the time format
-		// We also make sure this a is not escaped by a "/"
 		const is12HourTime = /a(?!\\)/i.test(
 			settings.formats.time
 				.toLowerCase() // Test only the lower case a
 				.replace( /\\\\/g, '' ) // Replace "//" with empty strings
 				.split( '' ).reverse().join( '' ) // Reverse the string and test for "a" not followed by a slash
 		);
-
-		return [
-			isSelected && (
-				<InspectorControls key="inspector">
+        return (
+            <div>
+                <InspectorControls>
 					<PanelBody title={ __( 'WP Events Setting' ) }>
 						<RangeControl
-							label={ __( 'Columns' ) }
-							value={ attributes.col || 3 }
-							onChange={ ( value ) => setAttributes( { col: value } ) }
-							min={ 1 }
-							max={ 4 }
-						/>
+								label={ __( 'Columns' ) }
+								value={ col || 2 }	
+								onChange={ ( value ) => setAttributes( { col: value } ) }
+								min={ 1 }
+								max={ 4 }
+							/>
 						<RangeControl
 							label={ __( 'Events per page' ) }
-							value={ attributes.posts_per_page || 12 }
+							value={ posts_per_page || 12 }
 							onChange={ ( value ) => setAttributes( { posts_per_page: value } ) }
 							min={ 1 }
 							max={ 100 }
 						/>
+						<ToggleControl
+							label={ __( 'Display past events' ) }
+							checked={ past_events }
+							onChange={ value => {
+								return setAttributes( { 
+									start_date: '',
+									end_date: '',
+									past_events: value
+								} );
+							}
+							}
+						/>
+						<SelectControl
+							label="Event Grid View Layout"
+							value={ layout }
+							options={ [
+								{ label: 'Default', value: '' },
+								{ label: 'Style 2', value: 'style2' },
+							] }
+							onChange={ ( value ) => setAttributes( { layout: value } ) }
+						/>
 						<SelectControl
 							label="Order By"
-							value={ attributes.orderby }
+							value={ orderby }
 							options={ [
 								{ label: 'Event Start Date', value: 'event_start_date' },
 								{ label: 'Event End Date', value: 'event_end_date' },
@@ -116,29 +125,21 @@ registerBlockType( 'wpea-block/wp-events', {
 						/>
 						<RadioControl
 							label={ __( 'Order' ) }
-							selected={ attributes.order }
+							selected={ order }
 							options={ [
 								{ label: __( 'Ascending' ), value: 'ASC' },
 								{ label: __( 'Descending' ), value: 'DESC' },
 							] }
 							onChange={ value => setAttributes( { order: value } ) }
 						/>
-						<ToggleControl
-							label={ __( 'Display past events' ) }
-							checked={ attributes.past_events }
-							onChange={ value => {
-								attributes.start_date = '';
-								attributes.end_date = '';
-								return setAttributes( { past_events: value ? 'yes' : false } );
-							}
-							}
-						/>
 						<PanelRow className={ `wpea-start-date ${ dateClassName }` }>
-							<span>{ __( 'Start Date' ) }</span>
+							<span>{ __( 'Event Start Date' ) }</span>
 							<Dropdown
+								label={ __( 'Start Date' ) }
 								position="bottom left"
 								contentClassName="wpea-start-date__dialog"
-								renderToggle={ ( { onToggle, isOpen } ) => (
+								popoverProps={ { placement: 'bottom-start' } }
+								renderToggle={ ( { isOpen, onToggle } ) => (
 									<Button
 										type="button"
 										className="wpea-start-date__toggle"
@@ -146,25 +147,29 @@ registerBlockType( 'wpea-block/wp-events', {
 										aria-expanded={ isOpen }
 										isLink
 									>
-										{ eventDateLabel( attributes.start_date, true ) }
+										{ eventDateLabel( start_date, true ) }
 									</Button>
 								) }
 								renderContent={ () =>
 									<DateTimePicker
-										currentDate={ attributes.start_date !== '' ? attributes.start_date : new Date() }
+										currentDate={ start_date !== '' ? start_date : new Date() }
 										onChange={ ( value ) => setAttributes( { start_date: value } ) }
 										locale={ settings.l10n.locale }
 										is12Hour={ is12HourTime }
+										__nextRemoveHelpButton
+										__nextRemoveResetButton
 									/>
 								}
 							/>
 						</PanelRow>
 						<PanelRow className={ `wpea-end-date ${ dateClassName }` }>
-							<span>{ __( 'End Date' ) }</span>
+							<span>{ __( 'Event End Date' ) }</span>
 							<Dropdown
+								label={ __( 'End Date' ) }
 								position="bottom left"
 								contentClassName="wpea-end-date__dialog"
-								renderToggle={ ( { onToggle, isOpen } ) => (
+								popoverProps={ { placement: 'bottom-start' } }
+								renderToggle={ ( { isOpen, onToggle } ) => (
 									<Button
 										type="button"
 										className="wpea-end-date__toggle"
@@ -172,38 +177,38 @@ registerBlockType( 'wpea-block/wp-events', {
 										aria-expanded={ isOpen }
 										isLink
 									>
-										{ eventDateLabel( attributes.end_date ) }
+										{ eventDateLabel( end_date ) }
 									</Button>
 								) }
 								renderContent={ () =>
 									<DateTimePicker
-										currentDate={ attributes.end_date !== '' ? attributes.end_date : new Date() }
+										currentDate={ end_date !== '' ? end_date : new Date() }
 										onChange={ ( value ) => setAttributes( { end_date: value } ) }
 										locale={ settings.l10n.locale }
 										is12Hour={ is12HourTime }
+										__nextRemoveHelpButton
+										__nextRemoveResetButton
 									/>
 								}
 							/>
 						</PanelRow>
 					</PanelBody>
-				</InspectorControls>
-			),
-
-			createElement( ServerSideRender, {
-				block: 'wpea-block/wp-events',
-				attributes: attributes,
-			} ),
-		];
-	},
-
+                </InspectorControls>
+				<ServerSideRender
+					block="wpea-block/wp-events"
+					attributes={attributes}
+					key={JSON.stringify(attributes)}
+				/>
+            </div>
+        );
+    },
 	save: function() {
 		// Rendering in PHP.
 		return null;
 	},
-} );
-
+});
 function eventDateLabel( date, start ) {
-	const settings = __experimentalGetSettings();
+	const settings = getSettings();
 	const defaultLabel = start ? __( 'Select Start Date' ) : __( 'Select End Date' );
 	return date ?
 		dateI18n( settings.formats.datetime, date ) :

@@ -717,6 +717,9 @@ class WP_Event_Aggregator_Cpt {
 			}
 
 		}else{
+			if( isset( $atts['past_events'] ) && $atts['past_events'] == true ){
+				$atts['past_events'] = "yes";
+			}
 			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' ){
 				$eve_args['meta_query'] = array(
 						        array(
@@ -770,6 +773,9 @@ class WP_Event_Aggregator_Cpt {
 				$eve_args['order'] = sanitize_text_field( $atts['order'] );
 			}
 		}else{
+			if( isset( $atts['past_events'] ) && $atts['past_events'] == true ){
+				$atts['past_events'] = "yes";
+			}
 			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' && $eve_args['orderby'] == 'meta_value' ){
 				$eve_args['order'] = 'DESC';
 			}else{
