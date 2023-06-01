@@ -61,7 +61,7 @@ global $importevents;
 			                    <span class="wpea_small">
 			                        <?php 
 			                        if( wpea_is_pro() ){
-			                        	_e( 'Insert eventbrite event IDs, One event ID per line ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>  ).', 'wp-event-aggregator' );
+			                        	_e( 'Eventbrite Event IDs, one Event ID per line (Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>).', 'wp-event-aggregator' );
 			                        } else {
 			                        	_e( 'Insert Eventbrite event ID ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>  ).', 'wp-event-aggregator' );
 			                        }
@@ -77,7 +77,7 @@ global $importevents;
 					    	<td>
 					    		<input class="wpea_text wpea_organizer_id" name="wpea_organizer_id" type="text" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled';} ?> />
 			                    <span class="wpea_small">
-			                        <?php _e( 'Insert eventbrite organizer ID ( Eg. https://www.eventbrite.com/o/cept-university-<span class="borderall">9151813372</span>  ).', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Insert Eventbrite Organizer ID (Eg. https://www.eventbrite.com/o/cept-university-<span class="borderall">9151813372</span>).', 'wp-event-aggregator' ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
@@ -85,7 +85,7 @@ global $importevents;
 
 					    <tr class="import_type_wrapper">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
+					    		<?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
 						    	<?php $importevents->common->render_import_type(); ?>

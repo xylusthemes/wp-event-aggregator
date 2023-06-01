@@ -46,14 +46,14 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
 
 		public function get_deactivation_reasons() {
 			return array(
-				'confusing' => __('I couldn\'t understand how to make it work', 'wp-event-aggregator' ),
-				'better_plugin' => __('I found a better plugin', 'wp-event-aggregator' ),
-				'feature_request' => __('The plugin is great, but I need specific feature that you don\'t support', 'wp-event-aggregator' ),
-				'buggy' => __('Plugin has bugs and it\'s not working', 'wp-event-aggregator' ),
-				'wrong_plugin' => __('It\'s not what I was looking for', 'wp-event-aggregator' ),
-				'not_working' => __('Plugin didn\'t work as expected', 'wp-event-aggregator' ),
-				'temporary' => __('It\'s temporary deactivatation, for debug an issue', 'wp-event-aggregator' ),
-				'other' => __('Other reasons', 'wp-event-aggregator' ),
+				'confusing' => __('I did not understand how to make it work', 'wp-event-aggregator' ),
+				'better_plugin' => __('I found a better plugin.', 'wp-event-aggregator' ),
+				'feature_request' => __('The plugin is great, but I need specific feature that you don\'t support.', 'wp-event-aggregator' ),
+				'buggy' => __('Plugin has bugs, and it\'s not working.', 'wp-event-aggregator' ),
+				'wrong_plugin' => __('It\'s not what I was looking for.', 'wp-event-aggregator' ),
+				'not_working' => __('Plugin did not work as expected.', 'wp-event-aggregator' ),
+				'temporary' => __('Temporary deactivatation to debug an issue.', 'wp-event-aggregator' ),
+				'other' => __('Other reasons.', 'wp-event-aggregator' ),
 			);
         }
 
@@ -211,26 +211,26 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                         var customerQuery = jQuery('#<?php echo $this->prefix; ?>customer_query');
                         customerQuery.removeAttr('required');
                         if (reason === "confusing") {
-                            customerQuery.attr("placeholder", "<?php _e('Finding it confusing? let us know so that we can improve the interface', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Finding it confusing? Please let us know so we can improve the interface.', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "other") {
-                            customerQuery.attr("placeholder", "<?php _e('Can you let us know the reason for deactivation (Required)', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Please let us know the reason for deactivation: (Required)', 'wp-event-aggregator' ); ?>");
                             customerQuery.prop('required', true);
 
                         } else if (reason === "buggy" || reason === 'not_working') {
-                            customerQuery.attr("placeholder", "<?php _e('Can you please let us know about the bug/issue in detail?', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Please describe the bug/issue in detail:', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "better_plugin") {
-                            customerQuery.attr("placeholder", "<?php _e('Can you please let us know which plugin you found helpful', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Please let us know which plugin you found helpful:', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "feature_request") {
-                            customerQuery.attr("placeholder", "<?php _e('Can you please let us know more about the feature you want', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Please let us know more about the features you want:', 'wp-event-aggregator' ); ?>");
 
                         }  else if (reason === "wrong_plugins") {
-                            customerQuery.attr("placeholder", "<?php _e('Can you please let us know more about your requirement', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Please let us know more about your requirements:', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "temporary") {
-                            customerQuery.attr("placeholder", "<?php _e('Write your query here', 'wp-event-aggregator'); ?>");
+                            customerQuery.attr("placeholder", "<?php _e('Write your query here:', 'wp-event-aggregator'); ?>");
                         }
                     });
                 });
@@ -255,7 +255,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
             }
 			</style>
             <div id="<?php echo $this->slug; ?>-deactivate-dialog">
-                <h3><?php _e('If you have a moment, please let us know why you are deactivating:', 'wp-event-aggregator'); ?></h3>
+                <h3><?php _e('Please let us know why you are deactivating:', 'wp-event-aggregator'); ?></h3>
                 <form method="post" action="" id="<?php echo $this->prefix; ?>deactivatation_form">
                     <div>
                     <?php

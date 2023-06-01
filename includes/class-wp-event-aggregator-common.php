@@ -78,7 +78,7 @@ class WP_Event_Aggregator_Common {
 
 				</div>
 				<span class="wpea_small">
-		            <?php esc_attr_e( 'These categories are assign to imported event.', 'wp-event-aggregator' ); ?>
+		            <?php esc_attr_e( 'These categories are assigned to imported events.', 'wp-event-aggregator' ); ?>
 		        </span>
 			</td>
 		</tr>
@@ -194,7 +194,7 @@ class WP_Event_Aggregator_Common {
 
 		// check All in one Event Calendar
 		if( class_exists( 'Ai1ec_Event' ) ){
-			$supported_plugins['aioec'] = __( 'All in one Event Calendar', 'wp-event-aggregator' );
+			$supported_plugins['aioec'] = __( 'All-in-one Event Calendar', 'wp-event-aggregator' );
 		}
 
 		// check My Calendar
@@ -500,7 +500,7 @@ class WP_Event_Aggregator_Common {
 		$updated = isset( $import_status['updated'] ) ? count( $import_status['updated'] ) : 0;
 		$skipped = isset( $import_status['skipped'] ) ? count( $import_status['skipped'] ) : 0;
 		
-		$success_message = esc_html__( 'Event(s) are imported successfully.', 'wp-event-aggregator' )."<br>";
+		$success_message = esc_html__( 'Event(s) successfully imported.', 'wp-event-aggregator' )."<br>";
 		if( $created > 0 ){
 			$success_message .= "<strong>".sprintf( __( '%d Created', 'wp-event-aggregator' ), $created )."</strong><br>";
 		}
@@ -796,7 +796,7 @@ class WP_Event_Aggregator_Common {
 		if( !empty( $wpea_user_token_options ) ){
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
-				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
+				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user has changed their password, or Facebook has changed the session for security reasons. Please reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
 			}
 		}
 	}
@@ -811,7 +811,7 @@ class WP_Event_Aggregator_Common {
 		if( defined('WPEAPRO_VERSION') ){
 			if ( version_compare( WPEAPRO_VERSION, WPEA_MIN_PRO_VERSION, '<' ) ) {
 				global $ife_warnings;
-				$ife_warnings[] = __( 'Your current "WP Event Aggregator Pro" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly.', 'wp-event-aggregator' );
+				$ife_warnings[] = __( 'The current "WP Event Aggregator Pro" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing.', 'wp-event-aggregator' );
 			}
 		}
 	}
