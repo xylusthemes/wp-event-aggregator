@@ -95,7 +95,6 @@ class WP_Event_Aggregator_Admin {
 	 */
 	function enqueue_admin_styles( $hook ) {
 
-		global $pagenow;
 		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
 		wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
 		wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
