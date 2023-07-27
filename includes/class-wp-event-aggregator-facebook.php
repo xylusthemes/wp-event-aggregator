@@ -286,6 +286,7 @@ class WP_Event_Aggregator_Facebook {
 					'ticket_uri',
 					'timezone',
 					'place',
+					'is_online'
 				);
 		$include_owner = apply_filters( 'wpea_import_owner', false );
 		if( $include_owner ){
@@ -361,6 +362,12 @@ class WP_Event_Aggregator_Facebook {
 			}
 		}
 
+		if( isset( $facebook_event->is_online ) && $facebook_event->is_online == 1 ){
+			$is_online = '1';
+		}else{
+			$is_online = '0';
+		}
+
 		$xt_event = array(
 			'origin'          => 'facebook',
 			'ID'              => $facebook_id,
@@ -377,13 +384,14 @@ class WP_Event_Aggregator_Facebook {
 			'is_all_day'      => '',
 			'url'             => $ticket_uri,
 			'image_url'       => $cover_image,
+			'online_event'    => $is_online,
 		);
 
 		if ( isset( $facebook_event->owner ) ) {
 			$xt_event['organizer'] = $this->get_organizer( $facebook_event );
 		}
 
-		if ( isset( $facebook_event->place ) ) {
+		if ( isset( $facebook_event->place ) || isset( $facebook_event->is_online ) ) {
 			$xt_event['location'] = $this->get_location( $facebook_event );
 		}
 
@@ -457,9 +465,13 @@ class WP_Event_Aggregator_Facebook {
 	 */
 	public function get_location( $facebook_event ) {
 
-		// if ( !isset( $facebook_event->place->id ) ) {
-		// 	return null;
-		// }
+		if( $facebook_event->is_online === true ){
+			$event_location = array(
+				'name'         => 'Online Event',
+			);
+			return $event_location;
+		}
+
 		$event_venue = $facebook_event->place;
 		$event_location = array(
 			'ID'           => isset( $facebook_event->place->id ) ? $facebook_event->place->id : '',

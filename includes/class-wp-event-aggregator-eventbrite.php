@@ -234,7 +234,7 @@ class WP_Event_Aggregator_Eventbrite {
 			$xt_event['organizer'] = $this->get_organizer( $eventbrite_event );
 		}
 
-		if ( array_key_exists( 'venue_id', $eventbrite_event ) && !empty( $eventbrite_event['venue_id'] ) ) {
+		if ( array_key_exists( 'name', $eventbrite_event ) && !empty( $eventbrite_event['name'] ) ) {
 			$xt_event['location'] = $this->get_location( $eventbrite_event );
 		}
 
@@ -292,6 +292,13 @@ class WP_Event_Aggregator_Eventbrite {
 			return null;
 		}
 		$event_venue_id = $eventbrite_event['venue_id'];
+		$is_online      = $eventbrite_event['online_event'];
+		if( $is_online === true ){
+			$event_location = array(
+				'name'         => 'Online Event',
+			);
+			return $event_location;
+		}
 		$get_venue = wp_remote_get( 'https://www.eventbriteapi.com/v3/venues/' . $event_venue_id .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 
 		if ( ! is_wp_error( $get_venue ) ) {
