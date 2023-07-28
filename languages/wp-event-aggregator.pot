@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-28T07:17:41+00:00\n"
+"POT-Creation-Date: 2023-07-28T07:37:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-event-aggregator\n"
@@ -1245,69 +1245,69 @@ msgstr ""
 msgid "Insert meetup group url ( Eg. -<span class=\"borderall\">https://www.meetup.com/xxxx-xxx-xxxx/</span>  )."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:48
+#: templates/admin/wp-event-aggregator-settings.php:47
 msgid "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:48
-#: templates/admin/wp-event-aggregator-settings.php:53
-#: templates/admin/wp-event-aggregator-settings.php:56
+#: templates/admin/wp-event-aggregator-settings.php:47
+#: templates/admin/wp-event-aggregator-settings.php:52
+#: templates/admin/wp-event-aggregator-settings.php:55
 #: templates/admin/wp-event-aggregator-settings.php:296
 #: templates/admin/wp-event-aggregator-settings.php:299
 msgid "Click here"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:48
+#: templates/admin/wp-event-aggregator-settings.php:47
 msgid "for more information."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:53
+#: templates/admin/wp-event-aggregator-settings.php:52
 #: templates/admin/wp-event-aggregator-settings.php:296
 msgid "Note : "
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:53
+#: templates/admin/wp-event-aggregator-settings.php:52
 msgid "You have to create a Facebook application before filling the following details."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:53
+#: templates/admin/wp-event-aggregator-settings.php:52
 msgid "to create new Facebook application."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:55
+#: templates/admin/wp-event-aggregator-settings.php:54
 #: templates/admin/wp-event-aggregator-settings.php:298
 msgid "For detailed step by step instructions "
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:58
+#: templates/admin/wp-event-aggregator-settings.php:57
 msgid "<strong>Set the site url as : </strong>"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:61
+#: templates/admin/wp-event-aggregator-settings.php:60
 msgid "<strong>Set Valid OAuth redirect URI : </strong>"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:67
+#: templates/admin/wp-event-aggregator-settings.php:66
 msgid "Authorize your Facebook Account"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:73
+#: templates/admin/wp-event-aggregator-settings.php:72
 msgid "Facebook Authorization"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:80
+#: templates/admin/wp-event-aggregator-settings.php:79
 msgid "Authorize"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:82
+#: templates/admin/wp-event-aggregator-settings.php:81
 msgid "Reauthorize"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:90
+#: templates/admin/wp-event-aggregator-settings.php:89
 msgid " ( Authorized as: %s )"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:97
+#: templates/admin/wp-event-aggregator-settings.php:96
 msgid "Please authorize your facebook account for import facebook events."
 msgstr ""
 
