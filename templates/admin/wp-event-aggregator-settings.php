@@ -38,7 +38,6 @@ if( is_object( $meetup_authorized_user ) ){
                     <span class="wpea-setting-tab" data-tab="licensesection">License Key</span>
                 <?php } ?>
             </div>
-            <form method="post" id="wpea_setting_form">
                 <div class="wpea-setting-tab-child active" id="facebooksetting">
                     <?php
                     $site_url = get_home_url();
@@ -105,6 +104,7 @@ if( is_object( $meetup_authorized_user ) ){
                     }
                     ?>
 
+            <form method="post" id="wpea_setting_form">
                     <table class="form-table">
                         <tbody>
                             <tr>
@@ -663,7 +663,7 @@ if( is_object( $meetup_authorized_user ) ){
                                 echo $license_section;
                             }
                         ?>
-                        </div>
+                    </div>
                 </div>
             <?php } ?>
         </div>
