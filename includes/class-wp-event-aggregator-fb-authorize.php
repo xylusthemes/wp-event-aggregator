@@ -51,7 +51,7 @@ class WP_Event_Aggregator_FB_Authorize {
 			}			
 
         } else {
-            die( __('You have not access to doing this operations.', 'wp-event-aggregator' ) );
+            die( __('You have not access to do this operations.', 'wp-event-aggregator' ) );
         }
     }	
 
@@ -118,7 +118,7 @@ class WP_Event_Aggregator_FB_Authorize {
 				}
 
             } else {
-            	die( __('You have not access to doing this operations.', 'wp-event-aggregator' ) );
+            	die( __('You have not access to do this operations.', 'wp-event-aggregator' ) );
             }
     }	
 }

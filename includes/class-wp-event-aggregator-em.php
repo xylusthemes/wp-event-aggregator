@@ -83,6 +83,15 @@ class WP_Event_Aggregator_EM {
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' != $update_events ) {
 				return array(
 					'status'=> 'skipped',

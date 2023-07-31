@@ -46,7 +46,7 @@ global $importevents;
 
 			                    </select>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> ( import events belonging to a Facebook page ).', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> (Import events from Facebook page).', 'wp-event-aggregator' ); ?>
 			                        <?php
 									if( $importevents->common->has_authorized_user_token() ){
 									_e( '<strong>3. Facebook Group</strong> (Import events from facebook group)', 'wp-event-aggregator' );
@@ -62,7 +62,7 @@ global $importevents;
 					    	<td>
 					    		<textarea name="facebook_event_ids" class="facebook_event_ids" rows="5" cols="50"></textarea>
 					    		<span class="wpea_small">
-			                        <?php _e( 'One event ID per line, ( Eg. Event ID for https://www.facebook.com/events/123456789/ is "123456789" ).', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'One event ID per line, (Eg. Event ID for https://www.facebook.com/events/123456789/ is "123456789").', 'wp-event-aggregator' ); ?>
 			                    </span>
 					    	</td>
 					    </tr>
@@ -95,7 +95,7 @@ global $importevents;
 
 					    <tr class="import_type_wrapper">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
+					    		<?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
 						    	<?php $importevents->common->render_import_type(); ?>
