@@ -459,7 +459,7 @@ table.wpea_form_table tr td:nth-child(1) {
       display: block
   }
 }
-#wpea_setting_form .checkout_model_option{
+.checkout_model_option{
   margin-left: 20px;
 }
 
@@ -478,6 +478,92 @@ table.wpea_form_table tr td:nth-child(1) {
 #wpea_edit_scheduled_import .form-table td select{
   width: 100%;
 }
+
+/* New Setting Section CSS */
+.wpea-setting-tab-container {
+    width: 100%;
+    margin: 25px 0;
+  }
+
+  .wpea-setting-main-tab {
+    display: flex;
+    border-bottom: 2px solid #d2d2d2;
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  .wpea-setting-tab {
+    color: #000;
+    padding: 8px 12px 15px;
+    font-size: 14px;
+    line-height: 1.71;
+    font-weight: 600;
+    background-color: #f0f0f1;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .wpea-setting-tab.active {
+    border-bottom: 4px solid #2271b1;
+    margin-bottom: -1px;
+  }
+
+  .wpea-setting-tab-child {
+    background-color: #ffffff;
+    display: none;
+    margin: 20px 0;
+    padding: 15px 25px;
+    box-shadow: 0px 0px 10px 1px #00000010;
+  }
+
+  .wpea-setting-tab-child.active {
+    display: block;
+  }
+
+  .wpea-setting-tab-child h2 {
+    margin-top: 0;
+  }
+
+  .wpea_gmap_error_message{
+    font-weight: bold;
+    color: red;
+    margin-left: 10px;
+  }
+  .wpea_gmap_success_message{
+    font-weight: bold;
+    color: green;
+    margin-left: 10px;
+  }
+  .wpea_google_maps_api_key{
+    width: 50%;
+  }
+  .wpea_mt_10{
+    margin-top: 10px;
+  }
+  
+  .wpea_loader {
+    position: relative;
+    display: none;
+  }
+  
+  .wpea_loader::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: -20px;
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(0); }
+  }
+
 .wpea-plugin-notice {
   border-left: 4px solid #dba617;
   display: flex;

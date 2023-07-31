@@ -23,6 +23,7 @@ class WP_Event_Aggregator_Manage_Import {
 		add_action( 'admin_init', array( $this, 'handle_import_form_submit' ) , 99);
 		add_action( 'admin_init', array( $this, 'handle_import_settings_submit' ), 99 );
 		add_action( 'admin_init', array( $this, 'handle_listtable_oprations' ), 99 );
+		add_action( 'admin_init', array( $this, 'handle_gma_settings_submit' ), 99 );
 	}
 
 	/**
@@ -364,6 +365,25 @@ class WP_Event_Aggregator_Manage_Import {
 				default:
 					$wpea_success_msg[] = esc_html__( 'Scheduled imports successfully deleted.', 'wp-event-aggregator' );
 					break;
+			}
+		}
+	}
+
+	/**
+	 * Process insert google maps api key for embed maps
+	 *
+	 * @since    1.7.3
+	 */
+	public function handle_gma_settings_submit() {
+		global $wpea_errors, $wpea_success_msg;
+		if ( isset( $_POST['wpea_gma_action'] ) && 'wpea_save_gma_settings' === sanitize_text_field( wp_unslash( $_POST['wpea_gma_action'] ) ) && check_admin_referer( 'wpea_gma_setting_form_nonce_action', 'wpea_gma_setting_form_nonce' ) ) { // input var okay.
+			$gma_option = array();
+			$gma_option['wpea_google_maps_api_key'] = isset( $_POST['wpea_google_maps_api_key'] ) ? wp_unslash( $_POST['wpea_google_maps_api_key'] ) : ''; // input var okay.
+			$is_update = update_option( 'wpea_google_maps_api_key', $gma_option['wpea_google_maps_api_key'] );
+			if ( $is_update ) {
+				$wpea_success_msg[] = __( 'Google Maps API Key has been saved successfully.', 'wp-event-aggregator' );
+			} else {
+				$wpea_errors[] = __( 'Something went wrong! please try again.', 'wp-event-aggregator' );
 			}
 		}
 	}
