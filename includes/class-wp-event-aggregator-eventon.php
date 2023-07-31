@@ -169,6 +169,7 @@ class WP_Event_Aggregator_EventON {
 			$state = isset( $centralize_array['location']['state'] ) ? sanitize_text_field($centralize_array['location']['state']) : '';
 			$country = isset( $centralize_array['location']['country'] ) ? sanitize_text_field($centralize_array['location']['country']) : '';
 			$is_all_day    = !empty( $centralize_array['is_all_day'] ) ? $centralize_array['is_all_day'] : 0;
+			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
@@ -179,6 +180,7 @@ class WP_Event_Aggregator_EventON {
 			update_post_meta( $inserted_event_id, 'evcal_erow', $end_time );
 			update_post_meta( $inserted_event_id, 'evcal_lmlink', $centralize_array['url'] );
 			update_post_meta( $inserted_event_id, 'evcal_allday', $is_all_day );
+			update_post_meta( $inserted_event_id, '_evo_tz', $timezone_name );
 			if( $centralize_array['location']['name'] == 'Online Event' ){
 				update_post_meta( $inserted_event_id, '_virtual', 'yes' );
 			}
