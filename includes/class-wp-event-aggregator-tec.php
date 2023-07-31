@@ -357,7 +357,8 @@ class WP_Event_Aggregator_TEC {
 			}
 		}
 		if( empty( $existing_organizer ) ){
-			$existing_organizer = $this->get_organizer_by_name( $centralize_org_array['name'] );
+			$organizer_name = str_replace( '\\', '', $centralize_org_array['name'] );
+			$existing_organizer = $this->get_organizer_by_name( $organizer_name );
 		}
 		if ( $existing_organizer && is_numeric( $existing_organizer ) && $existing_organizer > 0 ) {
 			return array(
