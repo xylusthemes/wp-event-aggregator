@@ -29,7 +29,7 @@ if( is_object( $meetup_authorized_user ) ){
     	<form method="post" id="wpea_setting_form">                
 
             <h3 class="setting_bar"><?php esc_attr_e( 'Eventbrite Settings', 'wp-event-aggregator' ); ?></h3>
-            <p><?php _e( 'You need a Eventbrite Personal OAuth token to import your events from Eventbrite.','wp-event-aggregator' ); ?> </p>
+            <p><?php _e( 'You need an Eventbrite Personal OAuth token to import your events.','wp-event-aggregator' ); ?> </p>
             <table class="form-table">
             	<tbody>
             		<tr>
@@ -39,7 +39,7 @@ if( is_object( $meetup_authorized_user ) ){
             			<td>
             				<input class="eventbrite_oauth_token" name="eventbrite[oauth_token]" type="text" value="<?php if ( isset( $eventbrite_options['oauth_token'] ) ) { echo $eventbrite_options['oauth_token']; } ?>" />
 		                    <span class="wpea_small">
-		                        <?php _e( 'Insert your eventbrite.com Personal OAuth token you can get it from <a href="http://www.eventbrite.com/myaccount/apps/" target="_blank">here</a>.', 'wp-event-aggregator' ); ?>
+		                        <?php _e( 'Insert your Eventbrite personal OAuth token. You can get it from <a href="http://www.eventbrite.com/myaccount/apps/" target="_blank">here</a>.', 'wp-event-aggregator' ); ?>
 		                    </span>
             			</td>
             		</tr>		
@@ -77,7 +77,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="eventbrite[update_events]" value="yes" <?php if( $update_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommended', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -91,8 +91,8 @@ if( is_object( $meetup_authorized_user ) ){
                             ?>
                             <input type="checkbox" name="eventbrite[private_events]" value="yes" <?php if( $private_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
-                                <?php _e( 'Tick to import Private events, Untick to not import private event.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php _e( 'Check to enable import of Private events.', 'wp-event-aggregator' ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommended', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -114,7 +114,7 @@ if( is_object( $meetup_authorized_user ) ){
                             }
                             ?>
                             <span class="wpea_small">
-                                <?php _e( 'Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events.', 'wp-event-aggregator' ); ?>
+                                <?php _e( 'Check to enable advanced synchronization. This will delete events which were removed from source calendar, and also delete past events if source calendar is to provide only upcoming events.', 'wp-event-aggregator' ); ?>
                             </span>
                             <?php do_action( 'wpea_render_pro_notice' ); ?>
                         </td>
@@ -130,21 +130,21 @@ if( is_object( $meetup_authorized_user ) ){
             if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $site_url, 'https' ) && $meetup_oauth_key != '' && $meetup_oauth_secret != '' && empty($meetup_authorized_user) ) {
                 ?>
                 <div class="widefat wpea_settings_error">
-                    <?php _e( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your meetup account.",'wp-event-aggregator' ); ?>
+                    <?php _e( "It appears that HTTPS is not enabled on your website. Please enable HTTPS to authorize your Meetup account.",'wp-event-aggregator' ); ?>
                 </div>
             <?php
             } ?>
 
             <div class="widefat wpea_settings_notice">
-                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://www.meetup.com/api/oauth/list/" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You have to create a Meetup OAuth Consumer before filling the following details.','wp-event-aggregator' ), __( 'Click here', 'wp-event-aggregator' ),  __( 'to create new OAuth Consumer','wp-event-aggregator' ) ); ?>
+                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://www.meetup.com/api/oauth/list/" target="_blank">%3$s</a></b> %4$s',  __( 'Note: ','wp-event-aggregator' ), __( 'You must create a Meetup OAuth Consumer before filling the following details.','wp-event-aggregator' ), __( 'Click here', 'wp-event-aggregator' ),  __( 'to create new OAuth Consumer','wp-event-aggregator' ) ); ?>
                 <br/>
                 <?php _e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
                 <strong><a href="http://docs.xylusthemes.com/docs/import-meetup-events/creating-oauth-consumer/" target="_blank"><?php _e( 'Click here', 'wp-event-aggregator' ); ?></a></strong>.
                 <br/>
-                <?php _e( '<strong>Set the Application Website as : </strong>', 'wp-event-aggregator' ); ?>
+                <?php _e( '<strong>Set the Application Website as: </strong>', 'wp-event-aggregator' ); ?>
                 <span style="color: green;"><?php echo get_site_url(); ?></span>
                 <br/>
-                <?php _e( '<strong>Set Redirect URI : </strong>', 'wp-event-aggregator' ); ?>
+                <?php _e( '<strong>Set Redirect URL : </strong>', 'wp-event-aggregator' ); ?>
                 <span style="color: green;"><?php echo admin_url( 'admin-post.php?action=wepa_meetup_authorize_callback' ); ?></span>
             </div>
 
@@ -183,7 +183,7 @@ if( is_object( $meetup_authorized_user ) ){
                                             <?php _e('Connect', 'wp-event-aggregator'); ?>
                                         </a>
                                         <span class="wpea_small">
-                                            <?php _e( 'Please connect your meetup account for import meetup events.','wp-event-aggregator' ); ?>
+                                            <?php _e( 'Please connect your Meetup account to import Meetup events.','wp-event-aggregator' ); ?>
                                         </span>
                                     <?php } ?>
                                 </td>
@@ -205,7 +205,7 @@ if( is_object( $meetup_authorized_user ) ){
                         <td>
                             <input class="meetup_api_key" name="meetup[meetup_oauth_key]" type="text" value="<?php echo $meetup_oauth_key; ?>" />
                             <span class="wpea_small">
-                                <?php printf('%s <a href="https://www.meetup.com/api/oauth/list/" target="_blank">%s</a>', __( 'Insert your meetup.com OAuth Key you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
+                                <?php printf('%s <a href="https://www.meetup.com/api/oauth/list/" target="_blank">%s</a>', __( 'Insert your Meetup OAuth Key. You can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -217,7 +217,7 @@ if( is_object( $meetup_authorized_user ) ){
                         <td>
                             <input class="meetup_api_key" name="meetup[meetup_oauth_secret]" type="text" value="<?php echo $meetup_oauth_secret; ?>" />
                             <span class="wpea_small">
-                                <?php printf('%s <a href="https://www.meetup.com/api/oauth/list/" target="_blank">%s</a>', __( 'Insert your meetup.com OAuth Secret you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
+                                <?php printf('%s <a href="https://www.meetup.com/api/oauth/list/" target="_blank">%s</a>', __( 'Insert your Meetup OAuth Secret. You can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -234,7 +234,7 @@ if( is_object( $meetup_authorized_user ) ){
                         <td>
                             <input class="meetup_api_key" name="meetup[meetup_api_key]" type="text" value="<?php if ( isset( $meetup_options['meetup_api_key'] ) ) { echo $meetup_options['meetup_api_key']; } ?>" />
                             <span class="wpea_small">
-                                <?php printf('%s <a href="https://www.meetup.com/api/oauth/list" target="_blank">%s</a>', __( 'Insert your meetup.com API key you can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
+                                <?php printf('%s <a href="https://www.meetup.com/api/oauth/list" target="_blank">%s</a>', __( 'Insert your Meetup API key. You can get it from', 'wp-event-aggregator' ), __( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>       
@@ -249,7 +249,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="meetup[update_events]" value="yes" <?php if( $update_meetup_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommended', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -288,20 +288,20 @@ if( is_object( $meetup_authorized_user ) ){
             if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $site_url, 'https' ) ) {
                 ?>
                 <div class="widefat wpea_settings_error">
-                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It looks like you don't have HTTPS enabled on your website. Please enable it. HTTPS is required for authorize your facebook account.","wp-event-aggregator" ), __( 'Click here','wp-event-aggregator' ), __( 'for more information.','wp-event-aggregator' ) ); ?>
+                    <?php printf( '%1$s <b><a href="https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/" target="_blank">%2$s</a></b> %3$s', __( "It appears that HTTPS is not enabled on your website. Please enable HTTPS to authorize your Facebook account.","wp-event-aggregator" ), __( 'Click here','wp-event-aggregator' ), __( 'for more information.','wp-event-aggregator' ) ); ?>
                 </div>
             <?php
             } ?>
             <div class="widefat wpea_settings_notice">
-                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You have to create a Facebook application before filling the following details.','wp-event-aggregator' ), __( 'Click here','wp-event-aggregator' ),  __( 'to create new Facebook application.','wp-event-aggregator' ) ); ?>
+                <?php printf( '<b>%1$s</b> %2$s <b><a href="https://developers.facebook.com/apps" target="_blank">%3$s</a></b> %4$s',  __( 'Note : ','wp-event-aggregator' ), __( 'You must create a Facebook application before filling the following details.','wp-event-aggregator' ), __( 'Click here','wp-event-aggregator' ),  __( 'to create new Facebook application.','wp-event-aggregator' ) ); ?>
                 <br/>
                 <?php _e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
                 <strong><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php _e( 'Click here', 'wp-event-aggregator' ); ?></a></strong>.
                 <br/>
-                <?php _e( '<strong>Set the site url as : </strong>', 'wp-event-aggregator' ); ?>
+                <?php _e( '<strong>Set the site URL as: </strong>', 'wp-event-aggregator' ); ?>
                 <span style="color: green;"><?php echo get_site_url(); ?></span>
                 <br/>
-                <?php _e( '<strong>Set Valid OAuth redirect URI : </strong>', 'wp-event-aggregator' ); ?>
+                <?php _e( '<strong>Set Valid OAuth redirect URL: </strong>', 'wp-event-aggregator' ); ?>
                 <span style="color: green;"><?php echo admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ?></span>
             </div>
 
@@ -352,7 +352,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="facebook[update_events]" value="yes" <?php if( $update_facebook_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommended', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -398,7 +398,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="checkbox" name="ical[update_events]" value="yes" <?php if( $update_ical_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php _e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
-                                <?php printf( "( <em>%s</em> )", __( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
+                                <?php printf( "( <em>%s</em> )", __( 'Not Recommended', 'wp-event-aggregator' ) ); ?>
                             </span>
                         </td>
                     </tr>
@@ -464,7 +464,7 @@ if( is_object( $meetup_authorized_user ) ){
                             ?>
                             <input type="checkbox" name="wpea[direct_link]" value="yes" <?php if ($direct_link == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
                             <span class="wpea_small">
-                                <?php _e('Check to enable direct event link to Event Source instead of event detail page.', 'wp-event-aggregator'); ?>
+                                <?php _e('Check to enable direct event link to Event Source page instead of Event Detail page.', 'wp-event-aggregator'); ?>
                             </span>
                             <?php do_action('wpea_render_pro_notice'); ?>
                         </td>
@@ -496,8 +496,8 @@ if( is_object( $meetup_authorized_user ) ){
                         $time_format = isset( $aggregator_options['time_format'] ) ? $aggregator_options['time_format'] : '12hours';
 						?>
                         <select name="wpea[time_format]">
-								<option value="12hours" <?php selected( '12hours', $time_format ); ?>><?php esc_attr_e( '12 Hours', 'wp-event-aggregator' );  ?></option>
-                                <option value="24hours" <?php selected( '24hours', $time_format ); ?>><?php esc_attr_e( '24 Hours', 'wp-event-aggregator' ); ?></option>						
+								<option value="12hours" <?php selected( '12hours', $time_format ); ?>><?php esc_attr_e( '12-Hours', 'wp-event-aggregator' );  ?></option>
+                                <option value="24hours" <?php selected( '24hours', $time_format ); ?>><?php esc_attr_e( '24-Hours', 'wp-event-aggregator' ); ?></option>						
                                 <option value="wordpress_default" <?php selected( 'wordpress_default', $time_format ); ?>><?php esc_attr_e( 'WordPress Default', 'wp-event-aggregator' ); ?></option>
                         </select>
 						<span class="wpea_small">
@@ -587,14 +587,14 @@ if( is_object( $meetup_authorized_user ) ){
                                         if( !empty( $wpea_fb_authorize_user ) && isset( $wpea_fb_authorize_user['name'] ) && $importevents->common->has_authorized_user_token() ){
                                             $fbauthname = sanitize_text_field( $wpea_fb_authorize_user['name'] );
                                             if( $fbauthname != '' ){
-                                               printf( __(' ( Authorized as: %s )', 'wp-event-aggregator'), '<b>'.$fbauthname.'</b>' );
+                                               printf( __(' (Authorized as: %s)', 'wp-event-aggregator'), '<b>'.$fbauthname.'</b>' );
                                             }   
                                         }
                                         ?>
                                     </form>
 
                                     <span class="wpea_small">
-                                        <?php _e( 'Please authorize your facebook account for import facebook events.','wp-event-aggregator' ); ?>
+                                        <?php _e( 'Please authorize your Facebook account to import Facebook events.','wp-event-aggregator' ); ?>
                                     </span>
                                 </td>
                             </tr>

@@ -60,7 +60,7 @@ class WP_Event_Aggregator_Admin {
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
     	$submenu['import_events'][] = array( __( 'iCalendar/.ics Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=ical' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
-    	$submenu['import_events'][] = array( __( 'Support & help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
+    	$submenu['import_events'][] = array( __( 'Support & Help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
 		if( !wpea_is_pro() ){
         	$submenu['import_events'][] = array( '<li class="wpea_upgrade_pro current">' . __( 'Upgrade to Pro', 'wp-event-aggregator' ) . '</li>', 'manage_options', esc_url( "https://xylusthemes.com/plugins/wp-event-aggregator/"));
 		}
@@ -543,14 +543,14 @@ class WP_Event_Aggregator_Admin {
 	    	}else{
 	    		?>
 	    		<div class="wpea_no_import_events">
-		    		<?php esc_html_e( 'No data found', 'wp-event-aggregator' ); ?>
+		    		<?php esc_html_e( 'No Data Found', 'wp-event-aggregator' ); ?>
 		    	</div>
 	    		<?php
 	    	}
 	    }else{
 	    	?>
     		<div class="wpea_no_import_events">
-	    		<?php esc_html_e( 'No data found', 'wp-event-aggregator' ); ?>
+	    		<?php esc_html_e( 'No Data Found', 'wp-event-aggregator' ); ?>
 	    	</div>
     		<?php
 	    }
