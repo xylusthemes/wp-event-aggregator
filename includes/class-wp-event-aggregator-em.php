@@ -160,13 +160,15 @@ class WP_Event_Aggregator_EM {
 			if ( $inserted_event->post_status == 'publish' ) { $event_status = 1;}
 			if ( $inserted_event->post_status == 'pending' ) { $event_status = 0;}
 			$is_all_day    = !empty( $centralize_array['is_all_day'] ) ? $centralize_array['is_all_day'] : 0;
+			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+			
 			// Save Meta.
 			update_post_meta( $inserted_event_id, '_event_start_time', date( 'H:i:s', $start_time ) );
 			update_post_meta( $inserted_event_id, '_event_end_time', date( 'H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, '_event_all_day', $is_all_day );
 			update_post_meta( $inserted_event_id, '_event_start_date', date( 'Y-m-d', $start_time ) );
 			update_post_meta( $inserted_event_id, '_event_end_date', date( 'Y-m-d', $end_time ) );
-			update_post_meta( $inserted_event_id, '_event_timezone', 'UTC' );
+			update_post_meta( $inserted_event_id, '_event_timezone', $timezone_name );
 			update_post_meta( $inserted_event_id, '_event_start', date( 'Y-m-d H:i:s', $start_time ) );
 			update_post_meta( $inserted_event_id, '_event_end', date( 'Y-m-d H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, '_event_start_local', date( 'Y-m-d H:i:s', $start_time ) );

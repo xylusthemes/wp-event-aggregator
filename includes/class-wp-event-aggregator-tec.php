@@ -141,6 +141,9 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $new_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $new_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
 			
+			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
+			
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			if ( ! empty( $wpea_cats ) ) {
@@ -191,6 +194,13 @@ class WP_Event_Aggregator_TEC {
 			$update_event_id = tribe_update_event( $event_id, $formated_args );
 		}
 		if ( $update_event_id ) {
+			$start_time    = $centralize_array['starttime_local'];
+			$end_time      = $centralize_array['endtime_local'];
+			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+
+			update_post_meta( $update_event_id, '_EventStartDate',  date( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $update_event_id, '_EventEndDate', date( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $update_event_id, '_EventTimezone', $timezone_name );
 			update_post_meta( $update_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $update_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
@@ -250,15 +260,13 @@ class WP_Event_Aggregator_TEC {
 		}
 		$start_time    = $centralize_array['starttime_local'];
 		$end_time      = $centralize_array['endtime_local'];
-		$timezone      = isset( $centralize_array['timezone'] ) ? $centralize_array['timezone'] : 'UTC';
 		$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 		$event_args    = array(
 			'title'             => $centralize_array['name'],
 			'post_content'      => $centralize_array['description'],
 			'status'            => 'pending',
 			'url'               => $centralize_array['url'],
-			'timezone'          => $timezone,
-			'timezone_name'     => $timezone_name,
+			'timezone'          => $timezone_name,
 			'start_date'        => date( 'Y-m-d H:i:s', $start_time ),
 			'end_date'          => date( 'Y-m-d H:i:s', $end_time ),
 		);

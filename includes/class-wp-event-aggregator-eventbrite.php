@@ -222,6 +222,7 @@ class WP_Event_Aggregator_Eventbrite {
 			'startime_utc'    => $start_time_utc,
 			'endtime_utc'     => $end_time_utc,
 			'timezone'        => $timezone,
+			'timezone_name'   => $timezone,
 			'utc_offset'      => $utc_offset,
 			'event_duration'  => '',
 			'is_all_day'      => '',
