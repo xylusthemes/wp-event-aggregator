@@ -157,6 +157,7 @@ class WP_Event_Aggregator_Common {
 			</select>
 			<?php
 		}
+		do_action('wpea_after_render_terms_by_plugin');
 		wp_die();
 	}
 
