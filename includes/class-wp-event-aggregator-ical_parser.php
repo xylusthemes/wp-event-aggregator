@@ -64,8 +64,24 @@ class WP_Event_Aggregator_Ical_Parser {
 		}
 		$imported_events = array();
 
-		$start_date = date('Y-m-d' );
-		$end_date = date('Y-m-d', strtotime('+2 years') );
+		if( $event_data['ical_import_by_date'] == 'sixmonths' ){
+			$start_date = date('Y-m-d');
+			$end_date   = date('Y-m-d', strtotime('+6 months') );
+		}elseif( $event_data['ical_import_by_date'] == 'oneyear' ){
+			$start_date = date('Y-m-d');
+			$end_date   = date('Y-m-d', strtotime('+1 years') );
+		}elseif( $event_data['ical_import_by_date'] == 'twoyears' ){
+			$start_date = date('Y-m-d');
+			$end_date   = date('Y-m-d', strtotime('+2 years') );
+		}elseif( $event_data['ical_import_by_date'] == 'custom_date_range' ){
+			if( !empty( $event_data['start_date'] ) && !empty( $event_data['end_date'] ) ){
+				$start_date = $event_data['start_date'];
+				$end_date   = $event_data['end_date'];
+			}
+		}else{
+			$start_date = date('Y-m-d' );
+			$end_date   = date('Y-m-d', strtotime('+1 years') );
+		}
 		
 		if( isset( $event_data['start_date'] ) && $event_data['start_date'] != '' ){
 			$start_date = $event_data['start_date'];

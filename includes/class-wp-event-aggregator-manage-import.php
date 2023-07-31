@@ -50,6 +50,7 @@ class WP_Event_Aggregator_Manage_Import {
 			$event_data['import_type'] = isset( $_POST['import_type'] ) ? sanitize_text_field( $_POST['import_type']) : 'onetime';
 			$event_data['import_frequency'] = isset( $_POST['import_frequency'] ) ? sanitize_text_field( $_POST['import_frequency']) : 'daily';
 			$event_data['event_status'] = isset( $_POST['event_status'] ) ? sanitize_text_field( $_POST['event_status']) : 'pending';
+			$event_data['ical_import_by_date'] = isset( $_POST['ical_import_by_date'] ) ? sanitize_text_field( $_POST['ical_import_by_date']) : '';
 
 			$event_data['event_cats'] = isset( $_POST['event_cats'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats'] ) ) : array();
 			$event_data['event_cats2'] = isset( $_POST['event_cats2'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats2'] ) ) : array();
@@ -300,6 +301,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$event_data['import_origin'] = 'ical';
 		$event_data['import_by'] = 'ics_file';
 		$event_data['ical_url'] = '';
+		$event_data['ical_import_by_date'] = $_POST['ical_import_by_date'];
 		$event_data['start_date'] = isset( $_POST['start_date'] ) ? sanitize_text_field( wp_unslash( $_POST['start_date'] ) ) : '';
 		$event_data['end_date'] = isset( $_POST['end_date'] ) ? sanitize_text_field( wp_unslash( $_POST['end_date'] ) ) : '';
 

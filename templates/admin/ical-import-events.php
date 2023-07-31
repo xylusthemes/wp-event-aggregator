@@ -69,8 +69,17 @@ global $importevents;
 					        	<?php esc_attr_e( 'Events date range','wp-event-aggregator' ); ?> :
 					        </th>
 					        <td>
-					            <input type="text" name="start_date" class="xt_datepicker start_date" placeholder="<?php esc_html_e('Select start date', 'wp-event-aggregator' ); ?>"> - 
-					            <input type="text" name="end_date" class="xt_datepicker end_date" placeholder="<?php esc_html_e('Select end date', 'wp-event-aggregator' ); ?>">
+								<select name="ical_import_by_date" id="ical_import_by_date">
+					            	<option value="sixmonths"><?php esc_attr_e( '6 Months','wp-event-aggregator' ); ?></option>
+			                    	<option value="oneyear" selected><?php esc_attr_e( '1 Year','wp-event-aggregator' ); ?></option>
+									<option value="twoyears" ><?php esc_attr_e( '2 Years','wp-event-aggregator' ); ?></option>
+									<option value="custom_date_range" ><?php esc_attr_e( 'Custom','wp-event-aggregator' ); ?></option>
+			                    </select>
+								<div id="custom_date_range_se" >
+									<br/>
+									<input type="text" name="start_date" class="xt_datepicker start_date" placeholder="<?php esc_html_e('Select start date', 'wp-event-aggregator' ); ?>"> - 
+									<input type="text" name="end_date" class="xt_datepicker end_date" placeholder="<?php esc_html_e('Select end date', 'wp-event-aggregator' ); ?>">
+								</div>
 			                    <span class="wpea_small">
 			                        <?php _e( 'Select date range from which you want to import events. Default start date is Today', 'wp-event-aggregator' ); ?>
 			                    </span>
