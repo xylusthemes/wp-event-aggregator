@@ -207,7 +207,8 @@ class WP_Event_Aggregator_Event_Organizer {
 				}
 				$term_loc_ids = wp_set_object_terms( $inserted_event_id, $loc_term_id, $this->venue_taxonomy );
 				$venue = $centralize_array['location'];
-				$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
+				$address_1 = isset( $venue['address_1'] ) ? $venue['address_1'] : '';
+				$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $address_1;
 				$city 	 = isset( $venue['city'] ) ? $venue['city'] : '';
 				$state   = isset( $venue['state'] ) ? $venue['state'] : '';
 				$zip     = isset( $venue['zip'] ) ? $venue['zip'] : '';

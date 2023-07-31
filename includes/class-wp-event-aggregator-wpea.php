@@ -157,6 +157,10 @@ class WP_Event_Aggregator_WPEA {
 			$event_end_minute     = date( 'i', $end_time );
 			$event_end_meridian   = date( 'a', $end_time );
 
+			if( $online_event == true ){
+				$centralize_array['location']['name'] = 'Online Event';
+			}
+
 			// Venue Deatails
 			$address_1 = isset( $venue_array['address_1'] ) ? $venue_array['address_1'] : '';
 			$venue_array = isset( $centralize_array['location'] ) ? $centralize_array['location'] : array();
