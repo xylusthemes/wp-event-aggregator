@@ -10,29 +10,33 @@
  * @version 1.0
  */
 global $importevents;
-$event_date     = get_post_meta( get_the_ID(), 'event_start_date', true );
-$start_hours    = get_post_meta( get_the_ID(), 'event_start_hour', true );
-$start_minutes  = get_post_meta( get_the_ID(), 'event_start_minute', true );
-$start_meridian = get_post_meta( get_the_ID(), 'event_start_meridian', true );
-if ( $event_date != '' ) {
-	$event_date = strtotime( $event_date );
-}
-$event_address = get_post_meta( get_the_ID(), 'venue_name', true );
-$venue_address = get_post_meta( get_the_ID(), 'venue_address', true );
+$start_date_str      = get_post_meta( get_the_ID(), 'start_ts', true );
+$start_date_formated = date_i18n( 'F j, Y ', $start_date_str );
+$event_address       = get_post_meta( get_the_ID(), 'venue_name', true );
+$venue_address       = get_post_meta( get_the_ID(), 'venue_address', true );
 if ( $event_address != '' && $venue_address != '' ) {
 	$event_address .= ' - ' . $venue_address;
 } elseif ( $venue_address != '' ) {
 	$event_address = $venue_address;
 }
 
-$wpea_options = get_option( 'wpea_options' );
-$accent_color = isset( $wpea_options['accent_color'] ) ? $wpea_options['accent_color'] : '#039ED7';
+$wpea_options = get_option( WPEA_OPTIONS );
+$accent_color = isset( $wpea_options['wpea']['accent_color'] ) ? $wpea_options['wpea']['accent_color'] : '#039ED7';
+$time_format  = isset( $wpea_options['wpea']['time_format'] ) ? $wpea_options['wpea']['time_format'] : '12hours';
+
+if( $time_format === '12hours' ){
+	$start_time = date_i18n( 'h:i a', $start_date_str );
+}elseif($time_format === '24hours' ){
+	$start_time = date_i18n( 'G:i', $start_date_str );
+}else{
+    $start_time = date_i18n( get_option( 'time_format' ), $start_date_str );
+}
 
 $image_url = array();
 if ( '' !== get_the_post_thumbnail() ) {
 	$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'full' );
 } else {
-	$image_date  = date_i18n( 'F+d', $event_date );
+	$image_date  = date_i18n( 'F+d', $start_date_str );
 	$image_url[] = 'https://dummyimage.com/420x210/ccc/969696.png&text=' . $image_date;
 }
 
@@ -74,7 +78,7 @@ if ( ! empty( $event_categories ) ) {
 				<div class="wpea_event_location_time">
 					<div class="wpea_event_time">
 						<span class="wpea_time">
-							<i style="color:<?php echo esc_attr( $accent_color ); ?>" class="fa fa-clock-o" aria-hidden="true"></i> <?php echo esc_attr( date_i18n( 'F j, Y ', $event_date ) . $start_hours . ':'. $start_minutes . ' ' . $start_meridian ) ; ?>
+							<i style="color:<?php echo esc_attr( $accent_color ); ?>" class="fa fa-clock-o" aria-hidden="true"></i> <?php echo esc_attr( $start_date_formated . ' ' . $start_time ) ; ?>
 						</span>
 					</div>
 					<div class="wpea_location_style2">

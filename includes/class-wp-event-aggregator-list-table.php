@@ -137,6 +137,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				if( $item['current_import']['skipped'] > 0 ){
 					$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $item['current_import']['skipped'] );
 				}
+				if( $item['current_import']['skip_trash'] > 0 ){
+					$stats[] = sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $item['current_import']['skip_trash'] );
+				}
 				if( !empty( $stats ) ){
 					$stats = esc_html__( 'Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
 					$cimport .= '<br/>'.$stats;
@@ -147,7 +150,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 
 		$total_import = '';
 		if( $item['total_import'] > 0 ){
-			$total_import = "<strong>".esc_html__( 'Total imported Events:', 'wp-event-aggregator' )."</strong> ".$item['total_import'];	
+			$total_import = "<strong>".esc_html__( 'Total Imported Events:', 'wp-event-aggregator' )."</strong> ".$item['total_import'];	
 		}
 		// Return the title contents.
 		return sprintf( '<a class="button-primary" href="%1$s">%2$s</a><br/>%3$s<br/>%4$s<br/>%5$s<br/><br/>%6$s',
@@ -176,7 +179,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
 		 'cb'    => '<input type="checkbox" />',
-		 'title'     => __( 'Scheduled import', 'wp-event-aggregator' ),
+		 'title'     => __( 'Scheduled Import', 'wp-event-aggregator' ),
 		 'import_status'   => __( 'Import Event Status', 'wp-event-aggregator' ),
 		 'import_category'   => __( 'Import Category', 'wp-event-aggregator' ),
 		 'import_frequency'   => __( 'Import Frequency', 'wp-event-aggregator' ),
@@ -251,7 +254,8 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					$import_status = array(
 						'created' => 0,
 						'updated' => 0,
-						'skipped' => 0
+						'skipped' => 0,
+						'skip_trash' => 0,
 					);
 					foreach ( $import_data as $key => $value ) {
 						if ( $value['status'] == 'created' ) {
@@ -260,6 +264,8 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 							$import_status['updated'] += 1;
 						} elseif ( $value['status'] == 'skipped' ) {
 							$import_status['skipped'] += 1;
+						} elseif ( $value['status'] == 'skip_trash' ) {
+							$import_status['skip_trash'] += 1;
 						}
 					}	
 					$current_imports[$batch['import_id']] = $import_status;
@@ -333,6 +339,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					$created = get_post_meta( $history[0], 'created', true );
 					$updated = get_post_meta( $history[0], 'updated', true );
 					$skipped = get_post_meta( $history[0], 'skipped', true );
+					$skip_trash = get_post_meta( $history[0], 'skip_trash', true );
 					$stats = array();
 					if( $created > 0 ){
 						$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $created );
@@ -342,6 +349,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					}
 					if( $skipped > 0 ){
 						$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped );
+					}
+					if( $skip_trash > 0 ){
+						$stats[] = sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash );
 					}
 					if( !empty( $stats ) ){
 						$stats = esc_html__( 'Last Import Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
@@ -433,7 +443,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		);
 		// Build row actions.
 		$actions = array(
-		    'delete' => sprintf( '<a href="%1$s" onclick="return confirm(\'Warning!! Are you sure to Delete this import history? Import history will be permanatly deleted.\')">%2$s</a>',esc_url( wp_nonce_url( add_query_arg( $wpea_url_delete_args ), 'wpea_delete_history_nonce' ) ), esc_html__( 'Delete', 'wp-event-aggregator' ) ),
+		    'delete' => sprintf( '<a href="%1$s" onclick="return confirm(\'Warning! Import history will be permanatly deleted. Are you certain you want to delete the import history?.\')">%2$s</a>',esc_url( wp_nonce_url( add_query_arg( $wpea_url_delete_args ), 'wpea_delete_history_nonce' ) ), esc_html__( 'Delete', 'wp-event-aggregator' ) ),
 		);
 
 		// Return the title contents.
@@ -456,6 +466,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		$created = get_post_meta( $item['ID'], 'created', true );
 		$updated = get_post_meta( $item['ID'], 'updated', true );
 		$skipped = get_post_meta( $item['ID'], 'skipped', true );
+		$skip_trash = get_post_meta( $item['ID'], 'skip_trash', true );
 		$nothing_to_import = get_post_meta( $item['ID'], 'nothing_to_import', true );
 
 		$success_message = '<span style="color: silver"><strong>';
@@ -467,6 +478,9 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		}
 		if( $skipped > 0 ){
 			$success_message .= sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped ) ."<br>";
+		}
+		if( $skip_trash > 0 ){
+			$success_message .= sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash ) ."<br>";
 		}
 		if( $nothing_to_import ){
 			$success_message .= __( 'No events are imported.', 'wp-event-aggregator' ) . '<br>';	
@@ -558,7 +572,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		$delete_ids  = get_posts( array( 'numberposts' => 1,'fields' => 'ids', 'post_type'   => 'wpea_import_history' ) );
 		if( !empty( $delete_ids ) ){
 			$wp_delete_nonce_url = esc_url( wp_nonce_url( add_query_arg( $wpea_url_all_delete_args, admin_url( 'admin.php' ) ), 'wpea_delete_all_history_nonce' ) );
-			$confirmation_message = esc_html__( "Warning!! Are you sure to delete all these import history? Import history will be permanatly deleted.", "wp-event-aggregator" );
+			$confirmation_message = esc_html__( "Warning! Import history will be permanatly deleted. Are you certain you want to delete the import history?", "wp-event-aggregator" );
 			?>
 			<a class="button apply" href="<?php echo $wp_delete_nonce_url; ?>" onclick="return confirm('<?php echo $confirmation_message; ?>')">
 				<?php esc_html_e( 'Clear Import History', 'wp-event-aggregator' ); ?>

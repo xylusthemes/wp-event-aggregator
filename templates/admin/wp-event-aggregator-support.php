@@ -22,28 +22,28 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Looking for Something?', 'wp-event-aggregator' ); ?></h3>
-						<p><?php esc_attr_e( 'We have documentation of how to import facebook events.', 'wp-event-aggregator' ); ?></p>
+						<p><?php esc_attr_e( 'We have documentation of how to import Facebook events.', 'wp-event-aggregator' ); ?></p>
 						<a target="_blank" class="button button-primary" href="http://docs.xylusthemes.com/docs/wp-event-aggregator/"><?php esc_attr_e( 'Plugin Documentation', 'wp-event-aggregator' ); ?></a>
 					</div>
 				</div>
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/call-center.svg'; ?>" alt="<?php esc_attr_e( 'Need Any Assistance?', 'wp-event-aggregator' ); ?>">
+						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/call-center.svg'; ?>" alt="<?php esc_attr_e( 'Need Assistance?', 'wp-event-aggregator' ); ?>">
 					</div>
 					<div class="wpea-support-features-text">
-						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Need Any Assistance?', 'wp-event-aggregator' ); ?></h3>
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Need Assistance?', 'wp-event-aggregator' ); ?></h3>
 						<p><?php esc_attr_e( 'Our EXPERT Support Team is always ready to Help you out.', 'wp-event-aggregator' ); ?></p>
 						<a target="_blank" class="button button-primary" href="https://xylusthemes.com/support/"><?php esc_attr_e( 'Contact Support', 'wp-event-aggregator' ); ?></a>
 					</div>
 				</div>
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon"  src="<?php echo WPEA_PLUGIN_URL.'assets/images/bug.svg'; ?>" alt="<?php esc_attr_e( 'Found Any Bugs?', 'wp-event-aggregator' ); ?>" />
+						<img class="wpea-support-features-icon"  src="<?php echo WPEA_PLUGIN_URL.'assets/images/bug.svg'; ?>" alt="<?php esc_attr_e( 'Find any Bugs?', 'wp-event-aggregator' ); ?>" />
 					</div>
 					<div class="wpea-support-features-text">
-						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Found Any Bugs?', 'wp-event-aggregator' ); ?></h3>
-						<p><?php esc_attr_e( 'Report any Bug that you Discovered, Get Instant Solutions.', 'wp-event-aggregator' ); ?></p>
-						<a target="_blank" class="button button-primary" href="https://github.com/xylusthemes/wp-event-aggregator"><?php esc_attr_e( 'Report to GitHub', 'wp-event-aggregator' ); ?></a>
+						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Find any Bugs?', 'wp-event-aggregator' ); ?></h3>
+						<p><?php esc_attr_e( 'Report Bugs, and get Instant Solutions.', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="https://github.com/xylusthemes/wp-event-aggregator"><?php esc_attr_e( 'Report to GitHub.', 'wp-event-aggregator' ); ?></a>
 					</div>
 				</div>
 				<div class="wpea-support-features-card">
@@ -62,8 +62,8 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?></h3>
-						<p><?php esc_attr_e( 'Your Review is very important to us as it helps us to grow more.', 'wp-event-aggregator' ); ?></p>
-						<a target="_blank" class="button button-primary" href="https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post"><?php esc_attr_e( 'Review Us on WP.org', 'wp-event-aggregator' ); ?></a>
+						<p><?php esc_attr_e( 'Your Review is very important to us, and helps us to grow!', 'wp-event-aggregator' ); ?></p>
+						<a target="_blank" class="button button-primary" href="https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post"><?php esc_attr_e( 'Review WP Event Aggregator on WP.org', 'wp-event-aggregator' ); ?></a>
 					</div>
 				</div>
 			</div>

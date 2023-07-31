@@ -103,6 +103,15 @@ class WP_Event_Aggregator_TEC {
 			}
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' == $update_events ) {
 				return $this->update_event( $is_exitsing_event, $centralize_array, $formated_args, $event_args );
 			}else{
@@ -348,7 +357,8 @@ class WP_Event_Aggregator_TEC {
 			}
 		}
 		if( empty( $existing_organizer ) ){
-			$existing_organizer = $this->get_organizer_by_name( $centralize_org_array['name'] );
+			$organizer_name = str_replace( '\\', '', $centralize_org_array['name'] );
+			$existing_organizer = $this->get_organizer_by_name( $organizer_name );
 		}
 		if ( $existing_organizer && is_numeric( $existing_organizer ) && $existing_organizer > 0 ) {
 			return array(
