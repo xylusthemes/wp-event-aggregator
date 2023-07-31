@@ -9,9 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-03-26T17:53:58+00:00\n"
+"POT-Creation-Date: 2023-07-31T07:03:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-event-aggregator\n"
 
 #. Plugin Name of the plugin
@@ -732,8 +732,8 @@ msgstr ""
 #: includes/class-wp-event-aggregator-eventbrite.php:60
 #: includes/class-wp-event-aggregator-eventbrite.php:73
 #: includes/class-wp-event-aggregator-eventbrite.php:97
-#: includes/class-wp-event-aggregator-tec.php:168
-#: includes/class-wp-event-aggregator-tec.php:233
+#: includes/class-wp-event-aggregator-tec.php:171
+#: includes/class-wp-event-aggregator-tec.php:243
 msgid "Something went wrong, please try again."
 msgstr ""
 
@@ -964,7 +964,7 @@ msgid "Please insert Meetup Oauth Key and Secret."
 msgstr ""
 
 #: includes/class-wp-event-aggregator-meetup.php:52
-#: includes/class-wp-event-aggregator-meetup.php:247
+#: includes/class-wp-event-aggregator-meetup.php:248
 msgid "Please insert \"Meetup API key\" Or OAuth key and secret in settings."
 msgstr ""
 
