@@ -5,7 +5,7 @@
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
  * Version:           1.7.2
  * Author:            Xylus Themes
- * Author URI:        http://xylusthemes.com
+ * Author URL:        http://xylusthemes.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       wp-event-aggregator

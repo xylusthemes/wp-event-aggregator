@@ -78,7 +78,7 @@ class WP_Event_Aggregator_Common {
 
 				</div>
 				<span class="wpea_small">
-		            <?php esc_attr_e( 'These categories are assign to imported event.', 'wp-event-aggregator' ); ?>
+		            <?php esc_attr_e( 'These categories are assigned to imported events.', 'wp-event-aggregator' ); ?>
 		        </span>
 			</td>
 		</tr>
@@ -157,6 +157,7 @@ class WP_Event_Aggregator_Common {
 			</select>
 			<?php
 		}
+		do_action('wpea_after_render_terms_by_plugin');
 		wp_die();
 	}
 
@@ -194,7 +195,7 @@ class WP_Event_Aggregator_Common {
 
 		// check All in one Event Calendar
 		if( class_exists( 'Ai1ec_Event' ) ){
-			$supported_plugins['aioec'] = __( 'All in one Event Calendar', 'wp-event-aggregator' );
+			$supported_plugins['aioec'] = __( 'All-in-one Event Calendar', 'wp-event-aggregator' );
 		}
 
 		// check My Calendar
@@ -487,6 +488,8 @@ class WP_Event_Aggregator_Common {
 					$import_status['updated'][] = $value;
 				}elseif( $value['status'] == 'skipped'){
 					$import_status['skipped'][] = $value;
+				}elseif( $value['status'] == 'skip_trash'){
+					$import_status['skip_trash'][] = $value;
 				}else{
 
 				}
@@ -495,12 +498,13 @@ class WP_Event_Aggregator_Common {
 				}
 			}
 		}
-		$created = $updated = $skipped = 0;
+		$created = $updated = $skipped = $skip_trash = 0;
 		$created = isset( $import_status['created'] ) ? count( $import_status['created'] ) : 0;
 		$updated = isset( $import_status['updated'] ) ? count( $import_status['updated'] ) : 0;
 		$skipped = isset( $import_status['skipped'] ) ? count( $import_status['skipped'] ) : 0;
+		$skip_trash = isset( $import_status['skip_trash'] ) ? count( $import_status['skip_trash'] ) : 0;
 		
-		$success_message = esc_html__( 'Event(s) are imported successfully.', 'wp-event-aggregator' )."<br>";
+		$success_message = esc_html__( 'Event(s) successfully imported.', 'wp-event-aggregator' )."<br>";
 		if( $created > 0 ){
 			$success_message .= "<strong>".sprintf( __( '%d Created', 'wp-event-aggregator' ), $created )."</strong><br>";
 		}
@@ -509,6 +513,9 @@ class WP_Event_Aggregator_Common {
 		}
 		if( $skipped > 0 ){
 			$success_message .= "<strong>".sprintf( __( '%d Skipped (Already exists)', 'wp-event-aggregator' ), $skipped ) ."</strong><br>";
+		}
+		if( $skip_trash > 0 ){
+			$success_message .= "<strong>".sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash ) ."</strong><br>";
 		}
 		$wpea_success_msg[] = $success_message;
 
@@ -519,10 +526,10 @@ class WP_Event_Aggregator_Common {
 		}
 		
 		$nothing_to_import = false;
-		if($created == 0 && $updated == 0 && $skipped == 0 ){
+		if($created == 0 && $updated == 0 && $skipped == 0 && $skip_trash == 0 ){
 			$nothing_to_import = true;
 		}
-		if( $created > 0 || $updated > 0 || $skipped >0 || $nothing_to_import){
+		if( $created > 0 || $updated > 0 || $skipped > 0 || $skip_trash > 0 || $nothing_to_import){
 			$insert_args = array(
 				'post_type'   => 'wpea_import_history',
 				'post_status' => 'publish',
@@ -535,6 +542,7 @@ class WP_Event_Aggregator_Common {
 				update_post_meta( $insert, 'created', $created );
 				update_post_meta( $insert, 'updated', $updated );
 				update_post_meta( $insert, 'skipped', $skipped );
+				update_post_meta( $insert, 'skip_trash', $skip_trash );
 				update_post_meta( $insert, 'nothing_to_import', $nothing_to_import );
 				update_post_meta( $insert, 'imported_data', $import_data );
 				update_post_meta( $insert, 'import_data', $import_args );
@@ -738,17 +746,29 @@ class WP_Event_Aggregator_Common {
 	public function get_event_by_event_id( $post_type, $centralize_array ) {
 		global $wpdb;
 		$event_id = $centralize_array['ID'];
-		$post_status = array( 'pending', 'draft', 'publish', 'private' );
-
-		$get_post_id = $wpdb->get_col(
-			$wpdb->prepare(
-				'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND ' . $wpdb->prefix . 'posts.post_status != %s AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
-				$post_type,
-				'trash',
-				'wpea_event_id',
-				$event_id
-			)
-		);
+		$wpea_options = get_option( WPEA_OPTIONS );
+		$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+		
+		if( $skip_trash == 'yes' ){
+			$get_post_id = $wpdb->get_col(
+				$wpdb->prepare(
+					'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
+					$post_type,
+					'wpea_event_id',
+					$event_id
+				)
+			);
+		}else{
+			$get_post_id = $wpdb->get_col(
+				$wpdb->prepare(
+					'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND ' . $wpdb->prefix . 'posts.post_status != %s AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
+					$post_type,
+					'trash',
+					'wpea_event_id',
+					$event_id
+				)
+			);
+		}
 
 		if ( !empty( $get_post_id[0] ) ) {
 			return $get_post_id[0];
@@ -796,7 +816,7 @@ class WP_Event_Aggregator_Common {
 		if( !empty( $wpea_user_token_options ) ){
 			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
 			if( 0 == $authorize_status ){
-				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
+				$wpea_warnings[] = __( 'The Access Token has been invalidated because the user has changed their password, or Facebook has changed the session for security reasons. Please reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style="text-decoration: none;" href="'.admin_url( 'admin.php?page=import_events&tab=settings' ).'" target="_blank">Settings</a> </strong>.', 'wp-event-aggregator' );
 			}
 		}
 	}
@@ -811,7 +831,7 @@ class WP_Event_Aggregator_Common {
 		if( defined('WPEAPRO_VERSION') ){
 			if ( version_compare( WPEAPRO_VERSION, WPEA_MIN_PRO_VERSION, '<' ) ) {
 				global $ife_warnings;
-				$ife_warnings[] = __( 'Your current "WP Event Aggregator Pro" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly.', 'wp-event-aggregator' );
+				$ife_warnings[] = __( 'The current "WP Event Aggregator Pro" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing.', 'wp-event-aggregator' );
 			}
 		}
 	}
