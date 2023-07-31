@@ -81,14 +81,25 @@ class WP_Event_Aggregator_TEC {
 		global $importevents;
 
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
-		$formated_args = $this->format_event_args_for_tec( $centralize_array );
-		if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
-			$formated_args['post_status'] = $event_args['event_status'];
+		if( function_exists( 'tribe_events' ) ){
+			$formated_args = $this->format_event_args_for_tec_orm( $centralize_array );
+			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
+				$formated_args['status'] = $event_args['event_status'];
+			}
+		}else{
+			$formated_args = $this->format_event_args_for_tec( $centralize_array );
+			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
+				$formated_args['post_status'] = $event_args['event_status'];
+			}
 		}
 
 		if ( $is_exitsing_event && is_numeric( $is_exitsing_event ) && $is_exitsing_event > 0 ) {
 			if ( ! $importevents->common->wpea_is_updatable('status') ) {
-				$formated_args['post_status'] = get_post_status( $is_exitsing_event );
+				if( function_exists( 'tribe_events' ) ){
+					$formated_args['status'] = get_post_status( $is_exitsing_event );
+				} else {
+					$formated_args['post_status'] = get_post_status( $is_exitsing_event );
+				}
 			}
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
@@ -118,7 +129,11 @@ class WP_Event_Aggregator_TEC {
 	public function create_event( $centralize_array = array(), $formated_args = array(), $event_args = array() ) {
 		// Create event using TEC advanced functions.
 		global $importevents;
-		$new_event_id = tribe_create_event( $formated_args );
+		if( function_exists( 'tribe_events' ) ){
+			$new_event_id = tribe_events()->set_args( $formated_args )->create()->ID;
+		}else{
+			$new_event_id = tribe_create_event( $formated_args );
+		}
 		if ( $new_event_id ) {
 			update_post_meta( $new_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $new_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
@@ -169,7 +184,12 @@ class WP_Event_Aggregator_TEC {
 		// Update event using TEC advanced functions.
 		global $importevents;
 
-		$update_event_id =  tribe_update_event( $event_id, $formated_args );
+		if( function_exists( 'tribe_events' ) ){
+			$update_event_id = tribe_events()->where( 'id', $event_id )->set_args( $formated_args )->save();
+			$update_event_id = $event_id;
+		}else{
+			$update_event_id = tribe_update_event( $event_id, $formated_args );
+		}
 		if ( $update_event_id ) {
 			update_post_meta( $update_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $update_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
@@ -217,10 +237,54 @@ class WP_Event_Aggregator_TEC {
 
 
 	/**
+	 * Format events arguments as per TEC ORM
+	 *
+	 * @since    1.0.0
+	 * @param array $centralize_array WP Events event.
+	 * @return array
+	 */
+	public function format_event_args_for_tec_orm( $centralize_array ) {
+
+		if ( empty( $centralize_array ) ) {
+			return;
+		}
+		$start_time    = $centralize_array['starttime_local'];
+		$end_time      = $centralize_array['endtime_local'];
+		$timezone      = isset( $centralize_array['timezone'] ) ? $centralize_array['timezone'] : 'UTC';
+		$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+		$event_args    = array(
+			'title'             => $centralize_array['name'],
+			'post_content'      => $centralize_array['description'],
+			'status'            => 'pending',
+			'url'               => $centralize_array['url'],
+			'timezone'          => $timezone,
+			'timezone_name'     => $timezone_name,
+			'start_date'        => date( 'Y-m-d H:i:s', $start_time ),
+			'end_date'          => date( 'Y-m-d H:i:s', $end_time ),
+		);
+
+		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
+			$event_args['_EventAllDay'] = 'yes';
+		}
+
+		if ( array_key_exists( 'organizer', $centralize_array ) ) {
+			$organizer               = $this->get_organizer_args( $centralize_array['organizer'] );      
+			$event_args['organizer'] = $organizer['OrganizerID'];
+		}
+
+		if ( array_key_exists( 'location', $centralize_array ) ) {
+			$venue               = $this->get_venue_args( $centralize_array['location'] );
+			$event_args['venue'] = $venue['VenueID'];
+		}
+		return $event_args;
+	}
+
+
+	/**
 	 * Format events arguments as per TEC
 	 *
 	 * @since    1.0.0
-	 * @param array $centralize_array Eventbrite event.
+	 * @param array $centralize_array WP Events event.
 	 * @return array
 	 */
 	public function format_event_args_for_tec( $centralize_array ) {
@@ -249,6 +313,11 @@ class WP_Event_Aggregator_TEC {
 			'EventShowMap' 			=> 1,
 			'EventShowMapLink'		=> 1,
 		);
+
+		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
+			$event_args['_EventAllDay']      = 'yes';
+		}
+		
 		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
 			$event_args['EventAllDay'] = 'yes';
 		}
@@ -272,10 +341,15 @@ class WP_Event_Aggregator_TEC {
 	 */
 	public function get_organizer_args( $centralize_org_array ) {
 
-		if ( !isset( $centralize_org_array['ID'] ) ) {
-			return null;
+		$organizer_id = isset( $centralize_org_array['ID'] ) ? $centralize_org_array['ID'] : '';
+		if( !empty( $organizer_id ) && $organizer_id != 'noreply@facebookmail.com' ){
+			if( $organizer_id != 'noreply@facebookmail_com' ){
+				$existing_organizer = $this->get_organizer_by_id( $organizer_id );
+			}
 		}
-		$existing_organizer = $this->get_organizer_by_id( $centralize_org_array['ID'] );
+		if( empty( $existing_organizer ) ){
+			$existing_organizer = $this->get_organizer_by_name( $centralize_org_array['name'] );
+		}
 		if ( $existing_organizer && is_numeric( $existing_organizer ) && $existing_organizer > 0 ) {
 			return array(
 				'OrganizerID' => $existing_organizer,
@@ -291,6 +365,7 @@ class WP_Event_Aggregator_TEC {
 
 		if ( $create_organizer ) {
 			update_post_meta( $create_organizer, 'wpea_event_organizer_id', $centralize_org_array['ID'] );
+			update_post_meta( $create_organizer, 'wpea_event_organizer_name', $centralize_org_array['name'] );
 			return array(
 				'OrganizerID' => $create_organizer,
 			);
@@ -308,11 +383,16 @@ class WP_Event_Aggregator_TEC {
 	public function get_venue_args( $venue ) {
 		global $importevents; 
 
-		if ( !isset( $venue['ID'] ) ) {
-			return null;
+		if( empty( $venue ) ){
+			return false;
 		}
-		$existing_venue = $this->get_venue_by_id( $venue['ID'] );
-
+		$venue_id = !empty( $venue['ID'] ) ? $venue['ID'] : '';
+		if( !empty( $venue['ID'] ) ){
+			$existing_venue = $this->get_venue_by_id( $venue_id );
+		}
+		if( empty( $existing_venue ) ){
+			$existing_venue = $this->get_venue_by_name( $venue['name'] );
+		}
 		if ( $existing_venue && is_numeric( $existing_venue ) && $existing_venue > 0 ) {
 			return array(
 				'VenueID' => $existing_venue,
@@ -336,7 +416,8 @@ class WP_Event_Aggregator_TEC {
 		) );
 
 		if ( $create_venue ) {
-			update_post_meta( $create_venue, 'wpea_event_venue_id', $venue['ID'] );
+			update_post_meta( $create_venue, 'wpea_event_venue_name', $venue['name'] );
+			update_post_meta( $create_venue, 'wpea_event_venue_id', $venue_id );
 			return array(
 				'VenueID' => $create_venue,
 			);
@@ -367,6 +448,28 @@ class WP_Event_Aggregator_TEC {
 	}
 
 	/**
+	 * Check for Existing TEC Organizer
+	 *
+	 * @since    1.0.0
+	 * @param int $organizer_id Organizer id.
+	 * @return int/boolean
+	 */
+	public function get_organizer_by_name( $organizer_name ) {
+		$existing_organizer = get_posts( array(
+			'posts_per_page' => 1,
+			'post_type' => $this->oraganizer_posttype,
+			'meta_key' => 'wpea_event_organizer_name',
+			'meta_value' => $organizer_name,
+			'suppress_filters' => false,
+		) );
+
+		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
+			return $existing_organizer[0]->ID;
+		}
+		return false;
+	}
+
+	/**
 	 * Check for Existing TEC Venue
 	 *
 	 * @since    1.0.0
@@ -381,6 +484,30 @@ class WP_Event_Aggregator_TEC {
 			'meta_value' => $venue_id,
 			'suppress_filters' => false,
 		) );
+
+		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
+			return $existing_organizer[0]->ID;
+		}
+		return false;
+	}
+
+	/**
+	 * Check for Existing TEC Venue Name
+	 *
+	 * @since    1.0.0
+	 * @param int $venue_name Venue Name.
+	 * @return int/boolean
+	 */
+	public function get_venue_by_name( $venue_name ) {
+		$existing_organizer = get_posts(
+			array(
+				'posts_per_page'   => 1,
+				'post_type'        => $this->venue_posttype,
+				'meta_key'         => 'wpea_event_venue_name', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Ignore.
+				'meta_value'       => $venue_name, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Ignore.
+				'suppress_filters' => false,
+			)
+		);
 
 		if ( is_array( $existing_organizer ) && ! empty( $existing_organizer ) ) {
 			return $existing_organizer[0]->ID;

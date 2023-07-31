@@ -1,24 +1,27 @@
-const path = require( 'path' );
-const webpack = require( 'webpack' );
+const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+const path = require('path');
 
 module.exports = {
-  entry: {
-    './assets/js/gutenberg.blocks' : './blocks/index.js',
-  },
-  output: {
-    path: path.resolve( __dirname ),
-    filename: '[name].js',
-  },
-  watch: 'production' !== process.env.NODE_ENV,
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
-    ],
-  },
+	...defaultConfig,
+	output: {
+		...defaultConfig.output,
+		path: path.resolve(__dirname, 'assets/js/blocks'),
+	},
+	entry: {
+		'gutenberg.blocks': [ './blocks/index.js' ],
+	},
+	module: {
+		rules: [
+			...defaultConfig.module.rules,
+			{
+				test: /\.svg$/,
+				use: [{
+					loader: 'svg-react-loader'
+				}]
+			}
+		],
+	},
+	externals: {
+		react: 'React'
+	},
 };

@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.6.3
+ * Version:           1.7.2
  * Author:            Xylus Themes
  * Author URI:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -51,6 +51,7 @@ class WP_Event_Aggregator{
 			add_action( 'plugins_loaded', array( self::$instance, 'load_authorize_class' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_style' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_script' ) );
+			add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( self::$instance, 'wpea_setting_doc_links' ) );
 
 			self::$instance->includes();
 			self::$instance->common = new WP_Event_Aggregator_Common();
@@ -95,14 +96,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.6.3' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.7.2' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.6.3' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.7.2' ); }
 
 
 	/**
@@ -116,12 +117,12 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.6.3' );
+			define( 'WPEA_VERSION', '1.7.2' );
 		}
 
 		// Minimum Pro plugin version.
 		if( ! defined( 'WPEA_MIN_PRO_VERSION' ) ){
-			define( 'WPEA_MIN_PRO_VERSION', '1.6.3' );
+			define( 'WPEA_MIN_PRO_VERSION', '1.7.1' );
 		}
 
 		// Plugin folder Path.
@@ -167,8 +168,8 @@ class WP_Event_Aggregator{
 		}else{
 			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';	
 		}		
-		if( !class_exists( 'vcalendar' ) ){
-			require_once WPEA_PLUGIN_DIR . 'includes/lib/iCalcreator/iCalcreator.php';
+		if( !class_exists( 'Kigkonsult\Icalcreator\Vcalendar' ) ){
+			require_once WPEA_PLUGIN_DIR . 'includes/lib/icalcreator/autoload.php';
 		}
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-cpt.php';
 
@@ -187,6 +188,8 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-my-calendar.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ee4.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wpea-plugin-deactivation.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-api.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/parsedown.php';
 
 		// Gutenberg Block
 		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';
@@ -207,6 +210,28 @@ class WP_Event_Aggregator{
 			basename( dirname( __FILE__ ) ) . '/languages'
 		);
 	
+	}
+
+	/**
+	 * WPEA setting And docs link add in plugin page.
+	 *
+	 * @since 1.0
+	 * @return void
+	 */
+	public function wpea_setting_doc_links ( $links ) {
+		$wpea_setting_doc_link = array(
+			'wpea-event-setting' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( admin_url( 'admin.php?page=import_events&tab=settings' ) ),
+				esc_html__( 'Setting', 'wp-event-aggregator' )
+			),
+			'wpea-event-docs' => sprintf(
+				'<a target="_blank" href="%s">%s</a>',
+				esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ),
+				esc_html__( 'Docs', 'wp-event-aggregator' )
+			),
+		);
+		return array_merge( $links, $wpea_setting_doc_link );
 	}
 
 	/**
@@ -242,7 +267,8 @@ class WP_Event_Aggregator{
 
 		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
 		wp_enqueue_style('font-awesome', $css_dir . 'font-awesome.min.css', false, "" );
-	 	wp_enqueue_style('wp-event-aggregator-front', $css_dir . 'wp-event-aggregator.css', false, "" );		
+	 	wp_enqueue_style('wp-event-aggregator-front', $css_dir . 'wp-event-aggregator.css', false, "" );
+		wp_enqueue_style('wp-event-aggregator-front-style2', $css_dir . 'grid-style2.css', false, WPEA_VERSION );
 	}
 
 	/**

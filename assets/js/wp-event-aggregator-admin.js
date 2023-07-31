@@ -25,6 +25,37 @@
 			}).focus();
 		});
 	});
+
+	jQuery(document).ready(function(){
+        jQuery('#wpea_meetup_import_by').on('change', function(){
+    
+            if( jQuery(this).val() == 'event_id' ){
+                jQuery('.import_type_wrapper').hide();
+                jQuery('.meetup_group_url').hide();
+                jQuery('.meetup_group_url .meetup_url').removeAttr( 'required' );
+                jQuery('.meetup_event_id').show();
+                jQuery('.meetup_event_id .ime_event_ids').attr('required', 'required');
+            
+            }else if( jQuery(this).val() == 'group_url' ){
+                jQuery('.import_type_wrapper').show();
+                jQuery('.meetup_group_url').show();
+                jQuery('.meetup_group_url .meetup_url').attr('required', 'required');
+                jQuery('.meetup_event_id').hide();
+                jQuery('.meetup_event_id .ime_event_ids').removeAttr( 'required' );
+            }
+        });
+    
+        jQuery('#import_type').on('change', function(){
+            if( jQuery(this).val() != 'onetime' ){
+                jQuery('.hide_frequency .import_frequency').show();
+            }else{
+                jQuery('.hide_frequency .import_frequency').hide();
+            }
+        });
+    
+        jQuery("#import_type").trigger('change');
+        jQuery("#wpea_meetup_import_by").trigger('change');
+    });
 	
 	jQuery(document).ready(function(){
 		jQuery('#eventbrite_import_by').on('change', function(){
@@ -107,18 +138,6 @@
 
 				jQuery('.facebook_page_wrapper').show();
 				jQuery('.facebook_page_wrapper .facebook_page_username').attr('required', 'required');
-			} else if( current_value == 'my_events' ){
-
-				jQuery('.import_type_wrapper').show();
-
-				jQuery('.facebook_eventid_wrapper').hide();
-				jQuery('.facebook_eventid_wrapper .facebook_event_ids').removeAttr( 'required' );
-
-				jQuery('.facebook_group_wrapper').hide();
-				jQuery('.facebook_group_wrapper .facebook_group').removeAttr( 'required' );
-
-				jQuery('.facebook_page_wrapper').hide();
-				jQuery('.facebook_page_wrapper .facebook_page_username').removeAttr( 'required' );
 			}
 
 		});

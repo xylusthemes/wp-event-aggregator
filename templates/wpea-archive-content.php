@@ -19,7 +19,7 @@ if ( '' !== get_the_post_thumbnail() ){
 	$image_url =  wp_get_attachment_image_src( get_post_thumbnail_id(  get_the_ID() ), 'full' );
 }else{
 	$image_date = date_i18n('F+d', $event_date );
-	$image_url[] =  "https://placehold.it/420x150?text=".$image_date;
+	$image_url[] =  "https://via.placeholder.com/420x150?text=".$image_date;
 }
 $target = '';
 $event_source_url = esc_url( get_permalink() );

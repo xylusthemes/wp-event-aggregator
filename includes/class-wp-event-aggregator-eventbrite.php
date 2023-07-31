@@ -40,6 +40,7 @@ class WP_Event_Aggregator_Eventbrite {
 		$options = wpea_get_import_options( 'eventbrite' );
 		$eventbrite_oauth_token = isset( $options['oauth_token'] ) ? $options['oauth_token'] : '';
 		$organizer_id = isset( $event_data['organizer_id'] ) ? $event_data['organizer_id'] : '';
+		$import_private_events = isset( $options['private_events'] ) ? $options['private_events'] : 'no';
 		
 		if( $event_data['import_by'] == 'organizer_id' ){
 
@@ -48,6 +49,9 @@ class WP_Event_Aggregator_Eventbrite {
 		}elseif( $event_data['import_by'] == 'your_events' ){
 
 			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/users/me/events/?status=live&token=' .  $this->oauth_token;
+		}
+		if( $import_private_events === 'no'){
+			$eventbrite_api_url .= '&only_public=on';
 		}
 
 		$eventbrite_response = wp_remote_get( $eventbrite_api_url );

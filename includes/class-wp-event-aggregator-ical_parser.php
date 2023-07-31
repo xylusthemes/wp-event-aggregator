@@ -8,6 +8,9 @@
  * @package    WP_Event_Aggregator
  * @subpackage WP_Event_Aggregator/includes
  */
+
+ use Kigkonsult\Icalcreator\Vcalendar;
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -88,41 +91,23 @@ class WP_Event_Aggregator_Ical_Parser {
 		// initiate vcalendar
 		//$config = array( 'unique_id' => 'WP_Event_Aggregator_Ical_Parser' . microtime( true ) ); 
 		//$calendar = new vcalendar( $config );
-		$calendar = new vcalendar();
+		$calendar = new Vcalendar();
 		if ( ! $calendar ) {
 			return false;
 		}
 
+		// Parse ics Content.
 		$calendar->parse( $ics_content );
 
-		$calendar_name = $calendar->getProperty( 'X-WR-CALNAME' );		
-		$timezone = $calendar->getProperty( 'X-WR-TIMEZONE' );
+		$calendar_name = $calendar->getXprop( Vcalendar::X_WR_CALNAME );
+		$timezone = $calendar->getXprop( Vcalendar::X_WR_TIMEZONE );
 		if ( ! empty( $timezone[1] ) ) {
 			$this->timezone = $timezone[1];
 		}
 
 		$all_events = $calendar->selectComponents( $start_year, $start_month, $start_day, $end_year, $end_month, $end_day, 'vevent' );
 		$centralize_events = array();
-		/*
-		iCalCreator Example for parse
 
-		$events_arr = $vcalendar->selectComponents( 2007, 11, 1, 2007, 11, 30, "vevent" ); 
-		foreach( $events_arr as $year => $year_arr ) { 
-			foreach( $year_arr as $month => $month_arr ) { 
-				foreach( $month_arr as $day => $day_arr ) { 
-					foreach( $day_arr as $event ) { 
-						$currddate = $event->getProperty( "x-current-dtstart" ); 
-						// if member of a recurrence set, returns
-       					//array(" x-current-dtstart",
-       					// <(string) date("Y-m-d [H:i:s][timezone/UTC offset]")>) 
-       					$startDate = $event->getProperty( "dtstart" ); 
-       					$summary = $event->getProperty( "summary" );
-       					$description = $event->getProperty( "description" );
-       				}
-       			}
-       		}
-       	}
-       	*/
 
        	// Events per Year
 		foreach ( $all_events as $year => $year_arr ) {
@@ -163,13 +148,10 @@ class WP_Event_Aggregator_Ical_Parser {
 					// Fitered Events
 					foreach ( $day_arr as $event ) {
 						
-						$centralize_event = $this->generate_centralize_event_array( $event );
+						$centralize_event = $this->generate_centralize_event_array( $event, $event_data );
 						if( !empty( $centralize_event ) ){
 							$centralize_events[$centralize_event['ID']] = $centralize_event;
 						}
-						/*echo "<pre>";
-						print_r( $event );
-						print_r( $centralize_event );*/
 					}
 				} //end day foreach
 			} //end month foreach
@@ -190,59 +172,49 @@ class WP_Event_Aggregator_Ical_Parser {
 	 * Format events arguments as per centralize event format
 	 *
 	 * @since    1.0.0
-	 * @param 	 array $event iCal vevent Object.
+	 * @param 	 Object $event iCal vevent Object.
 	 * @return 	 array
 	 */
-	public function generate_centralize_event_array( $event ) {
+	public function generate_centralize_event_array( $event, $event_data = array() ) {
 		if( empty( $event ) ){
 			return false;
 		}
 		global $importevents;
 		
-		$is_recurrence_event = $event->getProperty( 'X-RECURRENCE' );
-		$post_title = str_replace('\n', ' ', $event->getProperty( 'SUMMARY' ) );
-		$post_description = str_replace('\n', '<br/>', $event->getProperty( 'DESCRIPTION' ) );
+		$post_title = str_replace('\n', ' ', $event->getSummary() );
+		$post_description = str_replace('\n', '<br/>', $event->getDescription() );
 		$uid = $this->generate_uid_for_ical_event( $event );
 		$uid_old = $this->generate_uid_for_ical_event_old_support( $event );
+		$url = $event->getUrl();
 		$is_all_day = false;
-		
+
 		$system_timezone = date_default_timezone_get();
 		$wordpress_timezone = $this->wordpress_timezone();
 		$calendar_timezone = $this->timezone;
 
-		$start = $event->getProperty( 'dtstart', 1, true );
-		$end   = $event->getProperty( 'dtend',   1, true );
+		$start = $event->getDtstart();
+		$end   = $event->getDtend();
 
 		if ( empty( $end ) ) {
 			$end = $start;
 		}
 
-		if( ! isset( $start['value']['hour'] ) ){
+		// Check if all day event.
+		if ( "000000" === $start->format('His') && "000000" === $end->format('His') ) {
 			$is_all_day = true;
 		}
 		// Also check the proprietary MS all-day field.
-		$ms_allday = $event->getProperty( 'X-MICROSOFT-CDO-ALLDAYEVENT' );
+		$ms_allday = $event->getXprop( 'X-MICROSOFT-CDO-ALLDAYEVENT');
 		if ( ! empty( $ms_allday ) && $ms_allday[1] == 'TRUE' ) {
 			$is_all_day = true;
 		}
 
 		// Setup timezone for event.
-		$timezone = null;
+		$timezone = $start->getTimezone()->getName();
         $force_timezone = false;
-		if ( isset( $start['value']['tz'] ) && 'Z' == $start['value']['tz'] ) {
-			$timezone = 'UTC';
-            if( !$is_all_day && $this->timezone != '' ){
-                $force_timezone = $this->timezone;
-                $timezone = $this->timezone;
-            }
-		} elseif ( isset( $start['params']['TZID'] ) ) {
-			// if there's a TZID set
-			$timezone    = $start['params']['TZID'];
-			$tzid_values = explode( ':', $timezone );
-			if ( 2 === count( $tzid_values ) &&	15 === strlen ( $tzid_values[1] ) ) {
-				$timezone    = $tzid_values[0];
-			}
-
+		if ( 'UTC' === $timezone && ! $is_all_day && $this->timezone != '' ){
+			$force_timezone = $this->timezone;
+			$timezone = $this->timezone;
 		} elseif ( ! empty( $this->timezone ) ) {
 			// if there is a global timezone in the iCal file, use that
 			$timezone = $this->timezone;
@@ -258,56 +230,21 @@ class WP_Event_Aggregator_Ical_Parser {
 			$timezone = $system_timezone;
 		}*/
 
-		$start = $start['value'];
-		$end = $end['value'];
-		
-		if ( empty( $start['hour'] ) ) {
-			$start['hour'] = '00';
+		if ( true === $is_all_day ) {
+			$end->modify( '-1 day' );
+            $end->setTime( 23, 59, 59 );
 		}
-
-		if ( empty( $start['min'] ) ) {
-			$start['min'] = '00';
-		}
-
-		if ( empty( $start['sec'] ) ) {
-			$start['sec'] = '00';
-		}
-
-		if ( empty( $end['hour'] ) ) {
-			$end['hour'] = '00';
-		}
-
-		if ( empty( $end['min'] ) ) {
-			$end['min'] = '00';
-		}
-
-		if ( empty( $end['sec'] ) ) {
-			$end['sec'] = '00';
-		}
-
-		if( $is_all_day == true ){
-			$start['hour'] = 00;
-			$start['min']  = 00;
-			$start['sec']  = 00;
-			$end['hour']   = 23;
-			$end['min']    = 59;
-			$end['sec']    = 59;
-			$end['day']  = $end['day'] - 1;
-		}
-
-		$start = sprintf( "%'.04d%'.02d%'.02dT%'.02d%'.02d%'.02d", $start['year'], $start['month'], $start['day'],$start['hour'],$start['min'],$start['sec'] );
-		$end = sprintf( "%'.04d%'.02d%'.02dT%'.02d%'.02d%'.02d", $end['year'], $end['month'], $end['day'],$end['hour'],$end['min'],$end['sec'] );
 
 		$start_time = strtotime( $this->convert_datetime_to_timezone_wise_datetime( $start, $force_timezone ) );
 		$end_time = strtotime( $this->convert_datetime_to_timezone_wise_datetime( $end, $force_timezone ) );
 		/*$start_time = strtotime( $start ); 
 		$end_time = strtotime( $end );*/
 		
-		$x_start_str  = $event->getProperty( 'X-CURRENT-DTSTART' );
+		$x_start_str  = $event->getXprop( Vcalendar::X_CURRENT_DTSTART );
 		$x_start_time = strtotime( $this->convert_datetime_to_timezone_wise_datetime( end( $x_start_str ), $force_timezone ) );
 		//$x_start_time = strtotime( end( $x_start_str ) );
 		//$x_start_str  = $this->convert_date_to_according_timezone( end( $x_start_str ), $system_timezone, $timezone );
-		$x_end_str  = $event->getProperty( 'X-CURRENT-DTEND' );
+		$x_end_str = $event->getXprop( Vcalendar::X_CURRENT_DTEND );
 		$x_end_str = end( $x_end_str );
 		if( $x_end_str == '' ){
 			$x_end_str = end( $x_start_str );
@@ -343,7 +280,8 @@ class WP_Event_Aggregator_Ical_Parser {
 		}
 
 		$event_image = '';
-		$ical_attachment = $event->getProperty( 'ATTACH', false, true );
+		$event_venue = null;
+		$ical_attachment = $event->getAttach( true, true );
 		if( isset($ical_attachment['params']) && isset($ical_attachment['params']['FMTTYPE']) ) {
 			$attachment_type = $ical_attachment['params']['FMTTYPE'];
 			$image_types = array('image/jpeg', 'image/gif', 'image/png', 'image/jpg');
@@ -352,9 +290,38 @@ class WP_Event_Aggregator_Ical_Parser {
 			}
 		}
 
-		$ical_wp_images = $event->getProperty('X-WP-IMAGES-URL');
+		$ical_wp_images = $event->getXprop('X-WP-IMAGES-URL');
 		if( !empty( $ical_wp_images ) && !empty( $ical_wp_images[1]) ){
 			$event_image =  $ical_wp_images[1];
+		}
+		$timezone = !empty( $timezone ) ? $timezone : $calendar_timezone;
+
+		// Only for facebook ical imports.
+		$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
+		if( !empty( $wpea_user_token_options ) ){
+			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
+			if( 1 == $authorize_status ){
+				$check_facebook = explode( '/', $url);
+				if( $check_facebook[2] == 'www.facebook.com' ){
+					$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
+
+					if( !empty( $event_data ) ){
+						$event_image   = $event_data['image'];
+						$event_venue   = $event_data['location'];
+						$timezone      = $event_data['timezone'];
+						$timezone_name = $event_data['timezone_name'];
+						$start_time    = $event_data['start_time'];
+						$end_time      = $event_data['end_time'];
+					}
+
+					if( empty( $event_data['start_time'] ) ){
+						$start_time = strtotime( $this->convert_fb_ical_timezone(  $start->format('Y-m-d H:i:s'), $event_data['timezone_name'] ) );
+					}
+					if( empty( $event_data['end_time'] ) ){
+						$end_time   = strtotime( $this->convert_fb_ical_timezone(  $end->format('Y-m-d H:i:s'), $event_data['timezone_name'] ) );
+					}
+				}
+			}
 		}
 		
 		$xt_event = array(
@@ -367,20 +334,21 @@ class WP_Event_Aggregator_Ical_Parser {
 			'endtime_local'   => $end_time,
 			'starttime'       => date('Ymd\THis', $start_time),
 			'endtime'         => date('Ymd\THis', $end_time),
-			'startime_utc'    => $start_time,
-			'endtime_utc'     => $end_time,
+			'startime_utc'    => '',
+			'endtime_utc'     => '',
 			'timezone'        => $timezone,
+			'timezone_name'   => $timezone_name,
 			'utc_offset'      => '',
 			'event_duration'  => '',
 			'is_all_day'      => $is_all_day,
-			'url'             => $event->getProperty( 'URL' ),
+			'url'             => $url,
 			'image_url'       => $event_image,
 		);
 
 		$oraganizer_data = null;
 		$event_location = null;
 
-		$organizer = $event->getProperty( 'ORGANIZER', false, true);
+		$organizer = $event->getOrganizer( true );
 		$organizer_params = isset($organizer['params']) ? $organizer['params'] : array();
 		$organizer = isset($organizer['value']) ? $organizer['value'] : '';
 		if ( !empty( $organizer ) ) {
@@ -409,31 +377,9 @@ class WP_Event_Aggregator_Ical_Parser {
 				}
 			}
 		}		
-		$geo 		= $event->getProperty( 'GEO' );
-		$latitude 	= isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
-		$longitude 	= isset( $geo['longitude'] ) ? (float)$geo['longitude'] : '';	
-		$location 	= str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( !empty( $location ) || !empty( $geo ) ) {
-			$event_location = array(
-				'ID'           => strtolower( trim( stripslashes( $location ) ) ),
-				'name'         => isset( $location ) ? stripslashes( $location ) : '',
-				'description'  => '',
-				'address_1'    => isset( $location ) ? stripslashes( $location ) : '',
-				'address_2'    => '',
-				'city'         => '',
-				'state'        => '',
-				'country'      => '',
-				'zip'	       => '',
-				'lat'     	   => $latitude,
-				'long'		   => $longitude,
-				'full_address' => isset( $location ) ? stripslashes( $location ) : '',
-				'url'          => '',
-				'image_url'    => ''
-			);
-		}
 		
 		$xt_event['organizer'] = $oraganizer_data;
-		$xt_event['location'] = $event_location;
+		$xt_event['location'] = $this->get_location( $event, $event_venue );
 		
 		return apply_filters( 'wpea_ical_generate_centralize_array', $xt_event, $event );
 	}
@@ -445,29 +391,52 @@ class WP_Event_Aggregator_Ical_Parser {
 	 * @param array $event iCal vevent.
 	 * @return array
 	 */
-	public function get_location( $event ) {
-
-		$location = str_replace('\n', ' ', $event->getProperty( 'LOCATION' ) );
-		if ( empty( $location ) ) {
-			return null;
+	public function get_location( $event, $event_venue ) {
+		if ( ! empty( $event_venue ) ) {
+			$event_location = array(
+				'ID'           => isset( $event_venue->id ) ? $event_venue->id : '',
+				'name'         => isset( $event_venue->name ) ? $event_venue->name : '',
+				'description'  => '',
+				'address_1'    => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
+				'address_2'    => '',
+				'city'         => isset( $event_venue->location->city ) ? $event_venue->location->city : '',
+				'state'        => isset( $event_venue->location->state ) ? $event_venue->location->state : '',
+				'country'      => isset( $event_venue->location->country ) ? $event_venue->location->country : '',
+				'zip'          => isset( $event_venue->location->zip ) ? $event_venue->location->zip : '',
+				'lat'          => isset( $event_venue->location->latitude ) ? $event_venue->location->latitude : '',
+				'long'         => isset( $event_venue->location->longitude ) ? $event_venue->location->longitude : '',
+				'full_address' => isset( $event_venue->location->street ) ? $event_venue->location->street : '',
+				'url'          => '',
+				'image_url'    => '',
+			);	
+			return $event_location;
+		}else{
+			$geo       = $event->getGeo();
+			$latitude  = isset( $geo['latitude'] ) ? (float)$geo['latitude'] : '';	
+			$longitude = isset( $geo['longitude'] ) ? (float)$geo['longitude'] : '';
+			$location  = str_replace('\n', ' ', $event->getLocation() );
+			if ( empty( $location ) ) {
+				return null;
+			}
+			if ( !empty( $location ) || !empty( $geo ) ) {
+				$event_location = array(
+					'ID'           => strtolower( trim( stripslashes( $location ) ) ),
+					'name'         => isset( $location ) ? stripslashes( $location ) : '',
+					'description'  => '',
+					'address_1'    => '',
+					'address_2'    => '',
+					'city'         => '',
+					'state'        => '',
+					'country'      => '',
+					'zip'	       => '',
+					'lat'     	   => $latitude,
+					'long'		   => $longitude,
+					'full_address' => '',
+					'url'          => '',
+					'image_url'    => ''
+				);
+			}
 		}
-
-		$event_location = array(
-			'ID'           => strtolower( trim( stripslashes( $location ) ) ),
-			'name'         => isset( $location ) ? stripslashes( $location ) : '',
-			'description'  => '',
-			'address_1'    => isset( $location ) ? stripslashes( $location ) : '',
-			'address_2'    => '',
-			'city'         => '',
-			'state'        => '',
-			'country'      => '',
-			'zip'	       => '',
-			'lat'     	   => '',
-			'long'		   => '',
-			'full_address' => isset( $location ) ? stripslashes( $location ) : '',
-			'url'          => '',
-			'image_url'    => ''
-		);
 		return $event_location;
 	}
 
@@ -480,15 +449,25 @@ class WP_Event_Aggregator_Ical_Parser {
 	 */
 	public function generate_uid_for_ical_event( $ical_event ) {
 
-		$recurrence_id = $ical_event->getProperty( 'RECURRENCE-ID' );
+		$recurrence_id = $ical_event->getRecurrenceid();
+		if ( is_a( $recurrence_id, 'DateTime' ) ) {
+			$recurrence_id = $recurrence_id->format('Y-m-d');
+		}
 		if ( is_array( $recurrence_id) ) {
 			$recurrence_id = implode('-', $recurrence_id);
 		}
-		if ( false === $recurrence_id && false !== $ical_event->getProperty( 'X-RECURRENCE' ) ) {
-			$current_dt_start = $ical_event->getProperty( 'X-CURRENT-DTSTART' );
-			$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
+		if ( false === $recurrence_id && false !== $ical_event->getXprop( Vcalendar::X_RECURRENCE ) ) {
+			$current_dt_start = $ical_event->getXprop( Vcalendar::X_CURRENT_DTSTART );
+			if ( is_a( $current_dt_start, 'X-CURRENT-DTSTART' ) ) {
+					$recurrence_id = $recurrence_id->format('Y-m-d');
+			}elseif( !empty( $current_dt_start[1] ) ){
+				$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
+			}
 		}
-		return $ical_event->getProperty( 'UID' ) . $recurrence_id;
+		$event_id = $ical_event->getUid() . $recurrence_id;
+		$event_id = explode( '@facebook', $event_id );
+		$ical_event_id = str_replace('e', '', $event_id[0]);
+		return $ical_event_id;
 	}
 
 	/**
@@ -500,12 +479,22 @@ class WP_Event_Aggregator_Ical_Parser {
 	 */
 	public function generate_uid_for_ical_event_old_support( $ical_event ) {
 
-		$recurrence_id = $ical_event->getProperty( 'RECURRENCE-ID' );
-		if ( false === $recurrence_id && false !== $ical_event->getProperty( 'X-RECURRENCE' ) ) {
-			$current_dt_start = $ical_event->getProperty( 'X-CURRENT-DTSTART' );
-			$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
+		$recurrence_id = $ical_event->getRecurrenceid();
+		if ( is_a( $recurrence_id, 'DateTime' ) ) {
+			$recurrence_id = $recurrence_id->format('Y-m-d');
 		}
-		return $ical_event->getProperty( 'UID' ) . $recurrence_id . $ical_event->getProperty( 'SEQUENCE' );
+		if ( is_array( $recurrence_id) ) {
+			$recurrence_id = implode('-', $recurrence_id);
+		}
+		if ( false === $recurrence_id && false !== $ical_event->getXprop( Vcalendar::X_RECURRENCE ) ) {
+			$current_dt_start = $ical_event->getXprop( Vcalendar::X_CURRENT_DTSTART );
+			if ( is_a( $current_dt_start, 'X-CURRENT-DTSTART' ) ) {
+					$recurrence_id = $recurrence_id->format('Y-m-d');
+			}elseif( !empty( $current_dt_start[1] ) ){
+				$recurrence_id    = isset( $current_dt_start[1] ) ? $current_dt_start[1] : false;
+			}
+		}
+		return $ical_event->getUid() . $recurrence_id . $ical_event->getSequence();
 	}
 
 	/**
@@ -528,6 +517,93 @@ class WP_Event_Aggregator_Ical_Parser {
 			return 'UTC' . $utc_offset;
 		}
 		return 'UTC+' . $utc_offset;
+	}
+
+	/**
+	 * Convert datetime to desired timezone.
+	 *
+	 * @param string $event_datetime     Date string to possibly convert
+	 *
+	 * @return string
+	 *
+	 * @since 1.0.0
+	 */
+	public function convert_fb_ical_timezone( $event_datetime = '', $timezone = '' ) {
+		
+		$timezone_string = get_option( 'timezone_string' );
+		$offset  = (float) get_option( 'gmt_offset' );
+		if( !empty( $timezone ) ){
+			$tz = $timezone;
+		}else{
+
+			if ( ! empty( $timezone_string ) ) {
+				$tz        = $timezone_string;
+			} else {
+
+				$hours     = (int) $offset;
+				$minutes   = ( $offset - $hours );
+				$sign      = ( $offset < 0 ) ? '-' : '+';
+				$abs_hour  = abs( $hours );
+				$abs_mins  = abs( $minutes * 60 );
+				$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+				
+				list($hours, $minutes) = explode(':', $tz_offset);
+				$seconds = $hours * 60 * 60 + $minutes * 60;
+				$tz = timezone_name_from_abbr('', $seconds, 1);
+				if($tz === false) $tz = timezone_name_from_abbr('', $seconds, 0);
+			}
+		}
+		$utc_tz         = new DateTimeZone( 'UTC' );
+		$datetime       = new DateTime( $event_datetime, $utc_tz );
+		$event_timezone = new DateTimeZone( $tz );
+		$datetime->setTimezone( $event_timezone );
+
+		return $datetime->format('Y-m-d H:i:s');
+	}
+
+	/**
+     * Check and Update event image.
+     *
+     * @param string $import_into
+     * @param int $event_id
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+	public function get_event_image_and_location( $import_into, $facebook_event_id = 0 ){
+		global $importevents;
+		$event_data        = array();
+		$event_id          = array( 'ID' => $facebook_event_id );
+		$post_type         = $importevents->{$import_into}->get_event_posttype();
+		$is_exitsing_event = $importevents->common->get_event_by_event_id( $post_type, $event_id );
+		$has_event_image   = get_post_meta( $is_exitsing_event, '_thumbnail_id', true );
+
+		if ( empty( $has_event_image ) ){
+			$fetch_image = apply_filters( 'wpea_ical_fetch_event_image', true );
+			if( $fetch_image ) {
+				$facebook_event = $importevents->facebook->get_facebook_event_by_event_id( $event_id['ID'] );
+				if ( ! empty( $facebook_event->cover )  ) {
+					$event_data['image']         = $facebook_event->cover->source;
+					$event_data['location']      = $facebook_event->place;
+					$event_data['timezone_name'] = $facebook_event->timezone;
+					$event_data['start_time']    = isset( $facebook_event->start_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->start_time ) ) :'';
+					$event_data['end_time']      = isset( $facebook_event->end_time ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $facebook_event->end_time ) ) : '';
+					$event_data['timezone']      = $importevents->common->get_utc_offset( $facebook_event->start_time );
+				}
+			}
+		} else {
+			$attachment_id = get_post_thumbnail_id( $is_exitsing_event );
+			$imagesource = get_post_meta( $attachment_id, '_wpea_attachment_source', true );				
+			if( !empty( $imagesource ) ){
+				$event_data['image'] = $imagesource;
+			}
+			$event_timezone   = get_post_meta( $is_exitsing_event, 'timezone_name', true );
+			if( !empty( $event_timezone ) ){
+				$event_data['timezone_name'] = $event_timezone;
+			}
+		}
+		return $event_data;
 	}
 
 	/**
@@ -564,7 +640,9 @@ class WP_Event_Aggregator_Ical_Parser {
      */
     public function convert_datetime_to_timezone_wise_datetime( $datetime, $force_timezone = false ) {
         try {
-            $datetime = new DateTime( $datetime );
+			if ( ! is_a( $datetime, 'DateTime' ) ) {
+				$datetime = new DateTime( $datetime );
+			}
             if( $force_timezone && $force_timezone !='' ){
                 try{
                     $datetime->setTimezone(new DateTimeZone( $force_timezone ) );

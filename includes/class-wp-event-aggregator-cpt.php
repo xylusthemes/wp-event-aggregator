@@ -641,7 +641,7 @@ class WP_Event_Aggregator_Cpt {
 	 *
 	 */
 	public function wp_events_archive( $atts = array() ){
-		//[wp_events col='2' posts_per_page='12' category="cat1,cat2" past_events="yes" order="desc" orderby="" start_date="" end_date="" ]
+		//[wp_events col='2' layout="style2" posts_per_page='12' category="cat1,cat2" past_events="yes" order="desc" orderby="" start_date="" end_date="" ]
 		$current_date = current_time('timestamp');
 		$paged = ( get_query_var('paged') ? get_query_var('paged') : 1 );
 		if( is_front_page() ){
@@ -717,6 +717,9 @@ class WP_Event_Aggregator_Cpt {
 			}
 
 		}else{
+			if( isset( $atts['past_events'] ) && $atts['past_events'] == true ){
+				$atts['past_events'] = "yes";
+			}
 			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' ){
 				$eve_args['meta_query'] = array(
 						        array(
@@ -770,6 +773,9 @@ class WP_Event_Aggregator_Cpt {
 				$eve_args['order'] = sanitize_text_field( $atts['order'] );
 			}
 		}else{
+			if( isset( $atts['past_events'] ) && $atts['past_events'] == true ){
+				$atts['past_events'] = "yes";
+			}
 			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' && $eve_args['orderby'] == 'meta_value' ){
 				$eve_args['order'] = 'DESC';
 			}else{
@@ -777,8 +783,8 @@ class WP_Event_Aggregator_Cpt {
 			}
 		}
 
-		$col = 3;
-        $css_class = 'col-wpea-md-4';
+		$col = 2;
+        $css_class = 'col-wpea-md-6';
         if( isset( $atts['col'] ) && $atts['col'] != '' && is_numeric( $atts['col'] ) ){
              $col = $atts['col'];
                 switch ( $col ) {
@@ -830,7 +836,11 @@ class WP_Event_Aggregator_Cpt {
 			if( $wp_events->have_posts() ):
 				while ( $wp_events->have_posts() ) : $wp_events->the_post();
 					
-					get_wpea_template( 'wpea-archive-content.php', $template_args );
+					if( isset( $atts['layout'] ) && $atts['layout'] == 'style2' && wpea_is_pro() ){
+						get_wpea_template( 'wpea-archive-content2.php', $template_args );
+					}else{
+						get_wpea_template( 'wpea-archive-content.php', $template_args );
+					}
 					
 				endwhile; // End of the loop.
 
