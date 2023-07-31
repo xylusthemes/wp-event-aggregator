@@ -71,6 +71,15 @@ class WP_Event_Aggregator_EE4 {
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' != $update_events ) {
 				return array(
 					'status'=> 'skipped',
@@ -229,14 +238,24 @@ class WP_Event_Aggregator_EE4 {
 		if( empty( $venue_array ) ){
 			return false;
 		}
-		$venue_id = isset( $venue_array['ID'] ) ? $venue_array['ID'] : '';
-		if( empty( $venue_id ) ){
-			return false;
-		}
 
-		$is_exitsing_venue = $this->get_ee4_venue_by_id( $venue_id );
-		if( $is_exitsing_venue ){
-			return $is_exitsing_venue;
+		$location_name = isset( $venue_array['name'] ) ? $venue_array['name'] : '';
+		$venue_id      = isset( $venue_array['ID'] ) ? $venue_array['ID'] : '';
+
+		if( !empty( $location_name ) && $location_name == 'Online Event' ){
+			$is_exitsing_venue = $this->get_ee4_venue_by_name( $location_name );
+			if ( $is_exitsing_venue ) {
+				return $is_exitsing_venue;
+			}
+		}else{
+			if ( empty( $venue_id ) ) {
+				return false;
+			}
+
+			$is_exitsing_venue = $this->get_ee4_venue_by_id( $venue_id );
+			if( $is_exitsing_venue ){
+				return $is_exitsing_venue;
+			}
 		}
 
 		// Venue Deatails
@@ -261,7 +280,11 @@ class WP_Event_Aggregator_EE4 {
 		);
 
 		$ivenue_id = wp_insert_post( $venuedata, true );
-		update_post_meta( $ivenue_id, 'wpea_ee4_venue_id', $venue_id );
+		if( !empty( $venue_id ) ){
+			update_post_meta( $ivenue_id, 'wpea_ee4_venue_id', $venue_id );
+		}else{
+			update_post_meta( $ivenue_id, 'wpea_ee4_venue_id', $location_name );
+		}
 		
 		// Get Country code
 		$cnt_iso = $sta_id = '';
@@ -328,6 +351,32 @@ class WP_Event_Aggregator_EE4 {
 			'post_type' => $this->venue_posttype,
 			'meta_key' => 'wpea_ee4_venue_id',
 			'meta_value' => $venue_id,
+			'suppress_filters' => false,
+		) );
+
+		if ( is_array( $existing_venue ) && ! empty( $existing_venue ) ) {
+			return $existing_venue[0]->ID;
+		}
+		return false;
+	}
+
+	/**
+	 * Check for Existing EE4 Venue
+	 *
+	 * @since    1.7.3
+	 * @param int $venue_name Venue id.
+	 * @return int/boolean
+	 */
+	public function get_ee4_venue_by_name( $venue_name ) {
+		if ( empty( $venue_name ) ) {
+			return false;
+		}
+
+		$existing_venue = get_posts( array(
+			'posts_per_page'   => 1,
+			'post_type'        => $this->venue_posttype,
+			'meta_key'         => 'wpea_ee4_venue_id',
+			'meta_value'       => $venue_name,
 			'suppress_filters' => false,
 		) );
 

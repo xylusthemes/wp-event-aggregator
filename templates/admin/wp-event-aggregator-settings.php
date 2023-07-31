@@ -123,7 +123,7 @@ if( is_object( $meetup_authorized_user ) ){
                                     </span>
                                 </td>
                             </tr>
-
+    	                
                             <tr>
                                 <th scope="row">
                                     <?php _e( 'Facebook App secret','wp-event-aggregator' ); ?> : 
@@ -441,7 +441,6 @@ if( is_object( $meetup_authorized_user ) ){
                         <input type="submit" class="button-primary xtei_submit_button" style=""  value="<?php esc_attr_e( 'Save Settings', 'wp-event-aggregator' ); ?>" />
                     </div>
                 </div>
-            
 
                 <div class="wpea-setting-tab-child" id="icalsettings">
                     <table class="form-table">
@@ -495,6 +494,7 @@ if( is_object( $meetup_authorized_user ) ){
                     </div>
                 </div>
 
+
                 <div class="wpea-setting-tab-child" id="aggregatorsetting">
                     <table class="form-table">
                         <tbody>
@@ -534,6 +534,21 @@ if( is_object( $meetup_authorized_user ) ){
                                 </td>
                             </tr>
 
+                            <tr>
+                                <th scope="row">
+                                    <?php _e('Skip Trashed Events', 'wp-event-aggregator'); ?> :
+                                </th>
+                                <td>
+                                    <?php
+                                    $skip_trash = isset($aggregator_options['skip_trash']) ? $aggregator_options['skip_trash'] : 'no';
+                                    ?>
+                                    <input type="checkbox" name="wpea[skip_trash]" value="yes" <?php if ($skip_trash == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                                    <span class="wpea_small">
+                                        <?php _e('Check to enable skip-the-trash events during importing.', 'wp-event-aggregator'); ?>
+                                    </span>
+                                    <?php do_action('wpea_render_pro_notice'); ?>
+                                </td>
+                            </tr>
 
                             <tr>
                                 <th scope="row">
@@ -560,6 +575,7 @@ if( is_object( $meetup_authorized_user ) ){
                                 </th>
                                 <td>
                                 <?php
+
                                 $accent_color = isset( $aggregator_options['accent_color'] ) ? $aggregator_options['accent_color'] : '#039ED7';
                                 ?>
                                 <input class="wpea_color_field" type="text" name="wpea[accent_color]" value="<?php echo esc_attr( $accent_color ); ?>"/>
@@ -568,7 +584,7 @@ if( is_object( $meetup_authorized_user ) ){
                                 </span>
                                 </td>
                             </tr>
-                            
+
                             <tr>
                                 <th scope="row">
                                     <?php _e( 'Disable WP Events', 'wp-event-aggregator' ); ?> : 

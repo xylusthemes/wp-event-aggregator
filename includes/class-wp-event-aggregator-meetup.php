@@ -155,6 +155,7 @@ class WP_Event_Aggregator_Meetup {
 			'startime_utc'    => $start_time,
 			'endtime_utc'     => $end_time,
 			'timezone'        => $timezone,
+			'timezone_name'   => $timezone,
 			'utc_offset_hours'=> $this->get_utc_offset( $timezone),
 			'utc_offset'      => $this->get_utc_offset( $timezone),
 			'is_all_day'      => '',

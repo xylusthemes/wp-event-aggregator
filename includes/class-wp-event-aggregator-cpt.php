@@ -119,7 +119,7 @@ class WP_Event_Aggregator_Cpt {
 				'uploaded_to_this_item' => __( 'Uploaded to this Event', 'wp-event-aggregator' ),
 				'items_list'            => __( 'Event Items list', 'wp-event-aggregator' ),
 				'items_list_navigation' => __( 'Event Items list navigation', 'wp-event-aggregator' ),
-				'filter_items_list'     => __( 'Filter Event items list', 'wp-event-aggregator' ),
+				'filter_items_list'     => __( 'Filter Event Items list', 'wp-event-aggregator' ),
 		);
 		$rewrite = array(
 				'slug'                  => $this->event_slug,
@@ -210,7 +210,7 @@ class WP_Event_Aggregator_Cpt {
 				'add_new_item'               => __( 'Add New Tag',                   'wp-event-aggregator' ),
 				'new_item_name'              => __( 'New Tag Name',                  'wp-event-aggregator' ),
 				'separate_items_with_commas' => __( 'Separate tags with commas',     'wp-event-aggregator' ),
-				'add_or_remove_items'        => __( 'Add or remove tags',            'wp-event-aggregator' ),
+				'add_or_remove_items'        => __( 'Add or Remove tags',            'wp-event-aggregator' ),
 				'choose_from_most_used'      => __( 'Choose from the most used tags','wp-event-aggregator' ),
 				'not_found'                  => __( 'No tags found',                 'wp-event-aggregator' ),
 				'parent_item'                => null,
@@ -333,7 +333,7 @@ class WP_Event_Aggregator_Cpt {
 			</tr>
 
 			<tr>
-				<td><?php _e('Zipcode', 'wp-event-aggregator'); ?>:</td>
+				<td><?php _e('ZIP Code', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_zipcode" id="venue_zipcode" value="<?php echo get_post_meta($post->ID, 'venue_zipcode', true); ?>" />
 				</td>
