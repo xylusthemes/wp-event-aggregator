@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-31T09:09:48+00:00\n"
+"POT-Creation-Date: 2023-07-31T10:40:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-event-aggregator\n"
 
 #. Plugin Name of the plugin
 #: includes/class-wp-event-aggregator-admin.php:55
-#: includes/class-wp-event-aggregator-admin.php:119
+#: includes/class-wp-event-aggregator-admin.php:115
 #: includes/class-wp-event-aggregator-common.php:214
 #: includes/class-wpea-plugin-deactivation.php:38
 msgid "WP Event Aggregator"
@@ -59,7 +59,7 @@ msgid "Settings"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:63
-#: includes/class-wp-event-aggregator-admin.php:172
+#: includes/class-wp-event-aggregator-admin.php:168
 msgid "Support & Help"
 msgstr ""
 
@@ -102,11 +102,7 @@ msgstr ""
 msgid "Shortcodes"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:168
-msgid "Support & Help"
-msgstr ""
-
-#: includes/class-wp-event-aggregator-admin.php:289
+#: includes/class-wp-event-aggregator-admin.php:285
 msgctxt "post type general name"
 msgid "Scheduled Import"
 msgstr ""
@@ -274,7 +270,7 @@ msgstr ""
 msgid "Created/Updated"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:505
+#: includes/class-wp-event-aggregator-admin.php:501
 #: includes/class-wp-event-aggregator-list-table.php:186
 #: includes/class-wp-event-aggregator-list-table.php:542
 msgid "Action"
@@ -285,8 +281,8 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:546
-#: includes/class-wp-event-aggregator-admin.php:553
+#: includes/class-wp-event-aggregator-admin.php:542
+#: includes/class-wp-event-aggregator-admin.php:549
 msgid "No Data Found"
 msgstr ""
 
@@ -737,8 +733,8 @@ msgstr ""
 #: includes/class-wp-event-aggregator-eventbrite.php:60
 #: includes/class-wp-event-aggregator-eventbrite.php:73
 #: includes/class-wp-event-aggregator-eventbrite.php:97
-#: includes/class-wp-event-aggregator-tec.php:177
-#: includes/class-wp-event-aggregator-tec.php:242
+#: includes/class-wp-event-aggregator-tec.php:180
+#: includes/class-wp-event-aggregator-tec.php:252
 msgid "Something went wrong, please try again."
 msgstr ""
 
