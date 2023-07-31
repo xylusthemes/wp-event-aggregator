@@ -405,6 +405,22 @@ if( is_object( $meetup_authorized_user ) ){
 
                     <tr>
                         <th scope="row">
+                            <?php _e('Skip Trashed Events', 'wp-event-aggregator'); ?> :
+                        </th>
+                        <td>
+                            <?php
+                            $skip_trash = isset($aggregator_options['skip_trash']) ? $aggregator_options['skip_trash'] : 'no';
+                            ?>
+                            <input type="checkbox" name="wpea[skip_trash]" value="yes" <?php if ($skip_trash == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                            <span class="wpea_small">
+                                <?php _e('Check to enable skip-the-trash events during importing.', 'wp-event-aggregator'); ?>
+                            </span>
+                            <?php do_action('wpea_render_pro_notice'); ?>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
                             <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
                         </th>
                         <td>
