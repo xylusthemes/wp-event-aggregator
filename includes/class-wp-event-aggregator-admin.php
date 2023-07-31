@@ -60,7 +60,7 @@ class WP_Event_Aggregator_Admin {
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
     	$submenu['import_events'][] = array( __( 'iCalendar/.ics Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=ical' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
-    	$submenu['import_events'][] = array( __( 'Support & help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
+    	$submenu['import_events'][] = array( __( 'Support & Help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
 		if( !wpea_is_pro() ){
         	$submenu['import_events'][] = array( '<li class="wpea_upgrade_pro current">' . __( 'Upgrade to Pro', 'wp-event-aggregator' ) . '</li>', 'manage_options', esc_url( "https://xylusthemes.com/plugins/wp-event-aggregator/"));
 		}
@@ -95,14 +95,10 @@ class WP_Event_Aggregator_Admin {
 	 */
 	function enqueue_admin_styles( $hook ) {
 
-		global $pagenow;
-		$page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
-		if( 'import_events' == $page || 'widgets.php' == $pagenow || 'post.php' == $pagenow ){
-			$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
-	 		wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
-			wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
-			wp_enqueue_style('wp-color-picker');
-		}
+		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
+		wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
+		wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
+		wp_enqueue_style('wp-color-picker');
 
 	}
 
@@ -543,14 +539,14 @@ class WP_Event_Aggregator_Admin {
 	    	}else{
 	    		?>
 	    		<div class="wpea_no_import_events">
-		    		<?php esc_html_e( 'No data found', 'wp-event-aggregator' ); ?>
+		    		<?php esc_html_e( 'No Data Found', 'wp-event-aggregator' ); ?>
 		    	</div>
 	    		<?php
 	    	}
 	    }else{
 	    	?>
     		<div class="wpea_no_import_events">
-	    		<?php esc_html_e( 'No data found', 'wp-event-aggregator' ); ?>
+	    		<?php esc_html_e( 'No Data Found', 'wp-event-aggregator' ); ?>
 	    	</div>
     		<?php
 	    }

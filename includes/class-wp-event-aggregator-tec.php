@@ -103,6 +103,15 @@ class WP_Event_Aggregator_TEC {
 			}
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' == $update_events ) {
 				return $this->update_event( $is_exitsing_event, $centralize_array, $formated_args, $event_args );
 			}else{
@@ -140,6 +149,9 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $new_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $new_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $new_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
+			
+			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
 			
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
@@ -191,6 +203,13 @@ class WP_Event_Aggregator_TEC {
 			$update_event_id = tribe_update_event( $event_id, $formated_args );
 		}
 		if ( $update_event_id ) {
+			$start_time    = $centralize_array['starttime_local'];
+			$end_time      = $centralize_array['endtime_local'];
+			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+
+			update_post_meta( $update_event_id, '_EventStartDate',  date( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $update_event_id, '_EventEndDate', date( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $update_event_id, '_EventTimezone', $timezone_name );
 			update_post_meta( $update_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $update_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
@@ -250,15 +269,13 @@ class WP_Event_Aggregator_TEC {
 		}
 		$start_time    = $centralize_array['starttime_local'];
 		$end_time      = $centralize_array['endtime_local'];
-		$timezone      = isset( $centralize_array['timezone'] ) ? $centralize_array['timezone'] : 'UTC';
 		$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 		$event_args    = array(
 			'title'             => $centralize_array['name'],
 			'post_content'      => $centralize_array['description'],
 			'status'            => 'pending',
 			'url'               => $centralize_array['url'],
-			'timezone'          => $timezone,
-			'timezone_name'     => $timezone_name,
+			'timezone'          => $timezone_name,
 			'start_date'        => date( 'Y-m-d H:i:s', $start_time ),
 			'end_date'          => date( 'Y-m-d H:i:s', $end_time ),
 		);
@@ -348,7 +365,8 @@ class WP_Event_Aggregator_TEC {
 			}
 		}
 		if( empty( $existing_organizer ) ){
-			$existing_organizer = $this->get_organizer_by_name( $centralize_org_array['name'] );
+			$organizer_name = str_replace( '\\', '', $centralize_org_array['name'] );
+			$existing_organizer = $this->get_organizer_by_name( $organizer_name );
 		}
 		if ( $existing_organizer && is_numeric( $existing_organizer ) && $existing_organizer > 0 ) {
 			return array(

@@ -49,7 +49,7 @@ global $importevents;
 					    	<td>
 					    		<input class="wpea_text ical_url" name="ical_url" type="text" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled"'; } ?>/>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Enter iCal URL ( Eg. https://www.xyz.com/ical-url.ics )', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Enter iCal URL (Eg. https://www.xyz.com/ical-url.ics)', 'wp-event-aggregator' ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
@@ -81,14 +81,14 @@ global $importevents;
 									<input type="text" name="end_date" class="xt_datepicker end_date" placeholder="<?php esc_html_e('Select end date', 'wp-event-aggregator' ); ?>">
 								</div>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select date range from which you want to import events.', 'wp-event-aggregator' ); ?>
+			                        <?php _e( 'Select date range from which you want to import events. Default start date is Today', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>
 
 					    <tr class="import_type_wrapper">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
+					    		<?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
 						    	<?php $importevents->common->render_import_type(); ?>

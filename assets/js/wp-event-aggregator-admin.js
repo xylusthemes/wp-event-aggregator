@@ -255,4 +255,71 @@
 	});	
 })( jQuery );
 
+jQuery(document).ready(function($){
+
+	const wpea_tab_links = document.querySelectorAll('.wpea-setting-tab');
+	const wpea_tabcontents = document.querySelectorAll('.wpea-setting-tab-child');
+
+	wpea_tab_links.forEach(function(link) {
+		link.addEventListener('click', function() {
+			const wpea_tabId = this.dataset.tab;
+
+			wpea_tab_links.forEach(function(link) {
+				link.classList.remove('active');
+			});
+
+			wpea_tabcontents.forEach(function(content) {
+				content.classList.remove('active');
+			});
+
+			this.classList.add('active');
+			document.getElementById(wpea_tabId).classList.add('active');
+		});
+	});
+
+	const wpea_gm_apikey_input = document.querySelector('.wpea_google_maps_api_key');
+	const wpea_checkkeylink = document.querySelector('.wpea_check_key a');
+	wpea_gm_apikey_input.addEventListener('input', function() {
+		const wpea_check_key = document.querySelector('.wpea_check_key');
+		if (wpea_gm_apikey_input.value.trim() !== '') {
+			wpea_check_key.style.display = 'contents';
+		} else {
+			wpea_check_key.style.display = 'none';
+		}
+	});
+
+	wpea_checkkeylink.addEventListener('click', function(event) {
+		event.preventDefault();
+		const wpea_gm_apikey = wpea_gm_apikey_input.value.trim();
+
+		if ( wpea_gm_apikey !== '' ) {
+			wpea_check_gmap_apikey(wpea_gm_apikey);
+		}
+	});
+
+	function wpea_check_gmap_apikey(wpea_gm_apikey) {
+		const wpea_xhr = new XMLHttpRequest();
+		wpea_xhr.open('GET', 'https://www.google.com/maps/embed/v1/place?q=New+York&key=' + encodeURIComponent(wpea_gm_apikey), true);
+		const wpea_loader = document.getElementById('wpea_loader');
+		wpea_loader.style.display = 'inline-block';
+		wpea_xhr.onreadystatechange = function() {
+			if ( wpea_xhr.readyState === XMLHttpRequest.DONE ) {
+				wpea_loader.style.display = 'none';
+				if (wpea_xhr.status === 200) {
+					const response = wpea_xhr.responseText;
+					var wpea_gm_success_notice = jQuery("#wpea_gmap_success_message");
+						wpea_gm_success_notice.html('<span class="wpea_gmap_success_message">Valid Google Maps License Key</span>');
+						setTimeout(function(){ wpea_gm_success_notice.empty(); }, 2000);
+				} else {
+					var wpea_gm_error_notice = jQuery("#wpea_gmap_error_message");
+					wpea_gm_error_notice.html( '<span class="wpea_gmap_error_message" >Inalid Google Maps License Key</span>' );
+						setTimeout(function(){ wpea_gm_error_notice.empty(); }, 2000);
+				}
+			}
+		};
+
+		wpea_xhr.send();
+	}
+});
+
 
