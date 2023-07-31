@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-31T08:53:44+00:00\n"
+"POT-Creation-Date: 2023-07-31T08:58:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-event-aggregator\n"
@@ -335,7 +335,7 @@ msgid "EventON"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:198
-msgid "All in one Event Calendar"
+msgid "All-in-one Event Calendar"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:203
@@ -347,7 +347,7 @@ msgid "Event Espresso (EE4)"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:507
-msgid "Event(s) are imported successfully."
+msgid "Event(s) successfully imported."
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:509
@@ -400,6 +400,7 @@ msgid "One-time Import"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:651
+#: includes/class-wp-event-aggregator-list-table.php:182
 msgid "Scheduled Import"
 msgstr ""
 
@@ -420,11 +421,11 @@ msgid "Draft"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:819
-msgid "The Access Token has been invalidated because the user changed their password or Facebook has changed the session for security reasons. Can you please Authorize/Reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style=\"text-decoration: none;\" href=\""
+msgid "The Access Token has been invalidated because the user has changed their password, or Facebook has changed the session for security reasons. Please reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style=\"text-decoration: none;\" href=\""
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:834
-msgid "Your current \"WP Event Aggregator Pro\" add-on is not competible with Free plugin. Please Upgrade Pro latest to work event importing Flawlessly."
+msgid "The current \"WP Event Aggregator Pro\" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing."
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:848
@@ -828,15 +829,11 @@ msgid "Stats: "
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:153
-msgid "Total imported Events:"
+msgid "Total Imported Events:"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:158
 msgid "Import Now"
-msgstr ""
-
-#: includes/class-wp-event-aggregator-list-table.php:182
-msgid "Scheduled import"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:183
@@ -882,7 +879,7 @@ msgid "Import Stats"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:575
-msgid "Warning!! Are you sure to delete all these import history? Import history will be permanatly deleted."
+msgid "Warning! Import history will be permanatly deleted. Are you certain you want to delete the import history?"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:578
@@ -1307,10 +1304,7 @@ msgid "Advanced Synchronization"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:117
-#: templates/admin/wp-event-aggregator-settings.php:274
-#: templates/admin/wp-event-aggregator-settings.php:378
-#: templates/admin/wp-event-aggregator-settings.php:440
-msgid "Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events."
+msgid "Check to enable advanced synchronization. This will delete events which were removed from source calendar, and also delete past events if source calendar is to provide only upcoming events."
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:127
@@ -1414,7 +1408,7 @@ msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:274
 #: templates/admin/wp-event-aggregator-settings.php:378
-#: templates/admin/wp-event-aggregator-settings.php:424
+#: templates/admin/wp-event-aggregator-settings.php:440
 msgid "Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events."
 msgstr ""
 
@@ -1489,7 +1483,7 @@ msgid "Direct link to Event Source"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:467
-msgid "Check to enable direct event link to Event Source instead of event detail page."
+msgid "Check to enable direct event link to Event Source page instead of Event Detail page."
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:475
@@ -1505,11 +1499,11 @@ msgid "Event Display Time Format"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:499
-msgid "12 Hours"
+msgid "12-Hours"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:500
-msgid "24 Hours"
+msgid "24-Hours"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:501
@@ -1565,11 +1559,11 @@ msgid "Reauthorize"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:590
-msgid " ( Authorized as: %s )"
+msgid " (Authorized as: %s)"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:597
-msgid "Please authorize your facebook account for import facebook events."
+msgid "Please authorize your Facebook account to import Facebook events."
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-shortcode.php:12
