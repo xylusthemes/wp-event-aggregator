@@ -50,12 +50,12 @@ global $importevents;
 								<?php if ( wpea_is_pro() ) { ?>
 								<textarea class="ime_meetup_ids" name="ime_event_ids" type="text" rows="5" cols="50"></textarea>
 								<span class="wpea_small">
-									<?php _e( 'One event ID per line, ( Eg. Event ID for https://www.meetup.com/xxxx-xxx-xxxx/events/xxxxxxxxx is <span class="borderall">xxxxxxxxx</span> ).<br> ', 'wp-event-aggregator' ); ?>
+									<?php _e( 'One event ID per line, (Eg. Event ID for https://www.meetup.com/xxxx-xxx-xxxx/events/xxxxxxxxx is <span class="borderall">xxxxxxxxx</span>).<br> ', 'wp-event-aggregator' ); ?>
 								</span>
 								<?php } else { ?>
 								<input class="wpea_text" name="ime_event_ids" type="text" />
 								<span class="wpea_small">
-									<?php _e( 'Insert meetup event ID ( Eg. https://www.meetup.com/xxxx-xxx-xxxx/events/<span class="borderall">xxxxxxxxx</span>  ).', 'wp-event-aggregator' ); ?>
+									<?php _e( 'Insert Meetup event ID (Eg. https://www.meetup.com/xxxx-xxx-xxxx/events/<span class="borderall">xxxxxxxxx</span>).', 'wp-event-aggregator' ); ?>
 								</span>
 								<?php } ?>
 							</td>
@@ -68,7 +68,7 @@ global $importevents;
 							<td>
 								<input class="wpea_text" name="meetup_url" type="text" <?php if ( ! wpea_is_pro() ) { echo 'disabled="disabled"'; } ?> />
 								<span class="wpea_small">
-									<?php _e( 'Insert meetup group url ( Eg. -<span class="borderall">https://www.meetup.com/xxxx-xxx-xxxx/</span>  ).', 'wp-event-aggregator' ); ?>
+									<?php _e( 'Insert Meetup group url (Eg. -<span class="borderall">https://www.meetup.com/xxxx-xxx-xxxx/</span>).', 'wp-event-aggregator' ); ?>
 								</span>
 								<?php do_action( 'wpea_render_pro_notice' ); ?>
 							</td>
@@ -76,7 +76,7 @@ global $importevents;
 
 						<tr class="import_type_wrapper">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Import type','wp-event-aggregator' ); ?> : 
+					    		<?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td>
 						    	<?php $importevents->common->render_import_type(); ?>
