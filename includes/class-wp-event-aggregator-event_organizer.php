@@ -79,6 +79,15 @@ class WP_Event_Aggregator_Event_Organizer {
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' != $update_events ) {
 				return array(
 					'status'=> 'skipped',
@@ -198,7 +207,8 @@ class WP_Event_Aggregator_Event_Organizer {
 				}
 				$term_loc_ids = wp_set_object_terms( $inserted_event_id, $loc_term_id, $this->venue_taxonomy );
 				$venue = $centralize_array['location'];
-				$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
+				$address_1 = isset( $venue['address_1'] ) ? $venue['address_1'] : '';
+				$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $address_1;
 				$city 	 = isset( $venue['city'] ) ? $venue['city'] : '';
 				$state   = isset( $venue['state'] ) ? $venue['state'] : '';
 				$zip     = isset( $venue['zip'] ) ? $venue['zip'] : '';

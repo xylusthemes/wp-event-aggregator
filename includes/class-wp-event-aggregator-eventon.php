@@ -81,6 +81,15 @@ class WP_Event_Aggregator_EventON {
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' != $update_events ) {
 				return array(
 					'status'=> 'skipped',
@@ -172,6 +181,9 @@ class WP_Event_Aggregator_EventON {
 			update_post_meta( $inserted_event_id, 'evcal_lmlink', $centralize_array['url'] );
 			update_post_meta( $inserted_event_id, 'evcal_allday', $is_all_day );
 			update_post_meta( $inserted_event_id, '_evo_tz', $timezone_name );
+			if( $centralize_array['location']['name'] == 'Online Event' ){
+				update_post_meta( $inserted_event_id, '_virtual', 'yes' );
+			}
 
 			if( !empty( $centralize_array['location']['name'] ) ){
 				$loc_term = term_exists( $centralize_array['location']['name'], $this->location_taxonomy );
@@ -206,13 +218,17 @@ class WP_Event_Aggregator_EventON {
 				}
 
 				$term_loc_ids = wp_set_object_terms( $inserted_event_id, $loc_term_id, $this->location_taxonomy );
+				$vanue_url    = isset( $centralize_array['location']['url'] ) ? $centralize_array['location']['url'] : '';
+				$vanue_lat    = isset( $centralize_array['location']['lat'] ) ? $centralize_array['location']['lat'] : '';
+				$vanue_long   = isset( $centralize_array['location']['long'] ) ? $centralize_array['location']['long'] : '';
+
 				update_post_meta( $inserted_event_id, 'evo_location_tax_id', $loc_term_id );
 				update_post_meta( $inserted_event_id, 'evcal_location_name', $centralize_array['location']['name'] );
-				update_post_meta( $inserted_event_id, 'evcal_location_link', $centralize_array['location']['url'] );
+				update_post_meta( $inserted_event_id, 'evcal_location_link', $vanue_url );
 				update_post_meta( $inserted_event_id, 'evcal_location', $address );
-				update_post_meta( $inserted_event_id, 'evcal_lat', $centralize_array['location']['lat'] );
-			 	update_post_meta( $inserted_event_id, 'evcal_lon', $centralize_array['location']['long'] );
-			 	if( $centralize_array['location']['long'] != '' && $centralize_array['location']['lat'] != '' ){
+				update_post_meta( $inserted_event_id, 'evcal_lat', $vanue_lat );
+			 	update_post_meta( $inserted_event_id, 'evcal_lon', $vanue_long );
+			 	if( $vanue_long != '' && $vanue_lat != '' ){
 			 		update_post_meta( $inserted_event_id, 'evcal_gmap_gen', 'yes' );	
 			 	}
 			}

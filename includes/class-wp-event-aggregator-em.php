@@ -83,6 +83,15 @@ class WP_Event_Aggregator_EM {
 			// Update event or not?
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
+			$wpea_options = get_option( WPEA_OPTIONS );
+			$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
+			$post_status   = get_post_status( $is_exitsing_event );
+			if ( 'trash' == $post_status && $skip_trash == 'yes' ) {
+				return array(
+					'status' => 'skip_trash',
+					'id'     => $is_exitsing_event,
+				);
+			}
 			if ( 'yes' != $update_events ) {
 				return array(
 					'status'=> 'skipped',
@@ -248,12 +257,18 @@ class WP_Event_Aggregator_EM {
 	public function get_location_args( $venue, $event_id = false ) {
 		global $wpdb, $importevents;
 
-		if ( !isset( $venue['ID'] ) ) {
-			return null;
+		$address_1     = isset( $venue['address_1'] ) ? $venue['address_1'] : '';
+		$full_address  = !empty( $venue['full_address'] ) ? $venue['full_address'] : $address_1;
+		$location_name = isset( $venue['name'] ) ? $venue['name'] : '';
+		if( !empty( $location_name ) && $location_name == 'Online Event' ){
+			$existing_venue = $this->get_venue_by_name( $venue['name'], 'Online Event' );
+		}else{
+			if ( ! isset( $venue['ID'] ) ) {
+				return null;
+			}
+			$existing_venue = $this->get_venue_by_id( $venue['ID'], $full_address );
 		}
-		$full_address = !empty( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
-		$existing_venue = $this->get_venue_by_id( $venue['ID'], $full_address );
-		
+
 		if ( $existing_venue && is_numeric( $existing_venue ) && $existing_venue > 0 && !$event_id ) {
 			return get_post_meta( $existing_venue, '_location_id', true );
 		}
@@ -283,7 +298,7 @@ class WP_Event_Aggregator_EM {
 			if( strlen( $country ) > 2 && $country != '' ){
 				$country = $importevents->common->wpea_get_country_code( $country );
 			}
-			$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'];
+			$address = isset( $venue['full_address'] ) ? $venue['full_address'] : $address_1;
 			$city 	 = isset( $venue['city'] ) ? $venue['city'] : '';
 			$state   = isset( $venue['state'] ) ? $venue['state'] : '';
 			$zip     = isset( $venue['zip'] ) ? $venue['zip'] : '';
@@ -292,7 +307,6 @@ class WP_Event_Aggregator_EM {
 
 			// Save metas.
 			update_post_meta( $location_id, '_blog_id', $blog_id );
-			update_post_meta( $location_id, '_location_address', $address );
 			update_post_meta( $location_id, '_location_town', $city );
 			update_post_meta( $location_id, '_location_state', $state );
 			update_post_meta( $location_id, '_location_postcode', $zip );
@@ -301,7 +315,13 @@ class WP_Event_Aggregator_EM {
 			update_post_meta( $location_id, '_location_latitude', $lat );
 			update_post_meta( $location_id, '_location_longitude', $lon );
 			update_post_meta( $location_id, '_location_status', 1 );
-			update_post_meta( $location_id, 'wpea_event_venue_id', $venue['ID'] );
+			if( !empty( $location_name ) && $location_name == 'Online Event' ){
+				update_post_meta( $location_id, 'wpea_event_venue_id', $venue['name'] );
+				update_post_meta( $location_id, '_location_address', $venue['name'] );
+			}else{
+				update_post_meta( $location_id, 'wpea_event_venue_id', $venue['ID'] );
+				update_post_meta( $location_id, '_location_address', $address );
+			}
 
 			global $wpdb;
 			$location_array = array(
@@ -373,7 +393,7 @@ class WP_Event_Aggregator_EM {
 			'posts_per_page' => 1,
 			'post_type' => $this->venue_posttype,
 			'meta_query' => array(
-				'relation' => 'OR',
+				'relation' => 'AND',
 				array(
 					'key'     => 'wpea_event_venue_id',
 					'value'   => $venue_id,
@@ -387,6 +407,39 @@ class WP_Event_Aggregator_EM {
 			),
 			'suppress_filters' => false,
 		) );
+		if ( is_array( $existing_venue ) && ! empty( $existing_venue ) ) {
+			return $existing_venue[0]->ID;
+		}
+		return false;
+	}
+
+	/**
+	 * Check for Existing TEC Venue
+	 *
+	 * @since    1.7.3
+	 * @param int $venue_id Venue name.
+	 * @return int/boolean
+	 */
+	public function get_venue_by_name( $venue_name, $full_address ) {
+		$existing_venue = get_posts(
+			array(
+				'posts_per_page'   => 1,
+				'post_type'        => $this->venue_posttype,
+				'meta_query' => array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'wpea_event_venue_id',
+						'value'   => $venue_name,
+						'compare' => '='
+					),
+					array(
+						'key'     => '_location_address',
+						'value'   => $full_address,
+						'compare' => '='
+					)
+				),
+			)
+		);
 
 		if ( is_array( $existing_venue ) && ! empty( $existing_venue ) ) {
 			return $existing_venue[0]->ID;

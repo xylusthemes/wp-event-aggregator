@@ -77,7 +77,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		$start_date  = strtotime( $start_date );
 		$end_date  = strtotime( $end_date );
 		if( ( $end_date - $start_date ) < 0 ){
-			$wpea_errors[] = esc_html__( 'Please select end date bigger than start date.', 'wp-event-aggregator');
+			$wpea_errors[] = esc_html__( 'Please select an end date later than start date.', 'wp-event-aggregator');
 			return false;
 		}
 		// Get Start and End date  day,month,year
@@ -297,22 +297,24 @@ class WP_Event_Aggregator_Ical_Parser {
 		$timezone = !empty( $timezone ) ? $timezone : $calendar_timezone;
 
 		// Only for facebook ical imports.
-		$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
-		if( !empty( $wpea_user_token_options ) ){
-			$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
-			if( 1 == $authorize_status ){
-				$check_facebook = explode( '/', $url);
-				if( $check_facebook[2] == 'www.facebook.com' ){
-					$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
+		$match = 'https://www.facebook.com/events/';
+		if ( strpos( $url, $match ) !== false ) {
+			$wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
+			if( !empty( $wpea_user_token_options ) ){
+				$authorize_status =	isset( $wpea_user_token_options['authorize_status'] ) ? $wpea_user_token_options['authorize_status'] : 0;
+				if( 1 == $authorize_status ){
+					$check_facebook = explode( '/', $url);
+					if( $check_facebook[2] == 'www.facebook.com' ){
+						$event_data = $this->get_event_image_and_location( $event_data['import_into'], $uid );
 
-					if( !empty( $event_data ) ){
-						$event_image   = $event_data['image'];
-						$event_venue   = $event_data['location'];
-						$timezone      = $event_data['timezone'];
-						$timezone_name = $event_data['timezone_name'];
-						$start_time    = $event_data['start_time'];
-						$end_time      = $event_data['end_time'];
-					}
+						if( !empty( $event_data ) ){
+							$event_image   = $event_data['image'];
+							$event_venue   = $event_data['location'];
+							$timezone      = $event_data['timezone'];
+							$timezone_name = $event_data['timezone_name'];
+							$start_time    = $event_data['start_time'];
+							$end_time      = $event_data['end_time'];
+						}
 
 					if( empty( $event_data['start_time'] ) ){
 						$cwt_start     = $this->convert_fb_ical_timezone( $start->format('Y-m-d H:i:s'), $event_data['timezone_name'] );
@@ -383,6 +385,10 @@ class WP_Event_Aggregator_Ical_Parser {
 				}
 			}
 		}		
+		
+		if( $oraganizer_data['email'] == 'noreply@facebookmail_com' ){
+			$oraganizer_data['email'] = 'noreply@facebookmail.com';
+		}
 		
 		$xt_event['organizer'] = $oraganizer_data;
 		$xt_event['location'] = $this->get_location( $event, $event_venue );

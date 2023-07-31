@@ -37,7 +37,7 @@ class WP_Event_Aggregator_Manage_Import {
 		if ( isset( $_POST['wpea_action'] ) && sanitize_text_field( wp_unslash( $_POST['wpea_action'] ) ) == 'wpea_import_submit' &&  check_admin_referer( 'wpea_import_form_nonce_action', 'wpea_import_form_nonce' ) ) {
 			
 			if( !isset( $_POST['import_origin'] ) || empty( sanitize_text_field( wp_unslash( $_POST['import_origin'] ) ) ) ) {
-				$wpea_errors[] = esc_html__( 'Please provide import origin.', 'wp-event-aggregator' );
+				$wpea_errors[] = esc_html__( 'Please Provide Import origin.', 'wp-event-aggregator' );
 				return;
 			}
 
@@ -342,7 +342,7 @@ class WP_Event_Aggregator_Manage_Import {
 					break;
 
 				case 'import_dels':
-					$wpea_success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled imports successfully deleted.', 'wp-event-aggregator' );
 					break;
 
 				case 'import_success':
@@ -350,19 +350,19 @@ class WP_Event_Aggregator_Manage_Import {
 					break;
 
 				case 'history_del':
-					$wpea_success_msg[] = esc_html__( 'Import history deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Import history successfully deleted.', 'wp-event-aggregator' );
 					break;
 
 				case 'history_dels':
-					$wpea_success_msg[] = esc_html__( 'Import histories are deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Import history successfully deleted.', 'wp-event-aggregator' );
 					break;
 
 				case 'wpsiu_success':
-					$wpea_success_msg[] = esc_html__( 'Scheduled import has been updated successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled import successfully updated.', 'wp-event-aggregator' );
 					break;			
 								
 				default:
-					$wpea_success_msg[] = esc_html__( 'Scheduled imports are deleted successfully.', 'wp-event-aggregator' );
+					$wpea_success_msg[] = esc_html__( 'Scheduled imports successfully deleted.', 'wp-event-aggregator' );
 					break;
 			}
 		}

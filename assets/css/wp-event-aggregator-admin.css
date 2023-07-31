@@ -478,3 +478,49 @@ table.wpea_form_table tr td:nth-child(1) {
 #wpea_edit_scheduled_import .form-table td select{
   width: 100%;
 }
+.wpea-plugin-notice {
+  border-left: 4px solid #dba617;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 15px 20px 15px 15px !important;
+  justify-content: space-between;
+  align-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.wpea-notice-content {
+  margin-top: 10px;
+}
+.wpea-notice-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.wpea-notice-description {
+  margin: 5px 0;
+  color: #555;
+}
+.wpea-notice-actions {
+  display: flex;
+  align-items: center;
+}
+.wpea-notice-action {
+  display: inline-block;
+  padding: 8px 12px;
+  margin-left: 10px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.wpea-notice-action:hover {
+  background-color: #0056b3;
+  color: #fff !important;
+}
+.wpea-notice-actions a:active{
+  color: #ffffff;
+}
