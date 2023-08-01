@@ -418,12 +418,13 @@ class WP_Event_Aggregator_TEC {
 		}
 
 		$country = isset( $venue['country'] ) ? $venue['country'] : '';
+		$address_1 = isset( $venue['address_1'] ) ? $venue['address_1'] : '';
 		if( strlen( $country ) > 2 && $country != '' ){
 			$country = $importevents->common->wpea_get_country_code( $country );
 		}
 		$create_venue = tribe_create_venue( array(
 			'Venue'   => isset( $venue['name'] ) ? $venue['name'] : '',
-			'Address' => isset( $venue['full_address'] ) ? $venue['full_address'] : $venue['address_1'],
+			'Address' => isset( $venue['full_address'] ) ? $venue['full_address'] : $address_1,
 			'City'    => isset( $venue['city'] ) ? $venue['city'] : '',
 			'State'   => isset( $venue['state'] ) ? $venue['state'] : '',
 			'Country' => $country,

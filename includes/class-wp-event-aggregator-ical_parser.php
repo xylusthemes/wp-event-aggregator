@@ -77,6 +77,9 @@ class WP_Event_Aggregator_Ical_Parser {
 			if( !empty( $event_data['start_date'] ) && !empty( $event_data['end_date'] ) ){
 				$start_date = $event_data['start_date'];
 				$end_date   = $event_data['end_date'];
+			}else{
+				$start_date = date('Y-m-d' );
+				$end_date   = date('Y-m-d', strtotime('+1 years') );
 			}
 		}else{
 			$start_date = date('Y-m-d' );
