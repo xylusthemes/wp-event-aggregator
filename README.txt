@@ -3,8 +3,8 @@ Contributors: xylus,dharm1025,rajat1192
 Donate link: http://xylusthemes.com
 Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
-Tested up to: 6.2
-Stable tag: 1.7.2
+Tested up to: 6.3
+Stable tag: 1.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,26 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.7.3 =
+* ADDED: Google Map API key Option.
+* ADDED: Term Hook in supported plugin.
+* ADDED: Optimize Facebook API Calls in iCal.
+* ADDED: Responsive grid view style 1 Support.
+* ADDED: Timezone support in supported plugin.
+* ADDED: Time Format support in grid view style 2
+* ADDED: Online Event Location Support in suported plugin.
+* ADDED: Skip Trashed Events Option. (PRO)
+* ADDED: Schedule Date Range Option in iCal. (PRO)
+* ADDED: Grig View Style 2 Option in Elementor Block (PRO)
+* ADDED: Renew License button in the license section. (PRO)
+* FIXED: Background Progress conflict bug.
+* FIXED: iCal Organizer Duplicate Issue in TEC
+* FIXED: iCal Event Organizer Email Address Format.
+* FIXED: iCal URL Saving Bug in Schedule import (PRO).
+* FIXED: Delete WP Cron queue when you delete schedule delete.(PRO)
+* IMPROVEMENTS: Grammar Correction
+* IMPROVEMENTS: Support for WP 6.3
 
 = 1.7.2 =
 * FIXED: Timezone Name issue.
