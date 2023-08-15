@@ -60,6 +60,7 @@ class WP_Event_Aggregator{
 			self::$instance->meetup = new WP_Event_Aggregator_Meetup();
 			self::$instance->facebook = new WP_Event_Aggregator_Facebook();
 			self::$instance->ical_parser = new WP_Event_Aggregator_Ical_Parser();
+			self::$instance->ical_parser_aioec = new WP_Event_Aggregator_Ical_Parser_AIOEC();
 			self::$instance->ical = new WP_Event_Aggregator_Ical();
 			self::$instance->admin = new WP_Event_Aggregator_Admin();
 			if( wpea_is_pro() ){
@@ -177,6 +178,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-meetup.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-facebook.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical_parser.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical_parser_aioec.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical.php';
 		
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-wpea.php';
