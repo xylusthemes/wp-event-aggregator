@@ -304,6 +304,33 @@ class WP_Event_Aggregator_Common {
 				set_post_thumbnail( $event_id, $id );
 				return $id;
 			}
+			$image_name = '';
+			if ( strpos( $image_url, 'meetupstatic' ) === false || strpos( $image_url, 'https://img.evbuc.com' ) !== false || strpos( $image_url, 'https://cdn.evbuc.com' ) !== false ) {
+				$image_source = strtok( $image_url, '?');
+				$path_info    = pathinfo( $image_source );
+				$image_name   = $path_info['basename'];
+
+				$i_args = array(
+					'post_type'   => 'attachment',
+					'post_status' => 'any',
+					'fields'      => 'ids',
+					'meta_query'  => array(
+						array(
+							'value' => $image_name,
+							'key'   => '_ife_attachment_source_name',
+						),
+					),
+				);
+
+				$i_ids = get_posts( $i_args );
+				if ( $i_ids ) {
+					$i_id = current( $i_ids );
+				}
+				if ( $i_id && $i_id > 0 ) {
+					set_post_thumbnail( $event_id, $i_id );
+					return $i_id;
+				}
+			}
 
 			$file_array = array();
 			$file_array['name'] = $event->ID . '_image';
@@ -344,6 +371,7 @@ class WP_Event_Aggregator_Common {
 
 			// Save attachment source for future reference.
 			update_post_meta( $att_id, '_wpea_attachment_source', $image_url );
+			update_post_meta( $att_id, '_ife_attachment_source_name', $image_name );
 
 			return $att_id;
 		}
