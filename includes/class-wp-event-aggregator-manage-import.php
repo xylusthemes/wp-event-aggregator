@@ -160,6 +160,10 @@ class WP_Event_Aggregator_Manage_Import {
         	$delete_ids = array_map( 'sanitize_text_field', $_REQUEST['xt_scheduled_import'] );
         	if( !empty( $delete_ids ) ){
         		foreach ($delete_ids as $delete_id ) {
+					$timestamp = wp_next_scheduled('xt_run_scheduled_import', array( 'post_id' => (int)$delete_id ) );
+					if ( $timestamp ) {
+						wp_unschedule_event( $timestamp, 'xt_run_scheduled_import', array( 'post_id' => (int)$delete_id ) );
+					}
         			wp_delete_post( $delete_id, true );
         		}            		
         	}
