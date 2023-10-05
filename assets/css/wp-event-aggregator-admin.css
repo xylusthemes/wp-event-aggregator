@@ -610,3 +610,6 @@ table.wpea_form_table tr td:nth-child(1) {
 .wpea-notice-actions a:active{
   color: #ffffff;
 }
+.wpea-lh{
+  line-height: 1.5 !important;
+}
