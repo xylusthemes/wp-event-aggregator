@@ -127,7 +127,7 @@ class DateTimeZoneFactory
             'Canada Central Standard Time'    => 'America/Regina',
             'SA Pacific Standard Time'        => 'Etc/GMT+5',
             'Eastern Standard Time (Mexico)'  => 'America/Cancun',
-            'Eastern Standard Time'           => 'US/Eastern',
+            'Eastern Standard Time'           => 'America/New_York',
             'Haiti Standard Time'             => 'America/Port-au-Prince',
             'Cuba Standard Time'              => 'America/Havana',
             'US Eastern Standard Time'        => 'America/Indianapolis',

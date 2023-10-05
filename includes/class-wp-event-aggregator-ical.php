@@ -84,9 +84,14 @@ class WP_Event_Aggregator_Ical {
 		if( empty( $ics_content ) ){
 			return array();
 		}
-		
-		$imported_events = $importevents->ical_parser->parse_import_events( $event_data, $ics_content );
-		return $imported_events;
+
+		if( wpea_aioec_active() && post_type_exists( 'ai1ec_event' ) ){
+			$imported_events = $importevents->ical_parser_aioec->parse_import_events( $event_data, $ics_content );
+			return $imported_events;
+		}else{
+			$imported_events = $importevents->ical_parser->parse_import_events( $event_data, $ics_content );
+			return $imported_events;
+		}
 	}
 
 	/**
