@@ -170,6 +170,13 @@ class WP_Event_Aggregator_EventON {
 			$country = isset( $centralize_array['location']['country'] ) ? sanitize_text_field($centralize_array['location']['country']) : '';
 			$is_all_day    = !empty( $centralize_array['is_all_day'] ) ? $centralize_array['is_all_day'] : 0;
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+			$start_ampm = date("a", $start_time);
+			$start_hour = date("h", $start_time);
+			$start_minute = date("i", $start_time);
+			$end_ampm = date("a", $end_time);
+			$end_hour = date("h", $end_time);
+			$end_minute = date("i", $end_time);
+
 
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
@@ -181,6 +188,15 @@ class WP_Event_Aggregator_EventON {
 			update_post_meta( $inserted_event_id, 'evcal_lmlink', $centralize_array['url'] );
 			update_post_meta( $inserted_event_id, 'evcal_allday', $is_all_day );
 			update_post_meta( $inserted_event_id, '_evo_tz', $timezone_name );
+
+			// Event Start - End Date Time Metadata
+			update_post_meta( $inserted_event_id, '_start_ampm', $start_ampm );
+			update_post_meta( $inserted_event_id, '_start_hour', $start_hour );
+			update_post_meta( $inserted_event_id, '_start_minute', $start_minute );
+			update_post_meta( $inserted_event_id, '_end_ampm', $end_ampm );
+			update_post_meta( $inserted_event_id, '_end_hour', $end_hour );
+			update_post_meta( $inserted_event_id, '_end_minute', $end_minute );
+
 			if( $centralize_array['location']['name'] == 'Online Event' ){
 				update_post_meta( $inserted_event_id, '_virtual', 'yes' );
 			}
