@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 6.3
-Stable tag: 1.7.3
+Stable tag: 1.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,13 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.7.4 =
+* ADDED: All In One Event Calendar iCal support.
+* FIXED: Import Duplicate image issue on Facebook.
+* FIXED: Delete WP Cron multiple queues when you delete schedule delete.(PRO)
+* IMPROVEMENTS: EventOn Event Metadata.
+* IMPROVEMENTS: Added Support for PHP 8.2 and some design and security fixes.
 
 = 1.7.3 =
 * ADDED: Google Map API key Option.
