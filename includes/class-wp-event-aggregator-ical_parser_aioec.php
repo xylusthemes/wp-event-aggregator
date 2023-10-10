@@ -44,6 +44,13 @@ class WP_Event_Aggregator_Ical_Parser_AIOEC {
 	public function parse_import_events( $event_data = array(), $ics_content = '' ){
 
 		global $wpea_errors, $importevents;
+		$content_type = wp_remote_retrieve_header( $ics_content, 'content-type' );
+		if ( $content_type !== false ) {
+			if ( strpos( $content_type, 'text/calendar' ) === false && strpos( $content_type, 'application/calendar+xml' ) === false ) {
+				$wpea_errors[] = esc_html__( 'The provided URL does not contain iCal format data.', 'wp-event-aggregator' );
+				return false;
+			}
+		}
 		if( empty( $ics_content ) ){
 			return false;
 		}

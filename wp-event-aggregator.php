@@ -27,7 +27,7 @@ class WP_Event_Aggregator{
 	 * WP_Event_Aggregator The one true WP_Event_Aggregator.
 	 */
 	private static $instance;
-	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize;
+	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec;
 
     /**
      * Main WP Event Aggregator Instance.
