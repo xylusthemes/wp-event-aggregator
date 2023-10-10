@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-10-10T06:15:08+00:00\n"
+"POT-Creation-Date: 2023-10-10T06:59:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-event-aggregator\n"
@@ -789,16 +789,15 @@ msgstr ""
 msgid "Unable to retrieve content from the provided URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-ical_parser.php:58
-#: includes/class-wp-event-aggregator-ical_parser_aioec.php:50
+#: includes/class-wp-event-aggregator-ical.php:131
 msgid "The provided URL does not contain iCal format data."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-ical_parser.php:108
+#: includes/class-wp-event-aggregator-ical_parser.php:100
 msgid "Please select an end date later than start date."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-ical_parser_aioec.php:94
+#: includes/class-wp-event-aggregator-ical_parser_aioec.php:87
 msgid "Please select end date bigger than start date."
 msgstr ""
 
