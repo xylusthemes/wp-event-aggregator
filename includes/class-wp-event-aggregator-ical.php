@@ -125,6 +125,13 @@ class WP_Event_Aggregator_Ical {
 			$wpea_errors[] = esc_html__( 'Unable to retrieve content from the provided URL.', 'wp-event-aggregator');
 			return false;
 		}
+		$content_type = wp_remote_retrieve_header( $response, 'content-type' );
+		if ( $content_type !== false ) {
+			if ( strpos( $content_type, 'text/calendar' ) === false && strpos( $content_type, 'application/calendar+xml' ) === false ) {
+				$wpea_errors[] = esc_html__( 'The provided URL does not contain iCal format data.', 'wp-event-aggregator' );
+				return false;
+			}
+		}
 		return $response['body'];
 	}
 

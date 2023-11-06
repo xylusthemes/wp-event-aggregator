@@ -51,6 +51,7 @@ class WP_Event_Aggregator_Ical_Parser {
 	public function parse_import_events( $event_data = array(), $ics_content = '' ){
 
 		global $wpea_errors, $importevents;
+		
 		if( empty( $ics_content ) ){
 			return false;
 		}
