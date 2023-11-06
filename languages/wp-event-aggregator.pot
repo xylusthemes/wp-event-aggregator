@@ -789,7 +789,11 @@ msgstr ""
 msgid "Unable to retrieve content from the provided URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-ical_parser.php:99
+#: includes/class-wp-event-aggregator-ical.php:131
+msgid "The provided URL does not contain iCal format data."
+msgstr ""
+
+#: includes/class-wp-event-aggregator-ical_parser.php:100
 msgid "Please select an end date later than start date."
 msgstr ""
 
