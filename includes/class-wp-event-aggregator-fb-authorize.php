@@ -34,7 +34,7 @@ class WP_Event_Aggregator_FB_Authorize {
         	$app_id = isset( $facebook_options['facebook_app_id'] ) ? $facebook_options['facebook_app_id'] : '';
 			$app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $facebook_options['facebook_app_secret'] : '';
 			$redirect_url = admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' );
-			$api_version = 'v14.0';
+			$api_version = 'v18.0';
 			$param_url = urlencode($redirect_url);
 			$wpea_session_state = md5(uniqid(rand(), TRUE));
 			setcookie("wpea_session_state", $wpea_session_state, "0", "/");
@@ -43,7 +43,7 @@ class WP_Event_Aggregator_FB_Authorize {
 
 				$dialog_url = "https://www.facebook.com/" . $api_version . "/dialog/oauth?client_id="
 				        . $app_id . "&redirect_uri=" . $param_url . "&state="
-				        . $wpea_session_state . "&scope=groups_access_member_info,user_events,pages_show_list,pages_manage_metadata,pages_read_engagement,pages_read_user_content";
+				        . $wpea_session_state . "&scope=pages_show_list,pages_manage_metadata,pages_read_engagement,pages_read_user_content,page_events";
 				header("Location: " . $dialog_url);
 
 			}else{
@@ -69,7 +69,7 @@ class WP_Event_Aggregator_FB_Authorize {
 				$app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $facebook_options['facebook_app_secret'] : '';
     			
 				$redirect_url = admin_url('admin-post.php?action=wpea_facebook_authorize_callback');
-				$api_version = 'v14.0';
+				$api_version = 'v18.0';
 				$param_url = urlencode($redirect_url);
 
 				if( $app_id != '' && $app_secret != '' ){
