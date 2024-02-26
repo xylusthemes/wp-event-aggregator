@@ -115,6 +115,9 @@ class WP_Event_Aggregator_WPEA {
 			$inserted_event = get_post( $inserted_event_id );
 			if ( empty( $inserted_event ) ) { return false;}
 
+			//Event ID
+			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
+
 			// Asign event category.
 			$ife_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			if ( ! empty( $ife_cats ) ) {
@@ -215,7 +218,6 @@ class WP_Event_Aggregator_WPEA {
 			update_post_meta( $inserted_event_id, 'organizer_phone', $organizer_phone );
 			update_post_meta( $inserted_event_id, 'organizer_url', $organizer_url );
 
-			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $ticket_uri ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
