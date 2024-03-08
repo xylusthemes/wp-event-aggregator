@@ -317,7 +317,7 @@ class WP_Event_Aggregator_Common {
 					'meta_query'  => array(
 						array(
 							'value' => $image_name,
-							'key'   => '_ife_attachment_source_name',
+							'key'   => '_wpea_attachment_source_name',
 						),
 					),
 				);
@@ -371,7 +371,7 @@ class WP_Event_Aggregator_Common {
 
 			// Save attachment source for future reference.
 			update_post_meta( $att_id, '_wpea_attachment_source', $image_url );
-			update_post_meta( $att_id, '_ife_attachment_source_name', $image_name );
+			update_post_meta( $att_id, '_wpea_attachment_source_name', $image_name );
 
 			return $att_id;
 		}
@@ -858,8 +858,8 @@ class WP_Event_Aggregator_Common {
 	public function wpea_check_for_minimum_pro_version(){
 		if( defined('WPEAPRO_VERSION') ){
 			if ( version_compare( WPEAPRO_VERSION, WPEA_MIN_PRO_VERSION, '<' ) ) {
-				global $ife_warnings;
-				$ife_warnings[] = __( 'The current "WP Event Aggregator Pro" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing.', 'wp-event-aggregator' );
+				global $wpea_warnings;
+				$wpea_warnings[] = __( 'The current "WP Event Aggregator Pro" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing.', 'wp-event-aggregator' );
 			}
 		}
 	}
