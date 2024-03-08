@@ -63,7 +63,7 @@ class WP_Event_Aggregator_Meetup_Authorize {
 				wp_die(__('You do not have sufficient permissions to perform this action.'));
 			}
 		} else {
-			wp_die(__( 'Security check failed. Please try again.' ) );
+			wp_die(__('Sorry, you are not allowed to access this page.'));
 		}
 	}
 
