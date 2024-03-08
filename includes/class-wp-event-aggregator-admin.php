@@ -58,6 +58,8 @@ class WP_Event_Aggregator_Admin {
 		$submenu['import_events'][] = array( __( 'Eventbrite Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=eventbrite' ) );
     	$submenu['import_events'][] = array( __( 'Meetup Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=meetup' ) );
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
+		$submenu['import_events'][] = array( __( 'Schedule Imports', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=scheduled' ));
+    	$submenu['import_events'][] = array( __( 'Import History', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=history' ));
     	$submenu['import_events'][] = array( __( 'iCalendar/.ics Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=ical' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
     	$submenu['import_events'][] = array( __( 'Support & Help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
@@ -470,7 +472,7 @@ class WP_Event_Aggregator_Admin {
 	 */
 	public function get_selected_tab_submenu( $submenu_file ){
 		if( !empty( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) == 'import_events' ){
-			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'settings', 'support' );
+			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'support' );
 			$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'eventbrite';
 			if( in_array( $tab, $allowed_tabs ) ){
 				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );

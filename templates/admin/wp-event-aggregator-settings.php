@@ -188,7 +188,8 @@ if( is_object( $meetup_authorized_user ) ){
                         <input type="submit" class="button-primary xtei_submit_button" style=""  value="<?php esc_attr_e( 'Save Settings', 'wp-event-aggregator' ); ?>" />
                     </div>
                 </div>
-                
+            </form>
+            <form method="post" id="wpea_setting_form">
                 <div class="wpea-setting-tab-child" id="eventbritesetting" >
                     <p><?php _e( 'You need a Eventbrite Personal OAuth token to import your events from Eventbrite.','wp-event-aggregator' ); ?> </p>
                     <table class="form-table">

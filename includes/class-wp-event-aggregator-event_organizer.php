@@ -128,17 +128,20 @@ class WP_Event_Aggregator_Event_Organizer {
 			$inserted_event = get_post( $inserted_event_id );
 			if ( empty( $inserted_event ) ) { return '';}
 
+			//Event ID
+			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
+
 			// Asign event category.
-			$ife_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
-			if ( ! empty( $ife_cats ) ) {
-				foreach ( $ife_cats as $ife_catk => $ife_catv ) {
-					$ife_cats[ $ife_catk ] = (int) $ife_catv;
+			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
+			if ( ! empty( $wpea_cats ) ) {
+				foreach ( $wpea_cats as $wpea_catk => $wpea_catv ) {
+					$wpea_cats[ $wpea_catk ] = (int) $wpea_catv;
 				}
 			}
-			if ( ! empty( $ife_cats ) ) {
+			if ( ! empty( $wpea_cats ) ) {
 				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
-					$append = apply_filters('wpea_taxonomy_terms_append', false, $ife_cats, $this->taxonomy, $centralize_array['origin'] );
-					wp_set_object_terms( $inserted_event_id, $ife_cats, $this->taxonomy, $append );
+					$append = apply_filters('wpea_taxonomy_terms_append', false, $wpea_cats, $this->taxonomy, $centralize_array['origin'] );
+					wp_set_object_terms( $inserted_event_id, $wpea_cats, $this->taxonomy, $append );
 				}
 			}
 
@@ -158,7 +161,6 @@ class WP_Event_Aggregator_Event_Organizer {
 			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_start_finish', date( 'Y-m-d H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_last_start', date( 'Y-m-d H:i:s', $start_time ) );
 			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_last_finish', date( 'Y-m-d H:i:s', $end_time ) );
-			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $ticket_uri ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );

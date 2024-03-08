@@ -88,13 +88,18 @@ class WP_Event_Aggregator_Manage_Import {
 		global $wpea_errors, $wpea_success_msg;
 		if ( isset( $_POST['wpea_action'] ) && sanitize_text_field( wp_unslash( $_POST['wpea_action'] ) ) == 'wpea_save_settings' &&  check_admin_referer( 'wpea_setting_form_nonce_action', 'wpea_setting_form_nonce' ) ) {
 				
-			$wpea_options = array();
-			$wpea_options['eventbrite'] = isset( $_POST['eventbrite'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['eventbrite'] ) ) : array();
-			$wpea_options['meetup'] = isset( $_POST['meetup'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['meetup'] ) ) : array();
-			$wpea_options['facebook'] = isset( $_POST['facebook'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['facebook'] ) ) : array();
-			$wpea_options['ical'] = isset( $_POST['ical'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['ical'] ) ) : array();
-			$wpea_options['wpea'] = isset( $_POST['wpea'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['wpea'] ) ) : array();
+			$existing_options = get_option(WPEA_OPTIONS, array());
+			
+			// Update only the options present in $_POST, keeping the existing values for others
+			$wpea_options = array(
+				'eventbrite' => isset($_POST['eventbrite']) ? array_map('sanitize_text_field', wp_unslash($_POST['eventbrite'])) : (isset($existing_options['eventbrite']) ? $existing_options['eventbrite'] : array()),
+				'meetup'     => isset($_POST['meetup']) ? array_map('sanitize_text_field', wp_unslash($_POST['meetup'])) : (isset($existing_options['meetup']) ? $existing_options['meetup'] : array()),
+				'facebook'   => isset($_POST['facebook']) ? array_map('sanitize_text_field', wp_unslash($_POST['facebook'])) : (isset($existing_options['facebook']) ? $existing_options['facebook'] : array()),
+				'ical'       => isset($_POST['ical']) ? array_map('sanitize_text_field', wp_unslash($_POST['ical'])) : (isset($existing_options['ical']) ? $existing_options['ical'] : array()),
+				'wpea'       => isset($_POST['wpea']) ? array_map('sanitize_text_field', wp_unslash($_POST['wpea'])) : (isset($existing_options['wpea']) ? $existing_options['wpea'] : array())
+			);
 
+			// Update the options
 			$is_update = update_option( WPEA_OPTIONS, $wpea_options );
 			if( $is_update ){
 				$wpea_success_msg[] = __( 'Import settings has been saved successfully.', 'wp-event-aggregator' );
