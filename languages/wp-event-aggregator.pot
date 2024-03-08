@@ -9,12 +9,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-04T11:36:47+00:00\n"
+"POT-Creation-Date: 2024-03-08T06:09:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: wp-event-aggregator\n"
 
 #. Plugin Name of the plugin
+#: wp-event-aggregator.php
 #: includes/class-wp-event-aggregator-admin.php:55
 #: includes/class-wp-event-aggregator-admin.php:117
 #: includes/class-wp-event-aggregator-common.php:214
@@ -23,14 +24,17 @@ msgid "WP Event Aggregator"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: wp-event-aggregator.php
 msgid "http://xylusthemes.com/plugins/wp-event-aggregator/"
 msgstr ""
 
 #. Description of the plugin
+#: wp-event-aggregator.php
 msgid "Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site."
 msgstr ""
 
 #. Author of the plugin
+#: wp-event-aggregator.php
 msgid "Xylus Themes"
 msgstr ""
 
