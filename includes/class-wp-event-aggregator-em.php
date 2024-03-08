@@ -131,6 +131,9 @@ class WP_Event_Aggregator_EM {
 			$inserted_event = get_post( $inserted_event_id );
 			if ( empty( $inserted_event ) ) { return '';}
 
+			//Event ID
+			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
+
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			if ( ! empty( $wpea_cats ) ) {
@@ -187,7 +190,6 @@ class WP_Event_Aggregator_EM {
 			update_post_meta( $inserted_event_id, '_event_private', 0 );
 			update_post_meta( $inserted_event_id, '_start_ts', str_pad( $start_time, 10, 0, STR_PAD_LEFT));
 			update_post_meta( $inserted_event_id, '_end_ts', str_pad( $end_time, 10, 0, STR_PAD_LEFT));
-			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $ticket_uri ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );

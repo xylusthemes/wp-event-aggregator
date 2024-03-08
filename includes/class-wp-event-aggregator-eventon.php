@@ -129,6 +129,9 @@ class WP_Event_Aggregator_EventON {
 			$inserted_event = get_post( $inserted_event_id );
 			if ( empty( $inserted_event ) ) { return '';}
 
+			//Event ID
+			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
+
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			$wpea_cats2 = isset( $event_args['event_cats2'] ) ? $event_args['event_cats2'] : array();
@@ -177,8 +180,6 @@ class WP_Event_Aggregator_EventON {
 			$end_hour = date("h", $end_time);
 			$end_minute = date("i", $end_time);
 
-
-			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', $centralize_array['url'] );
 			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
