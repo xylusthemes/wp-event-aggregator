@@ -50,14 +50,22 @@ class WP_Event_Aggregator_Meetup_Authorize {
     /*
 	* Remove Meetup user connection
 	*/
-    function wpea_deauthorize_user() {
-    	delete_option('wpea_mauthorized_user');
-    	delete_option('wpea_muser_token_options');
-    	delete_transient('wpea_meetup_auth_token');
-		$redirect_url = admin_url('admin.php?page=import_events&tab=settings');
-	    wp_redirect($redirect_url);
-	    exit();
-    }
+	function wpea_deauthorize_user() {
+		if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'wpea_deauthorize_nonce' ) ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				delete_option('wpea_mauthorized_user');
+				delete_option('wpea_muser_token_options');
+				delete_transient('wpea_meetup_auth_token');
+				$redirect_url = admin_url('admin.php?page=import_events&tab=settings');
+				wp_redirect($redirect_url);
+				exit();
+			} else {
+				wp_die(__('You do not have sufficient permissions to perform this action.'));
+			}
+		} else {
+			wp_die(__( 'Security check failed. Please try again.' ) );
+		}
+	}
 
     /*
 	* Authorize meetup user on callback to get access token

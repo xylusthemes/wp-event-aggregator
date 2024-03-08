@@ -786,7 +786,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-fb-authorize.php:54
 #: includes/class-wp-event-aggregator-fb-authorize.php:121
 #: includes/class-wp-event-aggregator-meetup-authorize.php:46
-#: includes/class-wp-event-aggregator-meetup-authorize.php:121
+#: includes/class-wp-event-aggregator-meetup-authorize.php:129
 msgid "You have not access to do this operations."
 msgstr ""
 

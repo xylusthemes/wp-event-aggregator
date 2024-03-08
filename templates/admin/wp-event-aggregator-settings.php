@@ -329,7 +329,7 @@ if( is_object( $meetup_authorized_user ) ){
                                                         <br/>
                                                         <?php echo $email; ?>
                                                         <br/>
-                                                        <a href="<?php echo admin_url('admin-post.php?action=wpea_mdeauthorize_action'); ?>">
+                                                        <a href="<?php echo admin_url('admin-post.php?action=wpea_mdeauthorize_action&_wpnonce=' . wp_create_nonce('wpea_deauthorize_nonce')); ?>">
                                                             <?php _e('Remove Connection', 'wp-event-aggregator'); ?>
                                                         </a>
                                                     </div>
