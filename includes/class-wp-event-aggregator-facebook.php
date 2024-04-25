@@ -465,7 +465,7 @@ class WP_Event_Aggregator_Facebook {
 	 */
 	public function get_location( $facebook_event ) {
 
-		if( $facebook_event->is_online === true ){
+		if( isset( $facebook_event->is_online ) && $facebook_event->is_online === true ){
 			$event_location = array(
 				'name'         => 'Online Event',
 			);
