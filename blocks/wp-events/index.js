@@ -110,6 +110,8 @@ registerBlockType( 'wpea-block/wp-events', {
 							options={ [
 								{ label: 'Default', value: '' },
 								{ label: 'Style 2', value: 'style2' },
+								{ label: 'Style 3', value: 'style3' },
+								{ label: 'Style 4', value: 'style4' },
 							] }
 							onChange={ ( value ) => setAttributes( { layout: value } ) }
 						/>
