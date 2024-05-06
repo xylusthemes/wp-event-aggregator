@@ -139,8 +139,8 @@ You can use `[wp_events]` for display in-built events list.
 == Changelog ==
 
 = 1.7.9 =
-* ADDED: Grig View Style 3 & 4 Option in Shortcode, Elementor, WPBakery Page Builder, Gutenberg Block.
-* FIXED : Addressed conflicts in Admin CSS.
+* ADDED: Grid View Style 3 & 4 Option in Shortcode, Elementor, WPBakery Page Builder, Gutenberg Block.
+* FIXED: Addressed conflicts in Admin CSS.
 
 = 1.7.8 =
 * FIXED: Timezone issue in iCal method.
