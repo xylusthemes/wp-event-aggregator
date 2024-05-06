@@ -97,12 +97,12 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	function enqueue_admin_styles( $hook ) {
-
-		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
-		wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
-		wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
-		wp_enqueue_style('wp-color-picker');
-
+		if( isset( $_GET['page'] ) && $_GET['page'] == 'import_events' ){
+			$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
+			wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
+			wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
+			wp_enqueue_style('wp-color-picker');
+		}
 	}
 
 	/**
