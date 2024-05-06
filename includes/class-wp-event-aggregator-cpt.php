@@ -838,6 +838,10 @@ class WP_Event_Aggregator_Cpt {
 					
 					if( isset( $atts['layout'] ) && $atts['layout'] == 'style2' && wpea_is_pro() ){
 						get_wpea_template( 'wpea-archive-content2.php', $template_args );
+					}elseif( isset( $atts['layout'] ) && $atts['layout'] == 'style3' ){
+						get_wpea_template( 'wpea-archive-content3.php', $template_args );
+					}elseif( isset( $atts['layout'] ) && $atts['layout'] == 'style4' ){
+						get_wpea_template( 'wpea-archive-content4.php', $template_args );
 					}else{
 						get_wpea_template( 'wpea-archive-content.php', $template_args );
 					}

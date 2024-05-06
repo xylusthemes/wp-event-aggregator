@@ -740,7 +740,7 @@ msgstr ""
 msgid "Source Link"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:860
+#: includes/class-wp-event-aggregator-cpt.php:864
 msgid "No Events are found."
 msgstr ""
 
