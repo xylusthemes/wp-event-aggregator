@@ -233,7 +233,7 @@
 			$this.attr("disabled", "disabled");
 			$this.text("Copied!");
 			setTimeout(function(){
-				$this.text("Copy");
+				$this.text( oldText );
 				$this.removeAttr("disabled");
 			}, 800);
 	  

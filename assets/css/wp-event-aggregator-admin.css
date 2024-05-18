@@ -613,3 +613,8 @@ table.wpea_form_table tr td:nth-child(1) {
 .wpea-lh{
   line-height: 1.5 !important;
 }
+
+.wpea_link_cp{
+  width: 10%;
+  text-align: left;
+}
