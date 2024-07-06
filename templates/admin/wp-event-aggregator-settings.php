@@ -56,9 +56,11 @@ if( is_object( $meetup_authorized_user ) ){
                         <br/>
                         <?php _e( '<strong>Set the site url as : </strong>', 'wp-event-aggregator' ); ?>
                         <span style="color: green;"><?php echo get_site_url(); ?></span>
+                        <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo esc_url( get_site_url() ); ?>' ></span>
                         <br/>
                         <?php _e( '<strong>Set Valid OAuth redirect URI : </strong>', 'wp-event-aggregator' ); ?>
                         <span style="color: green;"><?php echo admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ?></span>
+                        <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ?>' ></span>
                     </div>
                     <?php 
                     if( $facebook_app_id != '' && $facebook_app_secret != '' ){
@@ -301,9 +303,11 @@ if( is_object( $meetup_authorized_user ) ){
                         <br/>
                         <?php _e( '<strong>Set the Application Website as : </strong>', 'wp-event-aggregator' ); ?>
                         <span style="color: green;"><?php echo get_site_url(); ?></span>
+                        <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo get_site_url(); ?>' ></span>
                         <br/>
                         <?php _e( '<strong>Set Redirect URI : </strong>', 'wp-event-aggregator' ); ?>
                         <span style="color: green;"><?php echo admin_url( 'admin-post.php?action=wepa_meetup_authorize_callback' ); ?></span>
+                        <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo admin_url( 'admin-post.php?action=wepa_meetup_authorize_callback' ); ?>' ></span>
                     </div>
 
                     <?php
