@@ -92,11 +92,11 @@ class WP_Event_Aggregator_Manage_Import {
 			
 			// Update only the options present in $_POST, keeping the existing values for others
 			$wpea_options = array(
-				'eventbrite' => isset($_POST['eventbrite']) ? array_map('sanitize_text_field', wp_unslash($_POST['eventbrite'])) : (isset($existing_options['eventbrite']) ? $existing_options['eventbrite'] : array()),
-				'meetup'     => isset($_POST['meetup']) ? array_map('sanitize_text_field', wp_unslash($_POST['meetup'])) : (isset($existing_options['meetup']) ? $existing_options['meetup'] : array()),
-				'facebook'   => isset($_POST['facebook']) ? array_map('sanitize_text_field', wp_unslash($_POST['facebook'])) : (isset($existing_options['facebook']) ? $existing_options['facebook'] : array()),
-				'ical'       => isset($_POST['ical']) ? array_map('sanitize_text_field', wp_unslash($_POST['ical'])) : (isset($existing_options['ical']) ? $existing_options['ical'] : array()),
-				'wpea'       => isset($_POST['wpea']) ? array_map('sanitize_text_field', wp_unslash($_POST['wpea'])) : (isset($existing_options['wpea']) ? $existing_options['wpea'] : array())
+				'eventbrite' => isset( $_POST['eventbrite'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['eventbrite'] ) ) ) : ( isset( $existing_options['eventbrite'] ) ? array_map( 'esc_attr', $existing_options['eventbrite'] ) : array() ),
+				'meetup'     => isset( $_POST['meetup'] ) ? array_map( 'esc_attr', array_map('sanitize_text_field', wp_unslash( $_POST['meetup'] ) ) ) : ( isset( $existing_options['meetup'] ) ? array_map( 'esc_attr', $existing_options['meetup'] ) : array() ),
+				'facebook'   => isset( $_POST['facebook']) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['facebook'] ) ) ) : ( isset( $existing_options['facebook'] ) ? array_map( 'esc_attr', $existing_options['facebook'] ) : array() ),
+				'ical'       => isset( $_POST['ical'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['ical'] ) ) ) : ( isset( $existing_options['ical'] ) ? array_map('esc_attr', $existing_options['ical'] ) : array() ),
+				'wpea'       => isset( $_POST['wpea'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['wpea'] ) ) ) : ( isset( $existing_options['wpea'] ) ? array_map('esc_attr', $existing_options['wpea'] ) : array() )
 			);
 
 			// Update the options
