@@ -116,7 +116,7 @@ class DateTimeZoneFactory
             'Marquesas Standard Time'         => 'Pacific/Marquesas',
             'Alaskan Standard Time'           => 'America/Anchorage',
             'Pacific Standard Time (Mexico)'  => 'America/Tijuana',
-            'Pacific Standard Time'           => 'US/Pacific',
+            'Pacific Standard Time'           => 'Etc/GMT+7',
             'US Mountain Standard Time'       => 'Etc/GMT+7',
             'Mountain Standard Time (Mexico)' => 'America/Chihuahua',
             'Mountain Standard Time'          => 'America/Boise',

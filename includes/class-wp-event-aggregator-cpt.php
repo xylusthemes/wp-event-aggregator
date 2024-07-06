@@ -300,63 +300,63 @@ class WP_Event_Aggregator_Cpt {
 			<tr>
 				<td><?php _e('Venue', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_name" id="venue_name" value="<?php echo get_post_meta($post->ID, 'venue_name', true); ?>" />
+					<input type="text" name="venue_name" id="venue_name" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_name', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('Address', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_address" id="venue_address" value="<?php echo get_post_meta($post->ID, 'venue_address', true); ?>" />
+					<input type="text" name="venue_address" id="venue_address" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_address', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('City', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_city" id="venue_city" value="<?php echo get_post_meta($post->ID, 'venue_city', true); ?>" />
+					<input type="text" name="venue_city" id="venue_city" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_city', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('State', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_state" id="venue_state" value="<?php echo get_post_meta($post->ID, 'venue_state', true); ?>" />
+					<input type="text" name="venue_state" id="venue_state" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_state', true) ); ?>" />
 				</td>
 			</tr>
 			
 			<tr>
 				<td><?php _e('Country', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_country" id="venue_country" value="<?php echo get_post_meta($post->ID, 'venue_country', true); ?>" />
+					<input type="text" name="venue_country" id="venue_country" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_country', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('ZIP Code', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_zipcode" id="venue_zipcode" value="<?php echo get_post_meta($post->ID, 'venue_zipcode', true); ?>" />
+					<input type="text" name="venue_zipcode" id="venue_zipcode" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_zipcode', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('Latitude', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_lat" id="venue_lat" value="<?php echo get_post_meta($post->ID, 'venue_lat', true); ?>" />
+					<input type="text" name="venue_lat" id="venue_lat" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_lat', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('Longitude', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_lon" id="venue_lon" value="<?php echo get_post_meta($post->ID, 'venue_lon', true); ?>" />
+					<input type="text" name="venue_lon" id="venue_lon" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_lon', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
 				<td><?php _e('Website', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="venue_url" id="venue_url" value="<?php echo get_post_meta($post->ID, 'venue_url', true); ?>" />
+					<input type="text" name="venue_url" id="venue_url" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_url', true) ); ?>" />
 				</td>
 			</tr>
 			</tbody>
@@ -375,25 +375,25 @@ class WP_Event_Aggregator_Cpt {
 			<tr>
 				<td><?php _e('Organizer Name', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="organizer_name" id="organizer_name" value="<?php echo get_post_meta($post->ID, 'organizer_name', true); ?>" />
+					<input type="text" name="organizer_name" id="organizer_name" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_name', true) ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td><?php _e('Email', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="email" name="organizer_email" id="organizer_email" value="<?php echo get_post_meta($post->ID, 'organizer_email', true); ?>" />
+					<input type="email" name="organizer_email" id="organizer_email" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_email', true) ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td><?php _e('Phone', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="organizer_phone" id="organizer_phone" value="<?php echo get_post_meta($post->ID, 'organizer_phone', true); ?>" />
+					<input type="text" name="organizer_phone" id="organizer_phone" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_phone', true) ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td><?php _e('Website', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="organizer_url" id="organizer_url" value="<?php echo get_post_meta($post->ID, 'organizer_url', true); ?>" />
+					<input type="text" name="organizer_url" id="organizer_url" value="<?php echo esc_url( get_post_meta($post->ID, 'organizer_url', true) ); ?>" />
 				</td>
 			</tr>
 			</tbody>
