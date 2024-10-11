@@ -94,6 +94,11 @@ class WP_Event_Aggregator_Eventbrite {
 			return $imported_events;
 
 		}else{
+			if( $eventbrite_events['error'] == 'INVALID_AUTH' ){
+				$error_description =  str_replace( 'OAuth token', 'Private token', $eventbrite_events['error_description'] );
+				$wpea_errors[] = __( $error_description, 'wp-event-aggregator');
+				return;
+			}
 			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
 			return;
 		}
@@ -144,6 +149,12 @@ class WP_Event_Aggregator_Eventbrite {
 						$imported_events[] = $this->save_eventbrite_event( $eventbrite_event, $event_data );
 						
 					}else{
+
+						if( $eventbrite_event['error'] == 'INVALID_AUTH' ){
+							$error_description =  str_replace( 'OAuth token', 'Private token', $eventbrite_event['error_description'] );
+							$wpea_errors[] = __( $error_description, 'wp-event-aggregator');
+							return;
+						}
 						$wpea_errors[] = sprintf( esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), $eventbrite_id ) ;
 						continue;
 					}
@@ -254,7 +265,7 @@ class WP_Event_Aggregator_Eventbrite {
 			return null;
 		}
 		$event_organizer = $eventbrite_event['organizer_id'];
-		$get_oraganizer = wp_remote_get( 'https://www.eventbriteapi.com/v3/organizers/' . $event_organizer .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		$get_oraganizer = wp_remote_get( 'https://www.eventbriteapi.com/v3/organizers/' . $event_organizer .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ), 'timeout' => 20, ) );
 
 		if ( ! is_wp_error( $get_oraganizer ) ) {
 			$oraganizer = json_decode( $get_oraganizer['body'], true );
@@ -343,7 +354,7 @@ class WP_Event_Aggregator_Eventbrite {
 			return;
 		}
 
-		$get_oraganizer = wp_remote_get( 'https://www.eventbriteapi.com/v3/organizers/' . $organizer_id .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+		$get_oraganizer = wp_remote_get( 'https://www.eventbriteapi.com/v3/organizers/' . $organizer_id .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ), 'timeout' => 20,  ) );
 
 		if ( ! is_wp_error( $get_oraganizer ) ) {
 			$oraganizer = json_decode( $get_oraganizer['body'], true );

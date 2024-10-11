@@ -501,7 +501,7 @@ class WP_Event_Aggregator_Common {
 	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function display_import_success_message( $import_data = array(),$import_args = array(), $schedule_post = '' ) {
+	public function display_import_success_message( $import_data = array(),$import_args = array(), $schedule_post = '', $error_reason = '' ) {
 		global $wpea_success_msg, $wpea_errors;
 		if ( ! empty( $wpea_errors ) ) {
 			return;
@@ -545,6 +545,11 @@ class WP_Event_Aggregator_Common {
 		if( $skip_trash > 0 ){
 			$success_message .= "<strong>".sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash ) ."</strong><br>";
 		}
+
+		if ( !empty( $error_reason ) ) {
+			$success_message .= "<strong>" . sprintf( __( '%d ', 'wp-event-aggregator' ), $error_reason ) . "</strong><br>";
+		}
+
 		$wpea_success_msg[] = $success_message;
 
 		if( $schedule_post != '' && $schedule_post > 0 ){
@@ -574,6 +579,7 @@ class WP_Event_Aggregator_Common {
 				update_post_meta( $insert, 'nothing_to_import', $nothing_to_import );
 				update_post_meta( $insert, 'imported_data', $import_data );
 				update_post_meta( $insert, 'import_data', $import_args );
+				update_post_meta( $insert, 'error_reason', $error_reason );
 				if( $schedule_post != '' && $schedule_post > 0 ){
 					update_post_meta( $insert, 'schedule_import_id', $schedule_post );
 				}
