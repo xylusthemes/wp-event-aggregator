@@ -591,6 +591,53 @@ if( is_object( $meetup_authorized_user ) ){
                             </tr>
 
                             <tr>
+                                <th scope="row"><?php esc_attr_e( 'Default Event Thumbnail', 'wp-event-aggregator' ); ?>:</th>
+                                <td>
+                                    <?php
+                                    wp_enqueue_media();
+
+                                    $wpea_cfulb     = ' upload-button button-add-media button-add-site-icon ';
+                                    $wpea_cfub      = ' button ';
+                                    $wpea_cfw       = '';
+
+                                    if ( has_site_icon() ) {
+                                        $wpea_cfw  .= ' has-site-icon';
+                                        $wpea_cfb   = $wpea_cfub;
+                                        $wpea_cfboc = $wpea_cfulb;
+                                    } else {
+                                        $wpea_cfw  .= ' hidden';
+                                        $wpea_cfb   = $wpea_cfulb;
+                                        $wpea_cfboc = $wpea_cfub;
+                                    }
+
+                                    $wpea_options   = get_option( WPEA_OPTIONS );
+                                    $wpea_edt_id    = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
+                                    $wpea_edt_url   = !empty( $wpea_edt_id ) ? wp_get_attachment_url( $wpea_edt_id ) : '';
+                                    $button_text    = empty( $wpea_edt_url ) ? 'Choose Event Thumbnail' : 'Change Event Thumbnail';
+                                    $remove_class   = empty( $wpea_edt_url ) ? 'hidden' : '';
+                                    ?>
+
+                                    <div id="wpea-event-thumbnail-preview" class="wp-clearfix settings-page-preview <?php echo esc_attr( ! empty( $wpea_edt_url ) ? '' : 'hidden' ); ?>">
+                                        <img id="wpea-event-thumbnail-img" src="<?php echo esc_url( $wpea_edt_url ); ?>" alt="<?php esc_attr_e( 'Event Thumbnail', 'wp-event-aggregator' ); ?>" style="max-width:100%;width: 15%;height: auto;" >
+                                    </div>
+
+                                    <input type="hidden" name="wpea[wpea_event_default_thumbnail]" id="wpea-event_thumbnail_hidden_field" value="<?php echo esc_attr( $wpea_edt_id ); ?>" />
+
+                                    <div class="action-buttons">
+                                        <button type="button" id="wpea-choose-from-library-button" class="<?php echo esc_attr( $wpea_cfb ); ?>" data-alt-classes="<?php echo esc_attr( $wpea_cfboc ); ?>" >
+                                            <?php echo $button_text; ?>
+                                        </button>
+                                        <button id="wpea-js-remove-thumbnail" type="button" data-alt-classes="<?php echo esc_attr( $wpea_cfboc ); ?>" class="reset <?php echo esc_attr( $remove_class ); ?><?php echo esc_attr( $wpea_cfb ); ?>" >
+                                            <?php _e( 'Remove Event Thumbnail', 'wp-event-aggregator' ); ?>
+                                        </button>
+                                    </div>
+                                    <span class="wpea_small">
+                                        <?php esc_attr_e( "This option will display this image in the event's grid view if the event does not have a featured image.", 'wp-event-aggregator' ); ?>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <th scope="row">
                                     <?php _e( 'Disable WP Events', 'wp-event-aggregator' ); ?> : 
                                 </th>

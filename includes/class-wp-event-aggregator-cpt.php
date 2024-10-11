@@ -823,6 +823,7 @@ class WP_Event_Aggregator_Cpt {
 		$wpea_options = get_option( WPEA_OPTIONS );
 		$accent_color = isset( $wpea_options['wpea']['accent_color'] ) ? $wpea_options['wpea']['accent_color'] : '#039ED7';
         $direct_link = isset($wpea_options['wpea']['direct_link']) ? $wpea_options['wpea']['direct_link'] : 'no';
+		$wpea_ed_image = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
         if (!wpea_is_pro()) {
             $direct_link = 'no';
         }
@@ -833,6 +834,7 @@ class WP_Event_Aggregator_Cpt {
 			$template_args = array();
             $template_args['css_class'] = $css_class;
             $template_args['direct_link'] = $direct_link;
+			$template_args['wpea_ed_image'] = $wpea_ed_image;
 			if( $wp_events->have_posts() ):
 				while ( $wp_events->have_posts() ) : $wp_events->the_post();
 					
