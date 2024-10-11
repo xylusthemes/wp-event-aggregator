@@ -38,19 +38,19 @@ global $importevents;
 			                    	<option value="facebook_organization"><?php esc_attr_e( 'Facebook Page','wp-event-aggregator' ); ?></option>
 
 			                    	<?php 
-			                    	if( wpea_is_pro() ){
-				                    	if( $importevents->common->has_authorized_user_token() ){ ?>
-				                    		<option value="facebook_group"><?php esc_attr_e( 'Facebook Group','wp-event-aggregator' ); ?></option>
-				                    	<?php } 
-			                    	} ?>
+			                    	//if( wpea_is_pro() ){
+				                    //	if( $importevents->common->has_authorized_user_token() ){ ?>
+				                    		<!-- <option value="facebook_group"><?php //esc_attr_e( 'Facebook Group','wp-event-aggregator' ); ?></option> -->
+				                    	<?php //} 
+			                    	//} ?>
 
 			                    </select>
 			                    <span class="wpea_small">
 			                        <?php _e( 'Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> (Import events from Facebook page).', 'wp-event-aggregator' ); ?>
 			                        <?php
-									if( $importevents->common->has_authorized_user_token() ){
-									_e( '<strong>3. Facebook Group</strong> (Import events from facebook group)', 'wp-event-aggregator' );
-									} ?>
+									//if( $importevents->common->has_authorized_user_token() ){
+									//_e( '<strong>3. Facebook Group</strong> (Import events from facebook group)', 'wp-event-aggregator' );
+									//} ?>
 			                    </span>
 					        </td>
 					    </tr>
@@ -80,18 +80,18 @@ global $importevents;
 					    	</td>
 					    </tr>
 
-					    <tr class="facebook_group_wrapper" style="display: none;">
+					    <!-- <tr class="facebook_group_wrapper" style="display: none;">
 					    	<th scope="row">
-					    		<?php esc_attr_e( 'Facebook Group URL / Numeric ID to fetch events from', 'wp-event-aggregator' ); ?> : 
+					    		<?php //esc_attr_e( 'Facebook Group URL / Numeric ID to fetch events from', 'wp-event-aggregator' ); ?> : 
 					    	</th>
 					    	<td> 
-					    		<input class="wpea_text facebook_group" type="text" <?php if( wpea_is_pro() ){ echo 'name="facebook_group_id"'; }else{ echo 'disabled="disabled"'; } ?> />
+					    		<input class="wpea_text facebook_group" type="text" <?php //if( wpea_is_pro() ){ echo 'name="facebook_group_id"'; }else{ echo 'disabled="disabled"'; } ?> />
 			                    <span class="wpea_small">
-			                        <?php _e( ' Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR "123456789123456"', 'wp-event-aggregator' ); ?>
+			                        <?php //_e( ' Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR "123456789123456"', 'wp-event-aggregator' ); ?>
 			                    </span>
-			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
+			                    <?php //do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
-					    </tr>
+					    </tr> -->
 
 					    <tr class="import_type_wrapper">
 					    	<th scope="row">
