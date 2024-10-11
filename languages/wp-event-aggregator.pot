@@ -2,16 +2,16 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Event Aggregator 1.7.9\n"
+"Project-Id-Version: WP Event Aggregator 1.8.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-event-aggregator\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-06T10:21:10+00:00\n"
+"POT-Creation-Date: 2024-10-11T11:59:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-event-aggregator\n"
 
 #. Plugin Name of the plugin
@@ -73,7 +73,7 @@ msgid "Settings"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:65
-#: includes/class-wp-event-aggregator-list-table.php:716
+#: includes/class-wp-event-aggregator-list-table.php:726
 msgid "Shortcode"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:502
 #: includes/class-wp-event-aggregator-list-table.php:186
-#: includes/class-wp-event-aggregator-list-table.php:542
+#: includes/class-wp-event-aggregator-list-table.php:552
 msgid "Action"
 msgstr ""
 
@@ -367,14 +367,14 @@ msgstr ""
 #: includes/class-wp-event-aggregator-common.php:537
 #: includes/class-wp-event-aggregator-list-table.php:132
 #: includes/class-wp-event-aggregator-list-table.php:345
-#: includes/class-wp-event-aggregator-list-table.php:474
+#: includes/class-wp-event-aggregator-list-table.php:480
 msgid "%d Created"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:540
 #: includes/class-wp-event-aggregator-list-table.php:135
 #: includes/class-wp-event-aggregator-list-table.php:348
-#: includes/class-wp-event-aggregator-list-table.php:477
+#: includes/class-wp-event-aggregator-list-table.php:483
 msgid "%d Updated"
 msgstr ""
 
@@ -385,72 +385,76 @@ msgstr ""
 #: includes/class-wp-event-aggregator-common.php:546
 #: includes/class-wp-event-aggregator-list-table.php:141
 #: includes/class-wp-event-aggregator-list-table.php:354
-#: includes/class-wp-event-aggregator-list-table.php:483
+#: includes/class-wp-event-aggregator-list-table.php:489
 msgid "%d Skipped (Already exists in Trash)"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:611
-msgid "Once Hourly"
-msgstr ""
-
-#: includes/class-wp-event-aggregator-common.php:614
-msgid "Twice Daily"
+#: includes/class-wp-event-aggregator-common.php:550
+msgid "%d "
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:617
-msgid "Once Daily"
+msgid "Once Hourly"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:620
-msgid "Once Weekly"
+msgid "Twice Daily"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:623
+msgid "Once Daily"
+msgstr ""
+
+#: includes/class-wp-event-aggregator-common.php:626
+msgid "Once Weekly"
+msgstr ""
+
+#: includes/class-wp-event-aggregator-common.php:629
 msgid "Once a Month"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:678
+#: includes/class-wp-event-aggregator-common.php:684
 msgid "One-time Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:679
+#: includes/class-wp-event-aggregator-common.php:685
 #: includes/class-wp-event-aggregator-list-table.php:182
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:733
+#: includes/class-wp-event-aggregator-common.php:739
 msgid "Status"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:738
+#: includes/class-wp-event-aggregator-common.php:744
 msgid "Published"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:741
+#: includes/class-wp-event-aggregator-common.php:747
 msgid "Pending"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:744
+#: includes/class-wp-event-aggregator-common.php:750
 msgid "Draft"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:847
+#: includes/class-wp-event-aggregator-common.php:853
 msgid "The Access Token has been invalidated because the user has changed their password, or Facebook has changed the session for security reasons. Please reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style=\"text-decoration: none;\" href=\""
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:862
+#: includes/class-wp-event-aggregator-common.php:868
 msgid "The current \"WP Event Aggregator Pro\" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:876
+#: includes/class-wp-event-aggregator-common.php:882
 msgid "Available in Pro Add-on."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:876
+#: includes/class-wp-event-aggregator-common.php:882
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1326
+#: includes/class-wp-event-aggregator-common.php:1332
 msgid "Buy Tickets"
 msgstr ""
 
@@ -746,22 +750,22 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-eventbrite.php:60
 #: includes/class-wp-event-aggregator-eventbrite.php:73
-#: includes/class-wp-event-aggregator-eventbrite.php:97
+#: includes/class-wp-event-aggregator-eventbrite.php:102
 #: includes/class-wp-event-aggregator-tec.php:180
 #: includes/class-wp-event-aggregator-tec.php:252
 msgid "Something went wrong, please try again."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-eventbrite.php:116
+#: includes/class-wp-event-aggregator-eventbrite.php:121
 msgid "Please insert Eventbrite \"Personal OAuth token\"."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-eventbrite.php:128
+#: includes/class-wp-event-aggregator-eventbrite.php:133
 msgid "Please provide valid Eventbrite event ID: %s."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-eventbrite.php:137
-#: includes/class-wp-event-aggregator-eventbrite.php:147
+#: includes/class-wp-event-aggregator-eventbrite.php:142
+#: includes/class-wp-event-aggregator-eventbrite.php:158
 msgid "Something went wrong with Eventbrite event ID: %s, please try again."
 msgstr ""
 
@@ -817,14 +821,14 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:76
 #: includes/class-wp-event-aggregator-list-table.php:194
-#: includes/class-wp-event-aggregator-list-table.php:446
-#: includes/class-wp-event-aggregator-list-table.php:550
+#: includes/class-wp-event-aggregator-list-table.php:451
+#: includes/class-wp-event-aggregator-list-table.php:560
 msgid "Delete"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:94
 #: includes/class-wp-event-aggregator-list-table.php:106
-#: includes/class-wp-event-aggregator-list-table.php:453
+#: includes/class-wp-event-aggregator-list-table.php:458
 msgid "Origin"
 msgstr ""
 
@@ -842,7 +846,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:138
 #: includes/class-wp-event-aggregator-list-table.php:351
-#: includes/class-wp-event-aggregator-list-table.php:480
+#: includes/class-wp-event-aggregator-list-table.php:486
 msgid "%d Skipped"
 msgstr ""
 
@@ -863,7 +867,7 @@ msgid "Import Event Status"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:184
-#: includes/class-wp-event-aggregator-list-table.php:539
+#: includes/class-wp-event-aggregator-list-table.php:549
 msgid "Import Category"
 msgstr ""
 
@@ -879,40 +883,43 @@ msgstr ""
 msgid "Last Import Stats: "
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:361
-#: includes/class-wp-event-aggregator-list-table.php:486
+#: includes/class-wp-event-aggregator-list-table.php:362
+msgid "<span style=\"color: red\"><strong>The Private token you provided was invalid.</strong></span>"
+msgstr ""
+
+#: includes/class-wp-event-aggregator-list-table.php:365
 msgid "No events are imported."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:515
+#: includes/class-wp-event-aggregator-list-table.php:525
 msgid "View Imported Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:538
+#: includes/class-wp-event-aggregator-list-table.php:548
 msgid "Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:540
+#: includes/class-wp-event-aggregator-list-table.php:550
 msgid "Import Date"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:541
+#: includes/class-wp-event-aggregator-list-table.php:551
 msgid "Import Stats"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:575
+#: includes/class-wp-event-aggregator-list-table.php:585
 msgid "Warning! Import history will be permanatly deleted. Are you certain you want to delete the import history?"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:578
+#: includes/class-wp-event-aggregator-list-table.php:588
 msgid "Clear Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:714
+#: includes/class-wp-event-aggregator-list-table.php:724
 msgid "ID"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-list-table.php:715
+#: includes/class-wp-event-aggregator-list-table.php:725
 msgid "Title"
 msgstr ""
 
