@@ -368,6 +368,8 @@ class WP_Event_Aggregator_Facebook {
 			$is_online = '0';
 		}
 
+		$post_description = $importevents->common->wpea_convert_text_to_hyperlink( $post_description );
+
 		$xt_event = array(
 			'origin'          => 'facebook',
 			'ID'              => $facebook_id,
