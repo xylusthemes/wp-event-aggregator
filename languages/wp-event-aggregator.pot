@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-11T07:48:34+00:00\n"
+"POT-Creation-Date: 2024-10-15T11:42:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -1158,16 +1158,8 @@ msgstr ""
 msgid "Facebook Page"
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:43
-msgid "Facebook Group"
-msgstr ""
-
 #: templates/admin/facebook-import-events.php:49
 msgid "Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> (Import events from Facebook page)."
-msgstr ""
-
-#: templates/admin/facebook-import-events.php:52
-msgid "<strong>3. Facebook Group</strong> (Import events from facebook group)"
 msgstr ""
 
 #: templates/admin/facebook-import-events.php:60
@@ -1184,14 +1176,6 @@ msgstr ""
 
 #: templates/admin/facebook-import-events.php:77
 msgid " Eg. username for https://www.facebook.com/xylusinfo/ is \"xylusinfo\"."
-msgstr ""
-
-#: templates/admin/facebook-import-events.php:85
-msgid "Facebook Group URL / Numeric ID to fetch events from"
-msgstr ""
-
-#: templates/admin/facebook-import-events.php:90
-msgid " Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR \"123456789123456\""
 msgstr ""
 
 #: templates/admin/ical-import-events.php:25
@@ -1400,8 +1384,8 @@ msgstr ""
 #: templates/admin/wp-event-aggregator-settings.php:310
 #: templates/admin/wp-event-aggregator-settings.php:463
 #: templates/admin/wp-event-aggregator-settings.php:515
-#: templates/admin/wp-event-aggregator-settings.php:644
-#: templates/admin/wp-event-aggregator-settings.php:682
+#: templates/admin/wp-event-aggregator-settings.php:691
+#: templates/admin/wp-event-aggregator-settings.php:729
 msgid "Save Settings"
 msgstr ""
 
@@ -1575,40 +1559,55 @@ msgstr ""
 msgid "Choose accent color for front-end event grid and event widget."
 msgstr ""
 
+#: templates/admin/wp-event-aggregator-settings.php:611
+msgid "Default Event Thumbnail"
+msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:612
+#: templates/admin/wp-event-aggregator-settings.php:638
+msgid "Event Thumbnail"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:648
+msgid "Remove Event Thumbnail"
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:652
+msgid "This option will display this image in the event's grid view if the event does not have a featured image."
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:659
 msgid "Disable WP Events"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:620
+#: templates/admin/wp-event-aggregator-settings.php:667
 msgid "Check to disable inbuilt event management system."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:626
+#: templates/admin/wp-event-aggregator-settings.php:673
 msgid "Delete WP Event Aggregator data on Uninstall"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:634
+#: templates/admin/wp-event-aggregator-settings.php:681
 msgid "Delete WP Event Aggregator data like settings, scheduled imports, import history on Uninstall"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:658
+#: templates/admin/wp-event-aggregator-settings.php:705
 msgid "Google Maps API"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:669
+#: templates/admin/wp-event-aggregator-settings.php:716
 msgid "Google maps API Key (Required)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:670
+#: templates/admin/wp-event-aggregator-settings.php:717
 msgid "How to get an API Key"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:671
+#: templates/admin/wp-event-aggregator-settings.php:718
 msgid "Find out more about API Key restrictions"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:699
+#: templates/admin/wp-event-aggregator-settings.php:746
 msgid "Here"
 msgstr ""
 
