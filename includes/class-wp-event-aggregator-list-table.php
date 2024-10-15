@@ -356,11 +356,16 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					if( !empty( $stats ) ){
 						$stats = esc_html__( 'Last Import Stats: ', 'wp-event-aggregator' ).'<span style="color: silver">'.implode(', ', $stats).'</span>';
 					}else{
+						$error_reason      = get_post_meta( $history[0], 'error_reason', true );
 						$nothing_to_import = get_post_meta( $history[0], 'nothing_to_import', true );
-						if( $nothing_to_import ){
-							$stats = '<span style="color: silver">'.__( 'No events are imported.', 'wp-event-aggregator' ).'</span>';	
+						if( !empty( $error_reason ) ){
+							$stats = __( '<span style="color: red"><strong>The Private token you provided was invalid.</strong></span>', 'wp-event-aggregator' ) . '<br>';	
 						}else{
-							$stats = '';
+							if( $nothing_to_import ){
+								$stats = '<span style="color: silver">'.__( 'No events are imported.', 'wp-event-aggregator' ).'</span>';	
+							}else{
+								$stats = '';
+							}
 						}
 					}
 				}
@@ -467,6 +472,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		$updated = get_post_meta( $item['ID'], 'updated', true );
 		$skipped = get_post_meta( $item['ID'], 'skipped', true );
 		$skip_trash = get_post_meta( $item['ID'], 'skip_trash', true );
+		$error_reason = get_post_meta( $item['ID'], 'error_reason', true );
 		$nothing_to_import = get_post_meta( $item['ID'], 'nothing_to_import', true );
 
 		$success_message = '<span style="color: silver"><strong>';
@@ -482,8 +488,12 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		if( $skip_trash > 0 ){
 			$success_message .= sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash ) ."<br>";
 		}
-		if( $nothing_to_import ){
-			$success_message .= __( 'No events are imported.', 'wp-event-aggregator' ) . '<br>';	
+		if( !empty( $error_reason ) ){
+			$success_message .= __( 'The Private token you provided was invalid.', 'import-eventbrite-events' ) . '<br>';	
+		}else{
+			if( $nothing_to_import ){
+				$success_message .= __( 'No events are imported.', 'import-eventbrite-events' ) . '<br>';	
+			}
 		}
 		$success_message .= "</strong></span>";
 
