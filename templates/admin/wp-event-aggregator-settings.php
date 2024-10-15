@@ -261,6 +261,23 @@ if( is_object( $meetup_authorized_user ) ){
                                     </span>
                                 </td>
                             </tr>
+
+
+                            <tr>
+                                <th scope="row">
+                                    <?php _e( 'Import Small Event Thumbnail', 'wp-event-aggregator' ); ?> : 
+                                </th>
+                                <td>
+                                    <?php
+                                    $small_thumbnail = isset( $eventbrite_options['small_thumbnail'] ) ? $eventbrite_options['small_thumbnail'] : 'no';
+                                    ?>
+                                    <input type="checkbox" name="eventbrite[small_thumbnail]" value="yes" <?php if ( $small_thumbnail == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <span>
+                                    <?php _e( 'You can import small thumbnails of events into an event by enabling this option.', 'wp-event-aggregator' ); ?>
+                                    </span>
+                                </td>
+							</tr>
+
                             <tr>
                                 <th scope="row">
                                     <?php _e( 'Advanced Synchronization', 'wp-event-aggregator' ); ?> : 
