@@ -352,6 +352,9 @@ class WP_Event_Aggregator_Ical_Parser_AIOEC {
 			$start_time    = strtotime( $cwt_start['date_format'] );
 			$end_time      = strtotime( $cwt_end['date_format'] );
 		}
+
+		$post_description = $importevents->common->wpea_remove_facebook_link_in_event_description( $post_description, $uid );
+		$post_description = $importevents->common->wpea_convert_text_to_hyperlink( $post_description );
 		
 		$xt_event = array(
 			'origin'          => 'ical',

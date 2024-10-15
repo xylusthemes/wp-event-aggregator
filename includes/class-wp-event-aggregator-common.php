@@ -279,6 +279,13 @@ class WP_Event_Aggregator_Common {
 			if ( ! $matches ) {
 				if(strpos($image_url, "https://cdn.evbuc.com") === 0 || strpos($image_url, "https://img.evbuc.com") === 0 || strpos($image_url, "https://drive.google.com") === 0 ){
 					$without_ext = true;
+
+					$e_options           = wpea_get_import_options( 'eventbrite' );
+					$small_thumbnail     = isset( $e_options['small_thumbnail'] ) ? $e_options['small_thumbnail'] : 'no';
+					if( $small_thumbnail == 'yes'){
+						$image_url       = str_replace( 'original.', 'logo.', $image_url );
+					}
+					
 				}else{
 					return new WP_Error( 'image_sideload_failed', __( 'Invalid image URL' ) );
 				}
@@ -1161,6 +1168,40 @@ class WP_Event_Aggregator_Common {
 			}
 		}
 		return $country;
+	}
+
+	/**
+	 * Ubnbale to hyperlink in description
+	 *
+	 * @since  1.0.0
+	 * @return array
+	 */
+	function wpea_convert_text_to_hyperlink( $post_description = '' ){
+
+		if( !empty($post_description ) ){
+			$url = '@(http(s)?)?(://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@';
+			$post_description = preg_replace($url, '<a href="http$2://$4" target="_blank" title="$0">$0</a>', $post_description );
+
+			$search  = ['  ', '_ ', ' _'];
+			$replace = ['<br />', '<br />', '<br />'];
+			$post_description = str_replace($search, $replace, $post_description);
+		}
+		return $post_description;
+	}
+
+	/**
+	 * Remove the facebook event link in event desction
+	 *
+	 * @since  1.0.0
+	 * @return array
+	 */
+	function wpea_remove_facebook_link_in_event_description( $post_description = '', $event_id = '' ){
+
+		if ( !empty( $post_description ) && !empty( $event_id ) ) {
+			$event_url        = 'https://www.facebook.com/events/'.$event_id.'/';
+			$post_description = str_replace( $event_url, '', $post_description );
+		}
+		return $post_description;
 	}
 
 }

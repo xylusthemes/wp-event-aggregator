@@ -272,8 +272,16 @@ class WP_Event_Aggregator_Eventbrite {
 			if ( is_array( $oraganizer ) && ! isset( $oraganizer['errors'] ) ) {
 				if ( ! empty( $oraganizer ) && array_key_exists( 'id', $oraganizer ) ) {
 
-					$org_image  = isset( $oraganizer['logo']['original']['url'] ) ? urldecode( $oraganizer['logo']['original']['url'] ) : '';
-					$image = explode( '?s=', $org_image );
+					$e_options = wpea_get_import_options( 'eventbrite' );
+					$small_thumbnail = isset( $e_options['small_thumbnail'] ) ? $e_options['small_thumbnail'] : 'no';
+
+					if( $small_thumbnail == 'yes'){
+						$event_image       = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['url'] ) : '';
+					}else{
+						$event_image       = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
+					}
+
+					$image = explode( '?s=', $event_image );
 					$image_url = esc_url( urldecode( str_replace('https://img.evbuc.com/', '', $image[0] ) ) );
 
 					$event_organizer = array(

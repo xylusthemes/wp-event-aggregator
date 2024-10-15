@@ -18,8 +18,12 @@ $image_url =  array();
 if ( '' !== get_the_post_thumbnail() ){
 	$image_url =  wp_get_attachment_image_src( get_post_thumbnail_id(  get_the_ID() ), 'full' );
 }else{
-	$image_date = date_i18n('F+d', $event_date );
-	$image_url[] =  "https://dummyimage.com/420x210/ccc/969696.png?text=".$image_date;
+	if ( '' !== $wpea_ed_image ) {
+		$image_url = wp_get_attachment_image_src( $wpea_ed_image, 'full' );
+	}else{
+		$image_date  = date_i18n( 'F+d', $event_date );
+		$image_url[] = 'https://dummyimage.com/420x210/ccc/969696.png?text=' . $image_date;
+	}
 }
 $target = '';
 $event_source_url = esc_url( get_permalink() );
