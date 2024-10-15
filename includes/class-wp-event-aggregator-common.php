@@ -279,6 +279,13 @@ class WP_Event_Aggregator_Common {
 			if ( ! $matches ) {
 				if(strpos($image_url, "https://cdn.evbuc.com") === 0 || strpos($image_url, "https://img.evbuc.com") === 0 || strpos($image_url, "https://drive.google.com") === 0 ){
 					$without_ext = true;
+
+					$e_options           = wpea_get_import_options( 'eventbrite' );
+					$small_thumbnail     = isset( $e_options['small_thumbnail'] ) ? $e_options['small_thumbnail'] : 'no';
+					if( $small_thumbnail == 'yes'){
+						$image_url       = str_replace( 'original.', 'logo.', $image_url );
+					}
+					
 				}else{
 					return new WP_Error( 'image_sideload_failed', __( 'Invalid image URL' ) );
 				}
