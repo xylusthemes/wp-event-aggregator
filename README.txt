@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
 Requires at least: 4.0
 Tested up to: 6.6
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,7 +46,7 @@ WP Event Aggregator works as a stand-alone as well as add-on plugin with leading
 * New Event listing Grid view Layout ([Pro][1]).
 * Easy and seemless Event import from Facebook, Eventbrite, Meetup, iCalendar and ICS to WordPres.
 * Import Eventrite event by Event ID, organiser ID ([Pro][1]) and from your Eventbrite account ([Pro][1]).
-* Import Facebook event by Event ID, Facebook page ID ([Pro][1]), Facebook group ([Pro][1]).
+* Import Facebook event by Event ID, Facebook page ID ([Pro][1]).
 * Import Meetup events by meetup group URL.
 * Import iCal events using .ics file upload or by iCal URL([Pro][1]).
 * Import multiple events using multiple event IDs at one time ([Pro][1]).
@@ -137,6 +137,14 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.8.1 =
+* ADDED: Default Event Featured image option( Grid View ).
+* ADDED: Hyperlink in facebook event description.
+* ADDED: Eventbrite event small thumbnail option.
+* REMOVE: Facebook Group ID option.
+* REMOVE: Facebook event link in the event description( iCal import ).
+* IMPROVEMENTS: Display Eventbrite private token message.
 
 = 1.8.0 =
 * ADDED: Copy-Paste button in the settings page.
