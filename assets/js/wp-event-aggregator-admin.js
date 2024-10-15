@@ -323,6 +323,42 @@ jQuery(document).ready(function($){
 
 		wpea_xhr.send();
 	}
+
+	var mediaUploader;
+	$('#wpea-choose-from-library-button').click(function(e) {
+		e.preventDefault();
+		if (mediaUploader) {
+			mediaUploader.open();
+			return;
+		}
+		mediaUploader = wp.media.frames.file_frame = wp.media({
+			title: 'Choose Event Thumbnail',
+			button: {
+				text: 'Choose Event Thumbnail'
+			},
+			multiple: false
+		});
+
+		mediaUploader.on('select', function() {
+			var attachment = mediaUploader.state().get('selection').first().toJSON();
+			$('#wpea-event_thumbnail_hidden_field').val(attachment.id);
+			$('#wpea-event-thumbnail-img').attr('src', attachment.url);
+			$('#wpea-event-thumbnail-preview').removeClass('hidden');
+			$('#wpea-js-remove-thumbnail').removeClass('hidden');
+			$('#wpea-choose-from-library-button').text('Change Event Thumbnail');
+		});
+
+		mediaUploader.open();
+	});
+
+	$('#wpea-js-remove-thumbnail').click(function(e) {
+		e.preventDefault();
+		$('#wpea-event_thumbnail_hidden_field').val('');
+		$('#wpea-event-thumbnail-img').attr('src', '');
+		$('#wpea-event-thumbnail-preview').addClass('hidden');
+		$('#wpea-js-remove-thumbnail').addClass('hidden');
+		$('#wpea-choose-from-library-button').text('Choose Event Thumbnail');
+	});
 });
 
 
