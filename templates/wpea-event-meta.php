@@ -32,7 +32,7 @@ if($time_format === '12hours' ){
     <div class="titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
 
     <?php 
-    if( date( 'Y-m-d', $start_date_str ) == date( 'Y-m-d', $end_date_str ) ){
+	if( date( 'Y-m-d', strtotime( $start_date_str ) ) == date( 'Y-m-d', strtotime( $end_date_str ) ) ){
     	?>
     	<strong><?php esc_html_e( 'Date','wp-event-aggregator' ); ?>:</strong>
 	    <p><?php echo $start_date_formated; ?></p>
