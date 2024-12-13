@@ -102,9 +102,9 @@ global $importevents;
 			<?php } elseif( $ntab == 'scheduled_import' ){
 				?>
 				<form id="scheduled-import" method="get">
-				<input type="hidden" name="page" value="<?php echo sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ); ?>" />
-				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) : 'eventbrite' ?>" />
-				<input type="hidden" name="ntab" value="<?php echo sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); ?>" />
+				<input type="hidden" name="tab" value="<?php echo isset( $_REQUEST['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite' ?>" />
+				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); ?>" />
 				<?php 
 				if( wpea_is_pro() ){
 					$listtable = new WP_Event_Aggregator_List_Table();
