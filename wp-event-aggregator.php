@@ -234,7 +234,15 @@ class WP_Event_Aggregator{
 				esc_html__( 'Docs', 'wp-event-aggregator' )
 			),
 		);
-		return array_merge( $links, $wpea_setting_doc_link );
+		$upgrade_to_pro = array();
+		if( !wpea_is_pro() ){
+			$upgrade_to_pro = array( 'wpea-event-pro-link' => sprintf(
+				'<a href="%s" target="_blank" style="color:#1da867;font-weight: 900;">%s</a>',
+				esc_url( 'https://xylusthemes.com/plugins/wp-event-aggregator/' ),
+				esc_html__( 'Upgrade to Pro', 'wp-event-aggregator' )
+			) ) ;
+		}
+		return array_merge( $links, $wpea_setting_doc_link, $upgrade_to_pro );
 	}
 
 	/**
