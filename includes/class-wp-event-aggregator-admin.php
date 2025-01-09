@@ -393,7 +393,7 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function add_event_aggregator_credit( $footer_text ){
-		$page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		$page = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( $_GET['page'] ) ) : '';
 		if ( $page != '' && $page == 'import_events' ) {
 			$rate_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
 
@@ -470,9 +470,9 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function get_selected_tab_submenu( $submenu_file ){
-		if( !empty( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) == 'import_events' ){
+		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){
 			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'shortcodes', 'support' );
-			$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'eventbrite';
+			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( $_GET['tab'] ) ) : 'eventbrite';
 			if( in_array( $tab, $allowed_tabs ) ){
 				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
 			}
