@@ -152,6 +152,15 @@ class WP_Event_Aggregator_TEC {
 			
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
+
+			$wpea_options       = get_option( WPEA_OPTIONS );
+			$is_import_ical_cat = isset( $wpea_options['ical']['ical_cat_import'] ) ? $wpea_options['ical']['ical_cat_import'] : 'no';
+			$ical_categories    = isset( $centralize_array['ical_categories'] ) ? $centralize_array['ical_categories'] : '';
+			if( !empty( $ical_categories ) && $is_import_ical_cat == 'yes' ){
+				$ical_cats      = explode( ',', $ical_categories );
+				$event_cat_ids  = $importevents->common->wepa_create_update_ical_categories( $ical_cats, $this->taxonomy );
+				$event_args['event_cats']  = array_merge( $event_args['event_cats'], $event_cat_ids );
+			}
 			
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
@@ -215,7 +224,16 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $update_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $update_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
-			
+
+			$wpea_options       = get_option( WPEA_OPTIONS );
+			$is_import_ical_cat = isset( $wpea_options['ical']['ical_cat_import'] ) ? $wpea_options['ical']['ical_cat_import'] : 'no';
+			$ical_categories    = isset( $centralize_array['ical_categories'] ) ? $centralize_array['ical_categories'] : '';
+			if( !empty( $ical_categories ) && $is_import_ical_cat == 'yes' ){
+				$ical_cats      = explode( ',', $ical_categories );
+				$event_cat_ids  = $importevents->common->wepa_create_update_ical_categories( $ical_cats, $this->taxonomy );
+				$event_args['event_cats']  = array_merge( $event_args['event_cats'], $event_cat_ids );
+			}
+
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? (array) $event_args['event_cats'] : array();
 			if ( ! empty( $wpea_cats ) ) {

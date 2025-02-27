@@ -506,6 +506,30 @@ if( is_object( $meetup_authorized_user ) ){
                                     <?php do_action( 'wpea_render_pro_notice' ); ?>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <th scope="row">
+                                    <?php _e( 'Import iCal Category', 'wp-event-aggregator' ); ?> : 
+                                </th>
+                                <td>
+                                    <?php 
+                                    if( wpea_is_pro() ){
+                                        $advanced_sync = isset( $ical_options['ical_cat_import'] ) ? $ical_options['ical_cat_import'] : 'no';
+                                        ?>
+                                        <input type="checkbox" name="ical[ical_cat_import]" value="yes" <?php if( $advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                        <?php
+                                    }else{
+                                        ?>
+                                        <input type="checkbox" name="" disabled="disabled" />
+                                        <?php
+                                    }
+                                    ?>
+                                    <span class="wpea_small">
+                                        <?php _e( 'Check to enable importing the iCal category, this will import and assign the iCal category to the events.', 'wp-event-aggregator' ); ?>
+                                    </span>
+                                    <?php do_action( 'wpea_render_pro_notice' ); ?>
+                                </td>
+                            </tr>
                         
                         </tbody>
                     </table>

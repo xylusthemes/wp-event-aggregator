@@ -320,6 +320,17 @@ class WP_Event_Aggregator_Ical_Parser_AIOEC {
 			}		
 		}
 
+		//Get iCal Categories
+		$ical_cats     = $event->getProperty( 'CATEGORIES', false );
+		if( !empty( $ical_cats ) ){
+			if( !is_array( $ical_cats ) ){
+				$ical_cats = array( $ical_cats );
+			}
+			$ical_cats = implode( ',', $ical_cats );
+		}else{
+			$ical_cats = '';
+		}
+
 		$event_image = '';
 		$event_venue = null;
 		$ical_attachment = $event->getProperty( 'ATTACH', false, true );
@@ -375,6 +386,7 @@ class WP_Event_Aggregator_Ical_Parser_AIOEC {
 			'is_all_day'      => $is_all_day,
 			'url'             => $url,
 			'image_url'       => $event_image,
+			'ical_categories' => $ical_cats,
 		);
 
 		$oraganizer_data = null;
