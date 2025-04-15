@@ -67,7 +67,7 @@ class WP_Event_Aggregator_Meetup {
 			
 			while( true === $have_next_page ){
 				$meetup_event_data   = $api->getGroupEvents( $meetup_group_id, $itemsnum, $endcursor );
-				$get_upcoming_events = $meetup_event_data['data']['groupByUrlname']['upcomingEvents'];
+				$get_upcoming_events = $meetup_event_data['data']['groupByUrlname']['events'];
 				$meetup_events       = $get_upcoming_events['edges'];
 			
 				if( !empty( $meetup_events ) ){
@@ -131,18 +131,18 @@ class WP_Event_Aggregator_Meetup {
 		}
 
 		$parsedown         = new ParsedownWpea();
-		$timezone          = isset( $meetup_event['timezone'] ) ? $meetup_event['timezone'] : '';
 		$start             = isset( $meetup_event['dateTime'] ) ? $meetup_event['dateTime'] : ''; 
 		$end               = isset( $meetup_event['endTime'] ) ? $meetup_event['endTime'] : '';
+		$timezone          = $this->wpea_get_timezone_from_datetime( $start );
 		$start_time        = strtotime( $this->convert_datetime_to_timezone_wise_datetime( $start, $timezone ) );
 		$end_time          = strtotime( $this->convert_datetime_to_timezone_wise_datetime( $end, $timezone ) );
 		$event_name        = isset( $meetup_event['title']) ? sanitize_text_field( $meetup_event['title'] ) : '';
 		$event_url         = isset( $meetup_event['eventUrl'] ) ? $meetup_event['eventUrl'] : '';
-		$image_url         = isset( $meetup_event['imageUrl'] ) ? $meetup_event['imageUrl'] : '';
+		$image_url         = isset( $meetup_event['featuredEventPhoto']['highResUrl'] ) ? $meetup_event['featuredEventPhoto']['highResUrl'] : '';
 		$event_description = isset( $meetup_event['description'] ) ? $parsedown->text($meetup_event['description']) : '';
 		$shortDescription  = isset( $meetup_event['shortDescription'] ) ? $meetup_event['shortDescription'] : '';
 		$status            = isset( $meetup_event['status'] ) ? $meetup_event['status'] : '';
-		$isOnline          = isset( $meetup_event['isOnline'] ) ? $meetup_event['isOnline'] : '';
+		$isOnline          = isset( $meetup_event['eventType'] ) ? $meetup_event['eventType'] : '';
 		$event_id          = isset( $meetup_event['id'] ) ? str_replace( '!chp', '', $meetup_event['id']  ) : '';
 
 		$xt_event = array(
@@ -170,7 +170,7 @@ class WP_Event_Aggregator_Meetup {
 			$xt_event['organizer'] = $this->get_organizer( $meetup_event );
 		}
 
-		if ( array_key_exists( 'venue', $meetup_event ) ) {
+		if ( array_key_exists( 'venues', $meetup_event ) ) {
 			$xt_event['location'] = $this->get_location( $meetup_event );
 		}
 		return apply_filters( 'wpea_meetup_generate_centralize_array', $xt_event, $meetup_event );
@@ -193,9 +193,10 @@ class WP_Event_Aggregator_Meetup {
 			'ID'          => isset( $organizer['id'] ) ? $organizer['id'] : '',
 			'name'        => isset( $organizer['name'] ) ? $organizer['name'] : '',
 			'description' => isset( $organizer['description'] ) ? $organizer['description'] : '',
-			'email'       => isset( $organizer['emailListAddress'] ) ? $organizer['emailListAddress'] : '',
+			'email'       => isset( $organizer['emailAnnounceAddress'] ) ? $organizer['emailAnnounceAddress'] : '',
 			'phone'       => '',
 			'url'         => isset( $organizer['urlname'] ) ? "https://www.meetup.com/".$organizer['urlname']."/":'',
+			'image_url'   => isset( $organizer['keyGroupPhoto']['standardUrl'] ) ? $organizer['keyGroupPhoto']['standardUrl'] : '',
 		);
 		return $event_organizer;
 	}
@@ -208,10 +209,10 @@ class WP_Event_Aggregator_Meetup {
 	 * @return array
 	 */
 	public function get_location( $meetup_event ) {
-		if ( ! array_key_exists( 'venue', $meetup_event ) ) {
+		if ( ! array_key_exists( 'venues', $meetup_event ) ) {
 			return null;
 		}
-		$venue = $meetup_event['venue'];
+		$venue = $meetup_event['venues'][0];
 		$event_location = array(
 			'ID'           => isset( $venue['id'] ) ? $venue['id'] : '',
 			'name'         => isset( $venue['name'] ) ? $venue['name'] : '',
@@ -221,7 +222,7 @@ class WP_Event_Aggregator_Meetup {
 			'state'        => isset( $venue['state'] ) ? $venue['state'] : '',
 			'country'      => isset( $venue['country'] ) ? strtoupper( $venue['country'] ) : '',
 			'lat'          => isset( $venue['lat'] ) ? $venue['lat'] : '',
-			'long'         => isset( $venue['lng'] ) ? $venue['lng'] : '',
+			'long'         => isset( $venue['lon'] ) ? $venue['lon'] : '',
 			'zip'          => isset( $venue['postalCode'] ) ? $venue['postalCode'] : '',
 			'phone'        => isset( $venue['phone'] ) ? $venue['phone'] : '',
 			'url'          => '',
@@ -403,5 +404,37 @@ class WP_Event_Aggregator_Meetup {
 		$import->push_to_queue( $params );
 		$import->save()->dispatch();
 		return true;
+	}
+
+	/**
+	 * Get timezone from datetime string.
+	 *
+	 * @param string $dateTimeString Date time string.
+	 *
+	 * @return string|bool
+	 */
+	public function wpea_get_timezone_from_datetime( $dateTimeString ) {
+		if ( empty( $dateTimeString ) ) {
+			return 'Etc/UTC';
+		}
+
+		try {
+			$date          = new DateTime( $dateTimeString );
+			$timezone      = $date->getTimezone();	
+			$offsetSeconds = $timezone->getOffset( $date );
+
+			// Try to find timezone name from offset
+			$timezoneName  = timezone_name_from_abbr( "", $offsetSeconds, 0 );
+
+			// If not found, use fallback
+			if ( $timezoneName === false || $timezoneName === '' ) {
+				$timezoneName = $timezone->getName();
+			}
+
+			return $timezoneName;
+
+		} catch ( Exception $e ) {
+			return 'Etc/UTC';
+		}
 	}
 }
