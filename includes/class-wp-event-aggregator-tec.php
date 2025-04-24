@@ -81,26 +81,8 @@ class WP_Event_Aggregator_TEC {
 		global $importevents;
 
 		$is_exitsing_event = $importevents->common->get_event_by_event_id( $this->event_posttype, $centralize_array );
-		if( function_exists( 'tribe_events' ) ){
-			$formated_args = $this->format_event_args_for_tec_orm( $centralize_array );
-			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
-				$formated_args['status'] = $event_args['event_status'];
-			}
-		}else{
-			$formated_args = $this->format_event_args_for_tec( $centralize_array );
-			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
-				$formated_args['post_status'] = $event_args['event_status'];
-			}
-		}
-
+		$formated_args = array();
 		if ( $is_exitsing_event && is_numeric( $is_exitsing_event ) && $is_exitsing_event > 0 ) {
-			if ( ! $importevents->common->wpea_is_updatable('status') ) {
-				if( function_exists( 'tribe_events' ) ){
-					$formated_args['status'] = get_post_status( $is_exitsing_event );
-				} else {
-					$formated_args['post_status'] = get_post_status( $is_exitsing_event );
-				}
-			}
 			$options = wpea_get_import_options( $centralize_array['origin'] );
 			$update_events = isset( $options['update_events'] ) ? $options['update_events'] : 'no';
 			$wpea_options = get_option( WPEA_OPTIONS );
@@ -113,6 +95,13 @@ class WP_Event_Aggregator_TEC {
 				);
 			}
 			if ( 'yes' == $update_events ) {
+
+				$formated_args['post_status'] = $event_args['event_status'];
+				$formated_args['post_author'] = isset($event_args['event_author']) ? $event_args['event_author'] : get_current_user_id();
+				if ( ! $importevents->common->wpea_is_updatable( 'status' ) ) {
+					$formated_args['post_status'] = get_post_status( $is_exitsing_event );
+				}
+
 				return $this->update_event( $is_exitsing_event, $centralize_array, $formated_args, $event_args );
 			}else{
 				return array(
@@ -121,9 +110,18 @@ class WP_Event_Aggregator_TEC {
 				);
 			}
 		} else {
+
+			if ( isset( $event_args['event_status'] ) && ! empty( $event_args['event_status'] ) ) {
+				$formated_args['post_status'] = $event_args['event_status'];
+			}
+			$formated_args['post_author'] = isset($event_args['event_author']) ? $event_args['event_author'] : get_current_user_id();
+
+			if ( ! $importevents->common->wpea_is_updatable( 'status' ) ) {
+				$formated_args['post_status'] = get_post_status( $is_exitsing_event );
+			}
+
 			return $this->create_event( $centralize_array, $formated_args, $event_args );
 		}
-
 	}
 
 	/**
@@ -137,19 +135,42 @@ class WP_Event_Aggregator_TEC {
 	 */
 	public function create_event( $centralize_array = array(), $formated_args = array(), $event_args = array() ) {
 		// Create event using TEC advanced functions.
-		global $importevents;
-		if( function_exists( 'tribe_events' ) ){
-			$new_event_id = tribe_events()->set_args( $formated_args )->create()->ID;
-		}else{
-			$new_event_id = tribe_create_event( $formated_args );
-		}
+		global $importevents ,$wpdb;
+	
+		$event_title   = isset( $centralize_array['name'] ) ? $centralize_array['name'] : '';
+		$event_content = isset( $centralize_array['description'] ) ? $centralize_array['description'] : '';
+		$event_status  = $formated_args['post_status'];
+		$event_author  = $formated_args['post_author'];
+		
+		$tec_event     = array(
+			'post_title'   => $event_title,
+			'post_content' => $event_content,
+			'post_status'  => $event_status,
+			'post_author'  => $event_author,
+			'post_type'    => $this->event_posttype,
+		);
+		
+		$new_event_id = wp_insert_post( $tec_event, true );
+
+
 		if ( $new_event_id ) {
+			
+			//update all metadata
+			$allmetas = $this->format_event_args_for_tec( $centralize_array );
+			if( !empty( $allmetas ) ){
+				foreach( $allmetas as $key => $value ){
+					if( !empty( $value ) ){
+						update_post_meta( $new_event_id, $key, $value );
+					}
+				}
+			}
+
 			update_post_meta( $new_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $new_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
 			update_post_meta( $new_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $new_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $new_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
-			
+
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
 			
@@ -170,7 +191,37 @@ class WP_Event_Aggregator_TEC {
 				$importevents->common->setup_featured_image_to_event( $new_event_id, $event_featured_image );
 			}
 
-			do_action( 'wpea_after_create_tec_'.$centralize_array["origin"].'_event', $new_event_id, $formated_args, $centralize_array );
+			//Insert in Custom Table 
+			$esource_id     = $centralize_array['ID'];
+			$start_time     = gmdate( 'Y-m-d H:i:s', $centralize_array['starttime_local'] );
+			$end_time       = gmdate( 'Y-m-d H:i:s', $centralize_array['endtime_local'] );
+			
+			if( $centralize_array['origin'] == 'ical' ){
+				$start_date_utc = $allmetas['_EventStartDateUTC'];
+				$end_date_utc   = $allmetas['_EventEndDateUTC'];
+			}else{
+				$start_date_utc = date( 'Y-m-d H:i:s', (int) $allmetas['_EventStartDateUTC'] );
+				$end_date_utc   = date( 'Y-m-d H:i:s', (int) $allmetas['_EventEndDateUTC'] );
+			}
+
+			$timezone       = isset( $allmetas['timezone'] ) ? $allmetas['timezone'] : 'UTC';
+			$duration       = 0;
+			$hash           = sha1( $new_event_id . $duration . $start_time . $end_time . $start_date_utc . $end_date_utc . $timezone );
+
+			// insert the $wpdb->prefix.tec_events table
+			$tetable_name   = $wpdb->prefix . 'tec_events';
+			$tedata         = array( 'post_id'   => $new_event_id, 'start_date' => $start_time, 'end_date'  => $end_time, 'timezone'  => $timezone, 'start_date_utc' => $start_date_utc, 'end_date_utc' => $end_date_utc );
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->insert( $tetable_name, $tedata );
+			$tec_e_id       = $wpdb->insert_id;
+
+			// Update the $wpdb->prefix.tec_occurrences table
+			$totable_name   = $wpdb->prefix . 'tec_occurrences';
+			$todata         = array( 'event_id' => $tec_e_id, 'post_id' => $new_event_id, 'start_date' => $start_time, 'start_date_utc' => $start_date_utc, 'end_date' => $end_time, 'end_date_utc' => $end_date_utc, 'hash' => $hash );
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->insert( $totable_name, $todata );
+
+			do_action( 'wpea_after_create_tec_' . $centralize_array['origin'] . '_event', $new_event_id, $formated_args, $centralize_array );
 			return array(
 				'status' => 'created',
 				'id' 	 => $new_event_id
@@ -194,28 +245,43 @@ class WP_Event_Aggregator_TEC {
 	 */
 	public function update_event( $event_id, $centralize_array, $formated_args = array(), $event_args = array() ) {
 		// Update event using TEC advanced functions.
-		global $importevents;
+		global $importevents, $wpdb;
 
-		if( function_exists( 'tribe_events' ) ){
-			$update_event_id = tribe_events()->where( 'id', $event_id )->set_args( $formated_args )->save();
-			$update_event_id = $event_id;
-		}else{
-			$update_event_id = tribe_update_event( $event_id, $formated_args );
-		}
+		$event_title   = isset( $centralize_array['name'] ) ? $centralize_array['name'] : '';
+		$event_content = isset( $centralize_array['description'] ) ? $centralize_array['description'] : '';
+		$event_status  = $formated_args['post_status'];
+		$event_author  = $formated_args['post_author'];
+		
+		$tec_event     = array(
+			'ID'           => $event_id,
+			'post_title'   => $event_title,
+			'post_content' => $event_content,
+			'post_status'  => $event_status,
+			'post_author'  => $event_author,
+			'post_type'    => $this->event_posttype,
+		);
+		
+		$update_event_id = wp_update_post( $tec_event, true );
+
 		if ( $update_event_id ) {
-			$start_time    = $centralize_array['starttime_local'];
-			$end_time      = $centralize_array['endtime_local'];
-			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 
-			update_post_meta( $update_event_id, '_EventStartDate',  date( 'Y-m-d H:i:s', $start_time ) );
-			update_post_meta( $update_event_id, '_EventEndDate', date( 'Y-m-d H:i:s', $end_time ) );
-			update_post_meta( $update_event_id, '_EventTimezone', $timezone_name );
+			//update all metadata
+			$allmetas = $this->format_event_args_for_tec( $centralize_array );
+			if( !empty( $allmetas ) ){
+				foreach( $allmetas as $key => $value ){
+					if( !empty( $value ) ){
+						update_post_meta( $update_event_id, $key, $value );
+					}
+				}
+			}
+
 			update_post_meta( $update_event_id, 'wpea_event_id',  $centralize_array['ID'] );
 			update_post_meta( $update_event_id, 'wpea_event_origin',  $event_args['import_origin'] );
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $update_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $update_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
 			
+			delete_post_meta( $update_event_id, '_tribe_is_classic_editor' );
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? (array) $event_args['event_cats'] : array();
 			if ( ! empty( $wpea_cats ) ) {
@@ -243,7 +309,38 @@ class WP_Event_Aggregator_TEC {
 				}
 			}
 
-			do_action( 'wpea_after_update_tec_'.$centralize_array["origin"].'_event', $update_event_id, $formated_args, $centralize_array );
+
+			//Update in Custom Table 
+			$esource_id     = $centralize_array['ID'];
+			$start_time     = gmdate( 'Y-m-d H:i:s', $centralize_array['starttime_local'] );
+			$end_time       = gmdate( 'Y-m-d H:i:s', $centralize_array['endtime_local'] );
+
+			if( $centralize_array['origin'] == 'ical' ){
+				$start_date_utc = $allmetas['_EventStartDateUTC'];
+				$end_date_utc   = $allmetas['_EventEndDateUTC'];
+			}else{
+				$start_date_utc = date( 'Y-m-d H:i:s', (int) $allmetas['_EventStartDateUTC'] );
+				$end_date_utc   = date( 'Y-m-d H:i:s', (int)$allmetas['_EventEndDateUTC'] );
+			}
+			
+			$timezone       = isset( $allmetas['timezone'] ) ? $allmetas['timezone'] : 'UTC';
+
+			// Update the $wpdb->prefix.tec_events table
+			$tetable_name   = $wpdb->prefix . 'tec_events';
+			$tedata         = array( 'start_date' => $start_time, 'end_date' => $end_time, 'timezone' => $timezone, 'start_date_utc' => $start_date_utc, 'end_date_utc' => $end_date_utc );
+			$where          = array( 'post_id' => $update_event_id );
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->update( $tetable_name, $tedata, $where );
+
+			//update the $wpdb->prefix.tec_occurrences table
+			$totable_name   = $wpdb->prefix . 'tec_occurrences';
+			$todata         = array( 'start_date' => $start_time, 'start_date_utc' => $start_date_utc, 'end_date' => $end_time, 'end_date_utc' => $end_date_utc  );
+			$where          = array( 'post_id' => $update_event_id );
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+			$wpdb->update( $totable_name, $todata, $where );
+
+
+			do_action( 'wpea_after_update_tec_' . $centralize_array['origin'] . '_event', $update_event_id, $formated_args, $centralize_array );
 			return array(
 				'status' => 'updated',
 				'id' 	 => $update_event_id
@@ -253,49 +350,6 @@ class WP_Event_Aggregator_TEC {
 			return;
 		}
 	}
-
-
-	/**
-	 * Format events arguments as per TEC ORM
-	 *
-	 * @since    1.0.0
-	 * @param array $centralize_array WP Events event.
-	 * @return array
-	 */
-	public function format_event_args_for_tec_orm( $centralize_array ) {
-
-		if ( empty( $centralize_array ) ) {
-			return;
-		}
-		$start_time    = $centralize_array['starttime_local'];
-		$end_time      = $centralize_array['endtime_local'];
-		$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
-		$event_args    = array(
-			'title'             => $centralize_array['name'],
-			'post_content'      => $centralize_array['description'],
-			'status'            => 'pending',
-			'url'               => $centralize_array['url'],
-			'timezone'          => $timezone_name,
-			'start_date'        => date( 'Y-m-d H:i:s', $start_time ),
-			'end_date'          => date( 'Y-m-d H:i:s', $end_time ),
-		);
-
-		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
-			$event_args['_EventAllDay'] = 'yes';
-		}
-
-		if ( array_key_exists( 'organizer', $centralize_array ) ) {
-			$organizer               = $this->get_organizer_args( $centralize_array['organizer'] );      
-			$event_args['organizer'] = $organizer['OrganizerID'];
-		}
-
-		if ( array_key_exists( 'location', $centralize_array ) ) {
-			$venue               = $this->get_venue_args( $centralize_array['location'] );
-			$event_args['venue'] = $venue['VenueID'];
-		}
-		return $event_args;
-	}
-
 
 	/**
 	 * Format events arguments as per TEC
@@ -309,42 +363,47 @@ class WP_Event_Aggregator_TEC {
 		if( empty( $centralize_array ) ){
 			return;
 		}
-		$start_time = $centralize_array['starttime_local'];
-		$end_time = $centralize_array['endtime_local'];
-		$event_args  = array(
-			'post_type'             => $this->event_posttype,
-			'post_title'            => $centralize_array['name'],
-			'post_status'           => 'pending',
-			'post_content'          => $centralize_array['description'],
-			'EventStartDate'        => date( 'Y-m-d', $start_time ),
-			'EventStartHour'        => date( 'h', $start_time ),
-			'EventStartMinute'      => date( 'i', $start_time ),
-			'EventStartMeridian'    => date( 'a', $start_time ),
-			'EventEndDate'          => date( 'Y-m-d', $end_time ),
-			'EventEndHour'          => date( 'h', $end_time ),
-			'EventEndMinute'        => date( 'i', $end_time ),
-			'EventEndMeridian'      => date( 'a', $end_time ),
-			'EventStartDateUTC'     => !empty( $centralize_array['startime_utc'] ) ? date( 'Y-m-d H:i:s', $centralize_array['startime_utc'] ) : '',
-			'EventEndDateUTC'       => !empty( $centralize_array['endtime_utc'] ) ? date( 'Y-m-d H:i:s', $centralize_array['endtime_utc'] ) : '',
-			'EventURL'              => $centralize_array['url'],
-			'EventShowMap' 			=> 1,
-			'EventShowMapLink'		=> 1,
+		$start_time      = $centralize_array['starttime_local'];
+		$end_time        = $centralize_array['endtime_local'];
+		$timezone        = isset( $centralize_array['timezone'] ) ? sanitize_text_field( $centralize_array['timezone'] ) : 'UTC';
+		$timezone_name   = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
+		$esource_url     = isset( $centralize_array['url'] ) ? esc_url( $centralize_array['url'] ) : '';
+		$esource_id      = $centralize_array['ID'];
+		$start_time_utc = isset( $centralize_array['startime_utc'] ) ? gmdate( 'Y-m-d H:i:s', (int) $centralize_array['startime_utc'] ) : '';
+		$end_time_utc    = isset( $centralize_array['endtime_utc'] ) ? gmdate( 'Y-m-d H:i:s', (int) $centralize_array['endtime_utc'] ) : '';
+
+		$event_args = array(
+			'_EventStartDate'         => gmdate( 'Y-m-d H:i:s', $start_time ),
+			'_EventStartHour'         => gmdate( 'h', $start_time ),
+			'_EventStartMinute'       => gmdate( 'i', $start_time ),
+			'_EventStartMeridian'     => gmdate( 'a', $start_time ),
+			'_EventEndDate'           => gmdate( 'Y-m-d H:i:s', $end_time ),
+			'_EventEndHour'           => gmdate( 'h', $end_time ),
+			'_EventEndMinute'         => gmdate( 'i', $end_time ),
+			'_EventEndMeridian'       => gmdate( 'a', $end_time ),
+			'_EventStartDateUTC'      => !empty( $start_time_utc ) ? gmdate( 'Y-m-d H:i:s', (int) $start_time_utc ) : '',
+			'_EventEndDateUTC'        => !empty( $end_time_utc ) ? gmdate( 'Y-m-d H:i:s', (int) $end_time_utc ) : '',
+			'_EventURL'               => $centralize_array['url'],
+			'_EventShowMap'           => 1,
+			'_EventShowMapLink'       => 1,
+			'_EventTimezone'          => $timezone_name,
+			'wpea_event_timezone'      => $timezone,
+			'wpea_event_link'          => $esource_url,
+			'wpea_event_timezone_name' => $timezone_name,
 		);
 
 		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
 			$event_args['_EventAllDay']      = 'yes';
 		}
-		
-		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){
-			$event_args['EventAllDay'] = 'yes';
-		}
 
 		if ( array_key_exists( 'organizer', $centralize_array ) ) {
-			$event_args['organizer'] = $this->get_organizer_args( $centralize_array['organizer'] );
+			$get_organizer = $this->get_organizer_args( $centralize_array['organizer'] );
+			$event_args['_EventOrganizerID'] = $get_organizer['OrganizerID'];
 		}
 
 		if ( array_key_exists( 'location', $centralize_array ) ) {
-			$event_args['venue'] = $this->get_venue_args( $centralize_array['location'] );
+			$get_location = $this->get_venue_args( $centralize_array['location'] );
+			$event_args['_EventVenueID'] = $get_location['VenueID'];
 		}
 		return $event_args;
 	}
