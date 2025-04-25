@@ -112,6 +112,15 @@ class WP_Event_Aggregator_My_Calendar {
 			//Event ID
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 
+			$wpea_options       = get_option( WPEA_OPTIONS );
+			$is_import_ical_cat = isset( $wpea_options['ical']['ical_cat_import'] ) ? $wpea_options['ical']['ical_cat_import'] : 'no';
+			$ical_categories    = isset( $centralize_array['ical_categories'] ) ? $centralize_array['ical_categories'] : '';
+			if( !empty( $ical_categories ) && $is_import_ical_cat == 'yes' ){
+				$ical_cats      = explode( ',', $ical_categories );
+				$event_cat_ids  = $importevents->common->wepa_create_update_ical_categories( $ical_cats, $this->taxonomy );
+				$event_args['event_cats']  = array_merge( $event_args['event_cats'], $event_cat_ids );
+			}
+
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			if ( ! empty( $wpea_cats ) ) {
@@ -327,10 +336,26 @@ class WP_Event_Aggregator_My_Calendar {
 
 			if( $db_event_id > 0 && is_numeric( $db_event_id ) && !empty( $db_event_id ) ){
 				
-				if ( !$importevents->common->wpea_is_updatable('category') ){
+				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )){
 					$cat_id = $wpdb->get_var( "SELECT `event_category` FROM ".my_calendar_table()." WHERE `event_id`=". absint( $db_event_id ) );
 					if( $cat_id ){
 						$event_data['event_category'] = $cat_id;
+					}
+					
+					$selected_categories = $event_args['event_cats'];
+					foreach( $selected_categories as $select_cat ){
+						$cat_is_exist_id = $wpdb->get_var( "SELECT `category_id` FROM ".my_calendar_categories_table()." WHERE `category_term`=". absint( $select_cat ) );
+						if( empty( $cat_is_exist_id ) ){
+							$cat_name = get_the_category_by_ID( $select_cat );
+							$catsql       = "INSERT INTO " . my_calendar_categories_table() . " ( `category_name`, `category_color`, `category_icon`, `category_private`, `category_term`) VALUES ( '$cat_name', '', '', '0', '0');";
+							$cats_results = $wpdb->query( $wpdb->prepare( $catsql ) );
+						}
+
+						$relationship_exists = $wpdb->get_var( $wpdb->prepare( "SELECT `relationship_id` FROM " . my_calendar_category_relationships_table() . " WHERE `event_id` = %d AND `category_id` = %d", $db_event_id, $cat_is_exist_id ) );
+						if ( empty( $relationship_exists ) ) {
+							$wpdb->insert( my_calendar_category_relationships_table(), [ 'event_id'    => $db_event_id, 'category_id' => $cat_is_exist_id, ], [ '%d', '%d' ] );
+						}
+
 					}
 				}
 				

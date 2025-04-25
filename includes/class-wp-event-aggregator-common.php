@@ -1233,6 +1233,23 @@ class WP_Event_Aggregator_Common {
 		return $post_description;
 	}
 
+	public function wepa_create_update_ical_categories( $ical_cateories = array(), $source_taxonomy ){
+
+		$event_cat_ids  = [];
+		foreach ( $ical_cateories as $category_name ) {
+			$term = term_exists( $category_name, $source_taxonomy );
+			if( $term && isset($term['term_id'] ) ) {
+				$event_cat_ids[] = (int) $term['term_id'];
+			} else {
+				$new_term = wp_insert_term( $category_name, $source_taxonomy );
+				if (!is_wp_error($new_term) && isset($new_term['term_id'])) {
+					$event_cat_ids[] = (int) $new_term['term_id'];
+				}
+			}
+		}
+		return $event_cat_ids;
+
+	}
 }
 
 
