@@ -122,6 +122,14 @@ class WP_Event_Aggregator_EE4 {
 			//Event ID
 			update_post_meta( $inserted_event_id, 'wpea_event_id', $centralize_array['ID'] );
 			
+			$wpea_options       = get_option( WPEA_OPTIONS );
+			$is_import_ical_cat = isset( $wpea_options['ical']['ical_cat_import'] ) ? $wpea_options['ical']['ical_cat_import'] : 'no';
+			$ical_categories    = isset( $centralize_array['ical_categories'] ) ? $centralize_array['ical_categories'] : '';
+			if( !empty( $ical_categories ) && $is_import_ical_cat == 'yes' ){
+				$ical_cats      = explode( ',', $ical_categories );
+				$event_cat_ids  = $importevents->common->wepa_create_update_ical_categories( $ical_cats, $this->taxonomy );
+				$event_args['event_cats']  = array_merge( $event_args['event_cats'], $event_cat_ids );
+			}
 
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();

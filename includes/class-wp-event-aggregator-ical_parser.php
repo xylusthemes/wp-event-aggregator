@@ -265,8 +265,14 @@ class WP_Event_Aggregator_Ical_Parser {
 		//$x_start_time = strtotime( end( $x_start_str ) );
 		//$x_start_str  = $this->convert_date_to_according_timezone( end( $x_start_str ), $system_timezone, $timezone );
 		$x_end_str = $event->getXprop( Vcalendar::X_CURRENT_DTEND );
-		$x_end_str = end( $x_end_str );
-		if( $x_end_str == '' ){
+		if ( is_array( $x_end_str ) ) {
+			$x_end_str = end( $x_end_str );
+		} else {
+			$x_end_str = null;
+		}
+
+		// Fallback to start date if end is empty
+		if ( empty( $x_end_str ) ) {
 			$x_end_str = end( $x_start_str );
 		}
 		$x_end_time = strtotime( $this->convert_datetime_to_timezone_wise_datetime( $x_end_str ,$force_timezone ) );
@@ -297,6 +303,12 @@ class WP_Event_Aggregator_Ical_Parser {
                     }
                 }
 			}		
+		}
+
+		//Get iCal Categories
+		$ical_cats = $event->getCategories();
+		if( empty( $ical_cats ) ){
+			$ical_cats = '';
 		}
 
 		$event_image = '';
@@ -350,6 +362,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'is_all_day'      => $is_all_day,
 			'url'             => $url,
 			'image_url'       => $event_image,
+			'ical_categories' => $ical_cats,
 		);
 
 		$oraganizer_data = null;
@@ -386,7 +399,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		}		
 		
 		if( $oraganizer_data['email'] == 'noreply@facebookmail_com' ){
-			$oraganizer_data['email'] = 'noreply@facebookmail.com';
+			$oraganizer_data['email'] = '';
 		}
 		
 		$xt_event['organizer'] = $oraganizer_data;
