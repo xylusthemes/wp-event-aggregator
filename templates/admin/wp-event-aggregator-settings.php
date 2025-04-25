@@ -523,6 +523,21 @@ if( is_object( $meetup_authorized_user ) ){
                             <?php 
                             do_action( 'wpea_admin_settings_start' );
                             ?>
+
+                            <tr>
+                                <th scope="row">
+                                    <?php _e( 'Move past events in trash', 'wp-event-aggregator' ); ?> : 
+                                </th>
+                                <td>
+                                    <?php
+                                    $wpea_move_peit = isset( $aggregator_options['move_peit'] ) ? $aggregator_options['move_peit'] : 'no';
+                                    ?>
+                                    <input type="checkbox" name="wpea[move_peit]" value="yes" <?php if ( $wpea_move_peit == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <span class="wpea_small">
+                                        <?php _e( 'Check to move past events in the trash, Automatically move events to the trash 24 hours after their end date using wp-cron. This runs once daily in the background.', 'wp-event-aggregator' ); ?>
+                                    </span>
+                                </td>
+                            </tr>
                             
                             <tr>
                                 <th scope="row">
