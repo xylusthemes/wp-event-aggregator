@@ -299,6 +299,12 @@ class WP_Event_Aggregator_Ical_Parser {
 			}		
 		}
 
+		//Get iCal Categories
+		$ical_cats = $event->getCategories();
+		if( empty( $ical_cats ) ){
+			$ical_cats = '';
+		}
+
 		$event_image = '';
 		$event_venue = null;
 		$ical_attachment = $event->getAttach( true, true );
@@ -350,6 +356,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			'is_all_day'      => $is_all_day,
 			'url'             => $url,
 			'image_url'       => $event_image,
+			'ical_categories' => $ical_cats,
 		);
 
 		$oraganizer_data = null;
@@ -386,7 +393,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		}		
 		
 		if( $oraganizer_data['email'] == 'noreply@facebookmail_com' ){
-			$oraganizer_data['email'] = 'noreply@facebookmail.com';
+			$oraganizer_data['email'] = '';
 		}
 		
 		$xt_event['organizer'] = $oraganizer_data;
