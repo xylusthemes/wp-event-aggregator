@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-25T05:45:21+00:00\n"
+"POT-Creation-Date: 2025-04-25T05:47:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: wp-event-aggregator.php
 #: includes/class-wp-event-aggregator-admin.php:57
 #: includes/class-wp-event-aggregator-admin.php:118
-#: includes/class-wp-event-aggregator-common.php:214
+#: includes/class-wp-event-aggregator-common.php:220
 #: includes/class-wpea-plugin-deactivation.php:38
 msgid "WP Event Aggregator"
 msgstr ""
@@ -459,7 +459,7 @@ msgstr ""
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1390
+#: includes/class-wp-event-aggregator-common.php:1419
 msgid "Buy Tickets"
 msgstr ""
 
