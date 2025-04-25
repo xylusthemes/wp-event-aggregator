@@ -3,7 +3,7 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
- * Version:           1.8.2
+ * Version:           1.8.3
  * Author:            Xylus Themes
  * Author URL:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -98,14 +98,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.2' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.3' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.2' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.3' ); }
 
 
 	/**
@@ -119,7 +119,7 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.8.2' );
+			define( 'WPEA_VERSION', '1.8.3' );
 		}
 
 		// Minimum Pro plugin version.
@@ -234,7 +234,15 @@ class WP_Event_Aggregator{
 				esc_html__( 'Docs', 'wp-event-aggregator' )
 			),
 		);
-		return array_merge( $links, $wpea_setting_doc_link );
+		$upgrade_to_pro = array();
+		if( !wpea_is_pro() ){
+			$upgrade_to_pro = array( 'wpea-event-pro-link' => sprintf(
+				'<a href="%s" target="_blank" style="color:#1da867;font-weight: 900;">%s</a>',
+				esc_url( 'https://xylusthemes.com/plugins/wp-event-aggregator/' ),
+				esc_html__( 'Upgrade to Pro', 'wp-event-aggregator' )
+			) ) ;
+		}
+		return array_merge( $links, $wpea_setting_doc_link, $upgrade_to_pro );
 	}
 
 	/**

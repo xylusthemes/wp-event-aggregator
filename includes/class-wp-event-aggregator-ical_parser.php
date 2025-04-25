@@ -393,7 +393,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		}		
 		
 		if( $oraganizer_data['email'] == 'noreply@facebookmail_com' ){
-			$oraganizer_data['email'] = 'noreply@facebookmail.com';
+			$oraganizer_data['email'] = '';
 		}
 		
 		$xt_event['organizer'] = $oraganizer_data;

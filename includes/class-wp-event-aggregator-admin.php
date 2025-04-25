@@ -33,6 +33,8 @@ class WP_Event_Aggregator_Admin {
 
 		add_action( 'init', array( $this, 'register_scheduled_import_cpt' ) );
 		add_action( 'init', array( $this, 'register_history_cpt' ) );
+		add_action( 'admin_init', array( $this, 'wpea_check_delete_pst_event_cron_status' ) );
+		add_action( 'wpea_delete_past_events_cron', array( $this, 'wpea_delete_past_events' ) );
 		add_action( 'admin_menu', array( $this, 'add_menu_pages') );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts') );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles') );
@@ -393,7 +395,7 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function add_event_aggregator_credit( $footer_text ){
-		$page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		$page = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( $_GET['page'] ) ) : '';
 		if ( $page != '' && $page == 'import_events' ) {
 			$rate_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
 
@@ -470,9 +472,9 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function get_selected_tab_submenu( $submenu_file ){
-		if( !empty( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) == 'import_events' ){
+		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){
 			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'shortcodes', 'support' );
-			$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'eventbrite';
+			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( $_GET['tab'] ) ) : 'eventbrite';
 			if( in_array( $tab, $allowed_tabs ) ){
 				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
 			}
@@ -580,5 +582,56 @@ class WP_Event_Aggregator_Admin {
 				$wpea_errors[] = esc_html__( 'Something went wrong during authorization. Please try again.', 'wp-event-aggregator' );
 			}			
 		}
+	}
+
+	/**
+	 * Render Delete Past Event in the wp_events post type
+	 * @return void
+	 */
+	public function wpea_delete_past_events() {
+
+		$current_time = current_time('timestamp');
+		$args         = array(
+			'post_type'       => 'wp_events',
+			'posts_per_page'  => 100,
+			'post_status'     => 'publish',
+			'fields'          => 'ids',
+			'meta_query'      => array(
+				array(
+					'key'     => 'end_ts',
+					'value'   => current_time( 'timestamp' ) - ( 24 * 3600 ),
+					'compare' => '<',      
+					'type'    => 'NUMERIC',
+				),
+			),
+		);
+		$events = get_posts( $args );
+
+		if ( empty( $events ) ) {
+			return;
+		}
+
+		foreach ( $events as $event_id ) {
+			wp_trash_post( $event_id );
+		}
+	}
+
+	/**
+	 * re-create if the past event cron is delete
+	 */
+	public function wpea_check_delete_pst_event_cron_status(){
+
+		$wpea_options        = get_option( WPEA_OPTIONS );
+		$move_peit_ieevents = isset( $wpea_options['wpea']['move_peit'] ) ? $wpea_options['wpea']['move_peit'] : 'no';
+		if ( $move_peit_ieevents == 'yes' ) {
+			if ( !wp_next_scheduled( 'wpea_delete_past_events_cron' ) ) {
+				wp_schedule_event( time(), 'daily', 'wpea_delete_past_events_cron' );
+			}
+		}else{
+			if ( wp_next_scheduled( 'wpea_delete_past_events_cron' ) ) {
+				wp_clear_scheduled_hook( 'wpea_delete_past_events_cron' );
+			}
+		}
+
 	}
 }

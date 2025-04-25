@@ -57,7 +57,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 		global $importevents;
 		$wpea_url_delete_args = array(
-			'page'   => sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
+			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ),
 			'wpea_action' => 'wpea_simport_delete',
 			'import_id'  => absint( $item['ID'] ),
 		);
@@ -118,7 +118,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function column_action( $item ) {
 
 		$xtmi_run_import_args = array(
-			'page'   => sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
+			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ),
 			'wpea_action' => 'wpea_run_import',
 			'import_id'  => $item['ID'],
 		);
@@ -183,6 +183,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		 'import_status'   => __( 'Import Event Status', 'wp-event-aggregator' ),
 		 'import_category'   => __( 'Import Category', 'wp-event-aggregator' ),
 		 'import_frequency'   => __( 'Import Frequency', 'wp-event-aggregator' ),
+		 'next_run'   => __( 'Next Run', 'wp-event-aggregator' ),
 		 'action'   => __( 'Action', 'wp-event-aggregator' ),
 		);
 		return $columns;
@@ -293,6 +294,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		}
 		$importdata_query = new WP_Query( $query_args );
 		$scheduled_import_data['total_records'] = ( $importdata_query->found_posts ) ? (int) $importdata_query->found_posts : 0;
+		$next_run_times = $this->get_wpea_next_run_times();
 		// The Loop.
 		if ( $importdata_query->have_posts() ) {
 			while ( $importdata_query->have_posts() ) {
@@ -374,12 +376,28 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 
 				$totalimport = $wpdb->get_var( $totalimport_query );
 
+				$next_run = '-';
+				if(isset($next_run_times[$import_id]) && !empty($next_run_times[$import_id])){
+					$next_time = $next_run_times[$import_id];
+					$next_run = sprintf( '%s (%s)',
+						esc_html( get_date_from_gmt( date( 'Y-m-d H:i:s', $next_time ), 'Y-m-d H:i:s' ) ),
+						esc_html( human_time_diff( current_time( 'timestamp', true ), $next_time ) )
+					);
+				}
+
+				if( $next_run == '-' ){
+					if ( function_exists( 'wpea_recreate_missng_scheduled_import' ) ) {
+						$importevents->common_pro->wpea_recreate_missng_scheduled_import($import_id);
+					}
+				}
+
 				$scheduled_import = array(
 					'ID' => $import_id,
 					'title' => $import_title,
 					'import_status'   => ucfirst( $import_status ),
 					'import_category' => implode( ', ', $term_names ),
 					'import_frequency'=> isset( $import_data['import_frequency'] ) ? ucfirst( $import_data['import_frequency'] ) : '',
+					'next_run'        => $next_run,
 					'import_origin'   => $import_origin,
 					'import_into'     => $import_plugin,
 					'last_import'     => $last_import_history_date,
@@ -396,6 +414,47 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		// Restore original Post Data.
 		wp_reset_postdata();
 		return $scheduled_import_data;
+	}
+
+	/**
+	 * Get WPEA crons.
+	 *
+	 * @return Array
+	 */
+	function get_wpea_crons(){
+		$crons = array();
+		if(function_exists('_get_cron_array') ){
+			$crons = _get_cron_array();
+		}
+		$wpea_scheduled = array_filter($crons, function($cron) {
+			$cron_name = array_keys($cron) ? array_keys($cron)[0] : '';
+			if (strpos($cron_name, 'xt_run_scheduled_import') !== false) {
+				return true;
+			}
+			return false;
+		});
+		return $wpea_scheduled;
+	}
+
+
+	/**
+	 * Get Next run time array for schdeuled import.
+	 *
+	 * @return Array
+	 */
+	function get_wpea_next_run_times(){
+		$next_runs = array();
+		$crons  = $this->get_wpea_crons();
+		foreach($crons as $time => $cron){
+			foreach($cron as $cron_name){
+				foreach($cron_name as $cron_post_id){
+					if( isset($cron_post_id['args']) && isset($cron_post_id['args']['post_id']) ){
+						$next_runs[$cron_post_id['args']['post_id']] = $time;
+					}
+				}
+			}
+		}
+		return $next_runs;
 	}
 }
 
@@ -441,8 +500,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 
 		$wpea_url_delete_args = array(
-			'page'   => sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
-			'tab'   => sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ),
+			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ),
+			'tab'    => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ),
 			'wpea_action' => 'wpea_history_delete',
 			'history_id'  => absint( $item['ID'] ),
 		);
@@ -574,8 +633,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 			return;
 		}	
 		$wpea_url_all_delete_args = array(
-			'page'       => wp_unslash( $_REQUEST['page'] ),
-			'tab'        => wp_unslash( $_REQUEST['tab'] ),
+			'page'       => esc_attr( wp_unslash( $_REQUEST['page'] ) ),
+			'tab'        => esc_attr( wp_unslash( $_REQUEST['tab'] ) ),
 			'wpea_action' => 'wpea_all_history_delete',
 		);
 
