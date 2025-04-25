@@ -506,6 +506,30 @@ if( is_object( $meetup_authorized_user ) ){
                                     <?php do_action( 'wpea_render_pro_notice' ); ?>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <th scope="row">
+                                    <?php _e( 'Import iCal Category', 'wp-event-aggregator' ); ?> : 
+                                </th>
+                                <td>
+                                    <?php 
+                                    if( wpea_is_pro() ){
+                                        $advanced_sync = isset( $ical_options['ical_cat_import'] ) ? $ical_options['ical_cat_import'] : 'no';
+                                        ?>
+                                        <input type="checkbox" name="ical[ical_cat_import]" value="yes" <?php if( $advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                        <?php
+                                    }else{
+                                        ?>
+                                        <input type="checkbox" name="" disabled="disabled" />
+                                        <?php
+                                    }
+                                    ?>
+                                    <span class="wpea_small">
+                                        <?php _e( 'Check to enable importing the iCal category, this will import and assign the iCal category to the events.', 'wp-event-aggregator' ); ?>
+                                    </span>
+                                    <?php do_action( 'wpea_render_pro_notice' ); ?>
+                                </td>
+                            </tr>
                         
                         </tbody>
                     </table>
@@ -523,6 +547,21 @@ if( is_object( $meetup_authorized_user ) ){
                             <?php 
                             do_action( 'wpea_admin_settings_start' );
                             ?>
+
+                            <tr>
+                                <th scope="row">
+                                    <?php _e( 'Move past events in trash', 'wp-event-aggregator' ); ?> : 
+                                </th>
+                                <td>
+                                    <?php
+                                    $wpea_move_peit = isset( $aggregator_options['move_peit'] ) ? $aggregator_options['move_peit'] : 'no';
+                                    ?>
+                                    <input type="checkbox" name="wpea[move_peit]" value="yes" <?php if ( $wpea_move_peit == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <span class="wpea_small">
+                                        <?php _e( 'Check to move past events in the trash, Automatically move events to the trash 24 hours after their end date using wp-cron. This runs once daily in the background.', 'wp-event-aggregator' ); ?>
+                                    </span>
+                                </td>
+                            </tr>
                             
                             <tr>
                                 <th scope="row">
