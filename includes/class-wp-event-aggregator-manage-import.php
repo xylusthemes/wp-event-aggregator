@@ -117,8 +117,8 @@ class WP_Event_Aggregator_Manage_Import {
 		global $wpea_success_msg;
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_simport_delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_delete_import_nonce') ) {
 			$import_id = $_GET['import_id'];
-			$page = isset($_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'import_events';
-			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'scheduled';
+			$page = isset($_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : 'import_events';
+			$tab = isset($_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'scheduled';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $import_id > 0 ) {
 				$post_type = get_post_type( $import_id );
@@ -133,8 +133,8 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_history_delete' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_delete_history_nonce' ) ) {
 			$history_id = (int)sanitize_text_field( wp_unslash( $_GET['history_id'] ) );
-			$page = isset($_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'import_events';
-			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'history';
+			$page = isset($_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : 'import_events';
+			$tab = isset($_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'history';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $history_id > 0 ) {
 				wp_delete_post( $history_id, true );
@@ -146,8 +146,8 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] == 'wpea_run_import' && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'wpea_run_import_nonce') ) {
 			$import_id = (int)$_GET['import_id'];
-			$page = isset($_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'import_events';
-			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'scheduled';
+			$page = isset($_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : 'import_events';
+			$tab = isset($_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'scheduled';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $import_id > 0 ) {
 				do_action( 'xt_run_scheduled_import', $import_id );
@@ -160,7 +160,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$is_bulk_delete = ( ( isset( $_GET['action'] ) && sanitize_text_field( wp_unslash( $_GET['action'] ) ) == 'delete' ) || ( isset( $_GET['action2'] ) && sanitize_text_field( wp_unslash( $_GET['action2'] ) ) == 'delete' ) );
 
 		if ( $is_bulk_delete && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-xt_scheduled_imports') ) {
-			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'scheduled';
+			$tab = isset($_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'scheduled';
 			$wp_redirect = get_site_url() . urldecode( sanitize_text_field( $_REQUEST['_wp_http_referer'] ) );
         	$delete_ids = array_map( 'sanitize_text_field', $_REQUEST['xt_scheduled_import'] );
         	if( !empty( $delete_ids ) ){
@@ -178,7 +178,7 @@ class WP_Event_Aggregator_Manage_Import {
 		}
 
 		if ( $is_bulk_delete && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'bulk-import_histories') ) {
-			$tab = isset($_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'history';
+			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'history';
 			$wp_redirect = get_site_url() . urldecode( sanitize_text_field( $_REQUEST['_wp_http_referer'] ) );        	$delete_ids = array_map( 'sanitize_text_field', $_REQUEST['import_history'] );
         	if( !empty( $delete_ids ) ){
         		foreach ($delete_ids as $delete_id ) {
@@ -192,8 +192,8 @@ class WP_Event_Aggregator_Manage_Import {
 
 		// Delete All History Data 
 		if ( isset( $_GET['wpea_action'] ) && $_GET['wpea_action'] === 'wpea_all_history_delete' && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'wpea_delete_all_history_nonce' ) ) {
-			$page        = isset( $_GET['page'] ) ? $_GET['page'] : 'import_events';
-			$tab         = isset( $_GET['tab'] ) ? $_GET['tab'] : 'history';
+			$page        = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : 'import_events';
+			$tab         = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'history';
 			$wp_redirect = admin_url( 'admin.php?page=' . $page );
 			$delete_ids  = get_posts( array( 'numberposts' => -1,'fields' => 'ids', 'post_type' => 'wpea_import_history' ) );
 
