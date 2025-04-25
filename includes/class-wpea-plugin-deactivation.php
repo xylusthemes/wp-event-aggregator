@@ -93,10 +93,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
             $client_id = $credentials->client_id;
             $client_secret = $credentials->client_secret;
             $customer_email = $user->user_email;
-            $customer_name = $user->display_name;
-            if(empty($customer_name)){
-                $customer_name = $user->user_firstname. ' '.$user->user_lastname;
-            }
+            $customer_name = $user->user_firstname. ' '.$user->user_lastname;
             $deactivation_reason = sanitize_text_field( $_REQUEST['reason'] );
             $deactivation_reason_message = $this->get_deactivation_reasons()[$deactivation_reason];
             $customer_query = sanitize_text_field( $_REQUEST['customerQuery'] );
@@ -194,7 +191,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                                     }
                                 },
                                 {
-                                    text: "<?php _e('Skip', 'wp-event-aggregator' ); ?>",
+                                    text: "<?php _e('Skip & Deactivate', 'wp-event-aggregator' ); ?>",
                                     class: 'button',
                                     click: function() {
                                         jQuery( this ).dialog( "close" );
@@ -254,8 +251,14 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                 display : none;
             }
 			</style>
-            <div id="<?php echo $this->slug; ?>-deactivate-dialog">
-                <h3><?php _e('Please let us know why you are deactivating:', 'wp-event-aggregator'); ?></h3>
+            <div id="<?php echo $this->slug; ?>-deactivate-dialog" style="overflow: hidden;">
+                <div class="ui-dialog-headerbar" >
+                    <div>
+                        <h2 style="margin: 5px 0 15px 0;"><?php esc_html_e('Quick Feedback', 'wp-event-aggregator'); ?></h2>
+                    </div>
+                </div>               
+                <div style="border-top: 1px solid #dcdcde;"></div>
+                <h3 style="font-size: 15px;" ><?php esc_html_e('Could you please share why you are deactivating WP Event Aggregator plugin ?', 'wp-event-aggregator'); ?></h3>
                 <form method="post" action="" id="<?php echo $this->prefix; ?>deactivatation_form">
                     <div>
                     <?php
@@ -269,6 +272,11 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                         <?php } ?>
                         <br>
                         <textarea id="<?php echo $this->prefix; ?>customer_query" name="<?php echo $this->prefix; ?>customer_query" rows="4" placeholder="<?php _e('Write your query here', 'wp-event-aggregator'); ?>"></textarea>
+                    </div>
+                    <div style="text-align: center;">
+                        <p style="font-size: 12px;margin: 2px 0 -10px 0;">
+                            <?php echo esc_attr__( '* By submitting this form, you will also be sending us your email address &amp; website URL.', 'wp-event-aggregator' ); ?>
+                        </p>
                     </div>
                 </form>
 				<div class="<?php echo $this->prefix; ?>deactivatation_loading" style="width: 100%;text-align: center; display:none;">
