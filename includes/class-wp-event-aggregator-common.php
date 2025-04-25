@@ -26,6 +26,7 @@ class WP_Event_Aggregator_Common {
 		add_action( 'wpea_render_pro_notice', array( $this, 'render_pro_notice') );
 		add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
 		add_action( 'admin_init', array( $this, 'wpea_check_for_minimum_pro_version' ) );
+		add_action( 'ep_after_single_event_contant', array( $this, 'wpea_add_eventprime_add_ticket_section' ) );
 	}	
 
 	/**
@@ -191,6 +192,11 @@ class WP_Event_Aggregator_Common {
 		// check EventON.
 		if( class_exists( 'EventON' ) ){
 			$supported_plugins['eventon'] = __( 'EventON', 'wp-event-aggregator' );
+		}
+
+		// check EventPrime.
+		if ( class_exists( 'Eventprime_Event_Calendar_Management_Admin' ) ) {
+			$supported_plugins['eventprime'] = __( 'EventPrime', 'wp-event-aggregator' );
 		}
 
 		// check All in one Event Calendar
@@ -410,6 +416,29 @@ class WP_Event_Aggregator_Common {
 			}
 		}
 	}
+
+	/**
+	 * Add ticket section to Eventbrite event.
+	 *
+	 * @since    1.0.0
+	 */
+	public function wpea_add_eventprime_add_ticket_section() {
+		global $importevents;
+
+		$xt_post_type = $importevents->eventprime->get_event_posttype();
+		$event_id     = get_the_ID();
+		$event_origin = get_post_meta( $event_id, 'wpea_event_origin', true );
+		if ( $event_id > 0 && $event_origin == 'eventbrite' ) {
+			if ( ( $importevents->eventprime->get_event_posttype() == $xt_post_type ) ) {
+				$eventbrite_id = get_post_meta( $event_id, 'wpea_event_id', true );
+				if ( $eventbrite_id && $eventbrite_id > 0 && is_numeric( $eventbrite_id ) ) {
+					$ticket_section = $this->wpea_get_ticket_section( $eventbrite_id );
+					echo $ticket_section;
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Display Ticket Section after eventbrite events.
