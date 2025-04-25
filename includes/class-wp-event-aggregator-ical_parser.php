@@ -265,8 +265,14 @@ class WP_Event_Aggregator_Ical_Parser {
 		//$x_start_time = strtotime( end( $x_start_str ) );
 		//$x_start_str  = $this->convert_date_to_according_timezone( end( $x_start_str ), $system_timezone, $timezone );
 		$x_end_str = $event->getXprop( Vcalendar::X_CURRENT_DTEND );
-		$x_end_str = end( $x_end_str );
-		if( $x_end_str == '' ){
+		if ( is_array( $x_end_str ) ) {
+			$x_end_str = end( $x_end_str );
+		} else {
+			$x_end_str = null;
+		}
+
+		// Fallback to start date if end is empty
+		if ( empty( $x_end_str ) ) {
 			$x_end_str = end( $x_start_str );
 		}
 		$x_end_time = strtotime( $this->convert_datetime_to_timezone_wise_datetime( $x_end_str ,$force_timezone ) );
