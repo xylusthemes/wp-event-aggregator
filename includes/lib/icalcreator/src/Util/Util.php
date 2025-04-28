@@ -156,13 +156,13 @@ class Util
         static $ERR2 = '%s value %s not in range (%d-%d)';
         if( ! is_scalar( $value ) || ! ctype_digit( (string) $value )) {
             throw new InvalidArgumentException(
-                sprintf( $ERR1, $propName, var_export( $value, true ))
+                sprintf( $ERR1, $propName, var_export( $value, true )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
             );
         }
         if( ( ! is_null( $rangeMin ) && ( $rangeMin > $value )) ||
             ( ! is_null( $rangeMax )) && ( $rangeMax < $value )) {
             throw new InvalidArgumentException(
-                sprintf( $ERR2, $propName, $value, $rangeMin, $rangeMax )
+                sprintf( $ERR2, $propName, $value, $rangeMin, $rangeMax ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
 
@@ -183,10 +183,10 @@ class Util
         if( ! is_scalar( $value )) {
             throw new InvalidArgumentException(
                 sprintf(
-                    $ERR1,
-                    $propName,
-                    gettype( $value ),
-                    var_export( $value, true )
+                    $ERR1, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    $propName, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    gettype( $value ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    var_export( $value, true ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                 )
             );
         }
@@ -209,7 +209,7 @@ class Util
     ) {
         static $ERR = 'Invalid %s value : %s';
         if( ! in_array( strtoupper( $value ), $enumeration )) {
-            throw new InvalidArgumentException( sprintf( $ERR, $propName, var_export( $value, true )));
+            throw new InvalidArgumentException( sprintf( $ERR, $propName, var_export( $value, true ))); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
         }
     }
 }

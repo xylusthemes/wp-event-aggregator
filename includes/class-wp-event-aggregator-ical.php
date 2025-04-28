@@ -72,12 +72,12 @@ class WP_Event_Aggregator_Ical {
 	public function import_events_from_ics_content( $event_data = array(), $ics_content = '' ){
 		global $importevents, $wpea_errors;
 
-		error_reporting(0);
+		error_reporting(0); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting
 		// Set time and memory limit.
-		set_time_limit(0);
+		set_time_limit(0); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 		$xt_memory_limit = (int)str_replace( 'M', '',ini_get('memory_limit' ) );
 		if( $xt_memory_limit < 512 ){
-			ini_set('memory_limit', '512M');
+			ini_set('memory_limit', '512M'); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 		}
 
 		$imported_events = array();

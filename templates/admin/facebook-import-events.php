@@ -34,23 +34,10 @@ global $importevents;
 					        <td>
 					            <select name="facebook_import_by" id="facebook_import_by">
 			                    	<option value="facebook_event_id"><?php esc_attr_e( 'Facebook Event ID','wp-event-aggregator' ); ?></option>
-
 			                    	<option value="facebook_organization"><?php esc_attr_e( 'Facebook Page','wp-event-aggregator' ); ?></option>
-
-			                    	<?php 
-			                    	//if( wpea_is_pro() ){
-				                    //	if( $importevents->common->has_authorized_user_token() ){ ?>
-				                    		<!-- <option value="facebook_group"><?php //esc_attr_e( 'Facebook Group','wp-event-aggregator' ); ?></option> -->
-				                    	<?php //} 
-			                    	//} ?>
-
 			                    </select>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> (Import events from Facebook page).', 'wp-event-aggregator' ); ?>
-			                        <?php
-									//if( $importevents->common->has_authorized_user_token() ){
-									//_e( '<strong>3. Facebook Group</strong> (Import events from facebook group)', 'wp-event-aggregator' );
-									//} ?>
+			                        <?php echo wp_kses_post( __( 'Select Event source. <strong>1. by Facebook Event ID</strong>, <strong>2. Facebook Page</strong> (Import events from Facebook page).', 'wp-event-aggregator' ) ); ?>
 			                    </span>
 					        </td>
 					    </tr>
@@ -62,7 +49,7 @@ global $importevents;
 					    	<td>
 					    		<textarea name="facebook_event_ids" class="facebook_event_ids" rows="5" cols="50"></textarea>
 					    		<span class="wpea_small">
-			                        <?php _e( 'One event ID per line, (Eg. Event ID for https://www.facebook.com/events/123456789/ is "123456789").', 'wp-event-aggregator' ); ?>
+			                        <?php echo wp_kses_post( __( 'One event ID per line, (Eg. Event ID for https://www.facebook.com/events/123456789/ is "123456789").', 'wp-event-aggregator' ) ); ?>
 			                    </span>
 					    	</td>
 					    </tr>
@@ -74,24 +61,11 @@ global $importevents;
 					    	<td> 
 					    		<input class="wpea_text" class="facebook_page_username" type="text"  <?php if( wpea_is_pro() ){ echo 'name="facebook_page_username"'; }else{ echo 'disabled="disabled"'; } ?>/>
 			                    <span class="wpea_small">
-			                        <?php _e( ' Eg. username for https://www.facebook.com/xylusinfo/ is "xylusinfo".', 'wp-event-aggregator' ); ?>
+			                        <?php echo wp_kses_post( __( ' Eg. username for https://www.facebook.com/xylusinfo/ is "xylusinfo".', 'wp-event-aggregator' ) ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
 					    </tr>
-
-					    <!-- <tr class="facebook_group_wrapper" style="display: none;">
-					    	<th scope="row">
-					    		<?php //esc_attr_e( 'Facebook Group URL / Numeric ID to fetch events from', 'wp-event-aggregator' ); ?> : 
-					    	</th>
-					    	<td> 
-					    		<input class="wpea_text facebook_group" type="text" <?php //if( wpea_is_pro() ){ echo 'name="facebook_group_id"'; }else{ echo 'disabled="disabled"'; } ?> />
-			                    <span class="wpea_small">
-			                        <?php //_e( ' Eg.Input value for https://www.facebook.com/groups/123456789123456/ <br/>https://www.facebook.com/groups/123456789123456/ OR "123456789123456"', 'wp-event-aggregator' ); ?>
-			                    </span>
-			                    <?php //do_action( 'wpea_render_pro_notice' ); ?>
-					    	</td>
-					    </tr> -->
 
 					    <tr class="import_type_wrapper">
 					    	<th scope="row">
@@ -120,9 +94,9 @@ global $importevents;
 			<?php } elseif( $ntab == 'scheduled_import' ){
 				?>
 				<form id="scheduled-import" method="get">
-				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); ?>" />
-				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite' ?>" />
-				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
 				<?php
 				if( wpea_is_pro() ){
 					$listtable = new WP_Event_Aggregator_List_Table();

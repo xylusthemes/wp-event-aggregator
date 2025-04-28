@@ -237,7 +237,7 @@ trait TRIGGERtrait
                 break;
         } // end switch
         throw new InvalidArgumentException(
-            sprintf( self::$FMTERRPROPFMT, self::TRIGGER, var_export( $value, true ))
+            sprintf( self::$FMTERRPROPFMT, self::TRIGGER, var_export( $value, true )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
         );
     }
 

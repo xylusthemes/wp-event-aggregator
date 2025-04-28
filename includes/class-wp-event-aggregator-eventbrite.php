@@ -96,7 +96,11 @@ class WP_Event_Aggregator_Eventbrite {
 		}else{
 			if( $eventbrite_events['error'] == 'INVALID_AUTH' ){
 				$error_description =  str_replace( 'OAuth token', 'Private token', $eventbrite_events['error_description'] );
-				$wpea_errors[] = __( $error_description, 'wp-event-aggregator');
+				$wpea_errors[] = sprintf(
+					// translators: %s: The error description after the replacement of 'OAuth token' with 'Private token'.
+					__( 'Error: %s', 'wp-event-aggregator' ),
+					$error_description
+				);
 				return;
 			}
 			$wpea_errors[] = __( 'Something went wrong, please try again.', 'wp-event-aggregator');
@@ -130,7 +134,11 @@ class WP_Event_Aggregator_Eventbrite {
 				if( $eventbrite_id != '' ){
 
 					if( !is_numeric( $eventbrite_id ) ){
-						$wpea_errors[] = sprintf( esc_html__( 'Please provide valid Eventbrite event ID: %s.', 'wp-event-aggregator' ), $eventbrite_id ) ;
+						$wpea_errors[] = sprintf( 
+							// translators: %s: Eventbrite event ID
+							esc_html__( 'Please provide valid Eventbrite event ID: %s.', 'wp-event-aggregator' ), 
+							$eventbrite_id 
+						); 
 						continue;
 					}
 
@@ -138,8 +146,11 @@ class WP_Event_Aggregator_Eventbrite {
 				    $eventbrite_response = wp_remote_get( $eventbrite_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 
 					if ( is_wp_error( $eventbrite_response ) ) {
-
-						$wpea_errors[] = sprintf( esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), $eventbrite_id ) ;
+						$wpea_errors[] = sprintf( 
+							// translators: %s: Eventbrite event ID
+							esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), 
+							$eventbrite_id 
+						); 
 						continue;
 					}
 
@@ -152,10 +163,18 @@ class WP_Event_Aggregator_Eventbrite {
 
 						if( $eventbrite_event['error'] == 'INVALID_AUTH' ){
 							$error_description =  str_replace( 'OAuth token', 'Private token', $eventbrite_event['error_description'] );
-							$wpea_errors[] = __( $error_description, 'wp-event-aggregator');
+							$wpea_errors[] = sprintf(
+								// translators: %s: The error description after the replacement of 'OAuth token' with 'Private token'.
+								__( 'Error: %s', 'wp-event-aggregator' ),
+								$error_description
+							);
 							return;
 						}
-						$wpea_errors[] = sprintf( esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), $eventbrite_id ) ;
+						$wpea_errors[] = sprintf( 
+							// translators: %s: Eventbrite event ID
+							esc_html__( 'Something went wrong with Eventbrite event ID: %s, please try again.', 'wp-event-aggregator' ), 
+							$eventbrite_id
+						); 
 						continue;
 					}
 				}		
@@ -202,7 +221,7 @@ class WP_Event_Aggregator_Eventbrite {
 		$utc_offset = '';
 
 		if ( array_key_exists( 'start', $eventbrite_event ) ) {
-			$start_time = isset( $eventbrite_event['start']['local'] ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $eventbrite_event['start']['local'] ) ) : strtotime( date( 'Y-m-d H:i:s') );
+			$start_time = isset( $eventbrite_event['start']['local'] ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $eventbrite_event['start']['local'] ) ) : strtotime( gmdate( 'Y-m-d H:i:s') );
 			$start_time_utc = isset( $eventbrite_event['start']['utc'] ) ? strtotime( $importevents->common->convert_datetime_to_db_datetime( $eventbrite_event['start']['utc'] ) ) : '';
 			$utc_offset = $importevents->common->get_utc_offset( $eventbrite_event['start']['local'] );
 		}

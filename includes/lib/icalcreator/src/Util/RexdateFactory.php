@@ -44,7 +44,7 @@ use function is_array;
 use function reset;
 use function substr;
 use function usort;
-use function var_export;
+use function var_export; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
 /**
  * iCalcreator EXDATE/RDATE support class
@@ -188,10 +188,10 @@ class RexdateFactory
                 default:
                     throw new InvalidArgumentException(
                         sprintf(
-                            self::$REXDATEERR,
-                            Vcalendar::EXDATE,
-                            $eix,
-                            var_export( $theExdate, true )
+                            self::$REXDATEERR, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            Vcalendar::EXDATE, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            $eix, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            var_export( $theExdate, true ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                         )
                     );
                     break;
@@ -422,9 +422,9 @@ class RexdateFactory
                 default :
                     throw new InvalidArgumentException(
                         sprintf(
-                            self::$REXDATEERR,
-                            Vcalendar::RDATE, $rpix,
-                            var_export( $theRdate, true )
+                            self::$REXDATEERR, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            Vcalendar::RDATE, $rpix, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            var_export( $theRdate, true ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                         )
                     );
             } // end switch
@@ -509,10 +509,10 @@ class RexdateFactory
                 default :
                     throw new InvalidArgumentException(
                         sprintf(
-                            self::$REXDATEERR,
-                            Vcalendar::RDATE,
-                            $rpix,
-                            var_export( $rPeriod, true )
+                            self::$REXDATEERR, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            Vcalendar::RDATE, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            $rpix, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                            var_export( $rPeriod, true ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                         )
                     );
                     break;

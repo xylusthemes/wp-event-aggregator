@@ -179,12 +179,14 @@ class WP_Event_Aggregator_Aioec {
 				'start'   => $start_time,
 				'end' 	  => $end_time,
 			);
-
+// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_instances_table WHERE `post_id` = ".absint( $inserted_event_id ) );
 			if( $event_count > 0 && is_numeric( $event_count ) ){
 				$where = array( 'post_id' => absint( $inserted_event_id ) );
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->update( $this->event_instances_table , $event_array, $where );	
 			}else{
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->insert( $this->event_instances_table , $event_array );
 			}
 
@@ -285,12 +287,14 @@ class WP_Event_Aggregator_Aioec {
 			if( $lon != '' ){
 				$event_format[] = '%f';  // longitude
 			}
-
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$event_exist_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_db_table WHERE `post_id` = ".absint( $inserted_event_id ) );
 			if( $event_exist_count > 0 && is_numeric( $event_exist_count ) ){
 				$where = array( 'post_id' => absint( $inserted_event_id ) );
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->update( $this->event_db_table, $event_table_array, $where, $event_format );	
 			}else{
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->insert( $this->event_db_table, $event_table_array, $event_format );
 			}
 
@@ -336,7 +340,7 @@ class WP_Event_Aggregator_Aioec {
 	 */
 	function convert_datetime_to_local_datetime( $datetime, $local_timezone ) {
 		try {
-			$datetime2 = new DateTime( date('Y-m-d H:i:s', $datetime), new DateTimeZone( $local_timezone ) );
+			$datetime2 = new DateTime( gmdate('Y-m-d H:i:s', $datetime), new DateTimeZone( $local_timezone ) );
 			$datetime2->setTimezone(new DateTimeZone( 'UTC' ) );
 			return $datetime2->format( 'Y-m-d H:i:s' );
 		}

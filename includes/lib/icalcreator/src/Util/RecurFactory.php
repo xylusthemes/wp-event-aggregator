@@ -43,7 +43,7 @@ use function checkdate;
 use function count;
 use function ctype_alpha;
 use function ctype_digit;
-use function date;
+use function gmdate;
 use function end;
 use function explode;
 use function get_class;
@@ -61,7 +61,7 @@ use function strtoupper;
 use function substr;
 use function trim;
 use function usort;
-use function var_export;
+use function var_export; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
 /**
  * iCalcreator recur support class
@@ -406,7 +406,7 @@ class RecurFactory
                     break;
                 default :
                     throw new InvalidArgumentException(
-                        sprintf( $ERR, var_export( $ruleValue, true ))
+                        sprintf( $ERR, var_export( $ruleValue, true )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                     );
                     break;
             } // end switch
@@ -423,7 +423,7 @@ class RecurFactory
             RecurFactory2::assertRecur( $output );
         }
         catch( LogicException $e ) {
-            throw new InvalidArgumentException( $e->getMessage(), null, $e );
+            throw new InvalidArgumentException( $e->getMessage(), null, $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         return [ Util::$LCvalue => $output ] + $params;
     }
@@ -1386,7 +1386,7 @@ class RecurFactory
     private static function getWeekNumber( $hour, $min, $sec, $month, $day, $year )
     {
         static $UCW  = 'W'; // week number
-        return (int) date( $UCW, mktime( $hour, $min, $sec, $month, $day, $year ));
+        return (int) gmdate( $UCW, mktime( $hour, $min, $sec, $month, $day, $year ));
     }
 
     /**
@@ -1403,7 +1403,7 @@ class RecurFactory
     private static function getDaysInMonth( $hour, $min, $sec, $month, $day, $year )
     {
         static $LCT  = 't'; // number of days in month
-        return (int) date( $LCT, mktime( $hour, $min, $sec, $month, $day, $year ));
+        return (int) gmdate( $LCT, mktime( $hour, $min, $sec, $month, $day, $year ));
     }
 
     /**
@@ -1420,7 +1420,7 @@ class RecurFactory
     private static function getDayInWeek( $hour, $min, $sec, $month, $day, $year )
     {
         static $LCW  = 'w'; // day of week number
-        $dayNo = (int) date(
+        $dayNo = (int) gmdate(
             $LCW,
             mktime( $hour, $min, $sec, $month, $day, $year )
         );

@@ -37,7 +37,7 @@ global $importevents;
 			                    	<option value="organizer_id"><?php esc_attr_e( 'Organizer ID','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select Event source. 1. by Event ID, 2. by Oraganizer ID.', 'wp-event-aggregator' ); ?>
+			                        <?php esc_attr_e( 'Select Event source. 1. by Event ID, 2. by Oraganizer ID.', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>
@@ -60,11 +60,19 @@ global $importevents;
 					    		<?php }?>
 			                    <span class="wpea_small">
 			                        <?php 
-			                        if( wpea_is_pro() ){
-			                        	_e( 'Eventbrite Event IDs, one Event ID per line (Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>).', 'wp-event-aggregator' );
-			                        } else {
-			                        	_e( 'Insert Eventbrite event ID ( Eg. https://www.eventbrite.com/e/event-import-with-wordpress-<span class="borderall">12265498440</span>  ).', 'wp-event-aggregator' );
-			                        }
+			                        if ( wpea_is_pro() ) {
+										printf(
+											/* translators: %s: Example Eventbrite event ID */
+											esc_html__( 'Eventbrite Event IDs, one Event ID per line (Eg. https://www.eventbrite.com/e/event-import-with-wordpress-%s).', 'wp-event-aggregator' ),
+											'<span class="borderall">12265498440</span>'
+										);
+									} else {
+										printf(
+											/* translators: %s: Example Eventbrite event ID */
+											esc_html__( 'Insert Eventbrite event ID (Eg. https://www.eventbrite.com/e/event-import-with-wordpress-%s).', 'wp-event-aggregator' ),
+											'<span class="borderall">12265498440</span>'
+										);
+									}									
 			                        ?>
 			                    </span>
 					    	</td>
@@ -77,7 +85,13 @@ global $importevents;
 					    	<td>
 					    		<input class="wpea_text wpea_organizer_id" name="wpea_organizer_id" type="text" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled';} ?> />
 			                    <span class="wpea_small">
-			                        <?php _e( 'Insert Eventbrite Organizer ID (Eg. https://www.eventbrite.com/o/cept-university-<span class="borderall">9151813372</span>).', 'wp-event-aggregator' ); ?>
+									<?php
+										printf(
+											/* translators: %s: Organizer ID wrapped in span */
+											esc_html__( 'Insert Eventbrite Organizer ID (e.g. https://www.eventbrite.com/o/cept-university-%s).', 'wp-event-aggregator' ),
+											'<span class="borderall">9151813372</span>'
+										);
+									?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
@@ -110,9 +124,9 @@ global $importevents;
 			<?php } elseif( $ntab == 'scheduled_import' ){
 				?>
 				<form id="scheduled-import" method="get">
-				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); ?>" />
-				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite' ?>" />
-				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated  ?>" />
+				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite';// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) );  // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
 				<?php
 				if( wpea_is_pro() ){
 					$listtable = new WP_Event_Aggregator_List_Table();

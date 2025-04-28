@@ -48,7 +48,7 @@ use function strrpos;
 use function strtotime;
 use function substr;
 use function trim;
-use function var_export;
+use function var_export; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
 /**
  * iCalcreator DateTime support class
@@ -150,9 +150,9 @@ class DateTimeFactory
         }
         catch( Exception $e ) {
             throw new InvalidArgumentException(
-                sprintf( self::$ERR1, $dateTimeString ),
+                sprintf( self::$ERR1, $dateTimeString ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 null,
-                $e );
+                $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         return $dateTime;
     }
@@ -230,9 +230,9 @@ class DateTimeFactory
             default :
                 throw new InvalidArgumentException(
                     sprintf(
-                        self::$ERR4,
-                        var_export( $value, true ),
-                        var_export( $params, true )
+                        self::$ERR4, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                        var_export( $value, true ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
+                        var_export( $params, true ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                     )
                 );
         } // end switch
@@ -533,10 +533,10 @@ class DateTimeFactory
         if( $first->getTimestamp() > $second->getTimestamp()) {
             throw new InvalidArgumentException(
                 sprintf(
-                    $ERR,
-                    $propName,
-                    $first->format( self::$YmdTHis ),
-                    $second->format( self::$YmdTHis )
+                    $ERR, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    $propName, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    $first->format( self::$YmdTHis ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    $second->format( self::$YmdTHis ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 )
             );
         }
@@ -612,14 +612,14 @@ class DateTimeFactory
         }
         catch( Exception $e ) {
             throw new InvalidArgumentException(
-                sprintf( self::$ERR4, $dateTime->format( self::$YMDHISe ), $tz ),
+                sprintf( self::$ERR4, $dateTime->format( self::$YMDHISe ), $tz ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 null,
-                $e
+                $e // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
         if( false === $dateTime->setTimezone( $tzt )) {
             throw new InvalidArgumentException(
-                sprintf( self::$ERR4, $dateTime->format( self::$YMDHISe ), $tz )
+                sprintf( self::$ERR4, $dateTime->format( self::$YMDHISe ), $tz ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
         return $dateTime;

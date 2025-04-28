@@ -134,7 +134,7 @@ class StringFactory
         $cnt  = count( $rows );
         if( 3 > $cnt ) { /* err 10 */
             throw new UnexpectedValueException(
-                sprintf( $ERR10, $cnt, PHP_EOL . implode( PHP_EOL, $rows ))
+                sprintf( $ERR10, $cnt, PHP_EOL . implode( PHP_EOL, $rows )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
         /* skip trailing empty lines and ensure an end row */

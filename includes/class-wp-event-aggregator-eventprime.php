@@ -173,12 +173,12 @@ class WP_Event_Aggregator_EventPrime {
 
 
             //Event Date & Time
-            $start_ampm = date( "h:i A", $start_time );
-            $end_ampm   = date( "h:i A", $end_time );
+            $start_ampm = gmdate( "h:i A", $start_time );
+            $end_ampm   = gmdate( "h:i A", $end_time );
 
             //get only day
-            $em_start_date_time = strtotime( date( "Y-m-d", $start_time ) );
-            $em_end_date_time = strtotime( date( "Y-m-d", $end_time ) );
+            $em_start_date_time = strtotime( gmdate( "Y-m-d", $start_time ) );
+            $em_end_date_time = strtotime( gmdate( "Y-m-d", $end_time ) );
 
 			update_post_meta( $inserted_event_id, 'em_start_date', $start_time );
             update_post_meta( $inserted_event_id, 'em_start_time', $start_ampm );

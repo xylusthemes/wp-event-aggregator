@@ -183,15 +183,15 @@ trait DURATIONtrait
                     $value        = DateIntervalFactory::conformDateInterval( $dateInterval );
                 }
                 catch( Exception $e ) {
-                    throw new InvalidArgumentException( $e->getMessage(), null, $e );
+                    throw new InvalidArgumentException( $e->getMessage(), null, $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 }
                 break;
             default :
                 throw new InvalidArgumentException(
                     sprintf(
-                        self::$FMTERRPROPFMT,
-                        self::DURATION,
-                        var_export( $value, true )
+                        self::$FMTERRPROPFMT, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                        self::DURATION, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                        var_export( $value, true ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                     )
                 );
                 break;

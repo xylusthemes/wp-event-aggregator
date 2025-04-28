@@ -120,7 +120,7 @@ trait TZOFFSETFROMtrait
             $params = [];
         }
         elseif( ! DateTimeZoneFactory::hasOffset( $value )) {
-            throw new InvalidArgumentException( sprintf( $ERR, Vcalendar::TZOFFSETFROM, $value ));
+            throw new InvalidArgumentException( sprintf( $ERR, Vcalendar::TZOFFSETFROM, $value )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         $this->tzoffsetfrom = [
             Util::$LCvalue  => $value,

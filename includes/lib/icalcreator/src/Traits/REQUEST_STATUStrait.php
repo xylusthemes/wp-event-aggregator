@@ -38,7 +38,7 @@ use InvalidArgumentException;
 use function number_format;
 use function filter_var;
 use function sprintf;
-use function var_export;
+use function var_export; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
 /**
  * REQUEST-STATUS property functions
@@ -164,7 +164,7 @@ trait REQUEST_STATUStrait
         else {
             if( false === ( $cmp = filter_var( $statCode, FILTER_VALIDATE_FLOAT ))) {
                 throw new InvalidArgumentException(
-                    sprintf( $ERR, self::REQUEST_STATUS, var_export( $statCode, true ) )
+                    sprintf( $ERR, self::REQUEST_STATUS, var_export( $statCode, true ) ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                 );
             }
             Util::assertString( $text, self::REQUEST_STATUS );

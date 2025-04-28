@@ -49,6 +49,7 @@ class WP_Event_Aggregator_Meetup_API {
      * @access private
      */
     private function getEventQuery(){
+        // phpcs:ignore Squiz.PHP.Heredoc.NotAllowed
         return <<<'GRAPHQL'
                 query ($eventId: ID!) {
                     event(id: $eventId) {
@@ -113,6 +114,7 @@ GRAPHQL;
      * @access private
      */
     private function getGroupEventsQuery(){
+        // phpcs:ignore Squiz.PHP.Heredoc.NotAllowed
         return <<<'GRAPHQL'
             query ($urlname: String!, $itemsNum: Int!, $cursor: String) {
                 groupByUrlname(urlname: $urlname) {
@@ -211,7 +213,7 @@ GRAPHQL;
      * @return array User data
      */
     public function getGroupName(  $meetup_group_id = '' ){
-
+        // phpcs:ignore Squiz.PHP.Heredoc.NotAllowed
         $query = <<<'GRAPHQL'
         query ($urlname: String!) {
             groupByUrlname(urlname: $urlname) {
@@ -230,7 +232,7 @@ GRAPHQL;
      * @return array User data
      */
     public function getAuthUser(){
-
+        // phpcs:ignore Squiz.PHP.Heredoc.NotAllowed
         $query = <<<'GRAPHQL'
             query{
                 self{
@@ -264,7 +266,7 @@ GRAPHQL;
             ]
         ]))) {
             $error = error_get_last();
-            throw new ErrorException( $error['message'], $error['type']);
+            throw new ErrorException( esc_html( $error['message'] ), intval( $error['type'] ) );
         }
 
         return json_decode($data, true);

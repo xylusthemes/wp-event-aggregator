@@ -113,9 +113,9 @@ class DateIntervalFactory
         }
         catch( Exception $e ) {
             throw new InvalidArgumentException(
-                sprintf( $ERR, $dateIntervalString ),
+                sprintf( $ERR, $dateIntervalString ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 null,
-                $e
+                $e // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
         return $dateInterval;

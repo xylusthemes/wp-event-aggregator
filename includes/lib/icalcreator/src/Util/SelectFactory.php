@@ -894,13 +894,13 @@ class SelectFactory
         }
         else {
             if( empty( $startY )) {
-                $startY = (int) date( $Y );
+                $startY = (int) gmdate( $Y );
             }
             if( empty( $startM )) {
-                $startM = (int) date( $M );
+                $startM = (int) gmdate( $M );
             }
             if( empty( $startD )) {
-                $startD = (int) date( $D );
+                $startD = (int) gmdate( $D );
             }
             if( empty( $endY )) {
                 $endY = $startY;

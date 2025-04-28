@@ -37,7 +37,7 @@ use Kigkonsult\Icalcreator\Vcalendar;
 
 use function array_keys;
 use function count;
-use function date;
+use function gmdate;
 use function end;
 use function is_array;
 use function reset;
@@ -281,7 +281,7 @@ class VtimezonePopulateFactory
                 break;
         } // end switch
         if( $start > $end ) {
-            throw new InvalidArgumentException( sprintf( $ERRMSG, $start, $end ));
+            throw new InvalidArgumentException( sprintf( $ERRMSG, $start, $end )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         return [ $start, $end ];
     }
@@ -318,7 +318,7 @@ class VtimezonePopulateFactory
             DateTimeZoneFactory::getDateTimeZoneTransitions( $timezone, $start, $end );
         // all transitions in date-time order!!
         foreach( $transitions as $tix => $trans ) {
-            if( 0 > (int) date( $Y, $trans[self::$TS] )) {
+            if( 0 > (int) gmdate( $Y, $trans[self::$TS] )) {
                 // skip negative year... but save offset
                 $prevOffsetFrom = $trans[self::$OFFSET];
                 // previous trans offset will be 'next' trans offsetFrom

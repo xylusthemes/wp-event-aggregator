@@ -23,7 +23,7 @@ if ( '12hours' === $time_format ) {
 } else {
 	$time_format_string = get_option('time_format');
 }
-$start_date        = date('l, j F, ' . $time_format_string, $start_date_str);
+$start_date        = gmdate('l, j F, ' . $time_format_string, $start_date_str);
 $event_source_url  = get_permalink();
 $event_url         = get_permalink();
 $target            = '';

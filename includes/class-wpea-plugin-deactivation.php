@@ -25,7 +25,6 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
 
         private $prefix = 'wpea_';
         private $slug = 'wp-event-aggregator';
-        private $plugin_name;
         private $plugin_version = '1.0.0';
         private $api_url = 'https://api.xylusthemes.com/api/v1/';
 
@@ -35,13 +34,12 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
          * @since    1.0.0
          */
         public function __construct() {
-			$this->plugin_name =  __('WP Event Aggregator', 'wp-event-aggregator' );
 			if ( defined( 'WPEA_VERSION' ) ) {
 				$this->plugin_version = WPEA_VERSION;
 			}
 
             add_action( 'admin_footer', array( $this, 'deactivation_feedback_form') );
-            add_action( 'wp_ajax_'.$this->prefix.'plugin_deactivation_feedback', array( $this, 'submit_plugin_deactivation_feedback') );
+            add_action( 'wp_ajax_'.esc_attr( $this->prefix ).'plugin_deactivation_feedback', array( $this, 'submit_plugin_deactivation_feedback') );
 		}
 
 		public function get_deactivation_reasons() {
@@ -77,7 +75,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
         }
 
         function submit_plugin_deactivation_feedback(){
-            if ( !wp_verify_nonce( $_REQUEST['nonce'], $this->prefix.'plugin_deactivation_feedback')) {
+            if ( !wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) ), esc_attr( $this->prefix ).'plugin_deactivation_feedback' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
                 exit("nonce verification failed");
             }
 
@@ -94,9 +92,9 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
             $client_secret = $credentials->client_secret;
             $customer_email = $user->user_email;
             $customer_name = $user->user_firstname. ' '.$user->user_lastname;
-            $deactivation_reason = sanitize_text_field( $_REQUEST['reason'] );
+            $deactivation_reason = sanitize_text_field( $_REQUEST['reason'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
             $deactivation_reason_message = $this->get_deactivation_reasons()[$deactivation_reason];
-            $customer_query = sanitize_text_field( $_REQUEST['customerQuery'] );
+            $customer_query = sanitize_text_field( $_REQUEST['customerQuery'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
             $data = array(
                 "type" => "plugin_deactivation",
@@ -104,7 +102,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                 "customer_name" => $customer_name,
                 "customer_email" => $customer_email,
                 "plugin" => $this->slug,
-                "plugin_name" => $this->plugin_name,
+                "plugin_name" => 'WP Event Aggregator',
                 "plugin_version" => $this->plugin_version,
                 "plugin_version" => $this->plugin_version,
                 "deactivation_reason" => $deactivation_reason,
@@ -129,7 +127,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
 			$response = wp_remote_post( $url, $args );
             if ( is_wp_error( $response ) ) {
                 $error_message = $response->get_error_message();
-                echo "Something went wrong: $error_message";
+                echo esc_attr( "Something went wrong: $error_message" );
                 exit();
             }
 
@@ -152,35 +150,35 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
 
             <script>
                 jQuery(document).ready(function() {
-					var dataReason = jQuery('input:radio[name="<?php echo $this->prefix; ?>deactivatation_reason_radio"]').val();
+					var dataReason = jQuery('input:radio[name="<?php echo esc_attr( $this->prefix ); ?>deactivatation_reason_radio"]').val();
                     jQuery('a[aria-label="Deactivate WP Event Aggregator"]').on('click', function (e) {
                         e.preventDefault();
                         var pluginDeactivateURL = jQuery(this).attr('href');
-                        jQuery('#<?php echo $this->slug; ?>-deactivate-dialog' ).dialog({
-                            'dialogClass'   : '<?php echo $this->slug . "-deactivate-dialog"; ?>',
+                        jQuery('#<?php echo esc_attr( $this->slug ); ?>-deactivate-dialog' ).dialog({
+                            'dialogClass'   : '<?php echo esc_attr( $this->slug ) . "-deactivate-dialog"; ?>',
                             'modal'         : true,
                             'closeOnEscape' : true,
                             width: 600,
                             'buttons'       : [
                                 {
-                                    text: "<?php _e('Submit & Deactivate', 'wp-event-aggregator' ); ?>",
-                                    class: 'button button-primary <?php echo $this->prefix . "deactivate_button"; ?>',
+                                    text: "Submit & Deactivate",
+                                    class: 'button button-primary <?php echo esc_attr( $this->prefix ) . "deactivate_button"; ?>',
                                     click: function() {
 										var that = this;
-										var dataQuery = jQuery('#<?php echo $this->prefix; ?>customer_query').val();
+										var dataQuery = jQuery('#<?php echo esc_attr( $this->prefix ); ?>customer_query').val();
 										if(dataReason == 'other' && !dataQuery){
-											jQuery('#<?php echo $this->prefix; ?>customer_query').focus();
+											jQuery('#<?php echo esc_attr( $this->prefix ); ?>customer_query').focus();
 											return false;
 										}
-										jQuery('#<?php echo $this->prefix; ?>deactivatation_form').hide();
-										jQuery('.<?php echo $this->prefix; ?>deactivatation_loading').show();
-                                        jQuery('button.<?php echo $this->prefix; ?>deactivate_button').prop('disabled', true);
+										jQuery('#<?php echo esc_attr( $this->prefix ); ?>deactivatation_form').hide();
+										jQuery('.<?php echo esc_attr( $this->prefix ); ?>deactivatation_loading').show();
+                                        jQuery('button.<?php echo esc_attr( $this->prefix ); ?>deactivate_button').prop('disabled', true);
                                         jQuery.ajax({
                                             type : "post",
                                             dataType : "json",
-                                            url : "<?php echo admin_url('admin-ajax.php?action='.$this->prefix.'plugin_deactivation_feedback&nonce='.wp_create_nonce($this->prefix.'plugin_deactivation_feedback')); ?>",
+                                            url : "<?php echo admin_url('admin-ajax.php?action='.$this->prefix.'plugin_deactivation_feedback&nonce='.wp_create_nonce($this->prefix.'plugin_deactivation_feedback' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>",
                                             data : {
-                                                action: "<?php echo $this->prefix; ?>plugin_deactivation_feedback",
+                                                action: "<?php echo esc_attr( $this->prefix ); ?>plugin_deactivation_feedback",
                                                 reason: dataReason,
                                                 customerQuery: dataQuery
                                             },
@@ -191,7 +189,7 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                                     }
                                 },
                                 {
-                                    text: "<?php _e('Skip & Deactivate', 'wp-event-aggregator' ); ?>",
+                                    text: "Skip & Deactivate",
                                     class: 'button',
                                     click: function() {
                                         jQuery( this ).dialog( "close" );
@@ -202,56 +200,56 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                         });
                     });
 
-                    jQuery('input:radio[name="<?php echo $this->prefix; ?>deactivatation_reason_radio"]').click(function () {
+                    jQuery('input:radio[name="<?php echo esc_attr( $this->prefix ); ?>deactivatation_reason_radio"]').click(function () {
                         var reason = jQuery(this).val();
 						dataReason = jQuery(this).val();
-                        var customerQuery = jQuery('#<?php echo $this->prefix; ?>customer_query');
+                        var customerQuery = jQuery('#<?php echo esc_attr( $this->prefix ); ?>customer_query');
                         customerQuery.removeAttr('required');
                         if (reason === "confusing") {
-                            customerQuery.attr("placeholder", "<?php _e('Finding it confusing? Please let us know so we can improve the interface.', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Finding it confusing? Please let us know so we can improve the interface.', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "other") {
-                            customerQuery.attr("placeholder", "<?php _e('Please let us know the reason for deactivation: (Required)', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Please let us know the reason for deactivation: (Required)', 'wp-event-aggregator' ); ?>");
                             customerQuery.prop('required', true);
 
                         } else if (reason === "buggy" || reason === 'not_working') {
-                            customerQuery.attr("placeholder", "<?php _e('Please describe the bug/issue in detail:', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Please describe the bug/issue in detail:', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "better_plugin") {
-                            customerQuery.attr("placeholder", "<?php _e('Please let us know which plugin you found helpful:', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Please let us know which plugin you found helpful:', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "feature_request") {
-                            customerQuery.attr("placeholder", "<?php _e('Please let us know more about the features you want:', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Please let us know more about the features you want:', 'wp-event-aggregator' ); ?>");
 
                         }  else if (reason === "wrong_plugins") {
-                            customerQuery.attr("placeholder", "<?php _e('Please let us know more about your requirements:', 'wp-event-aggregator' ); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Please let us know more about your requirements:', 'wp-event-aggregator' ); ?>");
 
                         } else if (reason === "temporary") {
-                            customerQuery.attr("placeholder", "<?php _e('Write your query here:', 'wp-event-aggregator'); ?>");
+                            customerQuery.attr("placeholder", "<?php esc_attr_e('Write your query here:', 'wp-event-aggregator'); ?>");
                         }
                     });
                 });
             </script>
 			<style>
-			<?php echo '.'.$this->slug; ?>-deactivate-dialog .ui-dialog-titlebar{
+			<?php echo '.'.esc_attr( $this->slug ); ?>-deactivate-dialog .ui-dialog-titlebar{
 				display: none;
 			}
-            .ui-widget.<?php echo $this->slug; ?>-deactivate-dialog{
+            .ui-widget.<?php echo esc_attr( $this->slug ); ?>-deactivate-dialog{
                 font-family: inherit;
                 font-size: 14px;
                 font-weight: inherit;
                 line-height: inherit;
             }
-            .ui-widget.<?php echo $this->slug; ?>-deactivate-dialog textarea{
+            .ui-widget.<?php echo esc_attr( $this->slug ); ?>-deactivate-dialog textarea{
                 font-family: inherit;
                 font-size: 14px;
                 width: 100%;
             }
-            <?php echo '#'.$this->slug; ?>-deactivate-dialog {
+            <?php echo '#'.esc_attr( $this->slug ); ?>-deactivate-dialog {
                 display : none;
             }
 			</style>
-            <div id="<?php echo $this->slug; ?>-deactivate-dialog" style="overflow: hidden;">
+            <div id="<?php echo esc_attr( $this->slug ); ?>-deactivate-dialog" style="overflow: hidden;">
                 <div class="ui-dialog-headerbar" >
                     <div>
                         <h2 style="margin: 5px 0 15px 0;"><?php esc_html_e('Quick Feedback', 'wp-event-aggregator'); ?></h2>
@@ -259,19 +257,19 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                 </div>               
                 <div style="border-top: 1px solid #dcdcde;"></div>
                 <h3 style="font-size: 15px;" ><?php esc_html_e('Could you please share why you are deactivating WP Event Aggregator plugin ?', 'wp-event-aggregator'); ?></h3>
-                <form method="post" action="" id="<?php echo $this->prefix; ?>deactivatation_form">
+                <form method="post" action="" id="<?php echo esc_attr( $this->prefix ); ?>deactivatation_form">
                     <div>
                     <?php
                         foreach ( $deactivate_reasons as $key => $deactivate_reason ) {
                             ?>
                             <div class="radio" style="padding:1px;margin-left:2%">
-                                <label for="<?php echo $key; ?>">
-                                    <input type="radio" name="<?php echo $this->prefix; ?>deactivatation_reason_radio" id="<?php echo $key; ?>" value="<?php echo $key; ?>" required <?php if($key === 'confusing') { echo "checked"; } ?>> <?php echo $deactivate_reason; ?>
+                                <label for="<?php echo esc_attr( $key ); ?>">
+                                    <input type="radio" name="<?php echo esc_attr( $this->prefix ); ?>deactivatation_reason_radio" id="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $key ); ?>" required <?php if($key === 'confusing') { echo "checked"; } ?>> <?php echo esc_attr( $deactivate_reason ); ?>
                                 </label>
                             </div>
                         <?php } ?>
                         <br>
-                        <textarea id="<?php echo $this->prefix; ?>customer_query" name="<?php echo $this->prefix; ?>customer_query" rows="4" placeholder="<?php _e('Write your query here', 'wp-event-aggregator'); ?>"></textarea>
+                        <textarea id="<?php echo esc_attr( $this->prefix ); ?>customer_query" name="<?php echo esc_attr( $this->prefix ); ?>customer_query" rows="4" placeholder="<?php esc_attr_e('Write your query here', 'wp-event-aggregator'); ?>"></textarea>
                     </div>
                     <div style="text-align: center;">
                         <p style="font-size: 12px;margin: 2px 0 -10px 0;">
@@ -279,8 +277,9 @@ if ( ! class_exists( 'WPEA_Plugin_Deactivation' ) ) {
                         </p>
                     </div>
                 </form>
-				<div class="<?php echo $this->prefix; ?>deactivatation_loading" style="width: 100%;text-align: center; display:none;">
-					<img src="<?php echo admin_url('images/spinner.gif'); ?>" />
+				<div class="<?php echo esc_attr( $this->prefix ); ?>deactivatation_loading" style="width: 100%;text-align: center; display:none;">
+                    <?php // phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage  ?>
+					<img src="<?php echo esc_url( admin_url('images/spinner.gif') ); ?>" />
 				</div>
             </div>
             <?php

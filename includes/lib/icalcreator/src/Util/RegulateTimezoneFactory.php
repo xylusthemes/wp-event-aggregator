@@ -275,7 +275,7 @@ class RegulateTimezoneFactory
             $this->setInputiCal( $inputiCal );
         }
         if( ! $this->isInputiCalSet()) {
-            throw new InvalidArgumentException( $FMTERR );
+            throw new InvalidArgumentException( $FMTERR ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         $vtSwitch = false;
         foreach( $this->getInputiCal() as $lix => $row ) {
@@ -460,10 +460,10 @@ class RegulateTimezoneFactory
         if( empty( $dlghtTzs )) {
             throw new RuntimeException(
                 sprintf(
-                    $ERR,
-                    $currTzId,
-                    implode( Util::$COMMA, $stdArr ),
-                    implode( Util::$COMMA, $dlghtArr )
+                    $ERR, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    $currTzId, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    implode( Util::$COMMA, $stdArr ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                    implode( Util::$COMMA, $dlghtArr ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 )
             );
         }
@@ -574,7 +574,7 @@ class RegulateTimezoneFactory
             return $res;
         }
         if( $throwException ) {
-            throw new RuntimeException( sprintf( $ERR, $offset, $seconds ));
+            throw new RuntimeException( sprintf( $ERR, $offset, $seconds )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         else {
             return null;
@@ -616,7 +616,7 @@ class RegulateTimezoneFactory
                 }
                 catch( Exception $e ) {
                     throw new RuntimeException(
-                        sprintf( $FMTERR, $tzAbbrCity[$TIMEZONEID] )
+                        sprintf( $FMTERR, $tzAbbrCity[$TIMEZONEID] ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                     );
                 }
                 if( $seconds == $dateTimeOffsetNow ) {

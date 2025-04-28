@@ -50,7 +50,7 @@ use function reset;
 use function sort;
 use function sprintf;
 use function substr;
-use function var_export;
+use function var_export; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
 /**
  * iCalcreator 'newer' recur support class
@@ -105,10 +105,10 @@ class RecurFactory2
      */
     public static function assertRecur( array $recur )
     {
-        $recurDisp = var_export( $recur, true );
+        $recurDisp = var_export( $recur, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
         static $ERR1TXT = '#1 The FREQ rule part MUST be specified in the recurrence rule.';
         if( ! isset( $recur[Vcalendar::FREQ] )) {
-            throw new LogicException( $ERR1TXT . $recurDisp );
+            throw new LogicException( $ERR1TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         static $ERR2TXT = '#2 NO BYDAY days : ';
         static $ERR3TXT = '#3 Unkown BYDAY day : ';
@@ -119,7 +119,7 @@ class RecurFactory2
                     foreach( $BYDAYv as $BYDAYx2 => $BYDAYv2 ) {
                         if( Vcalendar::DAY === $BYDAYx2 ) {
                             if( ! in_array( $BYDAYv2, RecurFactory::$DAYNAMES )) {
-                                throw new LogicException( $ERR3TXT . $recurDisp );
+                                throw new LogicException( $ERR3TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                             }
                             $cntDays += 1;
                         }
@@ -129,13 +129,13 @@ class RecurFactory2
                 } // end if
                 elseif(( Vcalendar::DAY === $BYDAYx )) {
                     if( ! in_array( $BYDAYv, RecurFactory::$DAYNAMES )) {
-                        throw new LogicException( $ERR3TXT . var_export( $recur, true ));
+                        throw new LogicException( $ERR3TXT . var_export( $recur, true )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                     }
                     $cntDays += 1;
                 }
             } // end foreach
             if( empty( $cntDays )) {
-                throw new LogicException( $ERR2TXT . var_export( $recur, true ));
+                throw new LogicException( $ERR2TXT . var_export( $recur, true )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
             }
         } // end if BYDAY
         static $ERR4TXT =
@@ -146,7 +146,7 @@ class RecurFactory2
         if( isset( $recur[Vcalendar::BYDAY] ) &&
             ! in_array( $recur[Vcalendar::FREQ], $FREQ1 ) &&
             self::hasRecurByDaysWithRelativeWeekdays( $recur[Vcalendar::BYDAY] )) {
-            throw new LogicException( $ERR4TXT . $recurDisp );
+            throw new LogicException( $ERR4TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end if
         static $ERR5TXT =
             '#4 The BYDAY rule part MUST NOT ' .
@@ -157,14 +157,14 @@ class RecurFactory2
             ( $recur[Vcalendar::FREQ] == Vcalendar::YEARLY ) &&
             isset( $recur[Vcalendar::BYWEEKNO] ) &&
             self::hasRecurByDaysWithRelativeWeekdays( $recur[Vcalendar::BYDAY] )) {
-            throw new LogicException( $ERR5TXT . $recurDisp );
+            throw new LogicException( $ERR5TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end if
         static $ERR6TXT =
             '#5 The BYMONTHDAY rule part MUST NOT be specified ' .
             'when the FREQ rule part is set to WEEKLY. ';
         if(( $recur[Vcalendar::FREQ] == Vcalendar::WEEKLY ) &&
             isset( $recur[Vcalendar::BYMONTHDAY] )) {
-            throw new LogicException( $ERR6TXT . $recurDisp );
+            throw new LogicException( $ERR6TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end if
         static $ERR7TXT =
             '#6 The BYYEARDAY rule part MUST NOT be specified ' .
@@ -172,14 +172,14 @@ class RecurFactory2
         static $FREQ4 = [ Vcalendar::DAILY, Vcalendar::WEEKLY, Vcalendar::MONTHLY ];
         if( isset( $recur[Vcalendar::BYYEARDAY] ) &&
             in_array( $recur[Vcalendar::FREQ], $FREQ4 )) {
-            throw new LogicException( $ERR7TXT . $recurDisp );
+            throw new LogicException( $ERR7TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end if
         static $ERR8TXT =
             '#7 The BYWEEKNO rule part MUST NOT be used ' .
             'when the FREQ rule part is set to anything other than YEARLY.';
         if( isset( $recur[Vcalendar::BYWEEKNO] ) &&
             ( $recur[Vcalendar::FREQ] != Vcalendar::YEARLY )) {
-            throw new LogicException( $ERR8TXT . $recurDisp );
+            throw new LogicException( $ERR8TXT . $recurDisp ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end if
     }
 

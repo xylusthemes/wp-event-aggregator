@@ -32,26 +32,26 @@ if($time_format === '12hours' ){
     <div class="titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
 
     <?php 
-	if( date( 'Y-m-d', strtotime( $start_date_str ) ) == date( 'Y-m-d', strtotime( $end_date_str ) ) ){
+	if( gmdate( 'Y-m-d', strtotime( $start_date_str ) ) == gmdate( 'Y-m-d', strtotime( $end_date_str ) ) ){
     	?>
     	<strong><?php esc_html_e( 'Date','wp-event-aggregator' ); ?>:</strong>
-	    <p><?php echo $start_date_formated; ?></p>
+	    <p><?php echo esc_attr( $start_date_formated ); ?></p>
 
 	    <strong><?php esc_html_e( 'Time','wp-event-aggregator' ); ?>:</strong>
 	    <p><?php if( $start_time != $end_time ){ 
-	    		echo $start_time . ' - ' . $end_time;
+	    		echo esc_attr( $start_time . ' - ' . $end_time );
 	    	}else{
-	    		echo $start_time;
+	    		echo esc_attr( $start_time );
     		}?>
 		</p>
 		<?php
 	}else{
 		?>
 		<strong><?php esc_html_e( 'Start','wp-event-aggregator' ); ?>:</strong>
-	    <p><?php echo $start_date_formated . ' - ' . $start_time; ?></p>
+	    <p><?php echo esc_attr( $start_date_formated . ' - ' . $start_time ); ?></p>
 
 	    <strong><?php esc_html_e( 'End','wp-event-aggregator' ); ?>:</strong>
-	    <p><?php echo $end_date_formated . ' - ' . $end_time; ?></p>
+	    <p><?php echo esc_attr( $end_date_formated . ' - ' . $end_time ); ?></p>
 		<?php
 	}
 
@@ -73,21 +73,21 @@ if($time_format === '12hours' ){
 	if( !empty( $eve_cats ) ){
 		?>
 		<strong><?php esc_html_e( 'Event Category','wp-event-aggregator' ); ?>:</strong>
-	    <p><?php echo implode(', ', $eve_cats ); ?></p>
+	    <p><?php echo wp_kses_post( implode(', ', $eve_cats ) ); ?></p>
 		<?php
 	}
 
 	if( !empty( $eve_tags ) ){
 		?>
 		<strong><?php esc_html_e( 'Event Tags','wp-event-aggregator' ); ?>:</strong>
-	    <p><?php echo implode(', ', $eve_tags ); ?></p>
+	    <p><?php echo wp_kses_post( implode(', ', $eve_tags ) ); ?></p>
 		<?php
 	}
 	?>
 
     <?php if( $website != '' ){ ?>
     	<strong><?php esc_html_e( 'Click to Register','wp-event-aggregator' ); ?>:</strong>
-    	<a href="<?php echo esc_url( $website ); ?>"><?php _e( "Click to Register", 'wp-event-aggregator' ); ?></a>
+    	<a href="<?php echo esc_url( $website ); ?>"><?php esc_attr_e( "Click to Register", 'wp-event-aggregator' ); ?></a>
     <?php } ?>
 
   </div>
@@ -103,19 +103,19 @@ if($time_format === '12hours' ){
 			?>
 			<div class="organizer">
 				<div class="titlemain"><?php esc_html_e( 'Organizer','wp-event-aggregator' ); ?></div>
-				<p><strong><?php echo $org_name; ?></strong></p>
+				<p><strong><?php echo esc_attr( $org_name ); ?></strong></p>
 			</div>
 			<?php if( $org_email != '' ){ ?>
 		    	<strong style="display: block;"><?php esc_html_e( 'Email','wp-event-aggregator' ); ?>:</strong>
-		    	<a href="<?php echo 'mailto:'.$org_email; ?>"><?php echo $org_email; ?></a>
+		    	<a href="<?php echo 'mailto:'. esc_attr( $org_email ); ?>"><?php echo esc_attr( $org_email ); ?></a>
 		    <?php } ?>
 		    <?php if( $org_phone != '' ){ ?>
 		    	<strong style="display: block;"><?php esc_html_e( 'Phone','wp-event-aggregator' ); ?>:</strong>
-		    	<a href="<?php echo 'tel:'.$org_phone; ?>"><?php echo $org_phone; ?></a>
+		    	<a href="<?php echo 'tel:'. esc_attr( $org_phone ); ?>"><?php echo esc_attr( $org_phone ); ?></a>
 		    <?php } ?>
 		    <?php if( $org_url != '' ){ ?>
 		    	<strong style="display: block;"><?php esc_html_e( 'Website','wp-event-aggregator' ); ?>:</strong>
-		    	<a href="<?php echo esc_url( $org_url ); ?>"><?php _e( "Organizer's Website", 'wp-event-aggregator' ); ?></a>
+		    	<a href="<?php echo esc_url( $org_url ); ?>"><?php esc_attr_e( "Organizer's Website", 'wp-event-aggregator' ); ?></a>
 		    <?php }
 		}
     ?>
@@ -147,10 +147,10 @@ if ( ! empty( $venue_address_name ) || ( ! empty( $venue['lat'] ) && ! empty( $v
 	<div class="wpea_organizer library">
 		<div class="venue">
 			<div class="titlemain"><strong><?php esc_html_e( 'Venue','wp-event-aggregator' ); ?></strong></div>
-			<p><?php echo $venue_name; ?></p>
+			<p><?php echo esc_attr( $venue_name ); ?></p>
 			<?php
 			if( $venue_address != '' ){
-				echo '<p>' . $venue_address . '</p>';
+				echo '<p>' . esc_attr( $venue_address ) . '</p>';
 			}
 			$venue_array = array();
 			foreach ($venue as $key => $value) {
@@ -160,7 +160,7 @@ if ( ! empty( $venue_address_name ) || ( ! empty( $venue['lat'] ) && ! empty( $v
 					}
 				}
 			}
-			echo '<p>' . implode( ", ", $venue_array ) . '</p>';
+			echo '<p>' . esc_attr( implode( ", ", $venue_array ) ) . '</p>';
 			?>
 		</div>
 		<?php
@@ -194,13 +194,13 @@ if ( ! empty( $venue_address_name ) || ( ! empty( $venue['lat'] ) && ! empty( $v
 				$full_address = str_replace( ' ', '%20', $venue_address ) .','. $venue['city'] .','. $venue['state'] .','. $venue['country'].'+(' . str_replace( ' ', '%20', $venue_name ) . ')';	
 				?>
 				<div class="map">
-					<iframe src="https://maps.google.com/maps?q=<?php echo $full_address; ?>&hl=es;z=14&output=embed" width="100%" height="350" frameborder="0" style="border:0; margin:0;" allowfullscreen></iframe>
+					<iframe src="https://maps.google.com/maps?q=<?php echo esc_attr( $full_address ); ?>&hl=es;z=14&output=embed" width="100%" height="350" frameborder="0" style="border:0; margin:0;" allowfullscreen></iframe>
 				</div>
 				<?php
 			}else{ 
 				?>
 				<div class="map">
-					<iframe src="https://www.google.com/maps/embed/v1/place?key=<?php echo $map_api_key; ?>&<?php echo $query; ?>" width="100%" height="350" frameborder="0" style="border:0; margin:0;" allowfullscreen></iframe>
+					<iframe src="https://www.google.com/maps/embed/v1/place?key=<?php echo esc_attr( $map_api_key ); ?>&<?php echo esc_attr( $query ); ?>" width="100%" height="350" frameborder="0" style="border:0; margin:0;" allowfullscreen></iframe>
 				</div>
 			<?php
 			}

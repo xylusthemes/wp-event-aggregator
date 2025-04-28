@@ -87,7 +87,7 @@ class DateTimeZoneFactory
     {
         static $ERR = 'Invalid DateTimeZone \'%s\'';
         if( empty( $tzString ) && ( 0 != intval( $tzString ))) {
-            throw new InvalidArgumentException( sprintf( $ERR, $tzString ));
+            throw new InvalidArgumentException( sprintf( $ERR, $tzString )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         if( self::hasOffset( $tzString )) {
             $tzString = self::getTimeZoneNameFromOffset( $tzString );
@@ -100,7 +100,7 @@ class DateTimeZoneFactory
             $timeZone = new DateTimeZone( $tzString );
         }
         catch( Exception $e ) {
-            throw new InvalidArgumentException( sprintf( $ERR, $tzString ), null, $e );
+            throw new InvalidArgumentException( sprintf( $ERR, $tzString ), null, $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         return $timeZone;
     }
@@ -294,7 +294,7 @@ class DateTimeZoneFactory
             $res = timezone_name_from_abbr( Util::$SP0, $seconds, 1 );
         }
         if( false === $res ) {
-            throw new InvalidArgumentException( sprintf( $ERR, $offset, $seconds ));
+            throw new InvalidArgumentException( sprintf( $ERR, $offset, $seconds )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         return $res;
     }

@@ -168,12 +168,12 @@ trait REFRESH_INTERVALrfc7986trait
                         DateIntervalFactory::conformDateInterval( $dateInterval );
                 }
                 catch( Exception $e ) {
-                    throw new InvalidArgumentException( $e->getMessage(), null, $e );
+                    throw new InvalidArgumentException( $e->getMessage(), null, $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 }
                 break;
             default :
                 throw new InvalidArgumentException(
-                    sprintf( $FMTERR, self::REFRESH_INTERVAL )
+                    sprintf( $FMTERR, self::REFRESH_INTERVAL ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 );
                 break;
         } // end switch

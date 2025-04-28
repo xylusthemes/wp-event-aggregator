@@ -145,7 +145,7 @@ trait IMAGErfc7986trait
                 break;
             default :
                 throw new InvalidArgumentException(
-                    sprintf( $FMTERR2, $params[self::VALUE] )
+                    sprintf( $FMTERR2, $params[self::VALUE] ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 );
                 break;
         } // end switch

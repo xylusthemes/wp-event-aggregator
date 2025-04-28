@@ -184,16 +184,16 @@ class WP_Event_Aggregator_EM {
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 			
 			// Save Meta.
-			update_post_meta( $inserted_event_id, '_event_start_time', date( 'H:i:s', $start_time ) );
-			update_post_meta( $inserted_event_id, '_event_end_time', date( 'H:i:s', $end_time ) );
+			update_post_meta( $inserted_event_id, '_event_start_time', gmdate( 'H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_event_end_time', gmdate( 'H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, '_event_all_day', $is_all_day );
-			update_post_meta( $inserted_event_id, '_event_start_date', date( 'Y-m-d', $start_time ) );
-			update_post_meta( $inserted_event_id, '_event_end_date', date( 'Y-m-d', $end_time ) );
+			update_post_meta( $inserted_event_id, '_event_start_date', gmdate( 'Y-m-d', $start_time ) );
+			update_post_meta( $inserted_event_id, '_event_end_date', gmdate( 'Y-m-d', $end_time ) );
 			update_post_meta( $inserted_event_id, '_event_timezone', $timezone_name );
-			update_post_meta( $inserted_event_id, '_event_start', date( 'Y-m-d H:i:s', $start_time ) );
-			update_post_meta( $inserted_event_id, '_event_end', date( 'Y-m-d H:i:s', $end_time ) );
-			update_post_meta( $inserted_event_id, '_event_start_local', date( 'Y-m-d H:i:s', $start_time ) );
-			update_post_meta( $inserted_event_id, '_event_end_local', date( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $inserted_event_id, '_event_start', gmdate( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_event_end', gmdate( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $inserted_event_id, '_event_start_local', gmdate( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_event_end_local', gmdate( 'Y-m-d H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, '_location_id', $location_id );
 			update_post_meta( $inserted_event_id, '_event_status', $event_status );
 			update_post_meta( $inserted_event_id, '_event_private', 0 );
@@ -210,14 +210,14 @@ class WP_Event_Aggregator_EM {
 				'event_slug' 	   	=> $inserted_event->post_name,
 				'event_owner' 	   	=> $inserted_event->post_author,
 				'event_name'       	=> $inserted_event->post_title,
-				'event_start_time' 	=> date( 'H:i:s', $start_time ),
-				'event_end_time'   	=> date( 'H:i:s', $end_time ),
+				'event_start_time' 	=> gmdate( 'H:i:s', $start_time ),
+				'event_end_time'   	=> gmdate( 'H:i:s', $end_time ),
 				'event_all_day'    	=> $is_all_day,
-				'event_start'		=> date( 'Y-m-d H:i:s', $start_time ),
-				'event_end'		   	=> date( 'Y-m-d H:i:s', $end_time ),
+				'event_start'		=> gmdate( 'Y-m-d H:i:s', $start_time ),
+				'event_end'		   	=> gmdate( 'Y-m-d H:i:s', $end_time ),
 				'event_timezone'	=> 'UTC',
-				'event_start_date' 	=> date( 'Y-m-d', $start_time ),
-				'event_end_date'   	=> date( 'Y-m-d', $end_time ),
+				'event_start_date' 	=> gmdate( 'Y-m-d', $start_time ),
+				'event_end_date'   	=> gmdate( 'Y-m-d', $end_time ),
 				'post_content' 	   	=> $inserted_event->post_content,
 				'location_id' 	   	=> $location_id,
 				'event_status' 	   	=> $event_status,
@@ -228,14 +228,17 @@ class WP_Event_Aggregator_EM {
 			if ( $is_exitsing_event ) {
 				$eve_id = get_post_meta( $inserted_event_id, '_event_id', true );
 				$where = array( 'event_id' => $eve_id );
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->update( $event_table , $event_array, $where );
 			}else{
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				if ( $wpdb->insert( $event_table , $event_array ) ) {
 					update_post_meta( $inserted_event_id, '_event_id', $wpdb->insert_id );
 				}
 			}
 
 			if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$status_changed = $wpdb->update( $wpdb->posts, array( 'post_status' => sanitize_text_field( $event_args['event_status'] ) ), array( 'ID' => $inserted_event_id ) );
 			}
 
@@ -366,12 +369,14 @@ class WP_Event_Aggregator_EM {
 				$loc_id = get_post_meta( $event_id, '_location_id', true );
 				if( $loc_id != '' ){
 					$where = array( 'location_id' => $loc_id );	
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 					$is_update = $wpdb->update( $event_location_table, $location_array, $where, $location_format, $where_format );
 					if ( false !== $is_update ) {
 						return $loc_id;    
 					}
 
 				}else{
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 					$is_insert = $wpdb->insert( $event_location_table , $location_array, $location_format );
 					if ( false !== $is_insert ) {
 						$insert_loc_id = $wpdb->insert_id;
@@ -381,6 +386,7 @@ class WP_Event_Aggregator_EM {
 				}				
 				
 			}else{
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$is_insert = $wpdb->insert( $event_location_table , $location_array, $location_format );
 				if ( false !== $is_insert ) {
 					$insert_loc_id = $wpdb->insert_id;
@@ -403,7 +409,7 @@ class WP_Event_Aggregator_EM {
 		$existing_venue = get_posts( array(
 			'posts_per_page' => 1,
 			'post_type' => $this->venue_posttype,
-			'meta_query' => array(
+			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				'relation' => 'AND',
 				array(
 					'key'     => 'wpea_event_venue_id',
@@ -436,7 +442,7 @@ class WP_Event_Aggregator_EM {
 			array(
 				'posts_per_page'   => 1,
 				'post_type'        => $this->venue_posttype,
-				'meta_query' => array(
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					'relation' => 'AND',
 					array(
 						'key'     => 'wpea_event_venue_id',
