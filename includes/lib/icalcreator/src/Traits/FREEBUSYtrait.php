@@ -48,7 +48,7 @@ use function is_array;
 use function reset;
 use function sprintf;
 use function usort;
-use function var_export;
+use function var_export; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
 /**
  * FREEBUSY property functions
@@ -331,7 +331,7 @@ trait FREEBUSYtrait
                         break;
                     default :
                         throw new InvalidArgumentException(
-                            sprintf( $ERR2, 2, $fbix1, $fbix2, var_export( $fbMember, true ))
+                            sprintf( $ERR2, 2, $fbix1, $fbix2, var_export( $fbMember, true )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
                         );
                         break;
                 } // end switch

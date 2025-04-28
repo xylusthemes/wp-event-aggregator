@@ -25,7 +25,7 @@ if ($time_format === '12hours') {
 }
 
 // Format the start and end dates
-$start_date        = date('l, j F, ' . $time_format_string, $start_date_str);
+$start_date        = gmdate('l, j F, ' . $time_format_string, $start_date_str);
 $event_url         = get_permalink();
 $target            = '';
 if ( 'yes' === $direct_link ){

@@ -285,7 +285,7 @@ abstract class CalendarComponent extends IcalBase
                        StringFactory::startsWith( $row, $ENDSTANDARD )) :
                     if( 1 != $subSync ) {
                         throw new UnexpectedValueException(
-                            self::getErrorMsg( $rows, $lix )
+                            self::getErrorMsg( $rows, $lix ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                         );
                     }
                     $subSync -= 1;
@@ -293,7 +293,7 @@ abstract class CalendarComponent extends IcalBase
                 case StringFactory::startsWith( $row, $END ) :
                     if( 1 != $compSync ) { // end:<component>
                         throw new UnexpectedValueException(
-                            self::getErrorMsg( $rows, $lix )
+                            self::getErrorMsg( $rows, $lix ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                         );
                     }
                     $compSync -= 1;

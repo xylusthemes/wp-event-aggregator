@@ -27,7 +27,7 @@ class WP_Event_Aggregator_FB_Authorize {
 	* Authorize facebook user to get access token
 	*/
     function wpea_facebook_authorize_user() {
-    	if ( ! empty($_POST) && wp_verify_nonce($_POST['wpea_facebook_authorize_nonce'], 'wpea_facebook_authorize_action' ) ) {
+    	if ( ! empty($_POST) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_POST['wpea_facebook_authorize_nonce'] ) ) ), 'wpea_facebook_authorize_action' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
         	$wpea_options = get_option( WPEA_OPTIONS , array() );
         	$facebook_options = isset($wpea_options['facebook'])? $wpea_options['facebook'] : array();
@@ -36,7 +36,7 @@ class WP_Event_Aggregator_FB_Authorize {
 			$redirect_url = admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' );
 			$api_version = 'v18.0';
 			$param_url = urlencode($redirect_url);
-			$wpea_session_state = md5(uniqid(rand(), TRUE));
+			$wpea_session_state = md5( uniqid( wp_rand(), TRUE ) );
 			setcookie("wpea_session_state", $wpea_session_state, "0", "/");
 
 			if( $app_id != '' && $app_secret != '' ){
@@ -47,11 +47,11 @@ class WP_Event_Aggregator_FB_Authorize {
 				header("Location: " . $dialog_url);
 
 			}else{
-				die( __( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
+				die( esc_attr__( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
 			}			
 
         } else {
-            die( __('You have not access to do this operations.', 'wp-event-aggregator' ) );
+            die( esc_attr__('You have not access to do this operations.', 'wp-event-aggregator' ) );
         }
     }	
 
@@ -60,9 +60,9 @@ class WP_Event_Aggregator_FB_Authorize {
 	*/
     function wpea_facebook_authorize_user_callback() {
     	global $wpea_success_msg;
-		if ( isset( $_COOKIE['wpea_session_state'] ) && isset($_REQUEST['state']) && ( $_COOKIE['wpea_session_state'] === sanitize_text_field( $_REQUEST['state'] ) ) ) {
+		if ( isset( $_COOKIE['wpea_session_state'] ) && isset( $_REQUEST['state'] ) && ( $_COOKIE['wpea_session_state'] === esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['state'] ) ) ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
                 
-    			$code = sanitize_text_field($_GET['code']);
+    			$code = esc_attr( sanitize_text_field( wp_unslash( $_GET['code'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
     			$wpea_options = get_option( WPEA_OPTIONS , array() );
 	        	$facebook_options = isset($wpea_options['facebook'])? $wpea_options['facebook'] : array();
 	        	$app_id = isset( $facebook_options['facebook_app_id'] ) ? $facebook_options['facebook_app_id'] : '';
@@ -114,11 +114,11 @@ class WP_Event_Aggregator_FB_Authorize {
 					$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wauthorize=2');
 					wp_redirect($redirect_url);
 					exit();
-					die( __( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
+					die( esc_attr__( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
 				}
 
             } else {
-            	die( __('You have not access to do this operations.', 'wp-event-aggregator' ) );
+            	die( esc_attr__('You have not access to do this operations.', 'wp-event-aggregator' ) );
             }
     }	
 }

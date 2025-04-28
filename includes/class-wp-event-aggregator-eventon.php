@@ -182,12 +182,12 @@ class WP_Event_Aggregator_EventON {
 			$country = isset( $centralize_array['location']['country'] ) ? sanitize_text_field($centralize_array['location']['country']) : '';
 			$is_all_day    = !empty( $centralize_array['is_all_day'] ) ? $centralize_array['is_all_day'] : 0;
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
-			$start_ampm = date("a", $start_time);
-			$start_hour = date("h", $start_time);
-			$start_minute = date("i", $start_time);
-			$end_ampm = date("a", $end_time);
-			$end_hour = date("h", $end_time);
-			$end_minute = date("i", $end_time);
+			$start_ampm = gmdate("a", $start_time);
+			$start_hour = gmdate("h", $start_time);
+			$start_minute = gmdate("i", $start_time);
+			$end_ampm = gmdate("a", $end_time);
+			$end_hour = gmdate("h", $end_time);
+			$end_minute = gmdate("i", $end_time);
 
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', $centralize_array['url'] );

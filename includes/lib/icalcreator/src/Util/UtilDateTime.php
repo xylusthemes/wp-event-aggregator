@@ -202,7 +202,7 @@ class UtilDateTime extends DateTime
             $iCaldateTime = new UtilDateTime( $YmdHise );
         }
         catch( Exception $e ) {
-            throw new RuntimeException( sprintf( $MSG2, 3, $YmdHise ), null, $e ); // -- #1
+            throw new RuntimeException( sprintf( $MSG2, 3, $YmdHise ), null, $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         if( Vcalendar::Z == $dtstartTz ) {
             $dtstartTz = Vcalendar::UTC;
@@ -216,14 +216,14 @@ class UtilDateTime extends DateTime
                 }
                 catch( Exception $e ) {
                     throw new RuntimeException( // -- #2
-                        sprintf( $MSG1, 5, $dtstartTz ),
-                        null,
-                        $e
+                        sprintf( $MSG1, 5, $dtstartTz ), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                        null, 
+                        $e // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                     );
                 }
                 if( false === $iCaldateTime->setTimezone( $timeZone )) {
                     throw new RuntimeException(  // -- #3
-                        sprintf( $MSG4, 6, $dtstartTz )
+                        sprintf( $MSG4, 6, $dtstartTz ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                     );
                 }
             }

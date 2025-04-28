@@ -204,15 +204,8 @@ class WP_Event_Aggregator_TEC {
 			$esource_id     = $centralize_array['ID'];
 			$start_time     = gmdate( 'Y-m-d H:i:s', $centralize_array['starttime_local'] );
 			$end_time       = gmdate( 'Y-m-d H:i:s', $centralize_array['endtime_local'] );
-			
-			if( $centralize_array['origin'] == 'ical' ){
-				$start_date_utc = $allmetas['_EventStartDateUTC'];
-				$end_date_utc   = $allmetas['_EventEndDateUTC'];
-			}else{
-				$start_date_utc = date( 'Y-m-d H:i:s', (int) $allmetas['_EventStartDateUTC'] );
-				$end_date_utc   = date( 'Y-m-d H:i:s', (int) $allmetas['_EventEndDateUTC'] );
-			}
-
+			$start_date_utc = $allmetas['_EventStartDateUTC'];
+			$end_date_utc   = $allmetas['_EventEndDateUTC'];
 			$timezone       = isset( $allmetas['timezone'] ) ? $allmetas['timezone'] : 'UTC';
 			$duration       = 0;
 			$hash           = sha1( $new_event_id . $duration . $start_time . $end_time . $start_date_utc . $end_date_utc . $timezone );
@@ -274,6 +267,7 @@ class WP_Event_Aggregator_TEC {
 
 		if ( $update_event_id ) {
 
+			
 			//update all metadata
 			$allmetas = $this->format_event_args_for_tec( $centralize_array );
 			if( !empty( $allmetas ) ){
@@ -333,15 +327,8 @@ class WP_Event_Aggregator_TEC {
 			$esource_id     = $centralize_array['ID'];
 			$start_time     = gmdate( 'Y-m-d H:i:s', $centralize_array['starttime_local'] );
 			$end_time       = gmdate( 'Y-m-d H:i:s', $centralize_array['endtime_local'] );
-
-			if( $centralize_array['origin'] == 'ical' ){
-				$start_date_utc = $allmetas['_EventStartDateUTC'];
-				$end_date_utc   = $allmetas['_EventEndDateUTC'];
-			}else{
-				$start_date_utc = date( 'Y-m-d H:i:s', (int) $allmetas['_EventStartDateUTC'] );
-				$end_date_utc   = date( 'Y-m-d H:i:s', (int)$allmetas['_EventEndDateUTC'] );
-			}
-			
+			$start_date_utc = $allmetas['_EventStartDateUTC'];
+			$end_date_utc   = $allmetas['_EventEndDateUTC'];
 			$timezone       = isset( $allmetas['timezone'] ) ? $allmetas['timezone'] : 'UTC';
 
 			// Update the $wpdb->prefix.tec_events table
@@ -388,8 +375,6 @@ class WP_Event_Aggregator_TEC {
 		$timezone_name   = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 		$esource_url     = isset( $centralize_array['url'] ) ? esc_url( $centralize_array['url'] ) : '';
 		$esource_id      = $centralize_array['ID'];
-		$start_time_utc = isset( $centralize_array['startime_utc'] ) ? gmdate( 'Y-m-d H:i:s', (int) $centralize_array['startime_utc'] ) : '';
-		$end_time_utc    = isset( $centralize_array['endtime_utc'] ) ? gmdate( 'Y-m-d H:i:s', (int) $centralize_array['endtime_utc'] ) : '';
 
 		$event_args = array(
 			'_EventStartDate'         => gmdate( 'Y-m-d H:i:s', $start_time ),
@@ -400,8 +385,8 @@ class WP_Event_Aggregator_TEC {
 			'_EventEndHour'           => gmdate( 'h', $end_time ),
 			'_EventEndMinute'         => gmdate( 'i', $end_time ),
 			'_EventEndMeridian'       => gmdate( 'a', $end_time ),
-			'_EventStartDateUTC'      => !empty( $start_time_utc ) ? gmdate( 'Y-m-d H:i:s', (int) $start_time_utc ) : '',
-			'_EventEndDateUTC'        => !empty( $end_time_utc ) ? gmdate( 'Y-m-d H:i:s', (int) $end_time_utc ) : '',
+			'_EventStartDateUTC'      => ! empty( $centralize_array['startime_utc'] ) ? gmdate( 'Y-m-d H:i:s', (int) $centralize_array['startime_utc'] ) : gmdate( 'Y-m-d H:i:s', (int) $start_time ),
+			'_EventEndDateUTC'        => ! empty( $centralize_array['endtime_utc'] ) ? gmdate( 'Y-m-d H:i:s', (int) $centralize_array['endtime_utc'] ) : gmdate( 'Y-m-d H:i:s', (int) $end_time ),
 			'_EventURL'               => $centralize_array['url'],
 			'_EventShowMap'           => 1,
 			'_EventShowMapLink'       => 1,
@@ -533,8 +518,8 @@ class WP_Event_Aggregator_TEC {
 		$existing_organizer = get_posts( array(
 			'posts_per_page' => 1,
 			'post_type' => $this->oraganizer_posttype,
-			'meta_key' => 'wpea_event_organizer_id',
-			'meta_value' => $organizer_id,
+			'meta_key' => 'wpea_event_organizer_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+			'meta_value' => $organizer_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 			'suppress_filters' => false,
 		) );
 
@@ -555,8 +540,8 @@ class WP_Event_Aggregator_TEC {
 		$existing_organizer = get_posts( array(
 			'posts_per_page' => 1,
 			'post_type' => $this->oraganizer_posttype,
-			'meta_key' => 'wpea_event_organizer_name',
-			'meta_value' => $organizer_name,
+			'meta_key' => 'wpea_event_organizer_name', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_value' => $organizer_name, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 			'suppress_filters' => false,
 		) );
 
@@ -577,8 +562,8 @@ class WP_Event_Aggregator_TEC {
 		$existing_organizer = get_posts( array(
 			'posts_per_page' => 1,
 			'post_type' => $this->venue_posttype,
-			'meta_key' => 'wpea_event_venue_id',
-			'meta_value' => $venue_id,
+			'meta_key' => 'wpea_event_venue_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_value' => $venue_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 			'suppress_filters' => false,
 		) );
 

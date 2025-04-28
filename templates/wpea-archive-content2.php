@@ -36,12 +36,8 @@ $image_url = array();
 if ( '' !== get_the_post_thumbnail() ) {
 	$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'full' );
 } else {
-	if ( '' !== $wpea_ed_image ) {
-		$image_url = wp_get_attachment_image_src( $wpea_ed_image, 'full' );
-	}else{
-		$image_date  = date_i18n( 'F+d', $start_date_str );
-		$image_url[] = 'https://dummyimage.com/420x210/ccc/969696.png?text=' . $image_date;
-	}
+	$image_date  = date_i18n( 'F+d', $start_date_str );
+	$image_url[] = 'https://dummyimage.com/420x210/ccc/969696.png&text=' . $image_date;
 }
 
 $event_url = get_permalink();
@@ -64,13 +60,13 @@ if ( ! empty( $event_categories ) ) {
 	<div class="wpea-style2">
 		<div class="wpea_event_style2">
 			<div class="wpea_event_thumbnail">
-				<a href="<?php echo esc_url( $event_url ); ?>" <?php echo $target; ?> >
+				<a href="<?php echo esc_url( $event_url ); ?>" <?php echo esc_attr( $target ); ?> >
 					<div class="wpea_img_placeholder" style=" background: url('<?php echo esc_url( $image_url[0] ); ?>') no-repeat left top;"></div>
 				</a>
 				<span class="wpea_event_meta_cat">
 					<?php
 						foreach( $eve_cats as $eve_cat ){
-							echo $eve_cat;
+							echo wp_kses_post( $eve_cat );
 						}
 					?>
 				</span>

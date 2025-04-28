@@ -84,7 +84,7 @@ class WP_Event_Aggregator_Admin {
 	function enqueue_admin_scripts( $hook ) {
 
 		$js_dir  = WPEA_PLUGIN_URL . 'assets/js/';
-		wp_register_script( 'wp-event-aggregator', $js_dir . 'wp-event-aggregator-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'wp-color-picker'), WPEA_VERSION );
+		wp_register_script( 'wp-event-aggregator', $js_dir . 'wp-event-aggregator-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'wp-color-picker'), WPEA_VERSION, true );
 		wp_enqueue_script( 'wp-event-aggregator' );
 		
 	}
@@ -118,8 +118,8 @@ class WP_Event_Aggregator_Admin {
 		    <h2><?php esc_html_e( 'WP Event Aggregator', 'wp-event-aggregator' ); ?></h2>
 		    <?php
 		    // Set Default Tab to Import.
-		    $tab = isset( $_GET[ 'tab' ] ) ? sanitize_text_field( wp_unslash( $_GET[ 'tab' ] ) ) : 'eventbrite';
-		    $ntab = isset( $_GET[ 'ntab' ] ) ? sanitize_text_field( wp_unslash( $_GET[ 'ntab' ] ) ) : 'import';
+		    $tab = isset( $_GET[ 'tab' ] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET[ 'tab' ] ) ) ) : 'eventbrite'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		    $ntab = isset( $_GET[ 'ntab' ] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET[ 'ntab' ] ) ) ) : 'import'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		    ?>
 		    <div id="poststuff">
 		        <div id="post-body" class="metabox-holder columns-2">
@@ -240,7 +240,7 @@ class WP_Event_Aggregator_Admin {
 			foreach ( $wpea_errors as $error ) :
 			    ?>
 			    <div class="notice notice-error is-dismissible">
-			        <p><?php echo $error; ?></p>
+			        <p><?php echo $error; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
 			endforeach;
@@ -250,7 +250,7 @@ class WP_Event_Aggregator_Admin {
 			foreach ( $wpea_success_msg as $success ) :
 			    ?>
 			    <div class="notice notice-success is-dismissible">
-			        <p><?php echo $success; ?></p>
+			        <p><?php echo $success; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
 			endforeach;
@@ -260,7 +260,7 @@ class WP_Event_Aggregator_Admin {
 			foreach ( $wpea_warnings as $warning ) :
 			    ?>
 			    <div class="notice notice-warning is-dismissible">
-			        <p><?php echo $warning; ?></p>
+			        <p><?php echo $warning; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
 			endforeach;
@@ -270,7 +270,7 @@ class WP_Event_Aggregator_Admin {
 			foreach ( $wpea_info_msg as $info ) :
 			    ?>
 			    <div class="notice notice-info is-dismissible">
-			        <p><?php echo $info; ?></p>
+			        <p><?php echo $info; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
 			endforeach;
@@ -395,11 +395,11 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function add_event_aggregator_credit( $footer_text ){
-		$page = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( $_GET['page'] ) ) : '';
+		$page = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( $page != '' && $page == 'import_events' ) {
 			$rate_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
-
 			$footer_text .= sprintf(
+				// translators: %1$s: Opening HTML tag for WP Event Aggregator, %2$s: Closing HTML tag for WP Event Aggregator, %3$s: The star rating link
 				esc_html__( ' Rate %1$sWP Event Aggregator%2$s %3$s', 'wp-event-aggregator' ),
 				'<strong>',
 				'</strong>',
@@ -472,11 +472,11 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function get_selected_tab_submenu( $submenu_file ){
-		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){
+		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'shortcodes', 'support' );
-			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( $_GET['tab'] ) ) : 'eventbrite';
+			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'eventbrite'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if( in_array( $tab, $allowed_tabs ) ){
-				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
+				$submenu_file = esc_url( admin_url( 'admin.php?page=import_events&tab='.$tab ) );
 			}
 		}
 		return $submenu_file;
@@ -491,7 +491,7 @@ class WP_Event_Aggregator_Admin {
 		    define( 'IFRAME_REQUEST', true );
 		}
 	    iframe_header();
-	    $history_id = isset($_GET['history']) ? absint($_GET['history']) : 0;
+	    $history_id = isset( $_GET['history'] ) ? absint( $_GET['history'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	    if( $history_id > 0){
 	    	$imported_data = get_post_meta($history_id, 'imported_data', true);
 	    	if(!empty($imported_data)){
@@ -513,20 +513,20 @@ class WP_Event_Aggregator_Admin {
 								<?php 
 								printf(
 									'<a href="%1$s" target="_blank">%2$s</a>',
-									get_the_permalink($event['id']),
-									get_the_title($event['id'])
+									esc_url( get_the_permalink($event['id'] ) ),
+									esc_attr( get_the_title( $event['id'] ) )
 								);
 								?>
 							</td>
 							<td class="title column-title">
-								<?php echo ucfirst($event['status']); ?>
+								<?php echo esc_attr( ucfirst( $event['status'] ) ); ?>
 							</td>
 							<td class="title column-action">
 								<?php 
 								printf(
 									'<a href="%1$s" target="_blank">%2$s</a>',
-									get_edit_post_link($event['id']),
-									__( 'Edit', 'wp-event-aggregator' )
+									esc_url( get_edit_post_link( $event['id'] ) ),
+									esc_attr__( 'Edit', 'wp-event-aggregator' )
 								);
 								?>
 							</td>
@@ -573,12 +573,13 @@ class WP_Event_Aggregator_Admin {
 	 */
 	public function setup_success_messages(){
 		global $wpea_success_msg, $wpea_errors;
-		if ( isset( $_GET['wpeam_authorize'] ) && trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) != '' ) {
-			if( trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) == '1' ){
+		$wpeam_authorize = isset( $_GET['wpeam_authorize'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['wpeam_authorize'] ) && trim( $wpeam_authorize ) != '' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if( trim( $wpeam_authorize ) == '1' ){
 				$wpea_success_msg[] = esc_html__( 'Authorized Successfully.', 'wp-event-aggregator' );	
-			} elseif( trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) == '2' ){
+			} elseif( trim( $wpeam_authorize ) == '2' ){
 				$wpea_errors[] = esc_html__( 'Please insert Meetup Auth Key and Secret.', 'wp-event-aggregator' );	
-			} elseif( trim( sanitize_text_field( wp_unslash( $_GET['wpeam_authorize'] ) ) ) == '0' ){
+			} elseif( trim( $wpeam_authorize ) == '0' ){
 				$wpea_errors[] = esc_html__( 'Something went wrong during authorization. Please try again.', 'wp-event-aggregator' );
 			}			
 		}
@@ -596,7 +597,7 @@ class WP_Event_Aggregator_Admin {
 			'posts_per_page'  => 100,
 			'post_status'     => 'publish',
 			'fields'          => 'ids',
-			'meta_query'      => array(
+			'meta_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'end_ts',
 					'value'   => current_time( 'timestamp' ) - ( 24 * 3600 ),

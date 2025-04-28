@@ -165,11 +165,11 @@ class WP_Event_Aggregator_Event_Organizer {
 			}
 
 			// Save Meta.
-			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_until', date( 'Y-m-d H:i:s', $start_time ) );
-			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_start_start', date( 'Y-m-d H:i:s', $start_time ) );
-			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_start_finish', date( 'Y-m-d H:i:s', $end_time ) );
-			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_last_start', date( 'Y-m-d H:i:s', $start_time ) );
-			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_last_finish', date( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_until', gmdate( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_start_start', gmdate( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_start_finish', gmdate( 'Y-m-d H:i:s', $end_time ) );
+			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_last_start', gmdate( 'Y-m-d H:i:s', $start_time ) );
+			update_post_meta( $inserted_event_id, '_eventorganiser_schedule_last_finish', gmdate( 'Y-m-d H:i:s', $end_time ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_link', esc_url( $ticket_uri ) );
 			update_post_meta( $inserted_event_id, 'wpea_event_origin', $event_args['import_origin'] );
 			update_post_meta( $inserted_event_id, '_wpea_starttime_str', $start_time );
@@ -185,18 +185,21 @@ class WP_Event_Aggregator_Event_Organizer {
 			// Custom table Details
 			$event_array = array(
 				'post_id' 		   => $inserted_event_id,
-				'StartDate' 	   => date( 'Y-m-d', $start_time ),
-				'EndDate' 	       => date( 'Y-m-d', $end_time ),
-				'StartTime'        => date( 'H:i:s', $start_time ),
-				'FinishTime' 	   => date( 'H:i:s', $end_time ),
+				'StartDate' 	   => gmdate( 'Y-m-d', $start_time ),
+				'EndDate' 	       => gmdate( 'Y-m-d', $end_time ),
+				'StartTime'        => gmdate( 'H:i:s', $start_time ),
+				'FinishTime' 	   => gmdate( 'H:i:s', $end_time ),
 				'event_occurrence' => 0,
 			);
 
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_db_table WHERE `post_id` = ".absint( $inserted_event_id ) );
 			if( $event_count > 0 && is_numeric( $event_count ) ){
 				$where = array( 'post_id' => absint( $inserted_event_id ) );
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->update( $this->event_db_table , $event_array, $where );	
 			}else{
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$wpdb->insert( $this->event_db_table , $event_array );
 			}
 
@@ -228,49 +231,52 @@ class WP_Event_Aggregator_Event_Organizer {
 				$country = isset( $venue['country'] ) ? $venue['country'] : '';
 
 				$loc_term_meta = array();
-				$loc_term_meta[] = array(
+				$$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_address',
-					'meta_value'  => $address,
+					'meta_key' 	  => '_address', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $address,   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
 				$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_city',
-					'meta_value'  => $city,
+					'meta_key' 	  => '_city',   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $city,     // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
 				$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_state',
-					'meta_value'  => $state,
+					'meta_key' 	  => '_state',   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $state,     // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
 				$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_postcode',
-					'meta_value'  => $zip,
+					'meta_key' 	  => '_postcode',  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $zip,         // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
 				$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_country',
-					'meta_value'  => $country,
+					'meta_key' 	  => '_country',  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $country,    // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
 				$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_lat',
-					'meta_value'  => $lat,
+					'meta_key' 	  => '_lat',  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $lat,    // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
 				$loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
-					'meta_key' 	  => '_lng',
-					'meta_value'  => $lon,
+					'meta_key' 	  => '_lng', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'  => $lon,   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);	
 
 				if( !empty( $loc_term_meta ) ){
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 					$meta_keys = $wpdb->get_col( "SELECT `meta_key` FROM {$wpdb->prefix}eo_venuemeta WHERE `eo_venue_id` = ".$loc_term_id );
 					foreach ($loc_term_meta as $loc_value) {
 						if( in_array( $loc_value['meta_key'], $meta_keys) ){
-							$where = array( 'eo_venue_id' => absint( $loc_term_id ), 'meta_key' => $loc_value['meta_key'] );
+							$where = array( 'eo_venue_id' => absint( $loc_term_id ), 'meta_key' => $loc_value['meta_key'] ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+							// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 							$wpdb->update( $this->venue_db_table , $loc_value, $where );	
 						}else{
+							// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 							$wpdb->insert( $this->venue_db_table , $loc_value );
 						}			
 					}

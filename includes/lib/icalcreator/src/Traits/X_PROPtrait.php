@@ -229,7 +229,7 @@ trait X_PROPtrait
     {
         static $MSG = 'Invalid X-property name : \'%s\'';
         if( empty( $xPropName ) || ! StringFactory::isXprefixed( $xPropName )) {
-            throw new InvalidArgumentException( sprintf( $MSG, $xPropName ));
+            throw new InvalidArgumentException( sprintf( $MSG, $xPropName )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
         $xPropName = strtoupper( $xPropName );
         $params    = array_change_key_case( $params, CASE_UPPER );

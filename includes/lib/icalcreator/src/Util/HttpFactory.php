@@ -129,7 +129,7 @@ class HttpFactory
         $cdType = ( $cdType ) ? 4 : 5;
         header( sprintf( self::$headers[$cdType], $fileName ));
         header( self::$headers[6] );
-        echo $output;
+        echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.Security.EscapeOutput.OutputNotEscaped	
         return true;
     }
 
@@ -144,7 +144,7 @@ class HttpFactory
     private static function getFakedFilename()
     {
         static $DOTICS = '.ics';
-        return date(
+        return gmdate(
             DateTimeFactory::$YmdHis,
             intval( microtime( true ))
             ) . $DOTICS;

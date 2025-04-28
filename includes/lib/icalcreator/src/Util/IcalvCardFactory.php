@@ -153,7 +153,7 @@ class IcalvCardFactory
     {
         static $ERRMSG1 = 'Invalid version %s';
         if( ! in_array( $version, self::$VCARDVERSIONS )) {
-            throw new InvalidArgumentException( sprintf( $ERRMSG1, $version ));
+            throw new InvalidArgumentException( sprintf( $ERRMSG1, $version )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
     }
 

@@ -449,7 +449,7 @@ abstract class IcalBase implements IcalInterface
             case ( $isComponent ) :
                 break;
             default:  // any invalid config key.. .
-                throw new InvalidArgumentException( sprintf( $ERRMSG9, $config ));
+                throw new InvalidArgumentException( sprintf( $ERRMSG9, $config )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end switch
         if( ! empty( $subCfg ) && ! empty( $this->components )) {
             foreach( $subCfg as $cfgkey => $cfgValue ) {
@@ -473,7 +473,7 @@ abstract class IcalBase implements IcalInterface
     {
         static $ERRMSG = 'Empty %s value not allowed';
         if( empty( $value ) && ! $this->getConfig( self::ALLOWEMPTY )) {
-            throw new InvalidArgumentException( sprintf( $ERRMSG, $propName ));
+            throw new InvalidArgumentException( sprintf( $ERRMSG, $propName )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
     }
 
@@ -882,7 +882,7 @@ abstract class IcalBase implements IcalInterface
         $compType = $component->getCompType();
         if( ! Util::isCompInList( $compType, self::$VCOMPS ) &&
              ( self::VTIMEZONE != $compType )) {
-            throw new InvalidArgumentException( sprintf( $ERRMSG, $compType ));
+            throw new InvalidArgumentException( sprintf( $ERRMSG, $compType )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
     }
 
@@ -912,7 +912,7 @@ abstract class IcalBase implements IcalInterface
                     case self::DAYLIGHT :
                         break 2;
                     default :
-                        throw new InvalidArgumentException( sprintf( $MSG, $subType ));
+                        throw new InvalidArgumentException( sprintf( $MSG, $subType )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 }
                 break;
             case self::VEVENT :
@@ -922,7 +922,7 @@ abstract class IcalBase implements IcalInterface
                     case self::VALARM :
                         break 2;
                     default :
-                        throw new InvalidArgumentException( sprintf( $MSG, $subType ));
+                        throw new InvalidArgumentException( sprintf( $MSG, $subType )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 }
                 break;
             case self::VFREEBUSY :
@@ -930,7 +930,7 @@ abstract class IcalBase implements IcalInterface
             case self::VJOURNAL :
                 break;
             default :
-                throw new InvalidArgumentException( sprintf( $MSG, $type ));
+                throw new InvalidArgumentException( sprintf( $MSG, $type )); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         } // end switch
     }
 }

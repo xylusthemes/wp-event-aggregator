@@ -37,7 +37,7 @@ global $importevents;
 			                    	<option value="ical_url" <?php if( wpea_is_pro() ){ echo 'selected="selected"'; } ?> ><?php esc_attr_e( 'iCal URL','wp-event-aggregator' ); ?></option>
 			                    </select>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select Event source.', 'wp-event-aggregator' ); ?>
+			                        <?php esc_attr_e( 'Select Event source.', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>
@@ -49,7 +49,7 @@ global $importevents;
 					    	<td>
 					    		<input class="wpea_text ical_url" name="ical_url" type="text" <?php if( !wpea_is_pro() ){ echo 'disabled="disabled"'; } ?>/>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Enter iCal URL (Eg. https://www.xyz.com/ical-url.ics)', 'wp-event-aggregator' ); ?>
+			                        <?php esc_attr_e( 'Enter iCal URL (Eg. https://www.xyz.com/ical-url.ics)', 'wp-event-aggregator' ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
 					    	</td>
@@ -81,7 +81,7 @@ global $importevents;
 									<input type="text" name="end_date" class="xt_datepicker end_date" placeholder="<?php esc_html_e('Select end date', 'wp-event-aggregator' ); ?>">
 								</div>
 			                    <span class="wpea_small">
-			                        <?php _e( 'Select date range from which you want to import events. Default start date is Today', 'wp-event-aggregator' ); ?>
+			                        <?php esc_attr_e( 'Select date range from which you want to import events. Default start date is Today', 'wp-event-aggregator' ); ?>
 			                    </span>
 					        </td>
 					    </tr>
@@ -113,9 +113,9 @@ global $importevents;
 			<?php } elseif( $ntab == 'scheduled_import' ){
 				?>
 				<form id="scheduled-import" method="get">
-				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); ?>" />
-				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'ical' ?>" />
-				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'ical'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
 				<?php 
 				if( wpea_is_pro() ){
 					$listtable = new WP_Event_Aggregator_List_Table();

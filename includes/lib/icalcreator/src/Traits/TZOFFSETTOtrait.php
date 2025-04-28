@@ -120,7 +120,7 @@ trait TZOFFSETTOtrait
         }
         elseif( ! DateTimeZoneFactory::hasOffset( $value )) {
             throw new InvalidArgumentException(
-                sprintf( $ERR, Vcalendar::TZOFFSETTO, $value )
+                sprintf( $ERR, Vcalendar::TZOFFSETTO, $value ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
         $this->tzoffsetto = [

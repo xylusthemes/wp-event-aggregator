@@ -99,14 +99,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.3' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.3' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.3' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.8.3' ); }
 
 
 	/**
@@ -279,8 +279,8 @@ class WP_Event_Aggregator{
 	public function wpea_enqueue_style() {
 
 		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
-		wp_enqueue_style('font-awesome', $css_dir . 'font-awesome.min.css', false, "" );
-	 	wp_enqueue_style('wp-event-aggregator-front', $css_dir . 'wp-event-aggregator.css', false, "" );
+		wp_enqueue_style('font-awesome', $css_dir . 'font-awesome.min.css', false, WPEA_VERSION );
+	 	wp_enqueue_style('wp-event-aggregator-front', $css_dir . 'wp-event-aggregator.css', false, WPEA_VERSION );
 		wp_enqueue_style('wp-event-aggregator-front-style2', $css_dir . 'grid-style2.css', false, WPEA_VERSION );
 	}
 

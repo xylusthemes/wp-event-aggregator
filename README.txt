@@ -1,7 +1,7 @@
 === WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress ===
 Contributors: xylus,dharm1025,rajat1192
 Donate link: http://xylusthemes.com
-Tags: facebook events, event aggregator, eventbrite, iCal, facebook, eventbrite, meetup, event aggregator, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, facebook event, meetup event, eventbrite event, ical import, ics import, event management, event calendar, event manager
+Tags: Event aggregator, calendar, Google Calendar, eventbrite event, facebook event
 Requires at least: 4.0
 Tested up to: 6.8
 Stable tag: 1.8.3
@@ -14,6 +14,8 @@ WP Event Aggregator: Easy way to import Facebook Events, Eventbrite events, Meet
 WP Event Aggregator ([Pro][1]) allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site. You can import Facebook Events, Eventbrite Events, Meetup events and other iCAL supported events into WordPress. 
 
 WP Event Aggregator works as a stand-alone as well as add-on plugin with leading Event Calendar plugins listed below, which allows you to run imports from multiple sources right from your dashboard, including Facebook, Meetup, Google Calendar( using iCal Url or .ics file ), Outlook Calendar ( using iCal Url or .ics file ), Apple Calendar ( using iCal Url or .ics file ), iCalendar, and ICS into WordPress.  WP Event aggregator is a perfect match for Event, Event Directory, City Directory, Hotel or School website who needs to display events. 
+
+facebook events, eventbrite, iCal, facebook, eventbrite, meetup, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, meetup event, ical import, ics import, event management, event calendar, event manager
 
 **Import Events from following sources**
 

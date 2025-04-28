@@ -28,7 +28,7 @@ class WP_Event_Aggregator_Meetup_Authorize {
 	* Authorize Meetup user to get access token
 	*/
     function wpea_authorize_user() {
-		if ( ! empty($_GET) && wp_verify_nonce($_GET['wpea_mauthorize_nonce'], 'wpea_mauthorize_action' ) ) {
+		if ( ! empty($_GET) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_GET['wpea_mauthorize_nonce'] ) ) ), 'wpea_mauthorize_action' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			$wpea_options = get_option( WPEA_OPTIONS );
 			$meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
 			$meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_options['meetup_oauth_key'] : '';
@@ -40,10 +40,10 @@ class WP_Event_Aggregator_Meetup_Authorize {
 				        . $meetup_oauth_key . "&response_type=code&redirect_uri=" . $param_url;
 				header("Location: " . $dialog_url);
 			}else{
-				die( __( 'Please insert Meetup Oauth Key and Secret.', 'wp-event-aggregator' ) );
+				die( esc_attr__( 'Please insert Meetup Oauth Key and Secret.', 'wp-event-aggregator' ) );
 			}
         } else {
-            die( __('You have not access to do this operations.', 'wp-event-aggregator' ) );
+            die( esc_attr__('You have not access to do this operations.', 'wp-event-aggregator' ) );
         }
     }
 
@@ -51,7 +51,7 @@ class WP_Event_Aggregator_Meetup_Authorize {
 	* Remove Meetup user connection
 	*/
 	function wpea_deauthorize_user() {
-		if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'wpea_deauthorize_nonce' ) ) {
+		if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) ), 'wpea_deauthorize_nonce' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			if ( current_user_can( 'manage_options' ) ) {
 				delete_option('wpea_mauthorized_user');
 				delete_option('wpea_muser_token_options');
@@ -60,10 +60,10 @@ class WP_Event_Aggregator_Meetup_Authorize {
 				wp_redirect($redirect_url);
 				exit();
 			} else {
-				wp_die(__('You do not have sufficient permissions to perform this action.'));
+				wp_die( esc_attr__('You do not have sufficient permissions to perform this action.', 'wp-event-aggregator' ));
 			}
 		} else {
-			wp_die(__('Sorry, you are not allowed to access this page.'));
+			wp_die( esc_attr__('Sorry, you are not allowed to access this page.', 'wp-event-aggregator' ));
 		}
 	}
 
@@ -72,9 +72,9 @@ class WP_Event_Aggregator_Meetup_Authorize {
 	*/
     function wpea_authorize_user_callback() {
 		global $wpea_success_msg;
-		if ( isset( $_GET['code'] ) && !empty( $_GET['code'] ) ) {
+		if ( isset( $_GET['code'] ) && !empty( $_GET['code'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
-				$code = sanitize_text_field($_GET['code']);
+				$code = esc_attr( sanitize_text_field( wp_unslash( $_GET['code'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				$wpea_options = get_option( WPEA_OPTIONS );
 				$meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
 				$meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_options['meetup_oauth_key'] : '';
@@ -126,7 +126,7 @@ class WP_Event_Aggregator_Meetup_Authorize {
 				}
 
             } else {
-				die( __('You have not access to do this operations.', 'wp-event-aggregator' ) );
+				die( esc_attr__('You have not access to do this operations.', 'wp-event-aggregator' ) );
             }
     }
 }

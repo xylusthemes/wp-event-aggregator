@@ -18,7 +18,8 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
             <div class="wpea-support-features">
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/document.svg'; ?>" alt="<?php esc_attr_e( 'Looking for Something?', 'wp-event-aggregator' ); ?>">
+                        <?php // phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage  ?>
+						<img class="wpea-support-features-icon" src="<?php echo esc_url( WPEA_PLUGIN_URL.'assets/images/document.svg' ); ?>" alt="<?php esc_attr_e( 'Looking for Something?', 'wp-event-aggregator' ); ?>">
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Looking for Something?', 'wp-event-aggregator' ); ?></h3>
@@ -28,7 +29,8 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 				</div>
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/call-center.svg'; ?>" alt="<?php esc_attr_e( 'Need Assistance?', 'wp-event-aggregator' ); ?>">
+                        <?php // phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage  ?>
+						<img class="wpea-support-features-icon" src="<?php echo esc_url( WPEA_PLUGIN_URL.'assets/images/call-center.svg' ); ?>" alt="<?php esc_attr_e( 'Need Assistance?', 'wp-event-aggregator' ); ?>">
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Need Assistance?', 'wp-event-aggregator' ); ?></h3>
@@ -38,7 +40,8 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 				</div>
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon"  src="<?php echo WPEA_PLUGIN_URL.'assets/images/bug.svg'; ?>" alt="<?php esc_attr_e( 'Find any Bugs?', 'wp-event-aggregator' ); ?>" />
+                        <?php // phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage  ?>
+						<img class="wpea-support-features-icon"  src="<?php echo esc_url( WPEA_PLUGIN_URL.'assets/images/bug.svg' ); ?>" alt="<?php esc_attr_e( 'Find any Bugs?', 'wp-event-aggregator' ); ?>" />
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Find any Bugs?', 'wp-event-aggregator' ); ?></h3>
@@ -48,7 +51,8 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 				</div>
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/tools.svg'; ?>" alt="<?php esc_attr_e( 'Require Customization?', 'wp-event-aggregator' ); ?>" />
+                        <?php // phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage  ?>
+						<img class="wpea-support-features-icon" src="<?php echo esc_url( WPEA_PLUGIN_URL.'assets/images/tools.svg' ); ?>" alt="<?php esc_attr_e( 'Require Customization?', 'wp-event-aggregator' ); ?>" />
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Require Customization?', 'wp-event-aggregator' ); ?></h3>
@@ -58,7 +62,8 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 				</div>
 				<div class="wpea-support-features-card">
 					<div class="wpea-support-features-img">
-						<img class="wpea-support-features-icon" src="<?php echo WPEA_PLUGIN_URL.'assets/images/like.svg'; ?>" alt="<?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?>" />
+                        <?php // phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage  ?>
+						<img class="wpea-support-features-icon" src="<?php echo esc_url( WPEA_PLUGIN_URL.'assets/images/like.svg' ); ?>" alt="<?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?>" />
 					</div>
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?></h3>
@@ -79,17 +84,17 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
         }
         ?>
         <div class="" style="margin-top: 20px;">
-            <h3 class="setting_bar"><?php _e( 'Plugins you should try','wp-event-aggregator' ); ?></h3>
+            <h3 class="setting_bar"><?php esc_attr_e( 'Plugins you should try','wp-event-aggregator' ); ?></h3>
             <?php 
             if( !empty( $plugins ) ){
                 foreach ($plugins as $plugin ) {
                     ?>
                     <div class="plugin_box">
                         <?php if( $plugin->banners['low'] != '' ){ ?>
-                            <img src="<?php echo $plugin->banners['low']; ?>" class="plugin_img" title="<?php echo $plugin->name; ?>">
+                            <img src="<?php echo esc_url( $plugin->banners['low'] ); ?>" class="plugin_img" title="<?php echo esc_attr( $plugin->name ); ?>">
                         <?php } ?>                    
                         <div class="plugin_content">
-                            <h3><?php echo $plugin->name; ?></h3>
+                            <h3><?php echo esc_attr( $plugin->name ); ?></h3>
 
                             <?php wp_star_rating( array(
                             'rating' => $plugin->rating,
@@ -98,23 +103,23 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
                             ) );?>
 
                             <?php if( $plugin->version != '' ){ ?>
-                                <p><strong><?php _e( 'Version:','wp-event-aggregator' ); ?> </strong><?php echo $plugin->version; ?></p>
+                                <p><strong><?php esc_attr_e( 'Version:','wp-event-aggregator' ); ?> </strong><?php echo esc_attr( $plugin->version ); ?></p>
                             <?php } ?>
 
                             <?php if( $plugin->requires != '' ){ ?>
-                                <p><strong><?php _e( 'Requires:','wp-event-aggregator' ); ?> </strong> <?php _e( 'WordPress ','wp-event-aggregator' ); echo $plugin->requires; ?>+</p>
+                                <p><strong><?php esc_attr_e( 'Requires:','wp-event-aggregator' ); ?> </strong> <?php esc_attr_e( 'WordPress ','wp-event-aggregator' ); echo esc_attr( $plugin->requires ); ?>+</p>
                             <?php } ?>
 
                             <?php if( $plugin->active_installs != '' ){ ?>
-                                <p><strong><?php _e( 'Active Installs:','wp-event-aggregator' ); ?> </strong><?php echo $plugin->active_installs; ?>+</p>
+                                <p><strong><?php esc_attr_e( 'Active Installs:','wp-event-aggregator' ); ?> </strong><?php echo esc_attr( $plugin->active_installs ); ?>+</p>
                             <?php } ?>
 
                             <?php //print_r( $plugin ); ?>
-                            <a class="button button-secondary" href="<?php echo admin_url( 'plugin-install.php?tab=plugin-information&plugin='. $plugin->slug.'&TB_iframe=1&width=772&height=600'); ?>" target="_blank">
-                                <?php _e( 'Install Now','wp-event-aggregator' ); ?>
+                            <a class="button button-secondary" href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin='. esc_attr( $plugin->slug ).'&TB_iframe=1&width=772&height=600' ) ); ?>" target="_blank">
+                                <?php esc_attr_e( 'Install Now','wp-event-aggregator' ); ?>
                             </a>
-                            <a class="button button-primary" href="<?php echo $plugin->homepage; ?>" target="_blank">
-                                <?php _e( 'Buy Now','wp-event-aggregator' ); ?>
+                            <a class="button button-primary" href="<?php echo esc_url( $plugin->homepage ); ?>" target="_blank">
+                                <?php esc_attr_e( 'Buy Now','wp-event-aggregator' ); ?>
                             </a>
                         </div>
                     </div>

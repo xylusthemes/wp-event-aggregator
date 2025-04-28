@@ -57,7 +57,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 		global $importevents;
 		$wpea_url_delete_args = array(
-			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ),
+			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated	
 			'wpea_action' => 'wpea_simport_delete',
 			'import_id'  => absint( $item['ID'] ),
 		);
@@ -118,7 +118,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	function column_action( $item ) {
 
 		$xtmi_run_import_args = array(
-			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ),
+			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated	
 			'wpea_action' => 'wpea_run_import',
 			'import_id'  => $item['ID'],
 		);
@@ -129,15 +129,19 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			if(!empty($item['current_import'])){
 				$stats = array();
 				if( $item['current_import']['created'] > 0 ){
+					// translators: %d: Number of events Created.
 					$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $item['current_import']['created']);
 				}
 				if( $item['current_import']['updated'] > 0 ){
+					// translators: %d: Number of events Updated.
 					$stats[] = sprintf( __( '%d Updated', 'wp-event-aggregator' ), $item['current_import']['updated'] );
 				}
 				if( $item['current_import']['skipped'] > 0 ){
+					// translators: %d: Number of events Skipped.
 					$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $item['current_import']['skipped'] );
 				}
 				if( $item['current_import']['skip_trash'] > 0 ){
+					// translators: %d: Number of events Skipped.
 					$stats[] = sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $item['current_import']['skip_trash'] );
 				}
 				if( !empty( $stats ) ){
@@ -284,13 +288,13 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			'paged' => $current_page,
 		);
 
-		if( isset( $_REQUEST['s'] ) ){
-			$query_args['s'] = sanitize_text_field($_REQUEST['s']);
+		if( isset( $_REQUEST['s'] ) ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$query_args['s'] = sanitize_text_field($_REQUEST['s']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		}
 
 		if( $origin != '' ){
-			$query_args['meta_key'] = 'import_origin';
-			$query_args['meta_value'] = esc_attr( $origin );
+			$query_args['meta_key'] = 'import_origin'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+			$query_args['meta_value'] = esc_attr( $origin ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 		}
 		$importdata_query = new WP_Query( $query_args );
 		$scheduled_import_data['total_records'] = ( $importdata_query->found_posts ) ? (int) $importdata_query->found_posts : 0;
@@ -329,14 +333,15 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					'post_type'      => 'wpea_import_history',
 					'post_status'    => 'publish',
 					'numberposts'    => 1,
-					'meta_key'       => 'schedule_import_id',
-					'meta_value'     => $import_id,
+					'meta_key'       => 'schedule_import_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+					'meta_value'     => $import_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 					'fields'         => 'ids'
 				);
 
 				$history = get_posts( $history_args );
 
 				if( !empty( $history ) ){
+					// translators: %d: Number of Last Import.
 					$last_import_history_date = sprintf( __( 'Last Import: %s ago', 'wp-event-aggregator' ), human_time_diff( get_the_date( 'U', $history[0] ), current_time( 'timestamp' ) ) );
 					$created = get_post_meta( $history[0], 'created', true );
 					$updated = get_post_meta( $history[0], 'updated', true );
@@ -344,15 +349,19 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					$skip_trash = get_post_meta( $history[0], 'skip_trash', true );
 					$stats = array();
 					if( $created > 0 ){
+						// translators: %d: Number of events Created.
 						$stats[] = sprintf( __( '%d Created', 'wp-event-aggregator' ), $created );
 					}
 					if( $updated > 0 ){
+						// translators: %d: Number of events Updated.
 						$stats[] = sprintf( __( '%d Updated', 'wp-event-aggregator' ), $updated );
 					}
 					if( $skipped > 0 ){
+						// translators: %d: Number of events Skipped.
 						$stats[] = sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped );
 					}
 					if( $skip_trash > 0 ){
+						// translators: %d: Number of events Skipped.
 						$stats[] = sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash );
 					}
 					if( !empty( $stats ) ){
@@ -361,10 +370,10 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 						$error_reason      = get_post_meta( $history[0], 'error_reason', true );
 						$nothing_to_import = get_post_meta( $history[0], 'nothing_to_import', true );
 						if( !empty( $error_reason ) ){
-							$stats = __( '<span style="color: red"><strong>The Private token you provided was invalid.</strong></span>', 'wp-event-aggregator' ) . '<br>';	
+							$stats = '<span style="color: red"><strong>'. esc_attr__( 'The Private token you provided was invalid.', 'wp-event-aggregator' ) . '</strong></span><br>';	
 						}else{
 							if( $nothing_to_import ){
-								$stats = '<span style="color: silver">'.__( 'No events are imported.', 'wp-event-aggregator' ).'</span>';	
+								$stats = '<span style="color: silver">'. esc_attr__( 'No events are imported.', 'wp-event-aggregator' ) . '</span>';	
 							}else{
 								$stats = '';
 							}
@@ -373,21 +382,21 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				}
 	
 				$totalimport_query = $wpdb->prepare( "SELECT SUM( meta_value) AS created_total FROM ".$wpdb->postmeta." WHERE post_id IN ( SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key = 'schedule_import_id' AND meta_value = %d ) AND meta_key = 'created'", $import_id );
-
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 				$totalimport = $wpdb->get_var( $totalimport_query );
 
 				$next_run = '-';
 				if(isset($next_run_times[$import_id]) && !empty($next_run_times[$import_id])){
 					$next_time = $next_run_times[$import_id];
 					$next_run = sprintf( '%s (%s)',
-						esc_html( get_date_from_gmt( date( 'Y-m-d H:i:s', $next_time ), 'Y-m-d H:i:s' ) ),
+						esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $next_time ), 'Y-m-d H:i:s' ) ),
 						esc_html( human_time_diff( current_time( 'timestamp', true ), $next_time ) )
 					);
 				}
 
 				if( $next_run == '-' ){
-					if ( function_exists( 'wpea_recreate_missng_scheduled_import' ) ) {
-						$importevents->common_pro->wpea_recreate_missng_scheduled_import($import_id);
+					if ( method_exists( $importevents->common_pro, 'wpea_recreate_missng_scheduled_import' ) ) {
+						$importevents->common_pro->wpea_recreate_missng_scheduled_import( $import_id );
 					}
 				}
 
@@ -500,8 +509,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 
 		$wpea_url_delete_args = array(
-			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ),
-			'tab'    => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ),
+			'page'   => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated	
+			'tab'    => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated	
 			'wpea_action' => 'wpea_history_delete',
 			'history_id'  => absint( $item['ID'] ),
 		);
@@ -536,22 +545,26 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 
 		$success_message = '<span style="color: silver"><strong>';
 		if( $created > 0 ){
+			// translators: %d: Number of events Created.
 			$success_message .= sprintf( __( '%d Created', 'wp-event-aggregator' ), $created )."<br>";
 		}
 		if( $updated > 0 ){
+			// translators: %d: Number of events Updated.
 			$success_message .= sprintf( __( '%d Updated', 'wp-event-aggregator' ), $updated )."<br>";
 		}
 		if( $skipped > 0 ){
+			// translators: %d: Number of events Skipped.
 			$success_message .= sprintf( __( '%d Skipped', 'wp-event-aggregator' ), $skipped ) ."<br>";
 		}
 		if( $skip_trash > 0 ){
+			// translators: %d: Number of events Skipped.
 			$success_message .= sprintf( __( '%d Skipped (Already exists in Trash)', 'wp-event-aggregator' ), $skip_trash ) ."<br>";
 		}
 		if( !empty( $error_reason ) ){
-			$success_message .= __( 'The Private token you provided was invalid.', 'import-eventbrite-events' ) . '<br>';	
+			$success_message .= __( 'The Private token you provided was invalid.', 'wp-event-aggregator' ) . '<br>';	
 		}else{
 			if( $nothing_to_import ){
-				$success_message .= __( 'No events are imported.', 'import-eventbrite-events' ) . '<br>';	
+				$success_message .= __( 'No events are imported.', 'wp-event-aggregator' ) . '<br>';	
 			}
 		}
 		$success_message .= "</strong></span>";
@@ -633,8 +646,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 			return;
 		}	
 		$wpea_url_all_delete_args = array(
-			'page'       => esc_attr( wp_unslash( $_REQUEST['page'] ) ),
-			'tab'        => esc_attr( wp_unslash( $_REQUEST['tab'] ) ),
+			'page'       => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated	
+			'tab'        => esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated	
 			'wpea_action' => 'wpea_all_history_delete',
 		);
 
@@ -643,7 +656,7 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 			$wp_delete_nonce_url = esc_url( wp_nonce_url( add_query_arg( $wpea_url_all_delete_args, admin_url( 'admin.php' ) ), 'wpea_delete_all_history_nonce' ) );
 			$confirmation_message = esc_html__( "Warning! Import history will be permanatly deleted. Are you certain you want to delete the import history?", "wp-event-aggregator" );
 			?>
-			<a class="button apply" href="<?php echo $wp_delete_nonce_url; ?>" onclick="return confirm('<?php echo $confirmation_message; ?>')">
+			<a class="button apply" href="<?php echo esc_url( $wp_delete_nonce_url ); ?>" onclick="return confirm('<?php echo esc_attr( $confirmation_message ); ?>')">
 				<?php esc_html_e( 'Clear Import History', 'wp-event-aggregator' ); ?>
 			</a>
 			<?php
@@ -703,8 +716,8 @@ class WP_Event_Aggregator_History_List_Table extends WP_List_Table {
 		);
 
 		if( $origin != '' ){
-			$query_args['meta_key'] = 'import_origin';
-			$query_args['meta_value'] = esc_attr( $origin );
+			$query_args['meta_key'] = 'import_origin'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
+			$query_args['meta_value'] = esc_attr( $origin ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 		}
 
 		$importdata_query = new WP_Query( $query_args );
@@ -783,7 +796,7 @@ class WPEA_Shortcode_List_Table extends WP_List_Table {
             'id'            => __( 'ID', 'wp-event-aggregator' ),
             'how_to_use'    => __( 'Title', 'wp-event-aggregator' ),
             'shortcode'     => __( 'Shortcode', 'wp-event-aggregator' ),
-			'action'    	=> __( 'Action', 'wp-event-aggregators' ),
+			'action'    	=> __( 'Action', 'wp-event-aggregator' ),
         );
 
         return $columns;
@@ -892,7 +905,7 @@ class WPEA_Shortcode_List_Table extends WP_List_Table {
                 return $item[ $column_name ];
 
             default:
-                return print_r( $item, true ) ;
+                return print_r( $item, true ) ; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
         }
     }
 }

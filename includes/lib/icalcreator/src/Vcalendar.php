@@ -125,7 +125,7 @@ final class Vcalendar extends IcalBase
         $this->setConfig(
             self::UNIQUE_ID,
             ( isset( $_SERVER[$SERVER_NAME] ))
-                ? gethostbyname( $_SERVER[$SERVER_NAME] )
+                ? gethostbyname( $_SERVER[$SERVER_NAME] ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	
                 : $LOCALHOST
         );
         $this->setConfig( $config );
@@ -607,7 +607,7 @@ final class Vcalendar extends IcalBase
         if(( self::VTIMEZONE != $component->getCompType()) ||
             ( false === ( $tzId = $component->getTzid()))) {
             throw new InvalidArgumentException(
-                sprintf( $ERRMSG1, $component->getCompType())
+                sprintf( $ERRMSG1, $component->getCompType()) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
         $found = [];
@@ -625,9 +625,9 @@ final class Vcalendar extends IcalBase
         } // end foreach
         throw new InvalidArgumentException(
             sprintf(
-                $ERRMSG2,
-                $component->getCompType(),
-                implode( Util::$COMMA, $found )
+                $ERRMSG2, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                $component->getCompType(), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                implode( Util::$COMMA, $found ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             )
         );
     }
@@ -767,7 +767,7 @@ final class Vcalendar extends IcalBase
                     $calSync  -= 1;
                     if( 0 != $calSync ) {  /* err 20 */
                         throw new UnexpectedValueException(
-                            sprintf( $ERR20, $lix, PHP_EOL . implode( PHP_EOL, $rows ))
+                            sprintf( $ERR20, $lix, PHP_EOL . implode( PHP_EOL, $rows )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                         );
                     }
                     break 2;
@@ -842,7 +842,7 @@ final class Vcalendar extends IcalBase
         foreach( $rows as $lix => $row ) {
             if( StringFactory::startsWith( $row, $BEGIN )) {
                 throw new UnexpectedValueException(
-                    sprintf( $ERR, $lix, PHP_EOL . implode( PHP_EOL, $rows ))
+                    sprintf( $ERR, $lix, PHP_EOL . implode( PHP_EOL, $rows )) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
                 );
             }
             /* split property name  and  opt.params and value */

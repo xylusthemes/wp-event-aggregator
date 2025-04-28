@@ -37,7 +37,7 @@ global $importevents;
 									<option value="group_url"><?php esc_attr_e( 'Group URL', 'wp-event-aggregator' ); ?></option>
 								</select>
 								<span class="wpea_small">
-									<?php _e( 'Select Event source. 1. by Event ID, 2. by Group URL', 'wp-event-aggregator' ); ?>
+									<?php esc_attr_e( 'Select Event source. 1. by Event ID, 2. by Group URL', 'wp-event-aggregator' ); ?>
 								</span>
 							</td>
 						</tr>
@@ -50,12 +50,12 @@ global $importevents;
 								<?php if ( wpea_is_pro() ) { ?>
 								<textarea class="ime_meetup_ids" name="ime_event_ids" type="text" rows="5" cols="50"></textarea>
 								<span class="wpea_small">
-									<?php _e( 'One event ID per line, (Eg. Event ID for https://www.meetup.com/xxxx-xxx-xxxx/events/xxxxxxxxx is <span class="borderall">xxxxxxxxx</span>).<br> ', 'wp-event-aggregator' ); ?>
+									<?php echo wp_kses_post( __( 'One event ID per line, (Eg. Event ID for https://www.meetup.com/xxxx-xxx-xxxx/events/xxxxxxxxx is <span class="borderall">xxxxxxxxx</span>).<br> ', 'wp-event-aggregator' ) ); ?>
 								</span>
 								<?php } else { ?>
 								<input class="wpea_text" name="ime_event_ids" type="text" />
 								<span class="wpea_small">
-									<?php _e( 'Insert Meetup event ID (Eg. https://www.meetup.com/xxxx-xxx-xxxx/events/<span class="borderall">xxxxxxxxx</span>).', 'wp-event-aggregator' ); ?>
+									<?php echo wp_kses_post( __( 'Insert Meetup event ID (Eg. https://www.meetup.com/xxxx-xxx-xxxx/events/<span class="borderall">xxxxxxxxx</span>).', 'wp-event-aggregator' ) ); ?>
 								</span>
 								<?php } ?>
 							</td>
@@ -68,7 +68,7 @@ global $importevents;
 							<td>
 								<input class="wpea_text" name="meetup_url" type="text" <?php if ( ! wpea_is_pro() ) { echo 'disabled="disabled"'; } ?> />
 								<span class="wpea_small">
-									<?php _e( 'Insert Meetup group url (Eg. -<span class="borderall">https://www.meetup.com/xxxx-xxx-xxxx/</span>).', 'wp-event-aggregator' ); ?>
+									<?php echo wp_kses_post( __( 'Insert Meetup group url (Eg. -<span class="borderall">https://www.meetup.com/xxxx-xxx-xxxx/</span>).', 'wp-event-aggregator' ) ); ?>
 								</span>
 								<?php do_action( 'wpea_render_pro_notice' ); ?>
 							</td>
@@ -102,9 +102,9 @@ global $importevents;
 			<?php } elseif( $ntab == 'scheduled_import' ){
 				?>
 				<form id="scheduled-import" method="get">
-				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); ?>" />
-				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite' ?>" />
-				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'eventbrite'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
+				<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
 				<?php 
 				if( wpea_is_pro() ){
 					$listtable = new WP_Event_Aggregator_List_Table();

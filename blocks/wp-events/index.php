@@ -26,7 +26,8 @@ function wpea_register_gutenberg_block() {
 			'wpea-wp-events-block',
 			$js_dir . 'gutenberg.blocks.js',
 			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ),
-			WPEA_VERSION
+			WPEA_VERSION,
+			true
 		);
 
 		// Register block editor style.

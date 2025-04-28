@@ -255,16 +255,16 @@ class WP_Event_Aggregator_Cpt {
 			<thead>
 			<tr>
 				<th colspan="2">
-					<?php _e('Time & Date', 'wp-event-aggregator'); ?>
+					<?php esc_attr_e('Time & Date', 'wp-event-aggregator'); ?>
 					<hr>
 				</th>
 			</tr>
 			</thead>
 			<tbody>
 			<tr>
-				<td><?php _e('Start Date & Time', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Start Date & Time', 'wp-event-aggregator'); ?>:</td>
 				<td>
-				<input type="text" name="event_start_date" class="xt_datepicker" id="event_start_date" value="<?php echo get_post_meta($post->ID, 'event_start_date', true); ?>" /> @ 
+				<input type="text" name="event_start_date" class="xt_datepicker" id="event_start_date" value="<?php echo esc_attr( get_post_meta($post->ID, 'event_start_date', true ) ); ?>" /> @ 
 				<?php
 				$this->generate_dropdown( 'event_start', 'hour', $start_hour );
 				$this->generate_dropdown( 'event_start', 'minute', $start_minute );
@@ -273,9 +273,9 @@ class WP_Event_Aggregator_Cpt {
 				</td>
 			</tr>
 			<tr>
-				<td><?php _e('End Date & Time', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('End Date & Time', 'wp-event-aggregator'); ?>:</td>
 				<td>
-					<input type="text" name="event_end_date" class="xt_datepicker" id="event_end_date" value="<?php echo get_post_meta($post->ID, 'event_end_date', true); ?>" /> @ 
+					<input type="text" name="event_end_date" class="xt_datepicker" id="event_end_date" value="<?php echo esc_attr( get_post_meta($post->ID, 'event_end_date', true ) ); ?>" /> @ 
 					<?php
 					$this->generate_dropdown( 'event_end', 'hour', $end_hour );
 					$this->generate_dropdown( 'event_end', 'minute', $end_minute );
@@ -290,7 +290,7 @@ class WP_Event_Aggregator_Cpt {
 			<thead>
 			<tr>
 				<th colspan="2">
-					<?php _e('Location Details', 'wp-event-aggregator'); ?>
+					<?php esc_attr_e('Location Details', 'wp-event-aggregator'); ?>
 					<hr>
 				</th>
 			</tr>
@@ -298,63 +298,63 @@ class WP_Event_Aggregator_Cpt {
 
 			<tbody>
 			<tr>
-				<td><?php _e('Venue', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Venue', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_name" id="venue_name" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_name', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('Address', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Address', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_address" id="venue_address" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_address', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('City', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('City', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_city" id="venue_city" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_city', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('State', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('State', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_state" id="venue_state" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_state', true) ); ?>" />
 				</td>
 			</tr>
 			
 			<tr>
-				<td><?php _e('Country', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Country', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_country" id="venue_country" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_country', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('ZIP Code', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('ZIP Code', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_zipcode" id="venue_zipcode" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_zipcode', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('Latitude', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Latitude', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_lat" id="venue_lat" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_lat', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('Longitude', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Longitude', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_lon" id="venue_lon" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_lon', true) ); ?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td><?php _e('Website', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Website', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="venue_url" id="venue_url" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_url', true) ); ?>" />
 				</td>
@@ -366,32 +366,32 @@ class WP_Event_Aggregator_Cpt {
 			<thead>
 			<tr>
 				<th colspan="2">
-					<?php _e('Organizer Details', 'wp-event-aggregator'); ?>
+					<?php esc_attr_e('Organizer Details', 'wp-event-aggregator'); ?>
 					<hr>
 				</th>
 			</tr>
 			</thead>
 			<tbody>
 			<tr>
-				<td><?php _e('Organizer Name', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Organizer Name', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="organizer_name" id="organizer_name" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_name', true) ); ?>" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php _e('Email', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Email', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="email" name="organizer_email" id="organizer_email" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_email', true) ); ?>" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php _e('Phone', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Phone', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="organizer_phone" id="organizer_phone" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_phone', true) ); ?>" />
 				</td>
 			</tr>
 			<tr>
-				<td><?php _e('Website', 'wp-event-aggregator'); ?>:</td>
+				<td><?php esc_attr_e('Website', 'wp-event-aggregator'); ?>:</td>
 				<td>
 					<input type="text" name="organizer_url" id="organizer_url" value="<?php echo esc_url( get_post_meta($post->ID, 'organizer_url', true) ); ?>" />
 				</td>
@@ -404,16 +404,16 @@ class WP_Event_Aggregator_Cpt {
 			<thead>
 				<tr>
 					<th colspan="2">
-						<?php _e( 'Event Source Link', 'wp-event-aggregator' ); ?>
+						<?php esc_attr_e( 'Event Source Link', 'wp-event-aggregator' ); ?>
 						<hr>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><?php _e( 'Source Link', 'wp-event-aggregator' ); ?>:</td>
+					<td><?php esc_attr_e( 'Source Link', 'wp-event-aggregator' ); ?>:</td>
 					<td>
-						<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo get_post_meta( $post->ID, 'wpea_event_link', true ); ?>" />
+						<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo esc_url( get_post_meta( $post->ID, 'wpea_event_link', true ) ); ?>" />
 					</td>
 				</tr>
 			</tbody>
@@ -433,7 +433,7 @@ class WP_Event_Aggregator_Cpt {
 		$select_name = $start_end.'_'.$type;
 		if( $type == 'hour'){
 			?>
-			<select name="<?php echo $select_name;?>">
+			<select name="<?php echo esc_attr( $select_name ); ?>">
 				<option value="01" <?php selected( $selected, '01' ); ?>>01</option>
 				<option value="02" <?php selected( $selected, '02' ); ?>>02</option>
 				<option value="03" <?php selected( $selected, '03' ); ?>>03</option>
@@ -450,7 +450,7 @@ class WP_Event_Aggregator_Cpt {
 			<?php
 		}elseif( $type == 'minute'){
 			?>
-			<select name="<?php echo $select_name;?>">
+			<select name="<?php echo esc_attr( $select_name ); ?>">
 				<option value="00" <?php selected( $selected, '00' ); ?>>00</option>
 				<option value="05" <?php selected( $selected, '05' ); ?>>05</option>
 				<option value="10" <?php selected( $selected, '10' ); ?>>10</option>
@@ -467,7 +467,7 @@ class WP_Event_Aggregator_Cpt {
 			<?php
 		}elseif( $type == 'meridian'){
 			?>
-			<select name="<?php echo $select_name;?>">
+			<select name="<?php echo esc_attr( $select_name ); ?>">
 				<option value="am" <?php selected( $selected, 'am' ); ?>>am</option>
 				<option value="pm" <?php selected( $selected, 'pm' ); ?>>pm</option>
 			</select>
@@ -483,7 +483,7 @@ class WP_Event_Aggregator_Cpt {
 	{
 
 		// Verify the nonce before proceeding.
-		if ( !isset( $_POST['wpea_event_metabox_nonce'] ) || !wp_verify_nonce( $_POST['wpea_event_metabox_nonce'], WPEA_PLUGIN_DIR ) ){
+		if ( !isset( $_POST['wpea_event_metabox_nonce'] ) || !wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_POST['wpea_event_metabox_nonce'] ) ) ) , WPEA_PLUGIN_DIR ) ){
 			return $post_id;
 		}
 
@@ -504,14 +504,14 @@ class WP_Event_Aggregator_Cpt {
 
 		
 		// Event Date & time Details
-		$event_start_date     = isset( $_POST['event_start_date'] ) ? sanitize_text_field($_POST['event_start_date']) : '';
-		$event_end_date       = isset( $_POST['event_end_date'] ) ? sanitize_text_field($_POST['event_end_date']) : '';
-		$event_start_hour     = isset( $_POST['event_start_hour'] ) ? sanitize_text_field($_POST['event_start_hour']) : '';
-		$event_start_minute   = isset( $_POST['event_start_minute'] ) ? sanitize_text_field($_POST['event_start_minute']) : '';
-		$event_start_meridian = isset( $_POST['event_start_meridian'] ) ? sanitize_text_field($_POST['event_start_meridian']) : '';
-		$event_end_hour       = isset( $_POST['event_end_hour'] ) ? sanitize_text_field($_POST['event_end_hour']) : '';
-		$event_end_minute     = isset( $_POST['event_end_minute'] ) ? sanitize_text_field($_POST['event_end_minute']) : '';
-		$event_end_meridian   = isset( $_POST['event_end_meridian'] ) ? sanitize_text_field($_POST['event_end_meridian']) : '';
+		$event_start_date     = isset( $_POST['event_start_date'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_start_date'] ) ) ) : '';
+		$event_end_date       = isset( $_POST['event_end_date'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_end_date'] ) ) ) : '';
+		$event_start_hour     = isset( $_POST['event_start_hour'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_start_hour'] ) ) ) : '';
+		$event_start_minute   = isset( $_POST['event_start_minute'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_start_minute'] ) ) ) : '';
+		$event_start_meridian = isset( $_POST['event_start_meridian'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_start_meridian'] ) ) ) : '';
+		$event_end_hour       = isset( $_POST['event_end_hour'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_end_hour'] ) ) ) : '';
+		$event_end_minute     = isset( $_POST['event_end_minute'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_end_minute'] ) ) ) : '';
+		$event_end_meridian   = isset( $_POST['event_end_meridian'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_end_meridian'] ) ) ) : '';
 
 		$start_time = $event_start_date.' '.$event_start_hour.':'.$event_start_minute.' '.$event_start_meridian;
 		$end_time = $event_end_date.' '.$event_end_hour.':'.$event_end_minute.' '.$event_end_meridian;
@@ -519,24 +519,24 @@ class WP_Event_Aggregator_Cpt {
 		$end_ts = strtotime( $end_time );
 
 		// Venue Deatails
-		$venue_name    = isset( $_POST['venue_name'] ) ? sanitize_text_field( $_POST['venue_name'] ) : '';
-		$venue_address = isset( $_POST['venue_address'] ) ? sanitize_text_field( $_POST['venue_address'] ) : '';
-		$venue_city    = isset( $_POST['venue_city'] ) ? sanitize_text_field( $_POST['venue_city'] ) : '';
-		$venue_state   = isset( $_POST['venue_state'] ) ? sanitize_text_field( $_POST['venue_state'] ) : '';
-		$venue_country = isset( $_POST['venue_country'] ) ? sanitize_text_field( $_POST['venue_country'] ) : '';
-		$venue_zipcode = isset( $_POST['venue_zipcode'] ) ? sanitize_text_field( $_POST['venue_zipcode'] ) : '';
-		$venue_lat     = isset( $_POST['venue_lat'] ) ? sanitize_text_field( $_POST['venue_lat'] ) : '';
-		$venue_lon     = isset( $_POST['venue_lon'] ) ? sanitize_text_field( $_POST['venue_lon'] ) : '';
-		$venue_url     = isset( $_POST['venue_url'] ) ? esc_url( $_POST['venue_url'] ) : '';
+		$venue_name    = isset( $_POST['venue_name'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_name'] ) ) ) : '';
+		$venue_address = isset( $_POST['venue_address'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_address'] ) ) ) : '';
+		$venue_city    = isset( $_POST['venue_city'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_city'] ) ) ) : '';
+		$venue_state   = isset( $_POST['venue_state'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_state'] ) ) ) : '';
+		$venue_country = isset( $_POST['venue_country'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_country'] ) ) ) : '';
+		$venue_zipcode = isset( $_POST['venue_zipcode'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_zipcode'] ) ) ) : '';
+		$venue_lat     = isset( $_POST['venue_lat'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_lat'] ) ) ) : '';
+		$venue_lon     = isset( $_POST['venue_lon'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['venue_lon'] ) ) ) : '';
+		$venue_url     = isset( $_POST['venue_url'] ) ? esc_url( sanitize_text_field( wp_unslash( $_POST['venue_url'] ) ) ) : '';
 
 		// Oraganizer Deatails
-		$organizer_name  = isset( $_POST['organizer_name'] ) ? sanitize_text_field( $_POST['organizer_name'] ) : '';
-		$organizer_email = isset( $_POST['organizer_email'] ) ? sanitize_text_field( $_POST['organizer_email'] ) : '';
-		$organizer_phone = isset( $_POST['organizer_phone'] ) ? sanitize_text_field( $_POST['organizer_phone'] ) : '';
-		$organizer_url   = isset( $_POST['organizer_url'] ) ? esc_url( $_POST['organizer_url'] ) : '';
+		$organizer_name  = isset( $_POST['organizer_name'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['organizer_name'] ) ) )  : '';
+		$organizer_email = isset( $_POST['organizer_email'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['organizer_email'] ) ) ) : '';
+		$organizer_phone = isset( $_POST['organizer_phone'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['organizer_phone'] ) ) ) : '';
+		$organizer_url   = isset( $_POST['organizer_url'] ) ? esc_url( sanitize_text_field( wp_unslash( $_POST['organizer_url'] ) ) ) : '';
 
 		// Event Source Link
-		$wpea_event_link   = isset( $_POST['wpea_event_link'] ) ? esc_url( $_POST['wpea_event_link'] ) : '';
+		$wpea_event_link   = isset( $_POST['wpea_event_link'] ) ? esc_url( sanitize_text_field( wp_unslash( $_POST['wpea_event_link'] ) ) ) : '';
 
 		// Save Event Data
 		// Date & Time
@@ -577,8 +577,8 @@ class WP_Event_Aggregator_Cpt {
 	 *
 	 */ 
 	function wp_events_columns( $cols ) {
-		$cols['event_start_date'] = __('Event Date', 'event-list-calendar');
-		$cols['event_origin'] = __('Event Origin', 'event-list-calendar');
+		$cols['event_start_date'] = __('Event Date', 'wp-event-aggregator');
+		$cols['event_origin'] = __('Event Origin', 'wp-event-aggregator');
 		return $cols;
 	}
 
@@ -592,7 +592,7 @@ class WP_Event_Aggregator_Cpt {
 				$start_date = get_post_meta( $post_id, 'event_start_date', true);
 				if( $start_date != '' ){
 					$start_date = strtotime( $start_date );
-					echo date_i18n( 'F j, Y', $start_date );	
+					echo esc_attr( date_i18n( 'F j, Y', $start_date ) );	
 				}else{
 					echo '-';
 				}
@@ -601,7 +601,7 @@ class WP_Event_Aggregator_Cpt {
 			case "event_origin":
 				$event_origin = get_post_meta( $post_id, 'wpea_event_origin', true);
 				if( $event_origin != '' ){
-					echo '<strong>'.ucfirst( $event_origin ).'</strong>';
+					echo '<strong>'. esc_attr( ucfirst( $event_origin ) ).'</strong>';
 				}else{
 					echo '-';
 				}
@@ -650,7 +650,7 @@ class WP_Event_Aggregator_Cpt {
 		$eve_args = array(
 		    'post_type' => 'wp_events',
 		    'post_status' => 'publish',
-		    'meta_key' => 'start_ts',
+		    'meta_key' => 'start_ts', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 		    'paged' => $paged,
 		);
 
@@ -679,7 +679,7 @@ class WP_Event_Aggregator_Cpt {
 
 			
 			if( $start_date_str != '' && $end_date_str != '' ){
-				$eve_args['meta_query'] = array(
+				$eve_args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 						   'relation' => 'AND',                        
 					        array(
 					            'key' => 'end_ts',
@@ -693,7 +693,7 @@ class WP_Event_Aggregator_Cpt {
 					        ),
 				        );
 			}elseif(  $start_date_str != '' ){
-				$eve_args['meta_query'] = array(
+				$eve_args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					        array(
 					            'key' => 'end_ts',
 					            'compare' => '>=',
@@ -701,12 +701,12 @@ class WP_Event_Aggregator_Cpt {
 					        )
 				        );
 			}elseif(  $end_date_str != '' ){
-				$eve_args['meta_query'] = array(
+				$eve_args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 						   'relation' => 'AND',                        
 					        array(
 					            'key' => 'end_ts',
 					            'compare' => '>=',
-					            'value' => strtotime( date( 'Y-m-d' ) ),
+					            'value' => strtotime( gmdate( 'Y-m-d' ) ),
 					        ),
 					        array(
 					            'key' => 'end_ts',
@@ -721,7 +721,7 @@ class WP_Event_Aggregator_Cpt {
 				$atts['past_events'] = "yes";
 			}
 			if( isset( $atts['past_events'] ) && $atts['past_events'] == 'yes' ){
-				$eve_args['meta_query'] = array(
+				$eve_args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 						        array(
 						            'key' => 'end_ts',
 						            'compare' => '<=',
@@ -729,7 +729,7 @@ class WP_Event_Aggregator_Cpt {
 						        )
 				            );
 			}else{
-				$eve_args['meta_query'] = array(
+				$eve_args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 						        array(
 						            'key' => 'end_ts',
 						            'compare' => '>=',
@@ -746,7 +746,7 @@ class WP_Event_Aggregator_Cpt {
 				$tax_field = 'term_id';
 			}
 			if( !empty( $categories ) ){
-				$eve_args['tax_query'] = array(
+				$eve_args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query, WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					array(
 						'taxonomy' => $this->event_category,
 						'field'    => $tax_field,
@@ -854,26 +854,26 @@ class WP_Event_Aggregator_Cpt {
 					<div class="col-wpea-md-12">
 						<nav class="prev-next-posts">
 							<div class="prev-posts-link alignright">
-								<?php echo get_next_posts_link( 'Next Events &raquo;', $wp_events->max_num_pages ); ?>
+								<?php echo get_next_posts_link( 'Next Events &raquo;', $wp_events->max_num_pages ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</div>
 							<div class="next-posts-link alignleft">
-								<?php echo get_previous_posts_link( '&laquo; Previous Events' ); ?>
+								<?php echo get_previous_posts_link( '&laquo; Previous Events' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</div>
 						</nav>
 					</div>
 				<?php endif;
 			else:
-				echo apply_filters( 'wpea_no_events_found_message', __( "No Events are found.", 'wp-event-aggregator' ) );
+				echo esc_html( apply_filters( 'wpea_no_events_found_message', __( "No Events are found.", 'wp-event-aggregator' ) ) );
 			endif;
 
 			?>
 		</div>
 		<style type="text/css">
 			.wpea_frontend_archive .event_date{
-			    background-color: <?php echo $accent_color;?>;
+			    background-color: <?php echo esc_attr( $accent_color ); ?>;
 			}
 			.wpea_frontend_archive .event_desc .event_title, .wpea_frontend_archive .event_desc a{
-			    color: <?php echo $accent_color;?>;
+			    color: <?php echo esc_attr( $accent_color ); ?>;
 			}
 		</style>
 		<?php
