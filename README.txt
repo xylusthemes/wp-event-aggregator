@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: Event aggregator, calendar, Google Calendar, eventbrite event, facebook event
 Requires at least: 4.0
 Tested up to: 6.8
-Stable tag: 1.8.3
+Stable tag: 1.8.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,7 @@ facebook events, eventbrite, iCal, facebook, eventbrite, meetup, event feeds, ev
 * [Events manager](https://wordpress.org/plugins/events-manager/)
 * [Event Organiser](https://wordpress.org/plugins/event-organiser/)
 * [EventON](https://codecanyon.net/item/eventon-wordpress-event-calendar-plugin/1211017)
+* [ EventPrime ](https://wordpress.org/plugins/eventprime-event-calendar-management/)
 * [My Calendar](https://wordpress.org/plugins/my-calendar/)
 * [Eventum (Tevolution-Events)](https://templatic.com/app-themes/eventum-event-directory-theme/) - Pro Add-on
 * [Event Espresso 4 (EE4)](https://wordpress.org/plugins/event-espresso-decaf/)
@@ -139,6 +140,15 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.8.4 =
+* ADDED: Integrated support for the EventPrime plugin
+* ADDED: Re-created missing schedule functionality (Pro version)
+* ADDED: Implemented auto trash feature for past events
+* ADDED: Import iCal category option
+* FIXED: Resolved event import issue with The Events Calendar (TEC) plugin
+* IMPROVEMENTS: New Meetup API Migration
+* IMPROVEMENTS: Support for WP 6.8
 
 = 1.8.3 =
 * FIXED: Date Format issue in Event Detail Page
