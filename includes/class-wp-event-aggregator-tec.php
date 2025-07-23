@@ -148,6 +148,7 @@ class WP_Event_Aggregator_TEC {
 			'post_status'  => $event_status,
 			'post_author'  => $event_author,
 			'post_type'    => $this->event_posttype,
+			'post_author'  => isset( $event_args['event_author'] ) ? $event_args['event_author'] : get_current_user_id()
 		);
 		
 		$new_event_id = wp_insert_post( $tec_event, true );
@@ -170,6 +171,12 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $new_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $new_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $new_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
+
+			// Series id
+			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
+			if( !empty( $series_id ) ){
+				update_post_meta( $new_event_id, 'series_id', $series_id );
+			}
 
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
@@ -195,9 +202,15 @@ class WP_Event_Aggregator_TEC {
 				wp_set_object_terms( $new_event_id, $wpea_cats, $this->taxonomy, $append );
 			}
 
-			$event_featured_image  = $centralize_array['image_url'];
-			if( $event_featured_image != '' ){
-				$importevents->common->setup_featured_image_to_event( $new_event_id, $event_featured_image );
+			// Assign Featured images
+			$event_image = $centralize_array['image_url'];
+			if ( ! empty( $event_image ) ) {
+				$importevents->common->setup_featured_image_to_event( $new_event_id, $event_image );
+			}else{
+				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
+				if( !empty( $default_thumb ) ){
+					set_post_thumbnail( $new_event_id, $default_thumb );
+				}
 			}
 
 			//Insert in Custom Table 
@@ -261,6 +274,7 @@ class WP_Event_Aggregator_TEC {
 			'post_status'  => $event_status,
 			'post_author'  => $event_author,
 			'post_type'    => $this->event_posttype,
+			'post_author'  => isset( $event_args['event_author'] ) ? $event_args['event_author'] : get_current_user_id()
 		);
 		
 		$update_event_id = wp_update_post( $tec_event, true );
@@ -283,6 +297,12 @@ class WP_Event_Aggregator_TEC {
 			update_post_meta( $update_event_id, 'wpea_event_link', esc_url( $centralize_array['url'] ) );
 			update_post_meta( $update_event_id, '_wpea_starttime_str', $centralize_array['starttime_local'] );
 			update_post_meta( $update_event_id, '_wpea_endtime_str', $centralize_array['endtime_local'] );
+
+			// Series id
+			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
+			if( !empty( $series_id ) ){
+				update_post_meta( $update_event_id, 'series_id', $series_id );
+			}
 			
 			delete_post_meta( $update_event_id, '_tribe_is_classic_editor' );
 
@@ -309,14 +329,16 @@ class WP_Event_Aggregator_TEC {
 				}
 			}
 
-			$event_featured_image  = $centralize_array['image_url'];
-			if( $event_featured_image != '' ){
-				$importevents->common->setup_featured_image_to_event( $update_event_id, $event_featured_image );
+			// Assign Featured images
+			$event_image = $centralize_array['image_url'];
+			if ( ! empty( $event_image ) ) {
+				$importevents->common->setup_featured_image_to_event( $update_event_id, $event_image );
 			}else{
-				if( has_post_thumbnail( $update_event_id ) ){
-					$attachment_id = get_post_thumbnail_id( $update_event_id );
-					$imagemeta = get_post_meta( $attachment_id, '_wpea_attachment_source', true );
-					if( !empty( $imagemeta ) ){
+				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
+				if( !empty( $default_thumb ) ){
+					set_post_thumbnail( $update_event_id, $default_thumb );
+				}else{
+					if ( $is_exitsing_event ) {
 						delete_post_thumbnail( $update_event_id );
 					}
 				}

@@ -1,0 +1,42 @@
+.wpea_form_section {
+  padding: 15px;
+  margin-bottom: 20px;
+  background: #fdfdfd;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.wpea_form_section h3 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.wpea_form_row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.wpea_form_row label {
+  width: 160px;
+  font-weight: bold;
+}
+
+.wpea_form_input_group {
+  flex: 1;
+}
+
+.wpea_form_input_group input {
+  width: 100%;
+  max-width: 60%;
+}
+.wpea_form_input_group input{
+  padding: 5px;
+}
+.wpea_form_input_group select {
+  padding: 5px;
+  width: 5%;
+}
+div#ui-datepicker-div {
+    background: #fff;
+}

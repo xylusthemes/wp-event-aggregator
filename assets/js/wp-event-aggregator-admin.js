@@ -63,23 +63,40 @@
 			if( jQuery(this).val() == 'event_id' ){
 				jQuery('.import_type_wrapper').hide();
 				jQuery('.eventbrite_organizer_id').hide();
+				jQuery('.eventbrite_collection_id').hide();
 				jQuery('.eventbrite_organizer_id .wpea_organizer_id').removeAttr( 'required' );
+				jQuery('.eventbrite_organizer_id .wpea_collection_id').removeAttr( 'required' );
 				jQuery('.eventbrite_event_id').show();
 				jQuery('.eventbrite_event_id .wpea_eventbrite_id').attr('required', 'required');
+				jQuery('.eventbrite_collection_id .wpea_collection_id').removeAttr( 'required' );
 
 			} else if( jQuery(this).val() == 'your_events' ){
 				jQuery('.import_type_wrapper').show();
 				jQuery('.eventbrite_organizer_id').hide();
+				jQuery('.eventbrite_collection_id').hide();
 				jQuery('.eventbrite_organizer_id .wpea_organizer_id').removeAttr( 'required' );
+				jQuery('.eventbrite_organizer_id .wpea_collection_id').removeAttr( 'required' );
 				jQuery('.eventbrite_event_id').hide();
 				jQuery('.eventbrite_event_id .wpea_eventbrite_id').removeAttr( 'required' );
+				jQuery('.eventbrite_collection_id .wpea_collection_id').removeAttr( 'required' );
 
 			} else if( jQuery(this).val() == 'organizer_id' ){
 				jQuery('.import_type_wrapper').show();
 				jQuery('.eventbrite_organizer_id').show();
 				jQuery('.eventbrite_organizer_id .wpea_organizer_id').attr('required', 'required');
 				jQuery('.eventbrite_event_id').hide();
+				jQuery('.eventbrite_collection_id').hide();
 				jQuery('.eventbrite_event_id .wpea_eventbrite_id').removeAttr( 'required' );
+				jQuery('.eventbrite_collection_id .wpea_collection_id').removeAttr( 'required' );
+
+			} else if( jQuery(this).val() == 'collection_id' ){
+				jQuery('.import_type_wrapper').show();
+				jQuery('.eventbrite_collection_id').show();
+				jQuery('.eventbrite_collection_id .wpea_collection_id').attr('required', 'required');
+				jQuery('.eventbrite_event_id').hide();
+				jQuery('.eventbrite_organizer_id').hide();
+				jQuery('.eventbrite_event_id .wpea_eventbrite_id').removeAttr( 'required' );
+				jQuery('.eventbrite_organizer_id .wpea_organizer_id').removeAttr( 'required' );
 			
 			}
 
@@ -257,26 +274,6 @@
 
 jQuery(document).ready(function($){
 
-	const wpea_tab_links = document.querySelectorAll('.wpea-setting-tab');
-	const wpea_tabcontents = document.querySelectorAll('.wpea-setting-tab-child');
-
-	wpea_tab_links.forEach(function(link) {
-		link.addEventListener('click', function() {
-			const wpea_tabId = this.dataset.tab;
-
-			wpea_tab_links.forEach(function(link) {
-				link.classList.remove('active');
-			});
-
-			wpea_tabcontents.forEach(function(content) {
-				content.classList.remove('active');
-			});
-
-			this.classList.add('active');
-			document.getElementById(wpea_tabId).classList.add('active');
-		});
-	});
-
 	const wpea_gm_apikey_input = document.querySelector('.wpea_google_maps_api_key');
 	if ( wpea_gm_apikey_input ) {
 		wpea_gm_apikey_input.addEventListener('input', function() {
@@ -361,4 +358,38 @@ jQuery(document).ready(function($){
 	});
 });
 
+jQuery(document).ready(function($) {
+	var $slides = $('.wpea-screenshot-slide');
+	var index = 0;
 
+	setInterval(function() {
+		$slides.removeClass('active');
+		index = (index + 1) % $slides.length;
+		$slides.eq(index).addClass('active');
+	}, 3000);
+
+    $('#eventbritesetting').show();
+
+	$('.var-settings-tab').on('click', function () {
+        var tabId = $(this).data('tab');
+        $('.var-settings-tab').removeClass('var-tab--active').addClass('var-tab--inactive');
+        $(this).removeClass('var-tab--inactive').addClass('var-tab--active');
+
+        $('.wpea-setting-tab-content').hide();
+        $('#' + tabId).show();
+    });
+
+	$('#wpea-facebook-auth-btn').on('click', function (e) {
+		e.preventDefault();
+
+		let $btn = $(this);
+		$btn.prop('disabled', true).text('Authorizing...');
+
+		let form = $('<form>', { action: wpea_data.ajax_url, method: 'POST' });
+		
+		form.append($('<input>', { type: 'hidden', name: 'action', value: 'wpea_facebook_authorize_action' }));
+		form.append($('<input>', { type: 'hidden', name: 'wpea_facebook_authorize_nonce', value: wpea_data.nonce }));
+
+		form.appendTo('body').submit();
+	});
+});

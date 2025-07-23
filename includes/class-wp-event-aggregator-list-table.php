@@ -85,26 +85,23 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		$source_data = get_post_meta( $item['ID'], 'import_eventdata', true );
 		$source = $importevents->common->get_source_data( $source_data, $item['title'] );
 
+		$schedule_title = $item['title'];
+		if ( strpos( $schedule_title, '(' ) !== false ) {
+			$parts = explode( '(', $schedule_title, 2 );
+			$schedule_title = trim( $parts[0] ) . '<br>(' . trim( $parts[1] );
+		}
+
 		return sprintf( '<strong>%1$s</strong>
 			<span>%2$s</span></br>
 			<span>%3$s</span></br>
 			<span>%4$s</span></br>
 			<span style="color:silver">(id:%5$s)</span>%6$s',
-			$item['title'],
+			$schedule_title,
 			__('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
 			__('Import Into', 'wp-event-aggregator') . ': <b>' . $import_into . '</b>',
 			__('Source', 'wp-event-aggregator') . ': <b>' . $source . '</b>',
 			$item['ID'],
 			$this->row_actions( $actions )
-		);
-
-		// Return the title contents.
-		return sprintf('<strong>%1$s</strong><span>%4$s</span> <span style="display:block;">%5$s</span> <span style="color:silver">(id:%2$s)</span>%3$s',
-		    $item['title'],
-		    $item['ID'],
-		    $this->row_actions( $actions ),
-		    __('Origin', 'wp-event-aggregator') . ': <b>' . ucfirst( $item["import_origin"] ) . '</b>',
-		    $import_into
 		);
 	}
 
@@ -182,13 +179,14 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-		 'cb'    => '<input type="checkbox" />',
-		 'title'     => __( 'Scheduled Import', 'wp-event-aggregator' ),
-		 'import_status'   => __( 'Import Event Status', 'wp-event-aggregator' ),
-		 'import_category'   => __( 'Import Category', 'wp-event-aggregator' ),
+		 'cb'                 => '<input type="checkbox" />',
+		 'title'              => __( 'Scheduled Import', 'wp-event-aggregator' ),
+		 'import_status'      => __( 'Import Event Status', 'wp-event-aggregator' ),
+		 'import_category'    => __( 'Import Category', 'wp-event-aggregator' ),
 		 'import_frequency'   => __( 'Import Frequency', 'wp-event-aggregator' ),
-		 'next_run'   => __( 'Next Run', 'wp-event-aggregator' ),
-		 'action'   => __( 'Action', 'wp-event-aggregator' ),
+		 'next_run'           => __( 'Next Run', 'wp-event-aggregator' ),
+		 'action'             => __( 'Action', 'wp-event-aggregator' ),
+		 'active_pause'     => __( 'Active/Pause', 'wp-event-aggregator' ),
 		);
 		return $columns;
 	}
@@ -200,6 +198,47 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
         );
 
     }
+
+	/**
+	 * Setup output for Action column.
+	 *
+	 * @since    1.0.0
+	 * @param array $item Items.
+	 * @return array
+	 */
+	function column_active_pause( $item ) {
+		$post_id = $item['ID'];
+		$status  = get_post_meta( $post_id, '_wpea_schedule_status', true );
+
+		if ( $status === 'paused' ) {
+			$status_text  = 'Paused';
+			$color        = '#d63638';
+			$action_text  = 'Activate';
+			$new_status   = 'active';
+			$btn_class    = 'button button-secondary';
+		} else {
+			$status_text  = 'Active';
+			$color        = '#008000';
+			$action_text  = 'Pause';
+			$new_status   = 'paused';
+			$btn_class    = 'button button-primary';
+		}
+
+		$url = wp_nonce_url( add_query_arg([ 'action' => 'wpea_toggle_status', 'schedule_id' => $post_id, 'new_status'  => $new_status, ]), 'wpea_toggle_schedule_' . $post_id );
+
+		return sprintf(
+			'<div class="wpea-status-wrap" style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
+				<div><a href="%s" class="%s">%s</a></div>
+				<div><strong>Schedule Status:</strong> <span style="color:%s; font-weight:600;">%s</span></div>
+			</div>',
+			esc_url( $url ),
+			esc_attr( $btn_class ),
+			esc_html( $action_text ),
+			esc_attr( $color ),
+			esc_html( $status_text )
+		);
+	}
+
 
 	/**
 	 * Prepare Meetup url data.
@@ -388,7 +427,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				$next_run = '-';
 				if(isset($next_run_times[$import_id]) && !empty($next_run_times[$import_id])){
 					$next_time = $next_run_times[$import_id];
-					$next_run = sprintf( '%s (%s)',
+					$next_run = sprintf( '%s<br>(%s)',
 						esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $next_time ), 'Y-m-d H:i:s' ) ),
 						esc_html( human_time_diff( current_time( 'timestamp', true ), $next_time ) )
 					);
@@ -398,6 +437,11 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 					if ( method_exists( $importevents->common_pro, 'wpea_recreate_missng_scheduled_import' ) ) {
 						$importevents->common_pro->wpea_recreate_missng_scheduled_import( $import_id );
 					}
+				}
+
+				$sstatus  = get_post_meta( $import_id, '_wpea_schedule_status', true );
+				if( $sstatus === 'paused' ){
+					$next_run = '-';
 				}
 
 				$scheduled_import = array(
@@ -457,8 +501,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 		foreach($crons as $time => $cron){
 			foreach($cron as $cron_name){
 				foreach($cron_name as $cron_post_id){
-					if( isset($cron_post_id['args']) && isset($cron_post_id['args']['post_id']) ){
-						$next_runs[$cron_post_id['args']['post_id']] = $time;
+					$schedule_id = isset( $cron_post_id['args']['post_id'] )  ? $cron_post_id['args']['post_id'] : 0;
+					if( isset($cron_post_id['args']) && $schedule_id > 0 ){
+						$next_runs[$schedule_id] = $time;
 					}
 				}
 			}
@@ -771,7 +816,7 @@ class WPEA_Shortcode_List_Table extends WP_List_Table {
         $sortable 	= $this->get_sortable_columns();
         $data 		= $this->table_data();
 
-        $perPage 		= 10;
+        $perPage 		= 20;
         $currentPage 	= $this->get_pagenum();
         $totalItems 	= count( $data );
 

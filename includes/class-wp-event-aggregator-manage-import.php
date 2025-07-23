@@ -51,6 +51,7 @@ class WP_Event_Aggregator_Manage_Import {
 			$event_data['import_frequency'] = isset( $_POST['import_frequency'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['import_frequency'] ) ) )  : 'daily';
 			$event_data['event_status'] = isset( $_POST['event_status'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_status'] ) ) ) : 'pending';
 			$event_data['ical_import_by_date'] = isset( $_POST['ical_import_by_date'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['ical_import_by_date'] ) ) ) : '';
+			$event_data['event_author'] = ( isset( $_POST['event_author'] ) && !empty( $_POST['event_author'] ) ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['event_author'] ) ) ) : get_current_user_id();
 
 			$event_data['event_cats'] = isset( $_POST['event_cats'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats'] ) ) : array();
 			$event_data['event_cats2'] = isset( $_POST['event_cats2'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats2'] ) ) : array();
@@ -232,6 +233,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$eventbrite_event_id[] = isset( $_POST['wpea_eventbrite_id'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['wpea_eventbrite_id'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$event_data['eventbrite_event_id'] = $eventbrite_event_id;
 		$event_data['organizer_id'] = '';
+		$event_data['collection_id'] = '';
 		
 		if( !is_numeric( $event_data['eventbrite_event_id'][0] ) ){
 			$wpea_errors[] = esc_html__( 'Please provide valid Eventbrite event ID.', 'wp-event-aggregator' );

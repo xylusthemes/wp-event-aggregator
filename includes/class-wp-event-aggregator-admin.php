@@ -38,8 +38,8 @@ class WP_Event_Aggregator_Admin {
 		add_action( 'admin_menu', array( $this, 'add_menu_pages') );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts') );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles') );
-		add_action( 'admin_notices', array( $this, 'display_notices') );
-		add_filter( 'submenu_file', array( $this, 'get_selected_tab_submenu' ) );
+		add_action( 'wpea_display_all_notice', array( $this, 'wpea_display_notices' ) );
+		add_filter( 'submenu_file', array( $this, 'get_selected_tab_submenu_wpea' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_event_aggregator_credit' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget') );
 		add_action( 'admin_action_wpea_view_import_history',  array( $this, 'wpea_view_import_history_handler' ) );
@@ -57,6 +57,7 @@ class WP_Event_Aggregator_Admin {
 		add_menu_page( __( 'WP Event Aggregator', 'wp-event-aggregator' ), __( 'WP Event Aggregator', 'wp-event-aggregator' ), 'manage_options', 'import_events', array( $this, 'admin_page' ), 'dashicons-calendar', '30' );
 
 		global $submenu;	
+		$submenu['import_events'][] = array( __( 'Dashboard', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=dashboard' ) );
 		$submenu['import_events'][] = array( __( 'Eventbrite Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=eventbrite' ) );
     	$submenu['import_events'][] = array( __( 'Meetup Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=meetup' ) );
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
@@ -65,7 +66,8 @@ class WP_Event_Aggregator_Admin {
     	$submenu['import_events'][] = array( __( 'Import History', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=history' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
     	$submenu['import_events'][] = array( __( 'Shortcode', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=shortcodes' ));
-    	$submenu['import_events'][] = array( __( 'Support & Help', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
+    	$submenu['import_events'][] = array( __( 'Support', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
+		$submenu['import_events'][] = array( __( 'Wizard', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=wpea_setup_wizard' ));
 		if( !wpea_is_pro() ){
         	$submenu['import_events'][] = array( '<li class="wpea_upgrade_pro current">' . __( 'Upgrade to Pro', 'wp-event-aggregator' ) . '</li>', 'manage_options', esc_url( "https://xylusthemes.com/plugins/wp-event-aggregator/"));
 		}
@@ -85,7 +87,17 @@ class WP_Event_Aggregator_Admin {
 
 		$js_dir  = WPEA_PLUGIN_URL . 'assets/js/';
 		wp_register_script( 'wp-event-aggregator', $js_dir . 'wp-event-aggregator-admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'wp-color-picker'), WPEA_VERSION, true );
+
+		wp_localize_script( 'wp-event-aggregator', 'wpea_data', array(
+			'ajax_url' => esc_url( admin_url( 'admin-post.php' ) ),
+			'nonce'    => wp_create_nonce( 'wpea_facebook_authorize_action' ),
+		));
 		wp_enqueue_script( 'wp-event-aggregator' );
+
+		if( isset( $_GET['tab'] ) && $_GET['tab'] == 'wpea_setup_wizard' ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			wp_register_script( 'wp-event-aggregator-wizard-js', $js_dir . 'wp-event-aggregator-wizard.js',  array( 'jquery', 'jquery-ui-core' ), WPEA_VERSION, false );
+			wp_enqueue_script( 'wp-event-aggregator-wizard-js' );
+		}
 		
 	}
 
@@ -99,10 +111,28 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	function enqueue_admin_styles( $hook ) {
-			$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
-			wp_enqueue_style('jquery-ui', $css_dir . 'jquery-ui.css', false, "1.11.4" );
-			wp_enqueue_style('wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
-			wp_enqueue_style('wp-color-picker');
+		global $pagenow;
+
+		$css_dir = WPEA_PLUGIN_URL . 'assets/css/';
+		$page    = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		// Load styles on plugin admin page
+		if ( 'import_events' === $page || 'wpea_pro_import_by_files' === $page ) {
+			wp_enqueue_style( 'wp-event-aggregator', $css_dir . 'wp-event-aggregator-admin.css', false, WPEA_VERSION );
+			wp_enqueue_style( 'wp-color-picker' );
+
+			$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( 'wpea_setup_wizard' === $tab ) {
+				wp_enqueue_style( 'wp-event-aggregator-wizard-css', $css_dir . 'wp-event-aggregator-wizard.css', false, WPEA_VERSION );
+			}
+		}
+
+		// Load styles on widgets/post screen
+		if ( in_array( $pagenow, [ 'widgets.php', 'post.php', 'post-new.php' ], true ) || ( 'admin.php' === $pagenow && isset( $_GET['page'] ) && in_array( $_GET['page'], [ 'import_events', 'wpea_pro_import_by_files' ], true ) ) ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			wp_enqueue_style( 'jquery-ui', $css_dir . 'jquery-ui.css', false, '1.12.0' );
+			wp_enqueue_style( 'wp-event-aggregator-admin-global', $css_dir . 'wp-event-aggregator-admin-global.css', false, WPEA_VERSION );
+			wp_enqueue_style( 'wp-color-picker' );
+		}
 	}
 
 	/**
@@ -112,119 +142,128 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	function admin_page() {
-		
-		?>
-		<div class="wrap wpea_admin_panel">
-		    <h2><?php esc_html_e( 'WP Event Aggregator', 'wp-event-aggregator' ); ?></h2>
-		    <?php
-		    // Set Default Tab to Import.
-		    $tab = isset( $_GET[ 'tab' ] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET[ 'tab' ] ) ) ) : 'eventbrite'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		    $ntab = isset( $_GET[ 'ntab' ] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET[ 'ntab' ] ) ) ) : 'import'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		    ?>
-		    <div id="poststuff">
-		        <div id="post-body" class="metabox-holder columns-2">
 
-		            <div id="postbox-container-1" class="postbox-container">
-		            	<?php 
-		            	if( !wpea_is_pro() ){
-		            		require_once WPEA_PLUGIN_DIR . '/templates/admin/admin-sidebar.php';
-		            	}
-		            	?>
-		            </div>
-		            <div id="postbox-container-2" class="postbox-container">
+		global $importevents;
 
-		                <h1 class="nav-tab-wrapper">
+		$active_tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) )  : 'dashboard'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$ntab       = isset( $_GET[ 'ntab' ] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET[ 'ntab' ] ) ) ) : 'import'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$gettab     = str_replace( 'by_', '', $active_tab );
+		$gettab     = ucwords( str_replace( '_', ' & ', $gettab ) );
+		if( $active_tab == 'support' ){
+			$page_title = 'Support & Help';
+		}elseif( $active_tab == 'eventbrite' ){
+			$page_title = 'Eventbrite Import';
+		}elseif( $active_tab == 'meetup' ){
+			$page_title = 'Meetup Import';
+		}elseif( $active_tab == 'facebook' ){
+			$page_title = 'Facebook Import';
+		}elseif( $active_tab == 'ics' ){
+			$page_title = 'ICS Import';
+		}elseif( $active_tab == 'scheduled' ){
+			$page_title = 'Scheduled Import';
+		}else{
+			$page_title = $gettab;
+		}
 
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'eventbrite', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'eventbrite' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Eventbrite', 'wp-event-aggregator' ); ?>
-		                    </a>
+		if( $active_tab == 'wpea_setup_wizard' ){
+			require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-wizard.php';
+			exit();
+		}
 
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'meetup', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'meetup' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Meetup', 'wp-event-aggregator' ); ?>
-		                    </a>
+		$posts_header_result = $importevents->common->wpea_render_common_header( $page_title );
+	
+		if( $active_tab != 'dashboard' ){
+			?>
+				<div class="wpea-container" style="margin-top: 60px;">
+					<div class="wpea-wrap" >
+						<div id="poststuff">
+							<div id="post-body" class="metabox-holder columns-2">
+								<?php 
+									do_action( 'wpea_display_all_notice' );
+								?>
+								<div class="delete_notice"></div>
+								<div id="postbox-container-2" class="postbox-container">
+									<div class="wpea-app">
+										<div class="wpea-tabs">
+											<div class="tabs-scroller">
+												<div class="var-tabs var-tabs--item-horizontal s">
+													<div class="var-tabs__tab-wrap var-tabs--layout-horizontal">
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'eventbrite', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'eventbrite' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Eventbrite', 'wp-event-aggregator' ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'meetup', $this->adminpage_url ) ); ?>" class="var-tab <?php echo ( $active_tab == 'meetup' )  ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Meetup', 'wp-event-aggregator' ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'facebook', $this->adminpage_url ) ); ?>" class="var-tab <?php echo ( $active_tab == 'facebook' )  ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Facebook', 'wp-event-aggregator' ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'ical', $this->adminpage_url ) ); ?>" class="var-tab <?php echo ( $active_tab == 'ical' )  ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'iCalendar / .ics', 'wp-event-aggregator' ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'scheduled', $this->adminpage_url ) ); ?>" class="var-tab <?php echo ( $active_tab == 'scheduled' )  ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Scheduled Imports', 'wp-event-aggregator' ); if( !wpea_is_pro() ){ echo '<div class="wpea-pro-badge"> PRO </div>'; } ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'history', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'history' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Import History', 'wp-event-aggregator' ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'settings', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'settings' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Settings', 'wp-event-aggregator' ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'shortcodes', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'shortcodes' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Shortcodes', 'wp-event-aggregator'  ); ?></span>
+														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'support', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'support' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'Support & Help', 'wp-event-aggregator' ); ?></span>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'facebook', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'facebook' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Facebook', 'wp-event-aggregator' ); ?>
-		                    </a>
+									<?php
 
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'ical', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'ical' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'iCalendar / .ics', 'wp-event-aggregator' ); ?>
-		                    </a>
 
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'scheduled', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'scheduled' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Scheduled Imports', 'wp-event-aggregator' ); ?>
-		                    </a>
-
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'history', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'history' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Import History', 'wp-event-aggregator' ); ?>
-		                    </a>
-
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'settings', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'settings' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Settings', 'wp-event-aggregator' ); ?>
-		                    </a>
-
-							<a href="<?php echo esc_url( add_query_arg( 'tab', 'shortcodes', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'shortcodes' ) { echo 'nav-tab-active'; } ?>">
-								<?php esc_html_e( 'Shortcodes', 'wp-event-aggregator' ); ?>
-							</a>
-
-		                    <a href="<?php echo esc_url( add_query_arg( 'tab', 'support', $this->adminpage_url ) ); ?>" class="nav-tab <?php if ( $tab == 'support' ) { echo 'nav-tab-active'; } ?>">
-		                        <?php esc_html_e( 'Support & Help', 'wp-event-aggregator' ); ?>
-		                    </a>
-		                </h1>
-
-		                <div class="wp-event-aggregator-page">
-
-		                	<?php
-		                	if ( $tab == 'eventbrite' ) {
-
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/eventbrite-import-events.php';
-
-		                	} elseif ( $tab == 'meetup' ) {
-
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/meetup-import-events.php';
-
-		                	} elseif ( $tab == 'facebook' ) {
-
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/facebook-import-events.php';
-
-		                	} elseif ( $tab == 'settings' ) {
-		                		
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-settings.php';
-
-		                	} elseif ( $tab == 'ical' ) {
-
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/ical-import-events.php';
-
-		                	} elseif ( $tab == 'scheduled' ) {
-		                		if( wpea_is_pro() ){
-		                			require_once WPEAPRO_PLUGIN_DIR . '/templates/admin/scheduled-import-events.php';
-		                		}else{
-		                			do_action( 'wpea_render_pro_notice' );
-		                		}		                		
-
-		                	}elseif ( $tab == 'history' ) {
-		                		
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-history.php';
-
-		                	}elseif ( $tab == 'support' ) {
-		                		
-		                		require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-support.php';
-
-		                	}elseif ( $tab == 'shortcodes' ) {
-
-								require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-shortcode.php';
-							
-							}
-
-			                ?>
-		                	<div style="clear: both"></div>
-		                </div>
-
-		        </div>
-		        
-		    </div>
-		</div>
-		<?php
+										if ( $active_tab == 'eventbrite' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/eventbrite-import-events.php';
+										} elseif ( $active_tab == 'meetup' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/meetup-import-events.php';
+										} elseif ( $active_tab == 'facebook' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/facebook-import-events.php';
+										} elseif ( $active_tab == 'settings' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-settings.php';
+										} elseif ( $active_tab == 'ical' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/ical-import-events.php';
+										} elseif ( $active_tab == 'scheduled' ) {
+											if( wpea_is_pro() ){
+												require_once WPEAPRO_PLUGIN_DIR . '/templates/admin/scheduled-import-events.php';
+											}else{
+												?>
+													<div class="wpea-blur-filter" >
+														<?php do_action( 'wpea_render_pro_notice' ); ?>
+													</div>
+												<?php
+												
+											}		                		
+										}elseif ( $active_tab == 'history' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-history.php';
+										}elseif ( $active_tab == 'support' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-support.php';
+										}elseif ( $active_tab == 'shortcodes' ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-shortcode.php';
+										}
+									?>
+								</div>
+							</div>
+							<div style="clear: both"></div>
+						</div>
+					</div>
+				</div>
+			<?php
+		}else{
+			require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-dashboard.php';
+		}
+		$posts_footer_result = $importevents->common->wpea_render_common_footer();
 	}
 
 
@@ -233,13 +272,13 @@ class WP_Event_Aggregator_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function display_notices() {
+	public function wpea_display_notices() {
 		global $wpea_errors, $wpea_success_msg, $wpea_warnings, $wpea_info_msg;
 		
 		if ( ! empty( $wpea_errors ) ) {
 			foreach ( $wpea_errors as $error ) :
 			    ?>
-			    <div class="notice notice-error is-dismissible">
+			    <div class="notice notice-error is-dismissible wpea_notice">
 			        <p><?php echo $error; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
@@ -249,7 +288,7 @@ class WP_Event_Aggregator_Admin {
 		if ( ! empty( $wpea_success_msg ) ) {
 			foreach ( $wpea_success_msg as $success ) :
 			    ?>
-			    <div class="notice notice-success is-dismissible">
+			    <div class="notice notice-success is-dismissible wpea_notice">
 			        <p><?php echo $success; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
@@ -259,7 +298,7 @@ class WP_Event_Aggregator_Admin {
 		if ( ! empty( $wpea_warnings ) ) {
 			foreach ( $wpea_warnings as $warning ) :
 			    ?>
-			    <div class="notice notice-warning is-dismissible">
+			    <div class="notice notice-warning is-dismissible wpea_notice">
 			        <p><?php echo $warning; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
@@ -269,7 +308,7 @@ class WP_Event_Aggregator_Admin {
 		if ( ! empty( $wpea_info_msg ) ) {
 			foreach ( $wpea_info_msg as $info ) :
 			    ?>
-			    <div class="notice notice-info is-dismissible">
+			    <div class="notice notice-info is-dismissible wpea_notice">
 			        <p><?php echo $info; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.NonSingularStringLiteralText ?></p>
 			    </div>
 			    <?php
@@ -471,12 +510,12 @@ class WP_Event_Aggregator_Admin {
 	 * @since 1.2
 	 * @return void
 	 */
-	public function get_selected_tab_submenu( $submenu_file ){
+	public function get_selected_tab_submenu_wpea( $submenu_file ){
 		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$allowed_tabs = array( 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'shortcodes', 'support' );
-			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'eventbrite'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$allowed_tabs = array( 'dashboard', 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'shortcodes', 'support' );
+			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'dashboard'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if( in_array( $tab, $allowed_tabs ) ){
-				$submenu_file = esc_url( admin_url( 'admin.php?page=import_events&tab='.$tab ) );
+				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
 			}
 		}
 		return $submenu_file;
@@ -623,8 +662,8 @@ class WP_Event_Aggregator_Admin {
 	public function wpea_check_delete_pst_event_cron_status(){
 
 		$wpea_options        = get_option( WPEA_OPTIONS );
-		$move_peit_ieevents = isset( $wpea_options['wpea']['move_peit'] ) ? $wpea_options['wpea']['move_peit'] : 'no';
-		if ( $move_peit_ieevents == 'yes' ) {
+		$move_peit_wpeavents = isset( $wpea_options['wpea']['move_peit'] ) ? $wpea_options['wpea']['move_peit'] : 'no';
+		if ( $move_peit_wpeavents == 'yes' ) {
 			if ( !wp_next_scheduled( 'wpea_delete_past_events_cron' ) ) {
 				wp_schedule_event( time(), 'daily', 'wpea_delete_past_events_cron' );
 			}
