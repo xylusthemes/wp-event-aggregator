@@ -244,180 +244,104 @@ class WP_Event_Aggregator_Cpt {
 		// Use nonce for verification
 		wp_nonce_field( WPEA_PLUGIN_DIR, 'wpea_event_metabox_nonce' );
 		
-		$start_hour = get_post_meta($post->ID, 'event_start_hour', true);
-		$start_minute = get_post_meta($post->ID, 'event_start_minute', true);
-		$start_meridian = get_post_meta($post->ID, 'event_start_meridian', true);
-		$end_hour = get_post_meta($post->ID, 'event_end_hour', true);
-		$end_minute = get_post_meta($post->ID, 'event_end_minute', true);
-		$end_meridian = get_post_meta($post->ID, 'event_end_meridian', true);
+		$start_hour     = get_post_meta( $post->ID, 'event_start_hour', true );
+		$start_minute   = get_post_meta( $post->ID, 'event_start_minute', true );
+		$start_meridian = get_post_meta( $post->ID, 'event_start_meridian', true );
+		$end_hour       = get_post_meta( $post->ID, 'event_end_hour', true );
+		$end_minute     = get_post_meta( $post->ID, 'event_end_minute', true );
+		$end_meridian   = get_post_meta( $post->ID, 'event_end_meridian', true );
+
+		$fields = [
+			'venue_name'      => __( 'Venue', 'wp-event-aggregator' ),
+			'venue_address'   => __( 'Address', 'wp-event-aggregator' ),
+			'venue_city'      => __( 'City', 'wp-event-aggregator' ),
+			'venue_state'     => __( 'State', 'wp-event-aggregator' ),
+			'venue_country'   => __( 'Country', 'wp-event-aggregator' ),
+			'venue_zipcode'   => __( 'Zipcode', 'wp-event-aggregator' ),
+			'venue_lat'       => __( 'Latitude', 'wp-event-aggregator' ),
+			'venue_lon'       => __( 'Longitude', 'wp-event-aggregator' ),
+			'venue_url'       => __( 'Website', 'wp-event-aggregator' ),
+			'organizer_name'  => __( 'Organizer Name', 'wp-event-aggregator' ),
+			'organizer_email' => __( 'Email', 'wp-event-aggregator' ),
+			'organizer_phone' => __( 'Phone', 'wp-event-aggregator' ),
+			'organizer_url'   => __( 'Website', 'wp-event-aggregator' ),
+			'wpea_event_link' => __( 'Source Link', 'wp-event-aggregator' ),
+		];
 		?>
-		<table class="wpea_form_table">
-			<thead>
-			<tr>
-				<th colspan="2">
-					<?php esc_attr_e('Time & Date', 'wp-event-aggregator'); ?>
-					<hr>
-				</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td><?php esc_attr_e('Start Date & Time', 'wp-event-aggregator'); ?>:</td>
-				<td>
-				<input type="text" name="event_start_date" class="xt_datepicker" id="event_start_date" value="<?php echo esc_attr( get_post_meta($post->ID, 'event_start_date', true ) ); ?>" /> @ 
-				<?php
-				$this->generate_dropdown( 'event_start', 'hour', $start_hour );
-				$this->generate_dropdown( 'event_start', 'minute', $start_minute );
-				$this->generate_dropdown( 'event_start', 'meridian', $start_meridian );
-				?>
-				</td>
-			</tr>
-			<tr>
-				<td><?php esc_attr_e('End Date & Time', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="event_end_date" class="xt_datepicker" id="event_end_date" value="<?php echo esc_attr( get_post_meta($post->ID, 'event_end_date', true ) ); ?>" /> @ 
+
+		<div class="wpea_form_section">
+			<h3><?php esc_attr_e( 'Time & Date', 'wp-event-aggregator' ); ?></h3>
+			<hr>
+			<div class="wpea_form_row">
+				<label for="event_start_date"><?php esc_attr_e( 'Start Date & Time', 'wp-event-aggregator' ); ?>:</label>
+				<div class="wpea_form_input_group">
+					<input type="text" name="event_start_date" class="xt_datepicker" id="event_start_date" value="<?php echo esc_attr( get_post_meta( $post->ID, 'event_start_date', true ) ); ?>" /> @ 
 					<?php
-					$this->generate_dropdown( 'event_end', 'hour', $end_hour );
-					$this->generate_dropdown( 'event_end', 'minute', $end_minute );
-					$this->generate_dropdown( 'event_end', 'meridian', $end_meridian );
+						$this->generate_dropdown( 'event_start', 'hour', $start_hour );
+						$this->generate_dropdown( 'event_start', 'minute', $start_minute );
+						$this->generate_dropdown( 'event_start', 'meridian', $start_meridian );
 					?>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<div style="clear: both;"></div>
-		<table class="wpea_form_table">
-			<thead>
-			<tr>
-				<th colspan="2">
-					<?php esc_attr_e('Location Details', 'wp-event-aggregator'); ?>
-					<hr>
-				</th>
-			</tr>
-			</thead>
+				</div>
+			</div>
 
-			<tbody>
-			<tr>
-				<td><?php esc_attr_e('Venue', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_name" id="venue_name" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_name', true) ); ?>" />
-				</td>
-			</tr>
+			<div class="wpea_form_row">
+				<label for="event_end_date"><?php esc_attr_e( 'End Date & Time', 'wp-event-aggregator' ); ?>:</label>
+				<div class="wpea_form_input_group">
+					<input type="text" name="event_end_date" class="xt_datepicker" id="event_end_date" value="<?php echo esc_attr( get_post_meta( $post->ID, 'event_end_date', true ) ); ?>" /> @ 
+					<?php
+						$this->generate_dropdown( 'event_end', 'hour', $end_hour );
+						$this->generate_dropdown( 'event_end', 'minute', $end_minute );
+						$this->generate_dropdown( 'event_end', 'meridian', $end_meridian );
+					?>
+				</div>
+			</div>
+		</div>
 
-			<tr>
-				<td><?php esc_attr_e('Address', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_address" id="venue_address" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_address', true) ); ?>" />
-				</td>
-			</tr>
+		<div class="wpea_form_section">
+			<h3><?php esc_attr_e( 'Location Details', 'wp-event-aggregator' ); ?></h3>
+			<hr>
+			<?php
+			foreach ( [ 'venue_name', 'venue_address', 'venue_city', 'venue_state', 'venue_country', 'venue_zipcode', 'venue_lat', 'venue_lon', 'venue_url' ] as $field ) {
+				?>
+				<div class="wpea_form_row">
+					<label for="<?php echo esc_attr( $field ); ?>"><?php echo esc_html( $fields[ $field ] ); ?>:</label>
+					<div class="wpea_form_input_group">
+						<input type="text" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" value="<?php echo esc_attr( get_post_meta( $post->ID, $field, true ) ); ?>" />
+					</div>
+				</div>
+				<?php
+			}
+			?>
+		</div>
 
-			<tr>
-				<td><?php esc_attr_e('City', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_city" id="venue_city" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_city', true) ); ?>" />
-				</td>
-			</tr>
-
-			<tr>
-				<td><?php esc_attr_e('State', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_state" id="venue_state" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_state', true) ); ?>" />
-				</td>
-			</tr>
-			
-			<tr>
-				<td><?php esc_attr_e('Country', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_country" id="venue_country" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_country', true) ); ?>" />
-				</td>
-			</tr>
-
-			<tr>
-				<td><?php esc_attr_e('ZIP Code', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_zipcode" id="venue_zipcode" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_zipcode', true) ); ?>" />
-				</td>
-			</tr>
-
-			<tr>
-				<td><?php esc_attr_e('Latitude', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_lat" id="venue_lat" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_lat', true) ); ?>" />
-				</td>
-			</tr>
-
-			<tr>
-				<td><?php esc_attr_e('Longitude', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_lon" id="venue_lon" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_lon', true) ); ?>" />
-				</td>
-			</tr>
-
-			<tr>
-				<td><?php esc_attr_e('Website', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="venue_url" id="venue_url" value="<?php echo esc_attr( get_post_meta($post->ID, 'venue_url', true) ); ?>" />
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<div style="clear: both;"></div>
-		<table class="wpea_form_table">
-			<thead>
-			<tr>
-				<th colspan="2">
-					<?php esc_attr_e('Organizer Details', 'wp-event-aggregator'); ?>
-					<hr>
-				</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td><?php esc_attr_e('Organizer Name', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="organizer_name" id="organizer_name" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_name', true) ); ?>" />
-				</td>
-			</tr>
-			<tr>
-				<td><?php esc_attr_e('Email', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="email" name="organizer_email" id="organizer_email" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_email', true) ); ?>" />
-				</td>
-			</tr>
-			<tr>
-				<td><?php esc_attr_e('Phone', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="organizer_phone" id="organizer_phone" value="<?php echo esc_attr( get_post_meta($post->ID, 'organizer_phone', true) ); ?>" />
-				</td>
-			</tr>
-			<tr>
-				<td><?php esc_attr_e('Website', 'wp-event-aggregator'); ?>:</td>
-				<td>
-					<input type="text" name="organizer_url" id="organizer_url" value="<?php echo esc_url( get_post_meta($post->ID, 'organizer_url', true) ); ?>" />
-				</td>
-			</tr>
-			</tbody>
-		</table>
-
-		<div style="clear: both;"></div>
-		<table class="wpea_form_table">
-			<thead>
-				<tr>
-					<th colspan="2">
-						<?php esc_attr_e( 'Event Source Link', 'wp-event-aggregator' ); ?>
-						<hr>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><?php esc_attr_e( 'Source Link', 'wp-event-aggregator' ); ?>:</td>
-					<td>
-						<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo esc_url( get_post_meta( $post->ID, 'wpea_event_link', true ) ); ?>" />
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="wpea_form_section">
+			<h3><?php esc_attr_e( 'Organizer Details', 'wp-event-aggregator' ); ?></h3>
+			<hr>
+			<?php
+			foreach ( [ 'organizer_name', 'organizer_email', 'organizer_phone', 'organizer_url' ] as $field ) {
+				$type = $field === 'organizer_email' ? 'email' : 'text';
+				?>
+				<div class="wpea_form_row">
+					<label for="<?php echo esc_attr( $field ); ?>"><?php echo esc_html( $fields[ $field ] ); ?>:</label>
+					<div class="wpea_form_input_group">
+						<input type="<?php echo esc_attr( $type ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" value="<?php echo esc_attr( get_post_meta( $post->ID, $field, true ) ); ?>" />
+					</div>
+				</div>
+				<?php
+			}
+			?>
+		</div>
+		
+		<div class="wpea_form_section">
+			<h3><?php esc_attr_e( 'Event Source Link', 'wp-event-aggregator' ); ?></h3>
+			<hr>
+			<div class="wpea_form_row">
+				<label for="event_source_link"><?php echo esc_html( $fields['wpea_event_link'] ); ?>:</label>
+				<div class="wpea_form_input_group">
+					<input type="text" name="event_source_link" id="event_source_link" value="<?php echo esc_url( get_post_meta( $post->ID, 'wpea_event_link', true ) ); ?>" />
+				</div>
+			</div>
+		</div>
 
 		<?php
 	}

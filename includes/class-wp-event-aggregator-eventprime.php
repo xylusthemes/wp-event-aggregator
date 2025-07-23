@@ -143,8 +143,17 @@ class WP_Event_Aggregator_EventPrime {
 
 			// Assign Featured images
 			$event_image = $centralize_array['image_url'];
-			if ( $event_image != '' ) {
+			if ( ! empty( $event_image ) ) {
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
+			}else{
+				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
+				if( !empty( $default_thumb ) ){
+					set_post_thumbnail( $inserted_event_id, $default_thumb );
+				}else{
+					if ( $is_exitsing_event ) {
+						delete_post_thumbnail( $inserted_event_id );
+					}
+				}
 			}
 			$address = !empty( $centralize_array['location']['address_1'] ) ? $centralize_array['location']['address_1'] : '';
 			if ( isset( $centralize_array['location']['full_address'] ) && !empty( $centralize_array['location']['full_address'] ) ) {
@@ -171,6 +180,11 @@ class WP_Event_Aggregator_EventPrime {
 			update_post_meta( $inserted_event_id, 'em_enable_recurrence', '0' );
 			update_post_meta( $inserted_event_id, 'em_recurrence_step', '0' );
 
+			// Series id
+			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
+			if( !empty( $series_id ) ){
+				update_post_meta( $inserted_event_id, 'series_id', $series_id );
+			}
 
             //Event Date & Time
             $start_ampm = gmdate( "h:i A", $start_time );

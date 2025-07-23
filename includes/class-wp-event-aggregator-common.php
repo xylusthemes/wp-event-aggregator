@@ -27,6 +27,7 @@ class WP_Event_Aggregator_Common {
 		add_action( 'admin_init', array( $this, 'wpea_check_if_access_token_invalidated' ) );
 		add_action( 'admin_init', array( $this, 'wpea_check_for_minimum_pro_version' ) );
 		add_action( 'ep_after_single_event_contant', array( $this, 'wpea_add_eventprime_add_ticket_section' ) );
+		add_action( 'admin_init', array( $this, 'wpea_redirect_after_activation' ) );
 	}	
 
 	/**
@@ -40,11 +41,11 @@ class WP_Event_Aggregator_Common {
 
 		$active_plugins = $this->get_active_supported_event_plugins();
 		?>	
-		<tr class="event_plugis_wrapper">
-			<th scope="row">
-				<?php esc_attr_e( 'Import into','wp-event-aggregator' ); ?> :
-			</th>
-			<td>
+		<div class="wpea-inner-main-section" >
+			<div class="wpea-inner-section-1" >
+				<span class="wpea-title-text" ><?php esc_attr_e( 'Import into','wp-event-aggregator' ); ?></span>
+			</div>
+			<div class="wpea-inner-section-2">
 				<select name="event_plugin" class="event_plugin">
 					<?php
 					if( !empty( $active_plugins ) ){
@@ -56,33 +57,40 @@ class WP_Event_Aggregator_Common {
 					}
 					?>
 	            </select>
-			</td>
-		</tr>
+			</div>
+		</div>
 
-		<tr class="event_cats_wrapper">
-			<th scope="row">
-				<?php esc_attr_e( 'Event Categories for Event Import','wp-event-aggregator' ); ?> : 
-			</th>
-			<td>
+		<div class="wpea-inner-main-section" >
+			<div class="wpea-inner-section-1" >
+				<span class="wpea-title-text" ><?php esc_attr_e( 'Event Categories for Event Import','wp-event-aggregator' ); ?>
+					<span class="wpea-tooltip">
+						<div>
+							<svg viewBox="0 0 20 20" fill="#000" xmlns="http://www.w3.org/2000/svg" class="wpea-circle-question-mark">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M1.6665 10.0001C1.6665 5.40008 5.39984 1.66675 9.99984 1.66675C14.5998 1.66675 18.3332 5.40008 18.3332 10.0001C18.3332 14.6001 14.5998 18.3334 9.99984 18.3334C5.39984 18.3334 1.6665 14.6001 1.6665 10.0001ZM10.8332 13.3334V15.0001H9.1665V13.3334H10.8332ZM9.99984 16.6667C6.32484 16.6667 3.33317 13.6751 3.33317 10.0001C3.33317 6.32508 6.32484 3.33341 9.99984 3.33341C13.6748 3.33341 16.6665 6.32508 16.6665 10.0001C16.6665 13.6751 13.6748 16.6667 9.99984 16.6667ZM6.6665 8.33341C6.6665 6.49175 8.15817 5.00008 9.99984 5.00008C11.8415 5.00008 13.3332 6.49175 13.3332 8.33341C13.3332 9.40251 12.6748 9.97785 12.0338 10.538C11.4257 11.0695 10.8332 11.5873 10.8332 12.5001H9.1665C9.1665 10.9824 9.9516 10.3806 10.6419 9.85148C11.1834 9.43642 11.6665 9.06609 11.6665 8.33341C11.6665 7.41675 10.9165 6.66675 9.99984 6.66675C9.08317 6.66675 8.33317 7.41675 8.33317 8.33341H6.6665Z" fill="currentColor"></path>
+							</svg>
+							<span class="wpea-popper">
+								<?php esc_attr_e( 'These categories are assign to imported event.', 'wp-event-aggregator' ); ?>
+								<div class="wpea-popper__arrow"></div>
+							</span>
+						</div>
+					</span>
+				</span>
+			</div>
+			<div class="wpea-inner-section-2">
 				<?php 
-				$taxo_cats = $taxo_tags = '';
-				if( !empty( $taxonomy_terms ) && isset( $taxonomy_terms['cats'] ) ){
-					$taxo_cats = implode(',', $taxonomy_terms['cats'] );
-				}
-				if( !empty( $taxonomy_terms ) && isset( $taxonomy_terms['tags'] ) ){
-					$taxo_tags = implode(',', $taxonomy_terms['tags'] );
-				}
+					$taxo_cats = $taxo_tags = '';
+					if( !empty( $taxonomy_terms ) && isset( $taxonomy_terms['cats'] ) ){
+						$taxo_cats = implode(',', $taxonomy_terms['cats'] );
+					}
+					if( !empty( $taxonomy_terms ) && isset( $taxonomy_terms['tags'] ) ){
+						$taxo_tags = implode(',', $taxonomy_terms['tags'] );
+					}
 				?>
 				<input type="hidden" id="wpea_taxo_cats" value="<?php echo esc_attr( $taxo_cats ); ?>">
 				<input type="hidden" id="wpea_taxo_tags" value="<?php echo esc_attr( $taxo_tags ); ?>">
-				<div class="event_taxo_terms_wraper">
-
-				</div>
-				<span class="wpea_small">
-		            <?php esc_attr_e( 'These categories are assigned to imported events.', 'wp-event-aggregator' ); ?>
-		        </span>
-			</td>
-		</tr>
+				<div class="event_taxo_terms_wraper"></div>
+			</div>
+		</div>
 		<?php		
 
 	}
@@ -239,6 +247,8 @@ class WP_Event_Aggregator_Common {
 			}
 		}elseif( $source_data['import_by'] == 'organizer_id' ){
 			$source = '<a href="https://eventbrite.com/o/' . $source_data['organizer_id'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}elseif( $source_data['import_by'] == 'collection_id' ){
+			$source = '<a href="https://eventbrite.com/cc/' . $source_data['collection_id'] . '" target="_blank" >' . $schedule_title . '</a>';
 		}elseif( $source_data['import_by'] == 'ical_url' ){
 			$source = '<a href="' . $source_data['ical_url'] . '" target="_blank" >iCal URL</a>';
 		}elseif( $source_data['import_by'] == 'facebook_group' ){
@@ -697,6 +707,10 @@ class WP_Event_Aggregator_Common {
 			$event_source  = $schedule_eventdata['organizer_id'];
 			$event_origins = 'Eventbrite Organizer ID';
 			$name          = 'organizer_id';
+		}elseif( !empty( $schedule_eventdata['collection_id'] ) ){
+			$event_source  = $schedule_eventdata['collection_id'];
+			$event_origins = 'Eventbrite Collection ID';
+			$name          = 'collection_id';
 		}elseif( !empty( $schedule_eventdata['ical_url'] ) ){
 			$event_source  = $schedule_eventdata['ical_url'];
 			$event_origins = 'iCal URL';
@@ -776,11 +790,12 @@ class WP_Event_Aggregator_Common {
 	 */
 	function render_eventstatus_input( $selected = 'publish' ){
 		?>
-		<tr class="event_status_wrapper">
-			<th scope="row">
-				<?php esc_attr_e( 'Status','wp-event-aggregator' ); ?> :
-			</th>
-			<td>
+
+		<div class="wpea-inner-main-section" >
+			<div class="wpea-inner-section-1" >
+				<span class="wpea-title-text" ><?php esc_attr_e( 'Status','wp-event-aggregator' ); ?></span>
+			</div>
+			<div class="wpea-inner-section-2">
 				<select name="event_status" >
 	                <option value="publish" <?php selected( $selected, 'publish' ); ?>>
 	                    <?php esc_html_e( 'Published','wp-event-aggregator' ); ?>
@@ -792,8 +807,8 @@ class WP_Event_Aggregator_Common {
 	                    <?php esc_html_e( 'Draft','wp-event-aggregator' ); ?>
 	                </option>
 	            </select>
-			</td>
-		</tr>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -927,9 +942,9 @@ class WP_Event_Aggregator_Common {
 	public function render_pro_notice(){
 		if( !wpea_is_pro() ){
 		?>
-		<span class="wpea_small">
-	        <?php printf( '<span style="color: red">%s</span> <a href="' . esc_url( WPEA_PLUGIN_BUY_NOW_URL ). '" target="_blank" >%s</a>', esc_attr__( 'Available in Pro Add-on.', 'wp-event-aggregator' ), esc_attr__( 'Upgrade to PRO', 'wp-event-aggregator' ) ); ?>
-	    </span>
+		<div class="wpea-blur-filter-cta" >
+			<span style="color: red"><?php echo esc_html_e( 'Available in Pro version.', 'wp-event-aggregator' ); ?> </span><a href="<?php echo esc_url( WPEA_PLUGIN_BUY_NOW_URL ); ?>"><?php echo esc_html_e( 'Upgrade to PRO', 'wp-event-aggregator' ); ?></a>
+		</div>
 		<?php
 		}
 	}
@@ -1246,6 +1261,9 @@ class WP_Event_Aggregator_Common {
 		return $post_description;
 	}
 
+	/**
+	 * Rendering Evebnt update category
+	 */
 	public function wepa_create_update_ical_categories( $ical_cateories = array(), $source_taxonomy ){
 
 		$event_cat_ids  = [];
@@ -1263,6 +1281,153 @@ class WP_Event_Aggregator_Common {
 		return $event_cat_ids;
 
 	}
+
+	/**
+	 * Redirect after activate the plugin.
+	 * @return void
+	 */
+	public function wpea_redirect_after_activation() {
+		if ( get_option( 'wpea_plugin_activated' ) ) {
+			delete_option( 'wpea_plugin_activated' );
+			wp_safe_redirect( admin_url( 'admin.php?page=import_events&tab=wpea_setup_wizard' ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Render Page header Section
+	 *
+	 * @since 1.1
+	 * @return void
+	 */
+	function wpea_render_common_header( $page_title  ){
+		?>
+		<div class="wpea-header" >
+			<div class="wpea-container" >
+				<div class="wpea-header-content" >
+					<span style="font-size:18px;"><?php esc_attr_e( 'Dashboard','wp-event-aggregator' ); ?></span>
+					<span class="spacer"></span>
+					<span class="page-name"><?php echo esc_attr( $page_title ); ?></span></span>
+					<div class="header-actions" title="documentation" >
+						<span class="round">
+							<a href="<?php echo esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ); ?>" target="_blank">
+								<svg viewBox="0 0 20 20" fill="#000000" height="20px" xmlns="http://www.w3.org/2000/svg" class="wpea-circle-question-mark">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.6665 10.0001C1.6665 5.40008 5.39984 1.66675 9.99984 1.66675C14.5998 1.66675 18.3332 5.40008 18.3332 10.0001C18.3332 14.6001 14.5998 18.3334 9.99984 18.3334C5.39984 18.3334 1.6665 14.6001 1.6665 10.0001ZM10.8332 13.3334V15.0001H9.1665V13.3334H10.8332ZM9.99984 16.6667C6.32484 16.6667 3.33317 13.6751 3.33317 10.0001C3.33317 6.32508 6.32484 3.33341 9.99984 3.33341C13.6748 3.33341 16.6665 6.32508 16.6665 10.0001C16.6665 13.6751 13.6748 16.6667 9.99984 16.6667ZM6.6665 8.33341C6.6665 6.49175 8.15817 5.00008 9.99984 5.00008C11.8415 5.00008 13.3332 6.49175 13.3332 8.33341C13.3332 9.40251 12.6748 9.97785 12.0338 10.538C11.4257 11.0695 10.8332 11.5873 10.8332 12.5001H9.1665C9.1665 10.9824 9.9516 10.3806 10.6419 9.85148C11.1834 9.43642 11.6665 9.06609 11.6665 8.33341C11.6665 7.41675 10.9165 6.66675 9.99984 6.66675C9.08317 6.66675 8.33317 7.41675 8.33317 8.33341H6.6665Z" fill="currentColor"></path>
+								</svg>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render Page Footer Section
+	 *
+	 * @since 1.1
+	 * @return void
+	 */
+	function wpea_render_common_footer(){
+		?>
+			<div id="wpea-footer-links" >
+				<div class="wpea-footer">
+					<div><?php esc_attr_e( 'Made with ♥ by the Xylus Themes', 'wp-event-aggregator' ); ?></div>
+					<div class="wpea-links" >
+						<a href="<?php echo esc_url( 'https://xylusthemes.com/support/' ); ?>" target="_blank" ><?php esc_attr_e( 'Support', 'wp-event-aggregator'); ?></a>
+						<span>/</span>
+						<a href="<?php echo esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ); ?>" target="_blank" ><?php esc_attr_e( 'Docs', 'wp-event-aggregator' ); ?></a>
+						<span>/</span>
+						<a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=xylus&tab=search&type=term' ) ); ?>" ><?php esc_attr_e( 'Free Plugins', 'wp-event-aggregator' ); ?></a>
+					</div>
+					<div class="wpea-social-links">
+						<a href="<?php echo esc_url( 'https://www.facebook.com/xylusinfo/' ); ?>" target="_blank" >
+							<svg class="wpea-facebook">
+								<path fill="currentColor" d="M16 8.05A8.02 8.02 0 0 0 8 0C3.58 0 0 3.6 0 8.05A8 8 0 0 0 6.74 16v-5.61H4.71V8.05h2.03V6.3c0-2.02 1.2-3.15 3-3.15.9 0 1.8.16 1.8.16v1.98h-1c-1 0-1.31.62-1.31 1.27v1.49h2.22l-.35 2.34H9.23V16A8.02 8.02 0 0 0 16 8.05Z"></path>
+							</svg>
+						</a>
+						<a href="<?php echo esc_url( 'https://www.linkedin.com/company/xylus-consultancy-service-xcs-/' ); ?>" target="_blank" >
+							<svg class="wpea-linkedin">
+								<path fill="currentColor" d="M14 1H1.97C1.44 1 1 1.47 1 2.03V14c0 .56.44 1 .97 1H14a1 1 0 0 0 1-1V2.03C15 1.47 14.53 1 14 1ZM5.22 13H3.16V6.34h2.06V13ZM4.19 5.4a1.2 1.2 0 0 1-1.22-1.18C2.97 3.56 3.5 3 4.19 3c.65 0 1.18.56 1.18 1.22 0 .66-.53 1.19-1.18 1.19ZM13 13h-2.1V9.75C10.9 9 10.9 8 9.85 8c-1.1 0-1.25.84-1.25 1.72V13H6.53V6.34H8.5v.91h.03a2.2 2.2 0 0 1 1.97-1.1c2.1 0 2.5 1.41 2.5 3.2V13Z"></path>
+							</svg>
+						</a>
+						<a href="<?php echo esc_url( 'https://x.com/XylusThemes" target="_blank' ); ?>" target="_blank" >
+							<svg class="wpea-twitter" width="24" height="24" viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="12" fill="currentColor"></circle>
+								<g>
+									<path d="M13.129 11.076L17.588 6H16.5315L12.658 10.4065L9.5665 6H6L10.676 12.664L6 17.9865H7.0565L11.1445 13.332L14.41 17.9865H17.9765L13.129 11.076ZM11.6815 12.7225L11.207 12.0585L7.4375 6.78H9.0605L12.1035 11.0415L12.576 11.7055L16.531 17.2445H14.908L11.6815 12.7225Z" fill="white"></path>
+								</g>
+							</svg>
+						</a>
+						<a href="<?php echo esc_url( 'https://www.youtube.com/@xylussupport7784' ); ?>" target="_blank" >
+							<svg class="wpea-youtube">
+								<path fill="currentColor" d="M16.63 3.9a2.12 2.12 0 0 0-1.5-1.52C13.8 2 8.53 2 8.53 2s-5.32 0-6.66.38c-.71.18-1.3.78-1.49 1.53C0 5.2 0 8.03 0 8.03s0 2.78.37 4.13c.19.75.78 1.3 1.5 1.5C3.2 14 8.51 14 8.51 14s5.28 0 6.62-.34c.71-.2 1.3-.75 1.49-1.5.37-1.35.37-4.13.37-4.13s0-2.81-.37-4.12Zm-9.85 6.66V5.5l4.4 2.53-4.4 2.53Z"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</div>
+		<?php   
+	}
+
+	/**
+	 * Get WPEA Events Counts
+	 *
+	 * @since 1.5.0
+	 * @return array
+	 */
+	function wpea_get_wpea_events_counts() {
+		global $wpdb;
+
+		// Table names with WordPress prefix
+		$posts_table    = $wpdb->prefix . 'posts';
+		$postmeta_table = $wpdb->prefix . 'postmeta';
+
+		// Current Unix timestamp
+		$current_time = current_time( 'timestamp' );
+
+		// Single query to get all counts
+		$sql = "SELECT 
+				COUNT( p.ID ) AS all_posts_count,
+				SUM( CASE WHEN pm.meta_value > %d THEN 1 ELSE 0 END ) AS upcoming_events_count,
+				SUM( CASE WHEN pm.meta_value <= %d THEN 1 ELSE 0 END ) AS past_events_count
+			FROM {$posts_table} AS p
+			INNER JOIN {$postmeta_table} AS pm ON p.ID = pm.post_id
+			WHERE p.post_type = %s
+			AND p.post_status = %s
+			AND pm.meta_key = %s";
+
+		$prepared_sql = $wpdb->prepare( $sql, $current_time, $current_time, 'wp_events', 'publish', 'end_ts' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$counts       = $wpdb->get_row( $prepared_sql );
+
+		// Return the counts as an array
+		return [
+			'all'      => intval( $counts->all_posts_count ),
+			'upcoming' => intval( $counts->upcoming_events_count ),
+			'past'     => intval( $counts->past_events_count ),
+		];
+	}
+
+	/**
+     * Get Plugin array
+     *
+     * @since 1.1.0
+     * @return array
+     */
+    public function wpea_get_xylus_themes_plugins(){
+        return array(
+            'wp-bulk-delete' => array( 'plugin_name' => esc_html__( 'WP Bulk Delete', 'wp-event-aggregator' ), 'description' => 'Delete posts, pages, comments, users, taxonomy terms and meta fields in bulk with different powerful filters and conditions.' ),
+            'import-eventbrite-events' => array( 'plugin_name' => esc_html__( 'Import Eventbrite Events', 'wp-event-aggregator' ), 'description' => 'Import Eventbrite Events into WordPress website and/or Event Calendar. Nice Display with shortcode & Event widget.' ),
+            'import-facebook-events' => array( 'plugin_name' => esc_html__( 'Import Social Events', 'wp-event-aggregator' ), 'description' => 'Import Facebook events into your WordPress website and/or Event Calendar. Nice Display with shortcode & Event widget.' ),
+            'import-meetup-events' => array( 'plugin_name' => esc_html__( 'Import Meetup Events', 'wp-event-aggregator' ), 'description' => 'Import Meetup Events allows you to import Meetup (meetup.com) events into your WordPress site effortlessly.' ),
+            'event-schema' => array( 'plugin_name' => esc_html__( 'Event Schema / Structured Data', 'wp-event-aggregator' ), 'description' => 'Automatically Google Event Rich Snippet Schema Generator. This plug-in generates complete JSON-LD based schema (structured data for Rich Snippet) for events.' ),
+            'wp-smart-import' => array( 'plugin_name' => esc_html__( 'WP Smart Import : Import any XML File to WordPress', 'wp-event-aggregator' ), 'description' => 'The most powerful solution for importing any CSV files to WordPress. Create Posts and Pages any Custom Posttype with content from any CSV file.' ),
+            'xylus-events-calendar' => array( 'plugin_name' => esc_html__( 'Xylus Events Calendar', 'wp-event-aggregator' ), 'description' => 'Display upcoming events from multiple sources in a responsive calendar with customizable layouts like grid, row, calendar, and masonry.' ),
+            'xt-feed-for-linkedin' => array( 'plugin_name' => esc_html__( 'XT Feed for LinkedIn', 'wp-event-aggregator' ), 'description' => 'XT Feed for LinkedIn auto-shares WordPress posts to LinkedIn with one click, making content distribution easy and boosting your reach effortlessly.' ),
+        );
+    }
 }
 
 

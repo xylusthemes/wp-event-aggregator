@@ -39,19 +39,26 @@ class WP_Event_Aggregator_Eventbrite {
 		$imported_events = array();
 		$options = wpea_get_import_options( 'eventbrite' );
 		$eventbrite_oauth_token = isset( $options['oauth_token'] ) ? $options['oauth_token'] : '';
-		$organizer_id = isset( $event_data['organizer_id'] ) ? $event_data['organizer_id'] : '';
+		$organizer_id  = isset( $event_data['organizer_id'] ) ? $event_data['organizer_id'] : '';
+		$collection_id = isset( $event_data['collection_id'] ) ? $event_data['collection_id'] : '';
 		$import_private_events = isset( $options['private_events'] ) ? $options['private_events'] : 'no';
 		
 		if( $event_data['import_by'] == 'organizer_id' ){
 
 			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/organizers/' . $organizer_id . '/events/?status=live&token=' .  $this->oauth_token;
+		
+		}elseif( $event_data['import_by'] == 'collection_id' ){
+			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/collections/' . $collection_id . '/events/?time_filter=current_future&token=' .  $this->oauth_token;
 
 		}elseif( $event_data['import_by'] == 'your_events' ){
 
 			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/users/me/events/?status=live&token=' .  $this->oauth_token;
 		}
-		if( $import_private_events === 'no'){
-			$eventbrite_api_url .= '&only_public=on';
+
+		if( $event_data['import_by'] != 'collection_id' ){
+			if( $import_private_events === 'no'){
+				$eventbrite_api_url .= '&only_public=on';
+			}
 		}
 
 		$eventbrite_response = wp_remote_get( $eventbrite_api_url );
@@ -234,7 +241,8 @@ class WP_Event_Aggregator_Eventbrite {
 		
 		$timezone = isset( $eventbrite_event['start']['timezone'] ) ? $eventbrite_event['start']['timezone']:'';
 		$event_name = isset( $eventbrite_event['name']['text']) ? sanitize_text_field( $eventbrite_event['name']['text'] ) : '';
-		$event_description = $this->get_eventbrite_event_description($eventbrite_event['id']);
+		$series_id   = isset( $eventbrite_event['series_id'] ) ? $eventbrite_event['series_id'] : '';
+		$event_description = $this->get_eventbrite_event_description( $eventbrite_event['id'], $series_id );
 		$event_url = array_key_exists( 'url', $eventbrite_event ) ? esc_url($eventbrite_event['url']): '';
 		$event_image  = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
 		$image = explode( '?s=', $event_image );
@@ -259,14 +267,15 @@ class WP_Event_Aggregator_Eventbrite {
 			'url'             => $event_url,
 			'image_url'       => $image_url,
 			'online_event'    => $online_event,
+			'series_id'		  => $series_id,
 		);
 
 		if ( array_key_exists( 'organizer_id', $eventbrite_event ) ) {
-			$xt_event['organizer'] = $this->get_organizer( $eventbrite_event );
+			$xt_event['organizer'] = $this->get_organizer( $eventbrite_event, $series_id );
 		}
 
 		if ( array_key_exists( 'name', $eventbrite_event ) && !empty( $eventbrite_event['name'] ) ) {
-			$xt_event['location'] = $this->get_location( $eventbrite_event );
+			$xt_event['location'] = $this->get_location( $eventbrite_event, $series_id );
 		}
 
 		return apply_filters( 'wpea_eventbrite_generate_centralize_array', $xt_event, $eventbrite_event );
@@ -279,10 +288,20 @@ class WP_Event_Aggregator_Eventbrite {
 	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function get_organizer( $eventbrite_event ) {
+	public function get_organizer( $eventbrite_event, $series_id ) {
 		if ( ! array_key_exists( 'organizer_id', $eventbrite_event ) ) {
 			return null;
 		}
+
+		if ( ! empty( $series_id ) ) {
+			$org_transient_key = 'wpea_series_organizer_' . $series_id;
+			$cached_org        = get_transient( $org_transient_key );
+
+			if ( ! empty( $cached_org ) ) {
+				return $cached_org;
+			}
+		}
+
 		$event_organizer = $eventbrite_event['organizer_id'];
 		$get_oraganizer = wp_remote_get( 'https://www.eventbriteapi.com/v3/organizers/' . $event_organizer .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ), 'timeout' => 20, ) );
 
@@ -312,6 +331,9 @@ class WP_Event_Aggregator_Eventbrite {
 						'url'         => isset( $oraganizer['url'] ) ? $oraganizer['url'] : '',
 						'image_url'   => $image_url,
 					);
+					if ( ! empty( $series_id ) ) {
+						set_transient( 'wpea_series_organizer_' . $series_id, $event_organizer, HOUR_IN_SECONDS );
+					}
 					return $event_organizer;
 				}
 			}
@@ -326,10 +348,20 @@ class WP_Event_Aggregator_Eventbrite {
 	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function get_location( $eventbrite_event ) {
+	public function get_location( $eventbrite_event, $series_id ) {
 		if ( ! array_key_exists( 'venue_id', $eventbrite_event ) ) {
 			return null;
 		}
+
+		if ( ! empty( $series_id ) ) {
+			$loc_transient_key = 'wpea_series_location_' . $series_id;
+			$cached_loc        = get_transient( $loc_transient_key );
+
+			if ( ! empty( $cached_loc ) ) {
+				return $cached_loc;
+			}
+		}
+
 		$event_venue_id = $eventbrite_event['venue_id'];
 		$is_online      = $eventbrite_event['online_event'];
 		if( $is_online === true ){
@@ -361,6 +393,10 @@ class WP_Event_Aggregator_Eventbrite {
 						'url'          => '',
 						'image_url'    => ''
 					);
+
+					if ( ! empty( $series_id ) ) {
+						set_transient( 'wpea_series_location_' . $series_id, $event_location, HOUR_IN_SECONDS );
+					}
 					return $event_location;
 				}
 			}
@@ -402,13 +438,27 @@ class WP_Event_Aggregator_Eventbrite {
 	 * @param $eventbrite_id
 	 * @return string description
 	 */
-	function get_eventbrite_event_description($eventbrite_id){
+	function get_eventbrite_event_description( $eventbrite_id, $series_id = '' ) {
 		$description = '';
+
+
+		if ( ! empty( $series_id ) ) {
+			$desc_transient_key = 'wpea_series_description_' . $series_id;
+			$cached_desc        = get_transient( $desc_transient_key );
+
+			if ( ! empty( $cached_desc ) ) {
+				return $cached_desc;
+			}
+		}
+
 		$eventbrite_desc_url  = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/description/?token=' . $this->oauth_token;
 		$eventbrite_response = wp_remote_get( $eventbrite_desc_url, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 		if ( !is_wp_error( $eventbrite_response ) ) {
 			$event_desc = json_decode( wp_remote_retrieve_body($eventbrite_response) );
 			$description = isset( $event_desc->description ) ? $event_desc->description : '';
+			if ( ! empty( $description ) && ! empty( $series_id ) ) {
+				set_transient( 'wpea_series_description_' . $series_id, $description, HOUR_IN_SECONDS );
+			}
 		}
 		return $description;
 	}
@@ -439,5 +489,41 @@ class WP_Event_Aggregator_Eventbrite {
 		$import->push_to_queue( $params );
 		$import->save()->dispatch();
 		return true;
+	}
+
+	/**
+	 * Get Collection Name based on Collection ID.
+	 *
+	 * @since    1.0.0
+	 * @param array $eventbrite_event Eventbrite event.
+	 * @return array
+	 */
+	public function wpea_get_collection_name_by_id( $collection_id ) {
+
+		if ( ! $collection_id || $collection_id == '' ) {
+			return;
+		}
+
+		$get_collection = wp_remote_get(
+			'https://www.eventbriteapi.com/v3/collections/' . $collection_id . '/?token=' . $this->oauth_token,
+			array(
+				'headers' => array(
+					'Content-Type' => 'application/json'
+				),
+				'timeout' => 20,
+			)
+		);
+
+		if ( ! is_wp_error( $get_collection ) ) {
+			$collection = json_decode( $get_collection['body'], true );
+			if ( is_array( $collection ) && ! isset( $collection['errors'] ) ) {
+				if ( ! empty( $collection ) && array_key_exists( 'id', $collection ) ) {
+
+					$collection_name = isset( $collection['name'] ) ? $collection['name'] : '';
+					return $collection_name;
+				}
+			}
+		}
+		return '';
 	}
 }

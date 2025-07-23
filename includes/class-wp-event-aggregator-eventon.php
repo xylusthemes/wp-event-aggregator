@@ -110,6 +110,7 @@ class WP_Event_Aggregator_EventON {
 			'post_content' => $post_description,
 			'post_type'   => $this->event_posttype,
 			'post_status' => 'pending',
+			'post_author'  => isset( $event_args['event_author'] ) ? $event_args['event_author'] : get_current_user_id()
 		);
 		if ( $is_exitsing_event ) {
 			$evon_eventdata['ID'] = $is_exitsing_event;
@@ -170,9 +171,18 @@ class WP_Event_Aggregator_EventON {
 			}
 
 			// Assign Featured images
-			$event_image = isset( $centralize_array['image_url'] ) ? $centralize_array['image_url'] : '';
-			if( $event_image != '' ){
+			$event_image = $centralize_array['image_url'];
+			if ( ! empty( $event_image ) ) {
 				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
+			}else{
+				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
+				if( !empty( $default_thumb ) ){
+					set_post_thumbnail( $inserted_event_id, $default_thumb );
+				}else{
+					if ( $is_exitsing_event ) {
+						delete_post_thumbnail( $inserted_event_id );
+					}
+				}
 			}
 			
 			$address = !empty( $centralize_array['location']['address_1'] ) ? $centralize_array['location']['address_1']: '' ;
@@ -206,6 +216,12 @@ class WP_Event_Aggregator_EventON {
 			update_post_meta( $inserted_event_id, '_end_ampm', $end_ampm );
 			update_post_meta( $inserted_event_id, '_end_hour', $end_hour );
 			update_post_meta( $inserted_event_id, '_end_minute', $end_minute );
+
+			// Series id
+			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
+			if( !empty( $series_id ) ){
+				update_post_meta( $inserted_event_id, 'series_id', $series_id );
+			}
 
 			if( $centralize_array['location']['name'] == 'Online Event' ){
 				update_post_meta( $inserted_event_id, '_virtual', 'yes' );

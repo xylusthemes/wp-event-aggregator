@@ -347,5 +347,6 @@ function wpea_activate_wp_event_aggregator() {
 	global $importevents;
 	$importevents->cpt->register_event_post_type();
 	flush_rewrite_rules();	
+	add_option( 'wpea_plugin_activated', true );
 }
 register_activation_hook( __FILE__, 'wpea_activate_wp_event_aggregator' );
