@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: Event aggregator, calendar, Google Calendar, eventbrite event, facebook event
 Requires at least: 4.0
 Tested up to: 6.8
-Stable tag: 1.8.4
+Stable tag: 1.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,16 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.8.5 =
+* ADDED: Modern and easy-to-use admin interface for better user experience
+* ADDED: Option to assign an author while importing events
+* ADDED: Support for importing events using Collection ID from Eventbrite (Pro version)
+* ADDED: Toggle button to Activate or Pause scheduled imports anytime (Pro version)
+* ADDED: Import events directly from CSV, XML, or JSON files (Pro version)
+* FIXED: Improved Eventbrite API performance for faster imports and lower server load (Pro version)
+* IMPROVEMENTS: Set a default image for events that don’t have one
+* IMPROVEMENTS: Strengthened plugin security for safer usage
 
 = 1.8.4 =
 * ADDED: Integrated support for the EventPrime plugin
