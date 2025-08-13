@@ -42,6 +42,9 @@ if( is_object( $meetup_authorized_user ) ){
                         <a href="javascript:void(0)" class="var-settings-tab var-tab var-tab--inactive" data-tab="icalsettings">
                             <span class="tab-label"><?php esc_attr_e( 'iCalendar / .ics', 'wp-event-aggregator' ); ?></span>
                         </a>
+
+                        <?php do_action( 'wpea_setting_page_tabs' ); ?>
+
                         <a href="javascript:void(0)" class="var-settings-tab var-tab var-tab--inactive" data-tab="aggregatorsetting">
                             <span class="tab-label"><?php esc_attr_e( 'General Settings', 'wp-event-aggregator' ); ?></span>
                         </a>
@@ -53,6 +56,8 @@ if( is_object( $meetup_authorized_user ) ){
                                 <span class="tab-label"><?php esc_attr_e( 'License Key', 'wp-event-aggregator' ); ?></span>
                             </a>
                         <?php } ?>
+
+                        <?php do_action( 'wpea_setting_license_page_tabs' ); ?>
                     </div>
 				</div>
 			</div>
@@ -631,6 +636,9 @@ if( is_object( $meetup_authorized_user ) ){
             </div>
         </div>
 
+        <!-- Addon tab Section -->
+         <?php do_action( 'wpea_addon_source_settings' ); ?>
+
         <!-- Aggregator General Tab Section -->
         <div id="aggregatorsetting" class="wpea-setting-tab-content">
             <div class="wpea-card" >
@@ -879,4 +887,7 @@ if( is_object( $meetup_authorized_user ) ){
             ?>
         </div>
     </div>
+
+    <?php do_action( 'wpea_addon_license_settings' ); ?>
+
 </div>

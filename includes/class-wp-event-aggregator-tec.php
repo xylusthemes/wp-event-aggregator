@@ -205,7 +205,7 @@ class WP_Event_Aggregator_TEC {
 			// Assign Featured images
 			$event_image = $centralize_array['image_url'];
 			if ( ! empty( $event_image ) ) {
-				$importevents->common->setup_featured_image_to_event( $new_event_id, $event_image );
+				$importevents->common->wpea_set_feature_image_logic( $new_event_id, $event_image, $event_args );
 			}else{
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
@@ -332,7 +332,7 @@ class WP_Event_Aggregator_TEC {
 			// Assign Featured images
 			$event_image = $centralize_array['image_url'];
 			if ( ! empty( $event_image ) ) {
-				$importevents->common->setup_featured_image_to_event( $update_event_id, $event_image );
+				$importevents->common->wpea_set_feature_image_logic( $update_event_id, $event_image, $event_args );
 			}else{
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
@@ -397,6 +397,8 @@ class WP_Event_Aggregator_TEC {
 		$timezone_name   = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 		$esource_url     = isset( $centralize_array['url'] ) ? esc_url( $centralize_array['url'] ) : '';
 		$esource_id      = $centralize_array['ID'];
+		$ticket_price    = isset( $centralize_array['ticket_price'] ) ? sanitize_text_field( $centralize_array['ticket_price'] ) : '0';
+		$t_currency      = isset( $centralize_array['ticket_currency'] ) ? sanitize_text_field( $centralize_array['ticket_currency'] ) : '';
 
 		$event_args = array(
 			'_EventStartDate'         => gmdate( 'Y-m-d H:i:s', $start_time ),
@@ -416,6 +418,8 @@ class WP_Event_Aggregator_TEC {
 			'wpea_event_timezone'      => $timezone,
 			'wpea_event_link'          => $esource_url,
 			'wpea_event_timezone_name' => $timezone_name,
+			'wpea_ticket_price'        => $ticket_price,
+			'wpea_ticket_currency'     => $t_currency
 		);
 
 		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){

@@ -91,7 +91,8 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			$schedule_title = trim( $parts[0] ) . '<br>(' . trim( $parts[1] );
 		}
 
-		return sprintf( '<strong>%1$s</strong>
+		$ra_html = $this->row_actions( $actions );
+		$return  = sprintf( '<strong>%1$s</strong>
 			<span>%2$s</span></br>
 			<span>%3$s</span></br>
 			<span>%4$s</span></br>
@@ -101,8 +102,9 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 			__('Import Into', 'wp-event-aggregator') . ': <b>' . $import_into . '</b>',
 			__('Source', 'wp-event-aggregator') . ': <b>' . $source . '</b>',
 			$item['ID'],
-			$this->row_actions( $actions )
+			$ra_html
 		);
+		return apply_filters( 'wpea_column_title', $return, $item, $source_data, $ra_html );
 	}
 
 	/**
