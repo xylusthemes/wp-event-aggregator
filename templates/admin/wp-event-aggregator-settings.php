@@ -552,6 +552,8 @@ if( is_object( $meetup_authorized_user ) ){
         <div id="icalsettings" class="wpea-setting-tab-content">
             <div class="wpea-card" >
                 <div class="wpea-content wpea_source_import" >
+                    <!-- Microsoft Authorization Section -->
+                    <?php do_action( 'wpea_microsoft_authorize' ); ?>
                     
                     <!-- Update Existing Events Section -->
                     <div class="wpea-inner-main-section" >

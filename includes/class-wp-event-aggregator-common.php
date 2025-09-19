@@ -255,6 +255,8 @@ class WP_Event_Aggregator_Common {
 			$source = '<a href="https://www.facebook.com/groups/' . $source_data['facebook_group_id'] . '" target="_blank" >Facebook Group</a>';
 		}elseif( $source_data['import_by'] == 'group_url' ){
 			$source = '<a href="' . $source_data['meetup_url'] . '" target="_blank" >' . $schedule_title . '</a>';
+		}elseif( $source_data['import_by'] == 'outlook_calendar' ){
+			$source = 'Microsoft Outlook '. $schedule_title;
 		}else{
 			$source = 'No Data Found';
 		}
