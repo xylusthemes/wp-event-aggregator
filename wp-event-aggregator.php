@@ -27,7 +27,7 @@ class WP_Event_Aggregator{
 	 * WP_Event_Aggregator The one true WP_Event_Aggregator.
 	 */
 	private static $instance;
-	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime;
+	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax;
 
     /**
      * Main WP Event Aggregator Instance.
@@ -56,6 +56,7 @@ class WP_Event_Aggregator{
 
 			self::$instance->includes();
 			self::$instance->common = new WP_Event_Aggregator_Common();
+			self::$instance->ajax   = new WP_Event_Aggregator_Ajax();
 			self::$instance->cpt    = new WP_Event_Aggregator_Cpt();
 			self::$instance->eventbrite = new WP_Event_Aggregator_Eventbrite();
 			self::$instance->meetup = new WP_Event_Aggregator_Meetup();
@@ -164,6 +165,7 @@ class WP_Event_Aggregator{
 	private function includes() {
 
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-common.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ajax.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-list-table.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-admin.php';
 		if( wpea_is_pro() ){
@@ -293,7 +295,11 @@ class WP_Event_Aggregator{
 	 */
 	public function wpea_enqueue_script() {
 		
-		// enqueue script here.
+		$js_dir = WPEA_PLUGIN_URL . 'assets/js/';
+			wp_enqueue_script( 'wpea-ajax-pagi', $js_dir . 'wpea-ajax-pagi.js', array( 'jquery' ), WPEA_VERSION, true );
+			wp_localize_script( 'wpea-ajax-pagi', 'wpea_ajax', array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		));
 	}
 
 }

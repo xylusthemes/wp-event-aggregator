@@ -1183,3 +1183,20 @@
   text-overflow: ellipsis;
   width: 90%;
 }
+
+.wpea-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    position: relative;
+}
+.wpea-loading::after {
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255,255,255,0.8);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
