@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-19T10:35:29+00:00\n"
+"POT-Creation-Date: 2025-11-19T10:44:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -92,7 +92,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-admin.php:75
 #: templates/admin/admin-sidebar.php:16
 #: templates/admin/admin-sidebar.php:19
-#: wp-event-aggregator.php:245
+#: wp-event-aggregator.php:247
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -499,7 +499,7 @@ msgid "Made with ♥ by the Xylus Themes"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:1350
-#: wp-event-aggregator.php:237
+#: wp-event-aggregator.php:239
 msgid "Docs"
 msgstr ""
 
@@ -826,7 +826,7 @@ msgstr ""
 msgid "Event Origin"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:790
+#: includes/class-wp-event-aggregator-cpt.php:817
 msgid "No Events are found."
 msgstr ""
 
@@ -2012,11 +2012,11 @@ msgstr ""
 msgid "Organizer's Website"
 msgstr ""
 
-#: wp-event-aggregator.php:102
-#: wp-event-aggregator.php:109
+#: wp-event-aggregator.php:103
+#: wp-event-aggregator.php:110
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: wp-event-aggregator.php:232
+#: wp-event-aggregator.php:234
 msgid "Setting"
 msgstr ""

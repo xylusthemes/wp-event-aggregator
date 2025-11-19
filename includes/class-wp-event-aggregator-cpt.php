@@ -567,9 +567,14 @@ class WP_Event_Aggregator_Cpt {
 	public function wp_events_archive( $atts = array() ){
 		//[wp_events col='2' layout="style2" posts_per_page='12' category="cat1,cat2" past_events="yes" order="desc" orderby="" start_date="" end_date="" ]
 		$current_date = current_time('timestamp');
-		$paged = ( get_query_var('paged') ? get_query_var('paged') : 1 );
-		if( is_front_page() ){
-			$paged = ( get_query_var('page') ? get_query_var('page') : 1 );
+		$ajaxpagi     = isset( $atts['ajaxpagi'] ) ? $atts['ajaxpagi'] : '';
+		if ( $ajaxpagi != 'yes' ) {
+			$paged        = ( get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1 );
+			if ( is_front_page() ) {
+				$paged = ( get_query_var( 'page' ) ? get_query_var( 'page' ) : 1 );
+			}
+		}else{
+			$paged  = isset( $atts['paged'] ) ? $atts['paged'] : 1;
 		}
 		$eve_args = array(
 		    'post_type' => 'wp_events',
@@ -753,7 +758,7 @@ class WP_Event_Aggregator_Cpt {
         }
 		ob_start();
 		?>
-		<div class="row_grid wpea_frontend_archive">
+		<div class="row_grid wpea_frontend_archive" data-paged="<?php echo esc_attr( $paged ); ?>" data-shortcode='<?php echo wp_json_encode( $atts ); ?>' >
 			<?php
 			$template_args = array();
             $template_args['css_class'] = $css_class;
@@ -774,18 +779,40 @@ class WP_Event_Aggregator_Cpt {
 					
 				endwhile; // End of the loop.
 
-				if ($wp_events->max_num_pages > 1) : // custom pagination  ?>
-					<div class="col-wpea-md-12">
-						<nav class="prev-next-posts">
-							<div class="prev-posts-link alignright">
-								<?php echo get_next_posts_link( 'Next Events &raquo;', $wp_events->max_num_pages ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-							</div>
-							<div class="next-posts-link alignleft">
-								<?php echo get_previous_posts_link( '&laquo; Previous Events' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-							</div>
-						</nav>
-					</div>
-				<?php endif;
+				if ( isset( $atts['ajaxpagi'] ) && $atts['ajaxpagi'] == 'yes' ) {
+					if ( $wp_events->max_num_pages > 1 ) { ?>
+						<div class="col-wpea-md-12">
+							<nav class="prev-next-posts">
+								<div class="prev-posts-link alignright">
+									<?php if( $paged < $wp_events->max_num_pages ) : ?>
+										<a href="#" class="wpea-next-page" data-page="<?php echo $paged + 1; ?>"><?php esc_attr_e( 'Next Events &raquo;' ); ?></a>
+									<?php endif; ?>
+								</div>
+								<div class="next-posts-link alignleft">
+									<?php if( $paged > 1 ) : ?>
+										<a href="#" class="wpea-prev-page" data-page="<?php echo $paged - 1; ?>"><?php esc_attr_e( '&laquo; Previous Events' ); ?></a>
+									<?php endif; ?>
+								</div>
+							</nav>
+						</div>
+						<?php
+					}
+				}else{
+					if ( $wp_events->max_num_pages > 1 ) : // custom pagination
+					?>
+						<div class="col-wpea-md-12">
+							<nav class="prev-next-posts">
+								<div class="prev-posts-link alignright">
+									<?php echo get_next_posts_link( 'Next Events &raquo;', $wp_events->max_num_pages ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								</div>
+								<div class="next-posts-link alignleft">
+									<?php echo get_previous_posts_link( '&laquo; Previous Events' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								</div>
+							</nav>
+						</div>
+					<?php
+					endif;
+				}
 			else:
 				echo esc_html( apply_filters( 'wpea_no_events_found_message', __( "No Events are found.", 'wp-event-aggregator' ) ) );
 			endif;
