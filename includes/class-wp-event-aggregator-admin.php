@@ -62,6 +62,9 @@ class WP_Event_Aggregator_Admin {
     	$submenu['import_events'][] = array( __( 'Meetup Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=meetup' ) );
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
     	$submenu['import_events'][] = array( __( 'iCalendar/.ics Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=ical' ));
+		
+		do_action( 'wpea_addon_submenus' );
+		
 		$submenu['import_events'][] = array( __( 'Schedule Imports', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=scheduled' ));
     	$submenu['import_events'][] = array( __( 'Import History', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=history' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
@@ -200,6 +203,9 @@ class WP_Event_Aggregator_Admin {
 														<a href="<?php echo esc_url( add_query_arg( 'tab', 'ical', $this->adminpage_url ) ); ?>" class="var-tab <?php echo ( $active_tab == 'ical' )  ? 'var-tab--active' : 'var-tab--inactive'; ?>">
 															<span class="tab-label"><?php esc_attr_e( 'iCalendar / .ics', 'wp-event-aggregator' ); ?></span>
 														</a>
+														
+														<?php do_action( 'wpea_addon_submenus_tabs', $active_tab ); ?>
+
 														<a href="<?php echo esc_url( add_query_arg( 'tab', 'scheduled', $this->adminpage_url ) ); ?>" class="var-tab <?php echo ( $active_tab == 'scheduled' )  ? 'var-tab--active' : 'var-tab--inactive'; ?>">
 															<span class="tab-label"><?php esc_attr_e( 'Scheduled Imports', 'wp-event-aggregator' ); if( !wpea_is_pro() ){ echo '<div class="wpea-pro-badge"> PRO </div>'; } ?></span>
 														</a>
@@ -252,6 +258,8 @@ class WP_Event_Aggregator_Admin {
 										}elseif ( $active_tab == 'shortcodes' ) {
 											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-shortcode.php';
 										}
+
+										do_action( 'wpea_addon_submenus_pages', $active_tab, $ntab );
 									?>
 								</div>
 							</div>
