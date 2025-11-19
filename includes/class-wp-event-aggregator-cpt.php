@@ -336,9 +336,9 @@ class WP_Event_Aggregator_Cpt {
 			<h3><?php esc_attr_e( 'Event Source Link', 'wp-event-aggregator' ); ?></h3>
 			<hr>
 			<div class="wpea_form_row">
-				<label for="event_source_link"><?php echo esc_html( $fields['wpea_event_link'] ); ?>:</label>
+				<label for="wpea_event_link"><?php echo esc_html( $fields['wpea_event_link'] ); ?>:</label>
 				<div class="wpea_form_input_group">
-					<input type="text" name="event_source_link" id="event_source_link" value="<?php echo esc_url( get_post_meta( $post->ID, 'wpea_event_link', true ) ); ?>" />
+					<input type="text" name="wpea_event_link" id="wpea_event_link" value="<?php echo esc_url( get_post_meta( $post->ID, 'wpea_event_link', true ) ); ?>" />
 				</div>
 			</div>
 		</div>

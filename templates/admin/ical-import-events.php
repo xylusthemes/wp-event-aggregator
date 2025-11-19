@@ -41,7 +41,8 @@ global $importevents;
 														/* translators: 1: First option (by Facebook Event ID), 2: Second option (Facebook Page) */
 														esc_html__( 'Select Event source. %1$s %2$s', 'wp-event-aggregator' ),
 														'<br><strong>' . esc_html__( '1. .ics File', 'wp-event-aggregator' ) . '</strong>',
-														'<br><strong>' . esc_html__( '2. .iCal URL', 'wp-event-aggregator' ) . '</strong>'
+														'<br><strong>' . esc_html__( '2. .iCal URL', 'wp-event-aggregator' ) . '</strong>',
+														'<br><strong>' . esc_html__( '3. Outlook Calendar', 'wp-event-aggregator' ) . '</strong>'
 													);
 													
 													echo wp_kses(
@@ -62,6 +63,7 @@ global $importevents;
 								<select name="ical_import_by" id="ical_import_by">
 					            	<option value="ics_file"><?php esc_attr_e( '.ics File','wp-event-aggregator' ); ?></option>
 			                    	<option value="ical_url" <?php if( wpea_is_pro() ){ echo 'selected="selected"'; } ?> ><?php esc_attr_e( 'iCal URL','wp-event-aggregator' ); ?></option>
+			                    	<option value="outlook_calendar" <?php if( wpea_is_pro() ){ echo 'selected="selected"'; } ?> ><?php esc_attr_e( 'Outlook Calendar','wp-event-aggregator' ); ?></option>
 			                    </select>
 							</div>
 						</div>
@@ -88,6 +90,26 @@ global $importevents;
 							</div>
 						</div>
 
+						<div class="wpea-inner-main-section outlook_calendar_wrapper" >
+							<div class="wpea-inner-section-1" >
+								<span class="wpea-title-text" ><?php esc_attr_e( 'Outlook Calendar','wp-event-aggregator' ); ?></span>
+							</div>
+							<div class="wpea-inner-section-2">
+								<?php 
+									if ( function_exists('wpea_is_pro') && wpea_is_pro() ) {
+										do_action(  'wpea_render_outlookcalendar_dropdown' );
+									} else {
+										?>
+										<select name="" id="" disabled="disabled">
+											<option value=""><?php esc_html_e('Select Calendar', 'wp-event-aggregator'); ?></option>
+										</select>
+										<?php
+										do_action( 'wpea_render_pro_notice' );
+									}
+								?>
+							</div>
+						</div>
+
 						<div class="wpea-inner-main-section import_date_range" >
 							<div class="wpea-inner-section-1" >
 								<span class="wpea-title-text" ><?php esc_attr_e( 'Events date range','wp-event-aggregator' ); ?></span>
@@ -110,7 +132,7 @@ global $importevents;
 							</div>
 						</div>
 
-						<div class="wpea-inner-main-section" >
+						<div class="wpea-inner-main-section import_type_wrapper" >
 							<div class="wpea-inner-section-1" >
 								<span class="wpea-title-text" ><?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?></span>
 							</div>
