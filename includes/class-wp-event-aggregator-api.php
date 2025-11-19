@@ -258,17 +258,36 @@ GRAPHQL;
             $headers[] = 'Authorization: Bearer ' . $this->api_key;
         }
 
-        if (false === $data = @file_get_contents($endpoint, false, stream_context_create([
-            'http' => [
-                'method' => 'POST',
-                'header' => $headers,
-                'content' => json_encode(['query' => $query, 'variables' => $variables]),
-            ]
-        ]))) {
-            $error = error_get_last();
-            throw new ErrorException( esc_html( $error['message'] ), intval( $error['type'] ) );
-        }
+        $payload = ['query' => $query];
+        if (!empty($variables)) {
+			$payload['variables'] = $variables;
+		}
 
-        return json_decode($data, true);
-    }
+		$json_data = json_encode($payload);
+		if ($json_data === false) {
+			throw new Exception('JSON encode error: ' . json_last_error_msg());
+		}
+
+		$context = stream_context_create([
+			'http' => [
+				'method'  => 'POST',
+				'header'  => implode("\r\n", $headers),
+				'content' => $json_data,
+			]
+		]);
+
+		$data = @file_get_contents($endpoint, false, $context);
+
+		if (false === $data) {
+			$error = error_get_last();
+			throw new ErrorException('HTTP Request Failed: ' . esc_html($error['message']), intval($error['type']));
+		}
+
+		$response = json_decode($data, true);
+		if (isset($response['errors'])) {
+			error_log('GraphQL API returned errors: ' . print_r($response['errors'], true));
+		}
+
+		return $response;
+	}
 }
