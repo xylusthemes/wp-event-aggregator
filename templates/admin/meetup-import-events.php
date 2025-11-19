@@ -97,7 +97,7 @@ global $importevents;
 							</div>
 						</div>
 
-						<div class="wpea-inner-main-section" >
+						<div class="wpea-inner-main-section import_type_wrapper" >
 							<div class="wpea-inner-section-1" >
 								<span class="wpea-title-text" ><?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?></span>
 							</div>

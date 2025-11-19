@@ -149,7 +149,7 @@ class WP_Event_Aggregator_EE4 {
 			// Assign Featured images
 			$event_image = $centralize_array['image_url'];
 			if ( ! empty( $event_image ) ) {
-				$importevents->common->setup_featured_image_to_event( $inserted_event_id, $event_image );
+				$importevents->common->wpea_set_feature_image_logic( $inserted_event_id, $event_image, $event_args );
 			}else{
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
@@ -230,6 +230,14 @@ class WP_Event_Aggregator_EE4 {
 			update_post_meta( $inserted_event_id, '_wpea_endtime_str', $end_time );
 			update_post_meta( $inserted_event_id, 'start_ts', $start_time );
 			update_post_meta( $inserted_event_id, 'end_ts', $end_time );
+
+			// Ticket Price
+			$wpea_ticket_price    = isset( $centralize_array['ticket_price'] ) ? sanitize_text_field( $centralize_array['ticket_price'] ) : '0';
+			$wpea_ticket_currency = isset( $centralize_array['ticket_currency'] ) ? sanitize_text_field( $centralize_array['ticket_currency'] ) : '';
+			
+			// Update Ticket Price
+			update_post_meta( $inserted_event_id, 'wpea_ticket_price', $wpea_ticket_price );
+			update_post_meta( $inserted_event_id, 'wpea_ticket_currency', $wpea_ticket_currency );
 
 			// Series id
 			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			

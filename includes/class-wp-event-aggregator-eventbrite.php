@@ -45,14 +45,14 @@ class WP_Event_Aggregator_Eventbrite {
 		
 		if( $event_data['import_by'] == 'organizer_id' ){
 
-			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/organizers/' . $organizer_id . '/events/?status=live&token=' .  $this->oauth_token;
+			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/organizers/' . $organizer_id . '/events/?status=live&expand=venue,ticket_availability,organizer,organizer.logo&token=' .  $this->oauth_token;
 		
 		}elseif( $event_data['import_by'] == 'collection_id' ){
-			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/collections/' . $collection_id . '/events/?time_filter=current_future&token=' .  $this->oauth_token;
+			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/collections/' . $collection_id . '/events/?time_filter=current_future&expand=venue,ticket_availability,organizer,organizer.logo&token=' .  $this->oauth_token;
 
 		}elseif( $event_data['import_by'] == 'your_events' ){
 
-			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/users/me/events/?status=live&token=' .  $this->oauth_token;
+			$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/users/me/events/?status=live&expand=venue,ticket_availability,organizer,organizer.logo&token=' .  $this->oauth_token;
 		}
 
 		if( $event_data['import_by'] != 'collection_id' ){
@@ -149,7 +149,7 @@ class WP_Event_Aggregator_Eventbrite {
 						continue;
 					}
 
-					$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/?token=' .  $this->oauth_token;
+					$eventbrite_api_url = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/?expand=venue,ticket_availability,organizer,organizer.logo&token=' .  $this->oauth_token;
 				    $eventbrite_response = wp_remote_get( $eventbrite_api_url , array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
 
 					if ( is_wp_error( $eventbrite_response ) ) {
@@ -248,6 +248,8 @@ class WP_Event_Aggregator_Eventbrite {
 		$image = explode( '?s=', $event_image );
 		$image_url = esc_url( urldecode( str_replace('https://img.evbuc.com/', '', $image[0] ) ) );
 		$online_event = isset( $eventbrite_event['online_event'] ) ? $eventbrite_event['online_event'] : false;
+		$ticket_price      = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] : '';	
+		$ticket_currency   = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] : '';	
 
 
 		$xt_event = array(
@@ -268,14 +270,22 @@ class WP_Event_Aggregator_Eventbrite {
 			'image_url'       => $image_url,
 			'online_event'    => $online_event,
 			'series_id'		  => $series_id,
+			'ticket_price'    => $ticket_price,
+			'ticket_currency' => $ticket_currency,
 		);
 
-		if ( array_key_exists( 'organizer_id', $eventbrite_event ) ) {
-			$xt_event['organizer'] = $this->get_organizer( $eventbrite_event, $series_id );
+		if ( array_key_exists( 'organizer', $eventbrite_event ) ) {
+			$organizer_details = $eventbrite_event['organizer'];
+			$xt_event['organizer'] = $this->get_organizer( $organizer_details );
 		}
 
-		if ( array_key_exists( 'name', $eventbrite_event ) && !empty( $eventbrite_event['name'] ) ) {
-			$xt_event['location'] = $this->get_location( $eventbrite_event, $series_id );
+		if ( array_key_exists( 'venue', $eventbrite_event ) ) {
+			$location_details = $eventbrite_event['venue'];
+			$online_event     = $eventbrite_event['online_event'] ?? false;
+			if( $online_event ){
+				$location_details['name'] = 'Online Event';
+			}
+			$xt_event['location'] = $this->get_location( $location_details );
 		}
 
 		return apply_filters( 'wpea_eventbrite_generate_centralize_array', $xt_event, $eventbrite_event );
@@ -288,55 +298,22 @@ class WP_Event_Aggregator_Eventbrite {
 	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function get_organizer( $eventbrite_event, $series_id ) {
-		if ( ! array_key_exists( 'organizer_id', $eventbrite_event ) ) {
-			return null;
-		}
+	public function get_organizer( $organizer_details ) {
+		if ( array_key_exists( 'id', $organizer_details ) && isset( $organizer_details['name'] ) && ! empty( $organizer_details['name'] ) ) {
+			$org_image = isset( $organizer_details['logo']['original']['url'] ) ? urldecode( $organizer_details['logo']['original']['url'] ) : '';
+			$image     = explode( '?s=', $org_image );
+			$image_url = esc_url( urldecode( str_replace( 'https://img.evbuc.com/', '', $image[0] ) ) );
 
-		if ( ! empty( $series_id ) ) {
-			$org_transient_key = 'wpea_series_organizer_' . $series_id;
-			$cached_org        = get_transient( $org_transient_key );
-
-			if ( ! empty( $cached_org ) ) {
-				return $cached_org;
-			}
-		}
-
-		$event_organizer = $eventbrite_event['organizer_id'];
-		$get_oraganizer = wp_remote_get( 'https://www.eventbriteapi.com/v3/organizers/' . $event_organizer .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ), 'timeout' => 20, ) );
-
-		if ( ! is_wp_error( $get_oraganizer ) ) {
-			$oraganizer = json_decode( $get_oraganizer['body'], true );
-			if ( is_array( $oraganizer ) && ! isset( $oraganizer['errors'] ) ) {
-				if ( ! empty( $oraganizer ) && array_key_exists( 'id', $oraganizer ) ) {
-
-					$e_options = wpea_get_import_options( 'eventbrite' );
-					$small_thumbnail = isset( $e_options['small_thumbnail'] ) ? $e_options['small_thumbnail'] : 'no';
-
-					if( $small_thumbnail == 'yes'){
-						$event_image       = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['url'] ) : '';
-					}else{
-						$event_image       = array_key_exists( 'logo', $eventbrite_event ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
-					}
-
-					$image = explode( '?s=', $event_image );
-					$image_url = esc_url( urldecode( str_replace('https://img.evbuc.com/', '', $image[0] ) ) );
-
-					$event_organizer = array(
-						'ID'          => isset( $oraganizer['id'] ) ? $oraganizer['id'] : '',
-						'name'        => isset( $oraganizer['name'] ) ? $oraganizer['name'] : '',
-						'description' => isset( $oraganizer['description']['text'] ) ? $oraganizer['description']['text'] : '',
-						'email'       => '',
-						'phone'       => '',
-						'url'         => isset( $oraganizer['url'] ) ? $oraganizer['url'] : '',
-						'image_url'   => $image_url,
-					);
-					if ( ! empty( $series_id ) ) {
-						set_transient( 'wpea_series_organizer_' . $series_id, $event_organizer, HOUR_IN_SECONDS );
-					}
-					return $event_organizer;
-				}
-			}
+			$event_organizer = array(
+				'ID'          => isset( $organizer_details['id'] ) ? $organizer_details['id'] : '',
+				'name'        => isset( $organizer_details['name'] ) ? $organizer_details['name'] : '',
+				'description' => isset( $organizer_details['description']['text'] ) ? $organizer_details['description']['text'] : '',
+				'email'       => '',
+				'phone'       => '',
+				'url'         => isset( $organizer_details['url'] ) ? $organizer_details['url'] : '',
+				'image_url'   => $image_url,
+			);
+			return $event_organizer;
 		}
 		return null;
 	}
@@ -348,58 +325,81 @@ class WP_Event_Aggregator_Eventbrite {
 	 * @param array $eventbrite_event Eventbrite event.
 	 * @return array
 	 */
-	public function get_location( $eventbrite_event, $series_id ) {
-		if ( ! array_key_exists( 'venue_id', $eventbrite_event ) ) {
-			return null;
-		}
+	// public function get_location( $eventbrite_event, $series_id ) {
+	// 	if ( ! array_key_exists( 'venue_id', $eventbrite_event ) ) {
+	// 		return null;
+	// 	}
 
-		if ( ! empty( $series_id ) ) {
-			$loc_transient_key = 'wpea_series_location_' . $series_id;
-			$cached_loc        = get_transient( $loc_transient_key );
+	// 	if ( ! empty( $series_id ) ) {
+	// 		$loc_transient_key = 'wpea_series_location_' . $series_id;
+	// 		$cached_loc        = get_transient( $loc_transient_key );
 
-			if ( ! empty( $cached_loc ) ) {
-				return $cached_loc;
-			}
-		}
+	// 		if ( ! empty( $cached_loc ) ) {
+	// 			return $cached_loc;
+	// 		}
+	// 	}
 
-		$event_venue_id = $eventbrite_event['venue_id'];
-		$is_online      = $eventbrite_event['online_event'];
-		if( $is_online === true ){
+	// 	$event_venue_id = $eventbrite_event['venue_id'];
+	// 	$is_online      = $eventbrite_event['online_event'];
+	// 	if( $is_online === true ){
+	// 		$event_location = array(
+	// 			'name'         => 'Online Event',
+	// 		);
+	// 		return $event_location;
+	// 	}
+	// 	$get_venue = wp_remote_get( 'https://www.eventbriteapi.com/v3/venues/' . $event_venue_id .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+
+	// 	if ( ! is_wp_error( $get_venue ) ) {
+	// 		$venue = json_decode( $get_venue['body'], true );
+	// 		if ( is_array( $venue ) && ! isset( $venue['errors'] ) ) {
+	// 			if ( ! empty( $venue ) && array_key_exists( 'id', $venue ) ) {
+
+	// 				$event_location = array(
+	// 					'ID'           => isset( $venue['id'] ) ? $venue['id'] : '',
+	// 					'name'         => isset( $venue['name'] ) ? $venue['name'] : '',
+	// 					'description'  => '',
+	// 					'address_1'    => isset( $venue['address']['address_1'] ) ? $venue['address']['address_1'] : '',
+	// 					'address_2'    => isset( $venue['address']['address_2'] ) ? $venue['address']['address_2'] : '',
+	// 					'city'         => isset( $venue['address']['city'] ) ? $venue['address']['city'] : '',
+	// 					'state'        => isset( $venue['address']['region'] ) ? $venue['address']['region'] : '',
+	// 					'country'      => isset( $venue['address']['country'] ) ? $venue['address']['country'] : '',
+	// 					'zip'	       => isset( $venue['address']['postal_code'] ) ? $venue['address']['postal_code'] : '',
+	// 					'lat'     	   => isset( $venue['address']['latitude'] ) ? $venue['address']['latitude'] : '',
+	// 					'long'		   => isset( $venue['address']['longitude'] ) ? $venue['address']['longitude'] : '',
+	// 					'full_address' => isset( $venue['address']['localized_address_display'] ) ? $venue['address']['localized_address_display'] : $venue['address']['address_1'],
+	// 					'url'          => '',
+	// 					'image_url'    => ''
+	// 				);
+
+	// 				if ( ! empty( $series_id ) ) {
+	// 					set_transient( 'wpea_series_location_' . $series_id, $event_location, HOUR_IN_SECONDS );
+	// 				}
+	// 				return $event_location;
+	// 			}
+	// 		}
+	// 	}
+	// 	return null;
+	// }
+	public function get_location( $location_details ) {
+
+		if ( isset( $location_details['name'] ) && ! empty( $location_details['name'] ) ) {
 			$event_location = array(
-				'name'         => 'Online Event',
+				'ID'           => isset( $location_details['id'] ) ? $location_details['id'] : '',
+				'name'         => isset( $location_details['name'] ) ? $location_details['name'] : '',
+				'description'  => '',
+				'address_1'    => isset( $location_details['address']['address_1'] ) ? $location_details['address']['address_1'] : '',
+				'address_2'    => isset( $location_details['address']['address_2'] ) ? $location_details['address']['address_2'] : '',
+				'city'         => isset( $location_details['address']['city'] ) ? $location_details['address']['city'] : '',
+				'state'        => isset( $location_details['address']['region'] ) ? $location_details['address']['region'] : '',
+				'country'      => isset( $location_details['address']['country'] ) ? $location_details['address']['country'] : '',
+				'zip'          => isset( $location_details['address']['postal_code'] ) ? $location_details['address']['postal_code'] : '',
+				'lat'          => isset( $location_details['address']['latitude'] ) ? $location_details['address']['latitude'] : '',
+				'long'         => isset( $location_details['address']['longitude'] ) ? $location_details['address']['longitude'] : '',
+				'full_address' => isset( $location_details['address']['localized_address_display'] ) ? $location_details['address']['localized_address_display'] : '',
+				'url'          => '',
+				'image_url'    => '',
 			);
 			return $event_location;
-		}
-		$get_venue = wp_remote_get( 'https://www.eventbriteapi.com/v3/venues/' . $event_venue_id .'/?token=' . $this->oauth_token, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
-
-		if ( ! is_wp_error( $get_venue ) ) {
-			$venue = json_decode( $get_venue['body'], true );
-			if ( is_array( $venue ) && ! isset( $venue['errors'] ) ) {
-				if ( ! empty( $venue ) && array_key_exists( 'id', $venue ) ) {
-
-					$event_location = array(
-						'ID'           => isset( $venue['id'] ) ? $venue['id'] : '',
-						'name'         => isset( $venue['name'] ) ? $venue['name'] : '',
-						'description'  => '',
-						'address_1'    => isset( $venue['address']['address_1'] ) ? $venue['address']['address_1'] : '',
-						'address_2'    => isset( $venue['address']['address_2'] ) ? $venue['address']['address_2'] : '',
-						'city'         => isset( $venue['address']['city'] ) ? $venue['address']['city'] : '',
-						'state'        => isset( $venue['address']['region'] ) ? $venue['address']['region'] : '',
-						'country'      => isset( $venue['address']['country'] ) ? $venue['address']['country'] : '',
-						'zip'	       => isset( $venue['address']['postal_code'] ) ? $venue['address']['postal_code'] : '',
-						'lat'     	   => isset( $venue['address']['latitude'] ) ? $venue['address']['latitude'] : '',
-						'long'		   => isset( $venue['address']['longitude'] ) ? $venue['address']['longitude'] : '',
-						'full_address' => isset( $venue['address']['localized_address_display'] ) ? $venue['address']['localized_address_display'] : $venue['address']['address_1'],
-						'url'          => '',
-						'image_url'    => ''
-					);
-
-					if ( ! empty( $series_id ) ) {
-						set_transient( 'wpea_series_location_' . $series_id, $event_location, HOUR_IN_SECONDS );
-					}
-					return $event_location;
-				}
-			}
 		}
 		return null;
 	}

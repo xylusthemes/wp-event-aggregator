@@ -692,8 +692,16 @@ class WP_Event_Aggregator_Common {
 	 * @since   1.6.5
 	 * @return  void
 	 */
-	function render_import_source( $schedule_eventdata = '' ){
-		if( !empty( $schedule_eventdata['page_username'] ) ){
+	public function render_import_source( $schedule_eventdata = '' ) {
+
+		// Allow addons to override this logic via filter
+		$custom_source = apply_filters( 'wpea_render_import_source', null, $schedule_eventdata );
+
+		if ( is_array( $custom_source ) && ! empty( $custom_source['name'] ) && isset( $custom_source['value'], $custom_source['label'] ) ) {
+			$name          = $custom_source['name'];
+			$event_source  = $custom_source['value'];
+			$event_origins = $custom_source['label'];
+		}elseif( !empty( $schedule_eventdata['page_username'] ) ) {
 			$event_source  = $schedule_eventdata['page_username'];
 			$event_origins = 'Facebook Page ID';
 			$name          = 'page_username';
@@ -725,7 +733,7 @@ class WP_Event_Aggregator_Common {
 		?>
 		<td>
 			<input type="text" name="<?php echo esc_attr( $name ); ?>" required="required" value="<?php echo esc_attr( $event_source ); ?>">
-			<span><?php echo esc_attr( $event_origins ); ?></span>
+			<span><?php echo esc_html( $event_origins ); ?></span>
 		</td>
 		<?php
 	}
@@ -1430,6 +1438,24 @@ class WP_Event_Aggregator_Common {
             'xt-feed-for-linkedin' => array( 'plugin_name' => esc_html__( 'XT Feed for LinkedIn', 'wp-event-aggregator' ), 'description' => 'XT Feed for LinkedIn auto-shares WordPress posts to LinkedIn with one click, making content distribution easy and boosting your reach effortlessly.' ),
         );
     }
+
+	/**
+	 * Render Event Feature Image Action
+	 *
+	 * @since 1.1
+	 * @return void
+	 */
+	public function wpea_set_feature_image_logic( $event_id, $image_url, $event_args ){
+		global $importevents;
+		
+		if ( $event_args['import_type'] === 'onetime' && $event_args['import_by'] === 'event_id' ) {
+			$importevents->common->setup_featured_image_to_event( $event_id, $image_url );
+		} else {
+			if ( class_exists( 'WPEA_Event_Image_Scheduler' ) ) {
+				WPEA_Event_Image_Scheduler::schedule_image_download( $event_id, $image_url, $event_args );
+			}
+		}
+	}
 }
 
 
