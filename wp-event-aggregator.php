@@ -64,7 +64,7 @@ class WP_Event_Aggregator{
 			self::$instance->ical_parser_aioec = new WP_Event_Aggregator_Ical_Parser_AIOEC();
 			self::$instance->ical = new WP_Event_Aggregator_Ical();
 			self::$instance->admin = new WP_Event_Aggregator_Admin();
-			if( wpea_is_pro() ){
+			if ( wpea_is_pro() && class_exists( 'WP_Event_Aggregator_Pro_Manage_Import' ) ) {
 				self::$instance->manage_import = new WP_Event_Aggregator_Pro_Manage_Import();
 			}else{
 				self::$instance->manage_import = new WP_Event_Aggregator_Manage_Import();
@@ -166,11 +166,11 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-common.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-list-table.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-admin.php';
-		if( wpea_is_pro() ){
+		if ( defined( 'WPEAPRO_PLUGIN_DIR' ) && function_exists('wpea_is_pro') && wpea_is_pro() ){
 			require_once WPEAPRO_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';
 		}else{
 			require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-manage-import.php';	
-		}		
+		}
 		if( !class_exists( 'Kigkonsult\Icalcreator\Vcalendar' ) ){
 			require_once WPEA_PLUGIN_DIR . 'includes/lib/icalcreator/autoload.php';
 		}
@@ -195,6 +195,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wpea-plugin-deactivation.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-api.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/parsedown.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/wpea-action-scheduler/wpea-image-init.php';
 
 		// Gutenberg Block
 		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';

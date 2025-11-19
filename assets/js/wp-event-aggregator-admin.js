@@ -169,14 +169,27 @@
 			if( jQuery(this).val() == 'ical_url' ){
 				jQuery('.import_type_wrapper').show();
 				jQuery('.ical_url_wrapper').show();
+				jQuery('.import_date_range').show();
 				jQuery('.ical_url_wrapper .ical_url').attr('required', 'required');
 				jQuery('.ics_file_wrapper').hide();
+				jQuery('.outlook_calendar_wrapper').hide();
 				jQuery('.ics_file_wrapper .ics_file_class').removeAttr( 'required' );
 
 			} else if( jQuery(this).val() == 'ics_file' ){
 				jQuery('.import_type_wrapper').hide();
+				jQuery('.outlook_calendar_wrapper').hide();
+				jQuery('.import_date_range').show();
 				jQuery('.ics_file_wrapper').show();
 				jQuery('.ics_file_wrapper .ics_file_class').attr('required', 'required');
+				jQuery('.ical_url_wrapper').hide();
+				jQuery('.ical_url_wrapper .ical_url').removeAttr( 'required' );
+
+			} else if( jQuery(this).val() == 'outlook_calendar' ){
+				jQuery('.import_type_wrapper').hide();
+				jQuery('.ics_file_wrapper').hide();
+				jQuery('.import_date_range').hide();
+				jQuery('.outlook_calendar_wrapper').show();
+				jQuery('.ics_file_wrapper .ics_file_class').removeAttr('required' );
 				jQuery('.ical_url_wrapper').hide();
 				jQuery('.ical_url_wrapper .ical_url').removeAttr( 'required' );
 
