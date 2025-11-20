@@ -4,7 +4,7 @@ Donate link: http://xylusthemes.com
 Tags: Event aggregator, calendar, Google Calendar, eventbrite event, facebook event
 Requires at least: 4.0
 Tested up to: 6.8
-Stable tag: 1.8.5
+Stable tag: 1.8.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,12 @@ You can use `[wp_events]` for display in-built events list.
 16. Upcoming WP Events widget in front-end without Event image(Pro)
 
 == Changelog ==
+
+= 1.8.6 =
+* ADDED: AJAX-based pagination support for the shortcode.
+* ADDED: Outlook API integration in the iCal import section. (Pro)
+* FIXED: Meetup authentication bug by updating the HTTP request method.
+* IMPROVED: Eventbrite API request handling for faster imports and reduced server resource usage. (Pro)
 
 = 1.8.5 =
 * ADDED: Modern and easy-to-use admin interface for better user experience
