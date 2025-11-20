@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-19T10:44:16+00:00\n"
+"POT-Creation-Date: 2025-11-20T08:46:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -1853,7 +1853,7 @@ msgid "Here"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-shortcode.php:13
-msgid "🎉 Try Our New Plugin – Xylus Events Calendar"
+msgid "🎉 Try Our New Plugin – Easy Events Calendar"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-shortcode.php:14
@@ -1884,7 +1884,7 @@ msgstr ""
 msgid "💯 100% Free Plugin"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-shortcode.php:68
+#: templates/admin/wp-event-aggregator-shortcode.php:72
 msgid "WP Event Aggregator Shortcodes"
 msgstr ""
 

@@ -185,7 +185,7 @@
 				jQuery('.ical_url_wrapper .ical_url').removeAttr( 'required' );
 
 			} else if( jQuery(this).val() == 'outlook_calendar' ){
-				jQuery('.import_type_wrapper').hide();
+				jQuery('.import_type_wrapper').show();
 				jQuery('.ics_file_wrapper').hide();
 				jQuery('.import_date_range').hide();
 				jQuery('.outlook_calendar_wrapper').show();
