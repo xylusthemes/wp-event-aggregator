@@ -277,6 +277,31 @@ if( is_object( $meetup_authorized_user ) ){
                         }
                     ?>
 
+                    <div class="wpea-inner-main-section wpea-new-feature" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" >
+                                <?php esc_attr_e( 'Import Event With Meetup API Key ', 'wp-event-aggregator' ); ?>
+                                <br/>
+                                <?php esc_attr_e( '(No Auth Required) ', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                        <div class="wpea-inner-section-2" >
+                            <?php
+                                $using_public_api = isset( $meetup_options['using_public_api'] ) ? $meetup_options['using_public_api'] : 'no';
+                            ?>
+                            <input type="checkbox" name="meetup[using_public_api]" value="yes" <?php if( $using_public_api == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <strong><?php esc_attr_e( 'Using "Import Event With Meetup API Key (No Auth Required)" lets you fetch events directly. No Key or authorization needed.', 'wp-event-aggregator' ); ?></strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="wpea-inner-main-section" >
+                        <div class="meetup_or_keyandsecrate">
+                            <span class="wpea-title-text" ><?php esc_attr_e( '- OR -', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                    </div>
+
                     <!-- Meetup OAuth Key Section -->
                     <div class="wpea-inner-main-section" >
                         <div class="wpea-inner-section-1" >
