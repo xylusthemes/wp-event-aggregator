@@ -362,6 +362,10 @@ class WP_Event_Aggregator_Ical_Parser_AIOEC {
 			$timezone_name = $cwt_start['timezone_name'];
 			$start_time    = strtotime( $cwt_start['date_format'] );
 			$end_time      = strtotime( $cwt_end['date_format'] );
+
+			if ( isset( $importevents->common_pro ) && is_object($importevents->common_pro) && method_exists( $importevents->common_pro, 'wpea_get_facebook_event_url' ) ) {
+				$event_image = $importevents->common_pro->wpea_get_facebook_event_url( $uid );
+			}
 		}
 
 		$post_description = $importevents->common->wpea_remove_facebook_link_in_event_description( $post_description, $uid );
