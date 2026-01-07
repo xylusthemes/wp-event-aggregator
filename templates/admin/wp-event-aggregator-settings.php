@@ -70,6 +70,31 @@ if( is_object( $meetup_authorized_user ) ){
             <div class="wpea-card" >
                 <div class="wpea-content wpea_source_import" >
 
+                    <div class="wpea-inner-main-section wpea-new-feature" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text">
+                                <?php esc_attr_e( 'Import Event With Standard API', 'wp-event-aggregator' ); ?>
+                                <br/>
+                                <?php esc_attr_e( '(No Private Token Required)', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                        <div class="wpea-inner-section-2" >
+                            <?php
+                                $using_standard_api = isset( $eventbrite_options['using_standard_api'] ) ? $eventbrite_options['using_standard_api'] : 'no';
+                            ?>
+                            <input type="checkbox" name="eventbrite[using_standard_api]" value="yes" <?php if( $using_standard_api == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <strong><?php esc_attr_e( 'Using "Import Event With Standard API" lets you fetch events directly. No Eventbrite private token is required.', 'wp-event-aggregator' ); ?></strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="wpea-inner-main-section" >
+                        <div class="aggregator_or_keyandsecrate">
+                            <span class="wpea-title-text" ><?php esc_attr_e( '- OR -', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                    </div> 
+
                     <!-- Eventbrite Notice Section -->
                     <div class="widefat wpea_settings_notice">
                         <p style="margin:0;">
@@ -133,7 +158,12 @@ if( is_object( $meetup_authorized_user ) ){
                     </div>
 
                     <!-- Private Events Section -->
-                    <div class="wpea-inner-main-section" >
+                    <?php
+                        $private_events     = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
+                        $using_standard_api = isset( $eventbrite_options['using_standard_api'] ) ? $eventbrite_options['using_standard_api'] : 'no';
+                        $disable_section    = ( $using_standard_api === 'yes' );
+                    ?>
+                    <div class="wpea-inner-main-section" <?php echo $disable_section ? 'style="opacity:0.5; pointer-events:none;"' : ''; ?> >
                         <div class="wpea-inner-section-1" >
                             <span class="wpea-title-text" ><?php esc_attr_e( 'Import Private Events', 'wp-event-aggregator' ); ?></span>
                         </div>
@@ -141,11 +171,16 @@ if( is_object( $meetup_authorized_user ) ){
                             <?php 
                                 $private_eventbrite_events = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
                             ?>
-                            <input type="checkbox" name="eventbrite[private_events]" value="yes" <?php if( $private_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" <?php if ( $private_events == 'yes' ) { echo 'checked="checked"'; } if ( $disable_section ) { echo 'disabled="disabled"'; }  ?>  name="eventbrite[private_events]" value="yes" <?php if( $private_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Tick to import Private events, Untick to not import private event.', 'wp-event-aggregator' ); ?>
                                 <?php printf( "( <em>%s</em> )", esc_attr__( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
                             </span>
+                            <?php if ( $disable_section ): ?>
+                                <div class="wpea_notice" style="margin-top:5px; color:#d63638; font-size:13px;">
+                                    <?php esc_html_e( 'This option only works with a eventbrite private token.', 'wp-event-aggregator' ); ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
@@ -276,6 +311,31 @@ if( is_object( $meetup_authorized_user ) ){
                             <?php
                         }
                     ?>
+
+                    <div class="wpea-inner-main-section wpea-new-feature" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" >
+                                <?php esc_attr_e( 'Import Event With Meetup API Key ', 'wp-event-aggregator' ); ?>
+                                <br/>
+                                <?php esc_attr_e( '(No Auth Required) ', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                        <div class="wpea-inner-section-2" >
+                            <?php
+                                $using_public_api = isset( $meetup_options['using_public_api'] ) ? $meetup_options['using_public_api'] : 'no';
+                            ?>
+                            <input type="checkbox" name="meetup[using_public_api]" value="yes" <?php if( $using_public_api == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <strong><?php esc_attr_e( 'Using "Import Event With Meetup API Key (No Auth Required)" lets you fetch events directly. No Key or authorization needed.', 'wp-event-aggregator' ); ?></strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="wpea-inner-main-section" >
+                        <div class="meetup_or_keyandsecrate">
+                            <span class="wpea-title-text" ><?php esc_attr_e( '- OR -', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                    </div>
 
                     <!-- Meetup OAuth Key Section -->
                     <div class="wpea-inner-main-section" >

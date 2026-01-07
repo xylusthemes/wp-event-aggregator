@@ -27,7 +27,7 @@ class WP_Event_Aggregator{
 	 * WP_Event_Aggregator The one true WP_Event_Aggregator.
 	 */
 	private static $instance;
-	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax;
+	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax, $eventbrite_api;
 
     /**
      * Main WP Event Aggregator Instance.
@@ -65,6 +65,7 @@ class WP_Event_Aggregator{
 			self::$instance->ical_parser_aioec = new WP_Event_Aggregator_Ical_Parser_AIOEC();
 			self::$instance->ical = new WP_Event_Aggregator_Ical();
 			self::$instance->admin = new WP_Event_Aggregator_Admin();
+			self::$instance->eventbrite_api = new WP_Event_Aggregator_Eventbrite_API();
 			if ( wpea_is_pro() && class_exists( 'WP_Event_Aggregator_Pro_Manage_Import' ) ) {
 				self::$instance->manage_import = new WP_Event_Aggregator_Pro_Manage_Import();
 			}else{
@@ -179,6 +180,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-cpt.php';
 
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-eventbrite.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-eventbrite_api.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-meetup.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-facebook.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical_parser.php';
@@ -196,6 +198,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ee4.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wpea-plugin-deactivation.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-api.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-public-api.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/parsedown.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/wpea-action-scheduler/wpea-image-init.php';
 

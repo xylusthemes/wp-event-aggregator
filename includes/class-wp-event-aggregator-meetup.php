@@ -15,6 +15,7 @@ class WP_Event_Aggregator_Meetup {
 
 	public $api_key;
 	public $access_token;
+	public $is_public_api;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -26,7 +27,8 @@ class WP_Event_Aggregator_Meetup {
 
 		$options = wpea_get_import_options( 'meetup' );
 		$this->api_key = isset( $options['meetup_api_key'] ) ? $options['meetup_api_key'] : '';
-		if( empty( $this->api_key) ){
+		$this->is_public_api = ( isset($options['using_public_api'] ) && $options['using_public_api'] === 'yes' );
+		if( empty( $this->api_key) && !$this->is_public_api ){
 			$auth_token = $this->get_user_auth_token();
 			$this->access_token = $auth_token;
 		}
@@ -46,11 +48,16 @@ class WP_Event_Aggregator_Meetup {
 		$import_by       = isset( $event_data['import_by'] ) ? $event_data['import_by'] : '';
 		$event_ids       = isset( $event_data['ime_event_ids'] ) ? $event_data['ime_event_ids'] : array();
 		$meetup_url      = isset( $event_data['meetup_url'] ) ? $event_data['meetup_url'] : '';
-		$api             = new WP_Event_Aggregator_Meetup_API();
-		
-		if( empty($this->api_key) && empty($this->access_token) ){
-			$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
-			return;
+
+		if( !$this->is_public_api ){
+			$api             = new WP_Event_Aggregator_Meetup_API();
+			
+			if( empty($this->api_key) && empty($this->access_token) ){
+				$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'import-meetup-events');
+				return;
+			}
+		}else{
+			$api             = new WP_Event_Aggregator_Meetup_Public_API();
 		}
 
 		if( 'group_url' === $import_by ){
@@ -245,15 +252,22 @@ class WP_Event_Aggregator_Meetup {
 			return;
 		}
 		
-		if( empty($this->api_key) && empty($this->access_token) ){
-			$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
-			return;
+		if( !$this->is_public_api ){
+			if( empty($this->api_key) && empty($this->access_token) ){
+				$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
+				return;
+			}
 		}
 
 		$url_group_slug = $this->fetch_group_slug_from_url( $meetup_url );
 		if( $url_group_slug == '' ){ return; }
 		
-		$api               = new WP_Event_Aggregator_Meetup_API();
+		if( !$this->is_public_api ){
+			$api               = new WP_Event_Aggregator_Meetup_API();
+		}else{
+			$api               = new WP_Event_Aggregator_Meetup_Public_API();
+		}
+
 		$meetup_group_data = $api->getGroupName( $url_group_slug );
 		$get_group         = $meetup_group_data['data']['groupByUrlname'];
 					
