@@ -145,6 +145,14 @@ class WP_Event_Aggregator_EventON {
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			$wpea_cats2 = isset( $event_args['event_cats2'] ) ? $event_args['event_cats2'] : array();
+			$category  = isset( $centralize_array['category'] ) ? $centralize_array['category'] : '';
+			if ( ! empty( $category ) ) {
+				$cat_id = $importevents->common->wpea_check_category_exists( $category, $this->taxonomy );
+
+				if ( $cat_id ) {
+					$wpea_cats[] = (int) $cat_id;
+				}
+			}
 			// Event Type
 			if ( ! empty( $wpea_cats ) ) {
 				foreach ( $wpea_cats as $wpea_catk => $wpea_catv ) {

@@ -573,6 +573,21 @@ if( is_object( $meetup_authorized_user ) ){
                             </div>
                         </div>
 
+                        <div class="wpea-inner-main-section"  >
+                            <div class="wpea-inner-section-1" >
+                                <span class="wpea-title-text" ><?php esc_attr_e( "Import Facebook's Event Category", 'wp-event-aggregator' ); ?></span>
+                            </div>
+                            <div class="wpea-inner-section-2">
+                                <?php
+                                $import_fb_event_cats = isset( $facebook_options['import_fb_event_cats'] ) ? $facebook_options['import_fb_event_cats'] : 'no';
+                                ?>
+                                <input type="checkbox" id="import_fb_event_cats" name="facebook[import_fb_event_cats]" value="yes" <?php echo( ( 'yes' === $import_fb_event_cats ) ? 'checked="checked"' : '' ); ?> />
+                                <span class="wpea_small">
+                                    <?php esc_attr_e( 'Check to import the Facebook event category and assign it to events.', 'wp-event-aggregator' ); ?>
+                                </span>
+                            </div>
+                        </div>
+
                         <!-- Advanced Synchronization Section -->
                         <div class="wpea-inner-main-section" >
                             <div class="wpea-inner-section-1" >
@@ -604,11 +619,6 @@ if( is_object( $meetup_authorized_user ) ){
                             <?php wp_nonce_field( 'wpea_setting_form_nonce_action', 'wpea_setting_form_nonce' ); ?>
                             <input type="submit" class="wpea_button xtei_submit_button" style=""  value="<?php esc_attr_e( 'Save Settings', 'wp-event-aggregator' ); ?>" />
                         </div>
-
-
-
-                    
-
                 </div>
             </div>
         </div>
