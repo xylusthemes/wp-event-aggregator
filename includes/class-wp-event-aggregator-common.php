@@ -1456,6 +1456,53 @@ class WP_Event_Aggregator_Common {
 			}
 		}
 	}
+
+	/**
+	 * Checks if a category exists
+	 *
+	 * @param string $cat_name The name of the category to check
+	 * @param string $taxonomy The taxonomy to check in
+	 * @return int The ID of the category if it exists, 0 otherwise
+	 */
+	public function wpea_check_category_exists( $cat_name, $taxonomy ) {
+		$cat_id = 0;
+
+		if ( ! empty( $cat_name ) ) {
+			$cat_slug = strtolower(str_replace('_', '-', trim($cat_name)));
+			$term = term_exists( $cat_slug, $taxonomy );
+
+			if ( $term === 0 || $term === null ) {
+				$cat_name_formatted = str_replace( '_', ' ', $cat_name );
+				$cat_name_formatted = ucwords( strtolower( trim( $cat_name_formatted ) ) );
+
+				$term = term_exists( $cat_name_formatted, $taxonomy );
+
+				if ( $term === 0 || $term === null ) {
+					$new_term = wp_insert_term( $cat_name_formatted, $taxonomy, array(
+						'slug' => $cat_slug
+					));
+
+					if ( ! is_wp_error( $new_term ) && isset( $new_term['term_id'] ) ) {
+						$cat_id = (int) $new_term['term_id'];
+					}
+				} else {
+					if ( is_array( $term ) && isset( $term['term_id'] ) ) {
+						$cat_id = (int) $term['term_id'];
+					} elseif ( is_numeric( $term ) ) {
+						$cat_id = (int) $term;
+					}
+				}
+			} else {
+				if ( is_array( $term ) && isset( $term['term_id'] ) ) {
+					$cat_id = (int) $term['term_id'];
+				} elseif ( is_numeric( $term ) ) {
+					$cat_id = (int) $term;
+				}
+			}
+		}
+
+		return $cat_id;
+	}
 }
 
 

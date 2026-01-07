@@ -287,7 +287,8 @@ class WP_Event_Aggregator_Facebook {
 					'ticket_uri',
 					'timezone',
 					'place',
-					'is_online'
+					'is_online',
+					'category'
 				);
 		$include_owner = apply_filters( 'wpea_import_owner', false );
 		if( $include_owner ){
@@ -346,6 +347,7 @@ class WP_Event_Aggregator_Facebook {
 		$timezone = $this->get_utc_offset( $facebook_event->start_time );
 		$timezone_name = isset( $facebook_event->timezone ) ? $facebook_event->timezone : $timezone;
 		$cover_image = isset( $facebook_event->cover->source ) ? $importevents->common->clean_url( esc_url( $facebook_event->cover->source ) ) : '';
+		$category      = isset( $facebook_event->category ) ? $facebook_event->category : '';
 
 		$event_times_obj = isset( $facebook_event->event_times ) ? $facebook_event->event_times : array();
 		$event_times = array();
@@ -389,6 +391,13 @@ class WP_Event_Aggregator_Facebook {
 			'image_url'       => $cover_image,
 			'online_event'    => $is_online,
 		);
+
+		$wpea_options          = wpea_get_import_options( 'facebook' );
+		$import_fb_event_cats = isset( $wpea_options['import_fb_event_cats'] ) ? $wpea_options['import_fb_event_cats'] : 'no';
+
+		if ( $import_fb_event_cats == 'yes' ) {
+			$xt_event['category'] = $category;
+		}
 
 		if ( isset( $facebook_event->owner ) ) {
 			$xt_event['organizer'] = $this->get_organizer( $facebook_event );

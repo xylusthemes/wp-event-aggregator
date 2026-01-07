@@ -130,6 +130,14 @@ class WP_Event_Aggregator_EventPrime {
 
 			// Asign event category.
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
+			$category  = isset( $centralize_array['category'] ) ? $centralize_array['category'] : '';
+			if ( ! empty( $category ) ) {
+				$cat_id = $importevents->common->wpea_check_category_exists( $category, $this->taxonomy );
+
+				if ( $cat_id ) {
+					$wpea_cats[] = (int) $cat_id;
+				}
+			}
 			if ( ! empty( $wpea_cats ) ) {
 				foreach ( $wpea_cats as $wpea_catk => $wpea_catv ) {
 					$wpea_cats[ $wpea_catk ] = (int) $wpea_catv;
