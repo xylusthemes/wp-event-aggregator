@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-07T07:47:11+00:00\n"
+"POT-Creation-Date: 2026-01-07T06:14:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
 
 #. Plugin Name of the plugin
 #: wp-event-aggregator.php
-#: includes/class-wp-event-aggregator-admin.php:57
+#: includes/class-wp-event-aggregator-admin.php:58
 #: includes/class-wp-event-aggregator-common.php:230
 #: templates/admin/wp-event-aggregator-wizard.php:2
 msgid "WP Event Aggregator"
@@ -37,86 +37,86 @@ msgstr ""
 msgid "Xylus Themes"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:60
+#: includes/class-wp-event-aggregator-admin.php:61
 #: includes/class-wp-event-aggregator-common.php:1318
 msgid "Dashboard"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:61
+#: includes/class-wp-event-aggregator-admin.php:62
 msgid "Eventbrite Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:62
+#: includes/class-wp-event-aggregator-admin.php:63
 msgid "Meetup Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:63
+#: includes/class-wp-event-aggregator-admin.php:64
 msgid "Facebook Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:64
+#: includes/class-wp-event-aggregator-admin.php:65
 msgid "iCalendar/.ics Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:68
+#: includes/class-wp-event-aggregator-admin.php:69
 msgid "Schedule Imports"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:69
-#: includes/class-wp-event-aggregator-admin.php:213
-#: includes/class-wp-event-aggregator-admin.php:397
+#: includes/class-wp-event-aggregator-admin.php:70
+#: includes/class-wp-event-aggregator-admin.php:214
+#: includes/class-wp-event-aggregator-admin.php:398
 msgid "Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:70
-#: includes/class-wp-event-aggregator-admin.php:216
+#: includes/class-wp-event-aggregator-admin.php:71
+#: includes/class-wp-event-aggregator-admin.php:217
 #: templates/admin/wp-event-aggregator-dashboard.php:35
 #: templates/admin/wp-event-aggregator-wizard.php:23
 msgid "Settings"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:71
+#: includes/class-wp-event-aggregator-admin.php:72
 #: includes/class-wp-event-aggregator-list-table.php:845
 msgid "Shortcode"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:72
+#: includes/class-wp-event-aggregator-admin.php:73
 #: includes/class-wp-event-aggregator-common.php:1348
 msgid "Support"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:73
+#: includes/class-wp-event-aggregator-admin.php:74
 msgid "Wizard"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:75
+#: includes/class-wp-event-aggregator-admin.php:76
 #: templates/admin/admin-sidebar.php:16
 #: templates/admin/admin-sidebar.php:19
 #: wp-event-aggregator.php:250
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:195
+#: includes/class-wp-event-aggregator-admin.php:196
 #: templates/admin/wp-event-aggregator-settings.php:34
 msgid "Eventbrite"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:198
+#: includes/class-wp-event-aggregator-admin.php:199
 #: templates/admin/wp-event-aggregator-settings.php:37
 msgid "Meetup"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:201
+#: includes/class-wp-event-aggregator-admin.php:202
 #: templates/admin/wp-event-aggregator-settings.php:40
 msgid "Facebook"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:204
+#: includes/class-wp-event-aggregator-admin.php:205
 #: templates/admin/wp-event-aggregator-settings.php:43
 msgid "iCalendar / .ics"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:210
+#: includes/class-wp-event-aggregator-admin.php:211
 #: templates/admin/eventbrite-import-events.php:17
 #: templates/admin/facebook-import-events.php:17
 #: templates/admin/ical-import-events.php:18
@@ -124,45 +124,45 @@ msgstr ""
 msgid "Scheduled Imports"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:219
+#: includes/class-wp-event-aggregator-admin.php:220
 msgid "Shortcodes"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:222
+#: includes/class-wp-event-aggregator-admin.php:223
 msgid "Support & Help"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:335
+#: includes/class-wp-event-aggregator-admin.php:336
 msgctxt "post type general name"
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:336
+#: includes/class-wp-event-aggregator-admin.php:337
 msgctxt "post type singular name"
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:337
+#: includes/class-wp-event-aggregator-admin.php:338
 msgctxt "admin menu"
 msgid "Scheduled Imports"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:338
+#: includes/class-wp-event-aggregator-admin.php:339
 msgctxt "add new on admin bar"
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:339
-#: includes/class-wp-event-aggregator-admin.php:383
+#: includes/class-wp-event-aggregator-admin.php:340
+#: includes/class-wp-event-aggregator-admin.php:384
 msgctxt "book"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:340
+#: includes/class-wp-event-aggregator-admin.php:341
 msgid "Add New Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:341
+#: includes/class-wp-event-aggregator-admin.php:342
 #: templates/admin/eventbrite-import-events.php:13
 #: templates/admin/facebook-import-events.php:13
 #: templates/admin/ical-import-events.php:14
@@ -170,168 +170,172 @@ msgstr ""
 msgid "New Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:342
+#: includes/class-wp-event-aggregator-admin.php:343
 msgid "Edit Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:343
+#: includes/class-wp-event-aggregator-admin.php:344
 msgid "View Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:344
+#: includes/class-wp-event-aggregator-admin.php:345
 msgid "All Scheduled Imports"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:345
+#: includes/class-wp-event-aggregator-admin.php:346
 msgid "Search Scheduled Imports"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:346
+#: includes/class-wp-event-aggregator-admin.php:347
 msgid "Parent Imports:"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:347
+#: includes/class-wp-event-aggregator-admin.php:348
 msgid "No Imports found."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:348
+#: includes/class-wp-event-aggregator-admin.php:349
 msgid "No Imports found in Trash."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:353
+#: includes/class-wp-event-aggregator-admin.php:354
 msgid "Scheduled Imports."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:379
+#: includes/class-wp-event-aggregator-admin.php:380
 msgctxt "post type general name"
 msgid "Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:380
+#: includes/class-wp-event-aggregator-admin.php:381
 msgctxt "post type singular name"
 msgid "Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:381
+#: includes/class-wp-event-aggregator-admin.php:382
 msgctxt "admin menu"
 msgid "Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:382
+#: includes/class-wp-event-aggregator-admin.php:383
 msgctxt "add new on admin bar"
 msgid "Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:384
+#: includes/class-wp-event-aggregator-admin.php:385
 #: includes/class-wp-event-aggregator-cpt.php:106
 msgid "Add New"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:385
+#: includes/class-wp-event-aggregator-admin.php:386
 msgid "New History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:386
+#: includes/class-wp-event-aggregator-admin.php:387
 msgid "Edit History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:387
+#: includes/class-wp-event-aggregator-admin.php:388
 msgid "View History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:388
+#: includes/class-wp-event-aggregator-admin.php:389
 msgid "All Import History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:389
+#: includes/class-wp-event-aggregator-admin.php:390
 msgid "Search History"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:390
+#: includes/class-wp-event-aggregator-admin.php:391
 msgid "Parent History:"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:391
+#: includes/class-wp-event-aggregator-admin.php:392
 msgid "No History found."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:392
+#: includes/class-wp-event-aggregator-admin.php:393
 msgid "No History found in Trash."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:423
+#: includes/class-wp-event-aggregator-admin.php:424
 msgid "News from Xylus Themes"
 msgstr ""
 
 #. translators: %1$s: Opening HTML tag for WP Event Aggregator, %2$s: Closing HTML tag for WP Event Aggregator, %3$s: The star rating link
-#: includes/class-wp-event-aggregator-admin.php:450
+#: includes/class-wp-event-aggregator-admin.php:451
 #, php-format
 msgid " Rate %1$sWP Event Aggregator%2$s %3$s"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:467
+#: includes/class-wp-event-aggregator-admin.php:468
 msgid "Import Facebook Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:468
+#: includes/class-wp-event-aggregator-admin.php:469
 #: includes/class-wp-event-aggregator-common.php:1432
 msgid "Import Eventbrite Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:469
+#: includes/class-wp-event-aggregator-admin.php:470
 #: includes/class-wp-event-aggregator-common.php:1434
 msgid "Import Meetup Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:470
+#: includes/class-wp-event-aggregator-admin.php:471
 #: includes/class-wp-event-aggregator-common.php:1431
 msgid "WP Bulk Delete"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:471
+#: includes/class-wp-event-aggregator-admin.php:472
 msgid "Facebook Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:472
+#: includes/class-wp-event-aggregator-admin.php:473
 msgid "Event Schema / Structured Data: Google Rich Snippet Schema for Event"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:549
+#: includes/class-wp-event-aggregator-admin.php:550
 #: includes/class-wp-event-aggregator-cpt.php:101
 msgid "Event"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:550
+#: includes/class-wp-event-aggregator-admin.php:551
 msgid "Created/Updated"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:551
+#: includes/class-wp-event-aggregator-admin.php:552
 #: includes/class-wp-event-aggregator-list-table.php:190
 #: includes/class-wp-event-aggregator-list-table.php:671
 #: includes/class-wp-event-aggregator-list-table.php:846
 msgid "Action"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:576
+#: includes/class-wp-event-aggregator-admin.php:577
 #: includes/class-wp-event-aggregator-list-table.php:75
 msgid "Edit"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:592
-#: includes/class-wp-event-aggregator-admin.php:599
+#: includes/class-wp-event-aggregator-admin.php:593
+#: includes/class-wp-event-aggregator-admin.php:600
 msgid "No Data Found"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:626
+#: includes/class-wp-event-aggregator-admin.php:627
 msgid "Authorized Successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:628
+#: includes/class-wp-event-aggregator-admin.php:629
 msgid "Please insert Meetup Auth Key and Secret."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-admin.php:630
+#: includes/class-wp-event-aggregator-admin.php:631
 msgid "Something went wrong during authorization. Please try again."
+msgstr ""
+
+#: includes/class-wp-event-aggregator-admin.php:704
+msgid "<strong>Scheduled imports are paused.</strong> WP-Cron is disabled on your site, so scheduled imports won’t run automatically. Enable WP-Cron or set a server cron job to keep imports running smoothly."
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:46
