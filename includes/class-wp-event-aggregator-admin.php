@@ -44,6 +44,7 @@ class WP_Event_Aggregator_Admin {
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget') );
 		add_action( 'admin_action_wpea_view_import_history',  array( $this, 'wpea_view_import_history_handler' ) );
 		add_action( 'admin_init', array( $this, 'setup_success_messages' ) );
+		add_action( 'admin_init', array( $this, 'wpea_wp_cron_check' ) );
 	}
 
 	/**
@@ -681,5 +682,30 @@ class WP_Event_Aggregator_Admin {
 			}
 		}
 
+	}
+
+	/**
+	 * Check if WP-Cron is enabled
+	 *
+	 * Checks if WP-Cron is enabled and if the current page is the scheduled imports page.
+	 * If WP-Cron is disabled, it will display an error message.
+	 *
+	 * @since 1.0
+	 * @return void
+	 */
+	public function wpea_wp_cron_check() {
+		global $wpea_errors;
+
+		if ( ! is_admin() || empty($_GET['page']) || empty($_GET['tab']) || $_GET['page'] !== 'import_events' || $_GET['tab']  !== 'scheduled' ) {
+			return;
+		}
+
+		if ( defined('DISABLE_WP_CRON') && DISABLE_WP_CRON ) {
+			$wpea_errors[] = __(
+				'<strong>Scheduled imports are paused.</strong> WP-Cron is disabled on your site, so scheduled imports won’t run automatically. Enable WP-Cron or set a server cron job to keep imports running smoothly.',
+				'wp-event-aggregator'
+			);
+
+		}
 	}
 }
