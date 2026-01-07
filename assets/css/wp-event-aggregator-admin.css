@@ -2104,3 +2104,35 @@ a.wpea-intro-section-link-tag.button.button-hero {
 input#current-page-selector {
     width: auto;
 }
+/* public api option css start */
+.wpea-new-feature {
+    border: 2px solid #4CAF50;
+    padding: 15px 20px;
+    background: #f9fff9;
+    border-radius: 8px;
+    gap: 20px;
+}
+.wpea-new-feature .wpea-title-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d7a2d;
+}
+.wpea-new-feature .wpea_small {
+    font-size: 13px;
+    color: #555;
+    display: block;
+    margin-top: 5px;
+}
+
+.wpea-new-feature .wpea-inner-section-2 input[type="checkbox"] {
+    transform: scale(1.5);
+    margin: 5px;
+}
+
+.wpea-new-feature .wpea-inner-section-1{
+  width : unset;
+}
+.wpea-new-feature .wpea-inner-section-2{
+  width : unset;
+} 
+/* public api option css end */
