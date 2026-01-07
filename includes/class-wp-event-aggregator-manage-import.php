@@ -100,6 +100,12 @@ class WP_Event_Aggregator_Manage_Import {
 				'wpea'       => isset( $_POST['wpea'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['wpea'] ) ) ) : ( isset( $existing_options['wpea'] ) ? array_map('esc_attr', $existing_options['wpea'] ) : array() )
 			);
 
+			if( isset( $wpea_options['eventbrite']['using_standard_api'] ) && ! empty( $wpea_options['eventbrite']['using_standard_api'] ) ) {
+				if( $wpea_options['eventbrite']['using_standard_api'] === 'yes' ){
+					unset( $wpea_options['eventbrite']['private_events'] );
+				}
+			}
+
 			// Update the options
 			$is_update = update_option( WPEA_OPTIONS, $wpea_options );
 			if( $is_update ){
@@ -222,9 +228,11 @@ class WP_Event_Aggregator_Manage_Import {
 		global $wpea_errors, $wpea_success_msg, $importevents;
 		$import_events = array();
 		$eventbrite_options = wpea_get_import_options('eventbrite');
-		if( !isset( $eventbrite_options['oauth_token'] ) || $eventbrite_options['oauth_token'] == '' ){
-			$wpea_errors[] = esc_html__( 'Please insert Eventbrite "Personal OAuth token" in settings.', 'wp-event-aggregator' );
-			return;
+		if( ! isset( $eventbrite_options['using_standard_api'] ) || $eventbrite_options['using_standard_api'] !== 'yes' ){
+			if ( ! isset( $eventbrite_options['eventbrite_oauth_token'] ) || $eventbrite_options['eventbrite_oauth_token'] == '' ) {
+				$wpea_errors[] = esc_html__( 'Please insert Eventbrite "Personal OAuth token" in settings.', 'wp-event-aggregator' );
+				return;
+			}
 		}
 
 		$event_data['import_origin'] = 'eventbrite';
@@ -239,7 +247,12 @@ class WP_Event_Aggregator_Manage_Import {
 			$wpea_errors[] = esc_html__( 'Please provide valid Eventbrite event ID.', 'wp-event-aggregator' );
 			return;
 		}
-		$import_events = $importevents->eventbrite->import_event_by_event_id( $event_data );
+
+		if( ! isset( $eventbrite_options['using_standard_api'] ) || $eventbrite_options['using_standard_api'] !== 'yes' ){
+			$import_events = $importevents->eventbrite->import_event_by_event_id( $event_data );
+		}else{
+			$import_events = $importevents->eventbrite_api->import_event_by_event_id( $event_data );
+		}
 	
 		if( $import_events && !empty( $import_events ) ){
 			$importevents->common->display_import_success_message( $import_events, $event_data );
@@ -262,7 +275,7 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if ( 'group_url' === $event_data['import_by'] && !empty( $event_data['meetup_url'] ) ) {
 			if ( filter_var( $event_data['meetup_url'], FILTER_VALIDATE_URL) === false ) {
-				$ime_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
+				$wpea_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
 				return;
 			}
 			$event_data['meetup_url'] = esc_url( $event_data['meetup_url'] );
