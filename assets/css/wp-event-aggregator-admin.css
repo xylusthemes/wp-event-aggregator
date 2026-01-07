@@ -2104,6 +2104,7 @@ a.wpea-intro-section-link-tag.button.button-hero {
 input#current-page-selector {
     width: auto;
 }
+
 /* public api option css start */
 .wpea-new-feature {
     border: 2px solid #4CAF50;
@@ -2127,6 +2128,11 @@ input#current-page-selector {
 .wpea-new-feature .wpea-inner-section-2 input[type="checkbox"] {
     transform: scale(1.5);
     margin: 5px;
+}
+.aggregator_or_keyandsecrate{
+  width: 56%;
+  display: flex;
+  justify-content: center;
 }
 
 .wpea-new-feature .wpea-inner-section-1{
