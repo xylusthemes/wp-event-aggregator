@@ -2111,6 +2111,7 @@ input#current-page-selector {
     padding: 15px 20px;
     background: #f9fff9;
     border-radius: 8px;
+    gap: 20px;
 }
 .wpea-new-feature .wpea-title-text {
     font-size: 16px;
@@ -2126,10 +2127,18 @@ input#current-page-selector {
 
 .wpea-new-feature .wpea-inner-section-2 input[type="checkbox"] {
     transform: scale(1.5);
+    margin: 5px;
 }
 .aggregator_or_keyandsecrate{
   width: 56%;
   display: flex;
   justify-content: center;
 }
+
+.wpea-new-feature .wpea-inner-section-1{
+  width : unset;
+}
+.wpea-new-feature .wpea-inner-section-2{
+  width : unset;
+} 
 /* public api option css end */

@@ -1118,13 +1118,12 @@ msgstr ""
 msgid "Sorry, you are not allowed to access this page."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-meetup.php:52
-#: includes/class-wp-event-aggregator-meetup.php:249
-msgid "Please insert \"Meetup API key\" Or OAuth key and secret in settings."
+#: includes/class-wp-event-aggregator-meetup.php:100
+msgid "Please insert valid Meetup Event ID."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-meetup.php:93
-msgid "Please insert valid Meetup Event ID."
+#: includes/class-wp-event-aggregator-meetup.php:257
+msgid "Please insert \"Meetup API key\" Or OAuth key and secret in settings."
 msgstr ""
 
 #: includes/class-wpea-plugin-deactivation.php:47

@@ -275,7 +275,7 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if ( 'group_url' === $event_data['import_by'] && !empty( $event_data['meetup_url'] ) ) {
 			if ( filter_var( $event_data['meetup_url'], FILTER_VALIDATE_URL) === false ) {
-				$ime_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
+				$wpea_errors[] = esc_html__( 'Please provide valid Meetup group URL.', 'wp-event-aggregator' );
 				return;
 			}
 			$event_data['meetup_url'] = esc_url( $event_data['meetup_url'] );
