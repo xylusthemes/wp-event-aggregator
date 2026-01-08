@@ -1,86 +1,197 @@
-=== WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress ===
+=== WP Event Aggregator: Import events into WordPress from Facebook, Eventbrite, Meetup, and iCal/ICS. WP Event Aggregator supports automatic imports and integrates with leading event calendar plugins. ===
 Contributors: xylus,dharm1025,rajat1192
 Donate link: http://xylusthemes.com
-Tags: Event aggregator, calendar, Google Calendar, eventbrite event, facebook event
+Tags: event importer, event calendar, eventbrite event, facebook event, ical import
+
 Requires at least: 4.0
+Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.8.6
+Stable tag: 1.8.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WP Event Aggregator: Easy way to import Facebook Events, Eventbrite events, MeetUp events into your WordPress Event Calendar.
+Import events into WordPress from Facebook, Eventbrite, Meetup, and iCal/ICS. WP Event Aggregator supports automatic imports and integrates with leading event calendar plugins
 
 == Description ==
-WP Event Aggregator ([Pro][1]) allows you to import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site. You can import Facebook Events, Eventbrite Events, Meetup events and other iCAL supported events into WordPress. 
 
-WP Event Aggregator works as a stand-alone as well as add-on plugin with leading Event Calendar plugins listed below, which allows you to run imports from multiple sources right from your dashboard, including Facebook, Meetup, Google Calendar( using iCal Url or .ics file ), Outlook Calendar ( using iCal Url or .ics file ), Apple Calendar ( using iCal Url or .ics file ), iCalendar, and ICS into WordPress.  WP Event aggregator is a perfect match for Event, Event Directory, City Directory, Hotel or School website who needs to display events. 
+= WP Event Aggregator – Import Events into WordPress =
+
+WP Event Aggregator is a powerful yet easy-to-use **WordPress event importer** that helps you import events into WordPress from multiple popular platforms such as Facebook, Eventbrite, Meetup, Google Calendar, Outlook, Apple Calendar, and other iCalendar (ICS) sources.
+
+The plugin works as a **stand-alone event management system** and also integrates seamlessly with leading WordPress event calendar and directory plugins. Whether you run a city directory, event listing website, school, hotel, or community portal, WP Event Aggregator helps you keep your events updated automatically—without manual effort.
+
+Designed for both beginners and advanced users, WP Event Aggregator offers flexible import options, scheduled automation, and reliable synchronization.
+
+You can easily import **Facebook Events**, **Eventbrite Events**, **Meetup Events**, **Google Calendar event**, **Outlook Calendar Event** and events from iCal/ICS feeds into your WordPress site—without manual data entry.
+
+== Key Features ==
+
+* Import events into WordPress from Facebook, Eventbrite, Meetup, iCal, and ICS
+* One-time or scheduled automatic event imports
+* Stand-alone event management or integration with popular event calendar plugins
+* Import Facebook events via API or iCal/ICS feeds
+* Import Eventbrite events by Event ID, Organizer ID, Collection ID, or account connection (**[Pro][1]**)
+* Import Meetup events using Meetup group URLs (OAuth & GraphQL supported)
+* Import Google, Outlook, and Apple Calendar events using iCal URLs or .ics files
+* Import events from CSV, XML, and JSON files (**[Pro][1]**)
+* Import multiple events at once using multiple Event IDs (**[Pro][1]**)
+* Automatic scheduled imports with flexible frequencies: hourly, daily, weekly, or monthly (**[Pro][1]**)
+* Pause or resume scheduled imports anytime (**[Pro][1]**)
+* Smart synchronization to update existing events and prevent duplicates
+* Auto-publish imported events or save them as drafts
+* Assign categories to imported events
+* Auto-trash past events
+* Skip trashed events during imports (**[Pro][1]**)
+* Import complete event details including title, description, images, dates, venue, organizer, and online event links
+* Event import history logs
+* Option to assign event author during import
+* Default featured image support for events without images
+* Built-in event management system
+* AJAX-based pagination for event listings
+* Responsive event list and grid layouts
+* Grid layouts for shortcode, Gutenberg, Elementor, and WPBakery
+* Upcoming Events widget (**[Pro][1]**)
+* Elementor Upcoming Events widget (**[Pro][1]**)
+* Google Maps API support for event locations
+* Accent color customization option
+* Improved security with XSS protection
+* Optimized API requests for faster imports
+
+
+== Pro Features ==
+
+* Upcoming Events widget
+* Elementor Upcoming Events widget
+* Grid layout for event listings
+* Scheduled automatic imports
+* Advanced Facebook, Eventbrite, and iCal import options
+* Multiple Event IDs import
+* Priority support
+
+
+== Supported Event Sources ==
+
+WP Event Aggregator supports importing events from:
+
+* Facebook Events
+* Eventbrite
+* Meetup
+* Google Calendar (iCal URL / .ics)
+* Outlook Calendar (iCal URL / .ics)
+* Apple Calendar (iCal URL / .ics)
+* iCalendar / ICS files
+* CSV, XML, JSON files (**[Pro][1]**)
+* Ticketmaster (via add-on)
+
+== Supported Event Calendar Plugins & Add-ons ==
+
+WP Event Aggregator integrates with a wide range of WordPress event calendar and directory plugins.
+
+=== Core Event Calendar Plugins ===
+
+* [Easy Event Calendar](https://wordpress.org/plugins/xylus-events-calendar/)
+* [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/)
+* [Events Manager](https://wordpress.org/plugins/events-manager/)
+* [Event Organiser](https://wordpress.org/plugins/event-organiser/)
+* [EventON](https://wordpress.org/plugins/eventon-lite/)
+* [EventPrime](https://wordpress.org/plugins/eventprime-event-calendar-management/)
+* [My Calendar](https://wordpress.org/plugins/my-calendar/)
+* [Event Espresso 4 (EE4)](https://eventespresso.com/)
+* [All-in-One Event Calendar](https://wordpress.org/plugins/event-calendar-timely/)
+* [WP Event Manager](https://wp-eventmanager.com/)
+* [Modern Events Calendar](https://webnus.net/modern-events-calendar/)
+* [Events Calendar WD](https://10web.io/plugins/wordpress-event-calendar/)
+* [Eventchamp](https://gloriathemes.com/theme/eventchamp/)
+
+
+=== Event Directory & Listing Plugins ===
+
+* [GeoDirectory Events](https://wordpress.org/plugins/events-for-geodirectory/)
+* [My Listing](https://mylistingtheme.com/)
+* [MeUp Event List](https://ovatheme.com/theme/meup-event-marketplace-wordpress-theme/)
+
+=== Theme & Framework Integrations ===
+
+* [AIT Events (AIT Themes)](https://www.ait-themes.club/)
+* [WooCommerce Events Manager](https://wordpress.org/plugins/mage-eventpress/)
+
+
+=== Advanced & Custom Integrations ===
+
+* ACF Events
+* In-built Events Management (stand-alone mode)
+
+
+== Use Cases ==
+
+WP Event Aggregator is ideal for:
+
+* Event organizers managing events across multiple platforms
+* City and event directory websites
+* Schools, colleges, and training institutes
+* Hotels, venues, and tourism websites
+* Community and non-profit organizations
+* WordPress agencies and developers
+* Bloggers and marketers curating public events
+
+== Why Choose WP Event Aggregator? ==
+
+* Import events from multiple sources in one place
+* Save time with automated scheduled imports
+* Avoid duplicate events with smart synchronization
+* Works with most popular WordPress event calendar plugins
+* Flexible setup for both beginners and advanced users
+* Actively maintained with documentation and support
+
+WP Event Aggregator focuses on stability, flexibility, and real-world event management needs.
+
+
+== Beginner-Friendly Setup ==
+
+Getting started is easy:
+
+1. Install and activate WP Event Aggregator
+2. Choose your event source (Facebook, Eventbrite, Meetup, iCal, or CSV)
+3. Select where you want to import events
+4. Configure import options
+5. Run a one-time import or schedule automatic imports
+
+No coding knowledge required.
+
+== Shortcodes ==
+
+You can display events using the built-in shortcode:
+
+`[wp_events]`
+
+Examples:
+
+`[wp_events col="3" posts_per_page="12"]`
+`[wp_events category="cat1,cat2"]`
+`[wp_events col="2" posts_per_page="12" category="cat1,cat2" past_events="yes" order="desc"]`
+
+
+== Get Started Today ==
+
+Install **WP Event Aggregator** to start importing events into WordPress quickly and efficiently.
+
+Upgrade to **WP Event Aggregator Pro** to unlock:
+
+* Scheduled automatic imports
+* Advanced Facebook, Eventbrite, and Meetup options
+* Multiple Event IDs import
+* Elementor widgets and premium layouts
+* Priority support
+
+Build a complete, always-updated event website with WP Event Aggregator.
 
 facebook events, eventbrite, iCal, facebook, eventbrite, meetup, event feeds, event bulk import,  import events, event import, wp events calendar, wp event,event import, event directory, events manager, the events calendar, events, import events, meetup event, ical import, ics import, event management, event calendar, event manager
 
-**Import Events from following sources**
-
-* Facebook Events (Using Facebook API)
-* Eventbrite Events (Using Eventbrite API)
-* Meetup Events (Using MeetUp API) 
-* iCalendar
-* ICS
-* Google Calendar ( using iCal Url or .ics file )
-* Outlook Calendar ( using iCal Url or .ics file )
-* Apple Calendar ( using iCal Url or .ics file )
-
-**Import Events into following plugins**
-
-* [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/) - supported with the latest version 6.0. 
-* [Events manager](https://wordpress.org/plugins/events-manager/)
-* [Event Organiser](https://wordpress.org/plugins/event-organiser/)
-* [EventON](https://codecanyon.net/item/eventon-wordpress-event-calendar-plugin/1211017)
-* [ EventPrime ](https://wordpress.org/plugins/eventprime-event-calendar-management/)
-* [My Calendar](https://wordpress.org/plugins/my-calendar/)
-* [Eventum (Tevolution-Events)](https://templatic.com/app-themes/eventum-event-directory-theme/) - Pro Add-on
-* [Event Espresso 4 (EE4)](https://wordpress.org/plugins/event-espresso-decaf/)
-* GeoDirectory Events - [Addon](https://xylusthemes.com/plugins/wpea-geodirectory-events-addon/)
-* AIT Events (AIT Themes) - [Addon](https://xylusthemes.com/plugins/wpea-ait-events-addon/)
-* In-built Events Management.
-
-
-**Features**
-
-* Upcoming Events Widget On Elementor Editor ([Pro][1]).
-* New Event listing Grid view Layout ([Pro][1]).
-* Easy and seemless Event import from Facebook, Eventbrite, Meetup, iCalendar and ICS to WordPres.
-* Import Eventrite event by Event ID, organiser ID ([Pro][1]) and from your Eventbrite account ([Pro][1]).
-* Import Facebook event by Event ID, Facebook page ID ([Pro][1]).
-* Import Meetup events by meetup group URL.
-* Import iCal events using .ics file upload or by iCal URL([Pro][1]).
-* Import multiple events using multiple event IDs at one time ([Pro][1]).
-* Import events into all WordPress leading Events plugins.
-* Scheduled event import (Automatic import) from above sources and import events effortlessly using import frequency like Hourly, Once a Day, Twice a day, Weekly, Monthly([Pro][1]).
-* Simple and Effective in-built Event Management.
-* Powerful shortcode for render Event listing (`[wp_events]`)
-* Responsive and impresive event listing design
-* Impresive design of event detail page.
-* Upcoming Events widget ([Pro][1]).
-* It support One Time Import only or schedule import on regular interval. 
-* Each Event Import can be imported in different categories.
-* Auto Publish, Draft Imported Events 
-* Get Event details like Event Title, Event Description, Event Images, Event Start Date, Event End date, Event Location (vanue), Event Organizer etc in to WordPress Database.
-* Event Import History Logs when & which Events Imported
-* Option to update existing Events (Syncronize Events)
-* Works with leading WordPress Event Calendar Plug-ins
-* Works with WPBackery Page Builder. Support for more page builders is on the way :)
 
 [Try Now (Admin Demo)](http://testdrive.xylusthemes.com/) | [Documentation](http://docs.xylusthemes.com/docs/wp-event-aggregator/) | [Pro Version][1]
 
 [1]: https://xylusthemes.com/plugins/wp-event-aggregator/?utm_source=wprepo&utm_campaign=wpaggregator&utm_medium=readme&utm_content=wprepo-readme
 
-
-You can use `[wp_events]` for display in-built events list.
-
-<strong>Shortcode Examples:</strong> 
-`[wp_events]`
-`[wp_events col="3" posts_per_page="12"]`
-`[wp_events category="cat1,cat2"]`
-`[wp_events col="2" posts_per_page="12" category="cat1,cat2" past_events="yes" order="desc" orderby="post_title" start_date="2017-12-25" end_date="2018-12-25" ]`
 
 <h3>NOTICE (FOR FACEBOOK IMPORT ONLY):</h3>
 >**You need below things to work Facebook Event Importing using API.**
@@ -120,26 +231,76 @@ You can use `[wp_events]` for display in-built events list.
 
 [More Information](http://docs.xylusthemes.com/docs/wp-event-aggregator/plugin-installation-pro/)
 
+== Frequently Asked Questions ==
+
+= What does WP Event Aggregator do? =
+WP Event Aggregator lets you import events into WordPress from platforms like Facebook, Eventbrite, Meetup, Google Calendar, Outlook, and iCal/ICS feeds.
+
+= Do I need an event calendar plugin? =
+No. The plugin includes a lightweight built-in event system, but it also supports popular event calendar plugins like The Events Calendar, Easy Event Calendar, EventON, Events Manager, and more.
+
+= Which event sources are supported? =
+You can import events from Facebook, Eventbrite, Meetup, Google Calendar, Outlook, Apple Calendar, iCal/ICS URLs, and files such as CSV, XML, or JSON (Pro).
+
+= Can I schedule automatic imports? =
+Yes. The Pro version allows you to schedule imports and pause or resume them anytime.
+
+= How does Facebook event import work? =
+Facebook events can be imported via the Facebook API or using iCal/ICS URLs. API imports require HTTPS and a Facebook App.
+
+= Does the plugin prevent duplicate events? =
+Yes. WP Event Aggregator synchronizes events and updates existing ones instead of creating duplicates.
+
+= What event details are imported? =
+The plugin imports event title, description, images, date/time, venue, organizer details, and online event links when available.
+
+= Can I assign categories and authors to imported events? =
+Yes. You can assign categories and authors during the import process.
+
+= Does it support recurring events? =
+Yes, recurring events are supported when provided by the source and the selected event calendar plugin.
+
+= Can past events be removed automatically? =
+Yes. Past events can be automatically trashed, with additional options available in the Pro version.
+
+= How can I display imported events? =
+You can display events using the built-in shortcode or grid views. Advanced layouts and widgets are available in the Pro version.
+
+= Is WP Event Aggregator compatible with page builders? =
+Yes. It supports Gutenberg and WPBakery. Elementor widgets are available in the Pro version.
+
+= Is the plugin secure and performance-friendly? =
+Yes. The plugin follows WordPress security standards and runs imports in the background for optimal performance.
+
+= Is WP Event Aggregator regularly updated? =
+Yes. The plugin is actively maintained and tested with the latest WordPress and PHP versions.
+
 == Screenshots ==
 
-1. Events page using '[wp_events posts_per_page="12"]' shortcode
-2. Single Event page (Twenty Sixteen Theme).
-3. Guternberg Block for WP Events
-4. Eventbrite event import using Event ID.
-5. Eventbrite event import using Organizer ID (Pro).
-6. Scheduled Imports for Eventbrite (Pro).
-7. Meetup Event import.
-8. Facebook event import using Event IDs.
-9. Facebook event import using Page or Organizer ID (Pro).
-10. iCal events import.
-11. Scheduled Imports (Pro)
-12. Import History
-13. Settings for import events.
-14. Upcoming WP Events widget in backend (Pro)
-15. Upcoming WP Events widget in front-end with Event image(Pro)
-16. Upcoming WP Events widget in front-end without Event image(Pro)
+1. Display events with Shortcode Layout Style 1.
+2. Display events with Shortcode Layout Style 2 (Pro).
+3. Display events with Shortcode Layout Style 3.
+4. Display events with Shortcode Layout Style 4.
+5. Display events using the Gutenberg Block for WP Events.
+6. Upcoming WP Events Widget in backend (Pro).
+7. Preview events directly in the widget area.
+8. Import events from Eventbrite.
+9. Import events from Meetup.
+10. Import events from Facebook.
+11. Import events from any iCal-compatible calendar.
+12. Schedule automatic imports at regular intervals (Pro).
+13. View detailed history of all events imports.
+14. Configure settings for imported events.
+15. Import events via CSV, XML, or JSON files (Pro).
 
 == Changelog ==
+
+= 1.8.7 =
+* ADDED: Facebook Event Categories import
+* FIXED: Issue of images not importing in some cases.
+* IMPROVEMENTS: Updated Facebook API version to v24.0
+* IMPROVEMENTS: Import Meetup events seamlessly using the new API integration
+* IMPROVEMENTS: Import Eventbrite events seamlessly using the new API integration
 
 = 1.8.6 =
 * ADDED: AJAX-based pagination support for the shortcode.
@@ -148,7 +309,7 @@ You can use `[wp_events]` for display in-built events list.
 * IMPROVED: Eventbrite API request handling for faster imports and reduced server resource usage. (Pro)
 
 = 1.8.5 =
-* ADDED: Modern and easy-to-use admin interface for better user experience
+* ADDED: Modern and easy-to-use admin interface for better user	 experience
 * ADDED: Option to assign an author while importing events
 * ADDED: Support for importing events using Collection ID from Eventbrite (Pro version)
 * ADDED: Toggle button to Activate or Pause scheduled imports anytime (Pro version)
