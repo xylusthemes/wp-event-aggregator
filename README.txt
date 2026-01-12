@@ -1,4 +1,4 @@
-=== WP Event Aggregator: Import events into WordPress from Facebook, Eventbrite, Meetup, and iCal/ICS. WP Event Aggregator supports automatic imports and integrates with leading event calendar plugins. ===
+=== WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress ===
 Contributors: xylus,dharm1025,rajat1192
 Donate link: http://xylusthemes.com
 Tags: event importer, event calendar, eventbrite event, facebook event, ical import
@@ -10,7 +10,7 @@ Stable tag: 1.8.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Import events into WordPress from Facebook, Eventbrite, Meetup, and iCal/ICS. WP Event Aggregator supports automatic imports and integrates with leading event calendar plugins
+Xylus WP Event Aggregator: Easy way to import Eventbrite events, MeetUp events, Social site Events into your WordPress Event Calendar.
 
 == Description ==
 
