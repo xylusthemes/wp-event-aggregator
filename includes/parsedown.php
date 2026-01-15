@@ -1,5 +1,4 @@
 <?php
-
 #
 #
 # ParsedownWpea
@@ -12,6 +11,8 @@
 # with this source code.
 #
 #
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 class ParsedownWpea
 {

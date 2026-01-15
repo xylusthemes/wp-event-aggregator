@@ -56,6 +56,7 @@ class WP_Event_Aggregator_Manage_Import {
 			$event_data['event_cats'] = isset( $_POST['event_cats'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats'] ) ) : array();
 			$event_data['event_cats2'] = isset( $_POST['event_cats2'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_cats2'] ) ) : array();
 
+			$event_data['import_origin'] = isset( $_POST['import_origin'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['import_origin'] ) ) )  : '';			
 			$event_origin = sanitize_text_field( wp_unslash( $_POST['import_origin'] ) );
 			switch ( $event_origin ) {
 				case 'eventbrite':

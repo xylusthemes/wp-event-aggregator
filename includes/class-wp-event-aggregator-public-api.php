@@ -231,18 +231,20 @@ class WP_Event_Aggregator_Meetup_Public_API {
      * @return cURL object
      */
     public function graphql_query( $endpoint, $payload ) {
+        $response = wp_remote_post( $endpoint, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'body'    => wp_json_encode( $payload ),
+            'timeout' => 30, // optional, adjust as needed
+        ] );
 
-        $ch = curl_init( $endpoint );
+        if ( is_wp_error( $response ) ) {
+            return null;
+        }
 
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_POST, true );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"] );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $payload ) );
-
-        $response = curl_exec( $ch );
-        curl_close( $ch );
-
-        $json = json_decode( $response, true );
+        $body = wp_remote_retrieve_body( $response );
+        $json = json_decode( $body, true );
 
         return $json ?? null;
     }

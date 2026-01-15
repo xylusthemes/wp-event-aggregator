@@ -536,7 +536,7 @@ class WP_Event_Aggregator_Admin {
 	 */
 	public function wpea_view_import_history_handler() {
 		if( ! defined( 'IFRAME_REQUEST' ) ){
-		    define( 'IFRAME_REQUEST', true );
+		    define( 'IFRAME_REQUEST', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 		}
 	    iframe_header();
 	    $history_id = isset( $_GET['history'] ) ? absint( $_GET['history'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -696,7 +696,7 @@ class WP_Event_Aggregator_Admin {
 	public function wpea_wp_cron_check() {
 		global $wpea_errors;
 
-		if ( ! is_admin() || empty($_GET['page']) || empty($_GET['tab']) || $_GET['page'] !== 'import_events' || $_GET['tab']  !== 'scheduled' ) {
+		if (  ! is_admin()  || empty( $_GET['page'] )  || empty( $_GET['tab'] )  || sanitize_text_field( wp_unslash( $_GET['page'] ) ) !== 'import_events'  || sanitize_text_field( wp_unslash( $_GET['tab'] ) ) !== 'scheduled'  ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 

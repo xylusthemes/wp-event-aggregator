@@ -191,8 +191,9 @@ class WP_Event_Aggregator_My_Calendar {
 			$event_category = 1;
 			if ( ! empty( $wpea_cats ) ) {
 				$event_cat = $wpea_cats[0];
+				$query          = $wpdb->prepare( "SELECT `category_id` FROM " . my_calendar_categories_table() . " WHERE `category_term` = %d LIMIT 1", $event_cat );
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$temp_event_cat = $wpdb->get_var( "SELECT `category_id` FROM " . my_calendar_categories_table() . " WHERE `category_term` = ". (int)$event_cat ." LIMIT 1"  );
+				$temp_event_cat = $wpdb->get_var( $query );
 				if( $temp_event_cat > 0 && is_numeric( $temp_event_cat ) && !empty( $temp_event_cat ) ){
 					$event_category = $temp_event_cat;
 				}

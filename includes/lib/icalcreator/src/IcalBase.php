@@ -54,6 +54,9 @@ use function strtoupper;
 use function trim;
 use function ucfirst;
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /**
  *         Do NOT alter or remove the constant!!
  */
