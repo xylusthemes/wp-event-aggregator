@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-15T07:59:50+00:00\n"
+"POT-Creation-Date: 2026-01-15T10:06:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -892,7 +892,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-facebook.php:65
 #: includes/class-wp-event-aggregator-facebook.php:154
-#: includes/class-wp-event-aggregator-manage-import.php:302
+#: includes/class-wp-event-aggregator-manage-import.php:303
 msgid "Please insert Facebook app ID and app Secret."
 msgstr ""
 
@@ -1069,58 +1069,58 @@ msgstr ""
 msgid "Please provide Import into plugin for Event import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:112
+#: includes/class-wp-event-aggregator-manage-import.php:113
 msgid "Import settings has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:233
+#: includes/class-wp-event-aggregator-manage-import.php:234
 msgid "Please insert Eventbrite \"Personal OAuth token\" in settings."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:247
+#: includes/class-wp-event-aggregator-manage-import.php:248
 msgid "Please provide valid Eventbrite event ID."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:278
+#: includes/class-wp-event-aggregator-manage-import.php:279
 #: includes/class-wp-event-aggregator-meetup.php:67
 msgid "Please provide valid Meetup group URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:343
+#: includes/class-wp-event-aggregator-manage-import.php:344
 msgid "Please upload .ics file"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:356
+#: includes/class-wp-event-aggregator-manage-import.php:357
 msgid "Nothing to import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:373
+#: includes/class-wp-event-aggregator-manage-import.php:374
 msgid "Scheduled import deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:377
-#: includes/class-wp-event-aggregator-manage-import.php:397
+#: includes/class-wp-event-aggregator-manage-import.php:378
+#: includes/class-wp-event-aggregator-manage-import.php:398
 msgid "Scheduled imports successfully deleted."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:381
+#: includes/class-wp-event-aggregator-manage-import.php:382
 msgid "Scheduled import has been run successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:385
-#: includes/class-wp-event-aggregator-manage-import.php:389
+#: includes/class-wp-event-aggregator-manage-import.php:386
+#: includes/class-wp-event-aggregator-manage-import.php:390
 msgid "Import history successfully deleted."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:393
+#: includes/class-wp-event-aggregator-manage-import.php:394
 msgid "Scheduled import successfully updated."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:415
+#: includes/class-wp-event-aggregator-manage-import.php:416
 msgid "Google Maps API Key has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:417
+#: includes/class-wp-event-aggregator-manage-import.php:418
 msgid "Something went wrong! please try again."
 msgstr ""
 
