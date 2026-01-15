@@ -106,7 +106,7 @@ class ActionMigrator {
 			$test_action = $this->source->fetch_action( $source_action_id );
 			if ( ! is_a( $test_action, 'ActionScheduler_NullAction' ) ) {
 				// translators: %s is an action ID.
-				throw new \RuntimeException( sprintf( __( 'Unable to remove source migrated action %s', 'import-eventbrite-events' ), $source_action_id ) );
+				throw new \RuntimeException( sprintf( __( 'Unable to remove source migrated action %s', 'wp-event-aggregator' ), $source_action_id ) );
 			}
 			do_action( 'action_scheduler/migrated_action', $source_action_id, $destination_action_id, $this->source, $this->destination ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 

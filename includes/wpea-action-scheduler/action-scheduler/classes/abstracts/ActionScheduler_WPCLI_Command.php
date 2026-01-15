@@ -31,7 +31,7 @@ abstract class ActionScheduler_WPCLI_Command extends \WP_CLI_Command {
 	public function __construct( array $args, array $assoc_args ) {
 		if ( ! defined( 'WP_CLI' ) || ! constant( 'WP_CLI' ) ) {
 			/* translators: %s php class name */
-			throw new \Exception( sprintf( __( 'The %s class can only be run within WP CLI.', 'import-eventbrite-events' ), get_class( $this ) ) );
+			throw new \Exception( sprintf( __( 'The %s class can only be run within WP CLI.', 'wp-event-aggregator' ), get_class( $this ) ) );
 		}
 
 		$this->args       = $args;

@@ -42,7 +42,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	public function __construct( ?ActionScheduler_Store $store = null, ?ActionScheduler_FatalErrorMonitor $monitor = null, ?ActionScheduler_QueueCleaner $cleaner = null ) {
 		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			/* translators: %s php class name */
-			throw new Exception( sprintf( __( 'The %s class can only be run within WP CLI.', 'import-eventbrite-events' ), __CLASS__ ) );
+			throw new Exception( sprintf( __( 'The %s class can only be run within WP CLI.', 'wp-event-aggregator' ), __CLASS__ ) );
 		}
 
 		parent::__construct( $store, $monitor, $cleaner );
@@ -66,9 +66,9 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 		// Check to make sure there aren't too many concurrent processes running.
 		if ( $this->has_maximum_concurrent_batches() ) {
 			if ( $force ) {
-				WP_CLI::warning( __( 'There are too many concurrent batches, but the run is forced to continue.', 'import-eventbrite-events' ) );
+				WP_CLI::warning( __( 'There are too many concurrent batches, but the run is forced to continue.', 'wp-event-aggregator' ) );
 			} else {
-				WP_CLI::error( __( 'There are too many concurrent batches.', 'import-eventbrite-events' ) );
+				WP_CLI::error( __( 'There are too many concurrent batches.', 'wp-event-aggregator' ) );
 			}
 		}
 
@@ -96,7 +96,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 		$count              = count( $this->actions );
 		$this->progress_bar = new ProgressBar(
 			/* translators: %d: amount of actions */
-			sprintf( _n( 'Running %d action', 'Running %d actions', $count, 'import-eventbrite-events' ), $count ),
+			sprintf( _n( 'Running %d action', 'Running %d actions', $count, 'wp-event-aggregator' ), $count ),
 			$count
 		);
 	}
@@ -114,7 +114,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 		foreach ( $this->actions as $action_id ) {
 			// Error if we lost the claim.
 			if ( ! in_array( $action_id, $this->store->find_actions_by_claim_id( $this->claim->get_id() ), true ) ) {
-				WP_CLI::warning( __( 'The claim has been lost. Aborting current batch.', 'import-eventbrite-events' ) );
+				WP_CLI::warning( __( 'The claim has been lost. Aborting current batch.', 'wp-event-aggregator' ) );
 				break;
 			}
 
@@ -137,7 +137,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	 */
 	public function before_execute( $action_id ) {
 		/* translators: %s refers to the action ID */
-		WP_CLI::log( sprintf( __( 'Started processing action %s', 'import-eventbrite-events' ), $action_id ) );
+		WP_CLI::log( sprintf( __( 'Started processing action %s', 'wp-event-aggregator' ), $action_id ) );
 	}
 
 	/**
@@ -152,7 +152,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 			$action = $this->store->fetch_action( $action_id );
 		}
 		/* translators: 1: action ID 2: hook name */
-		WP_CLI::log( sprintf( __( 'Completed processing action %1$s with hook: %2$s', 'import-eventbrite-events' ), $action_id, $action->get_hook() ) );
+		WP_CLI::log( sprintf( __( 'Completed processing action %1$s with hook: %2$s', 'wp-event-aggregator' ), $action_id, $action->get_hook() ) );
 	}
 
 	/**
@@ -165,7 +165,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	public function action_failed( $action_id, $exception ) {
 		WP_CLI::error(
 			/* translators: 1: action ID 2: exception message */
-			sprintf( __( 'Error processing action %1$s: %2$s', 'import-eventbrite-events' ), $action_id, $exception->getMessage() ),
+			sprintf( __( 'Error processing action %1$s: %2$s', 'wp-event-aggregator' ), $action_id, $exception->getMessage() ),
 			false
 		);
 	}

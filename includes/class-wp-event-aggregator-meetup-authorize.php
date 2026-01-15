@@ -57,7 +57,7 @@ class WP_Event_Aggregator_Meetup_Authorize {
 				delete_option('wpea_muser_token_options');
 				delete_transient('wpea_meetup_auth_token');
 				$redirect_url = admin_url('admin.php?page=import_events&tab=settings');
-				wp_redirect($redirect_url);
+				wp_safe_redirect($redirect_url);
 				exit();
 			} else {
 				wp_die( esc_attr__('You do not have sufficient permissions to perform this action.', 'wp-event-aggregator' ));
@@ -112,16 +112,16 @@ class WP_Event_Aggregator_Meetup_Authorize {
 						update_option('wpea_mauthorized_user', $profile );
 
 						$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=1');
-					    wp_redirect($redirect_url);
+					    wp_safe_redirect($redirect_url);
 					    exit();
 					}else{
 						$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=0');
-					    wp_redirect($redirect_url);
+					    wp_safe_redirect($redirect_url);
 					    exit();
 					}
 				} else {
 					$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=2');
-					wp_redirect($redirect_url);
+					wp_safe_redirect($redirect_url);
 					exit();
 				}
 

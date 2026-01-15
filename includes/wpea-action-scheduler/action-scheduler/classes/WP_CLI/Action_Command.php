@@ -108,7 +108,7 @@ class Action_Command extends \WP_CLI_Command {
 	 *     # Delete the actions with ids 100 and 200
 	 *     $ wp action-scheduler action delete 100 200
 	 *
-	 *     # Delete the first five pending actions in 'import-eventbrite-events' group
+	 *     # Delete the first five pending actions in 'wp-event-aggregator' group
 	 *     $ wp action-scheduler action delete $( wp action-scheduler action list --status=pending --group=action-scheduler --format=ids )
 	 *
 	 * @param array $args       Positional arguments.
@@ -337,7 +337,7 @@ class Action_Command extends \WP_CLI_Command {
 	 *     # Run the actions with ids 100 and 200
 	 *     $ wp action-scheduler action run 100 200
 	 *
-	 *     # Run the first five pending actions in 'import-eventbrite-events' group
+	 *     # Run the first five pending actions in 'wp-event-aggregator' group
 	 *     $ wp action-scheduler action run $( wp action-scheduler action list --status=pending --group=action-scheduler --format=ids )
 	 *
 	 * @param array $args       Positional arguments.

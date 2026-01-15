@@ -97,7 +97,7 @@ abstract class ActionScheduler_Logger {
 	 * @param int $action_id Action ID.
 	 */
 	public function log_stored_action( $action_id ) {
-		$this->log( $action_id, __( 'action created', 'import-eventbrite-events' ) );
+		$this->log( $action_id, __( 'action created', 'wp-event-aggregator' ) );
 	}
 
 	/**
@@ -106,7 +106,7 @@ abstract class ActionScheduler_Logger {
 	 * @param int $action_id Action ID.
 	 */
 	public function log_canceled_action( $action_id ) {
-		$this->log( $action_id, __( 'action canceled', 'import-eventbrite-events' ) );
+		$this->log( $action_id, __( 'action canceled', 'wp-event-aggregator' ) );
 	}
 
 	/**
@@ -118,9 +118,9 @@ abstract class ActionScheduler_Logger {
 	public function log_started_action( $action_id, $context = '' ) {
 		if ( ! empty( $context ) ) {
 			/* translators: %s: context */
-			$message = sprintf( __( 'action started via %s', 'import-eventbrite-events' ), $context );
+			$message = sprintf( __( 'action started via %s', 'wp-event-aggregator' ), $context );
 		} else {
-			$message = __( 'action started', 'import-eventbrite-events' );
+			$message = __( 'action started', 'wp-event-aggregator' );
 		}
 		$this->log( $action_id, $message );
 	}
@@ -135,9 +135,9 @@ abstract class ActionScheduler_Logger {
 	public function log_completed_action( $action_id, $action = null, $context = '' ) {
 		if ( ! empty( $context ) ) {
 			/* translators: %s: context */
-			$message = sprintf( __( 'action complete via %s', 'import-eventbrite-events' ), $context );
+			$message = sprintf( __( 'action complete via %s', 'wp-event-aggregator' ), $context );
 		} else {
-			$message = __( 'action complete', 'import-eventbrite-events' );
+			$message = __( 'action complete', 'wp-event-aggregator' );
 		}
 		$this->log( $action_id, $message );
 	}
@@ -152,10 +152,10 @@ abstract class ActionScheduler_Logger {
 	public function log_failed_action( $action_id, Exception $exception, $context = '' ) {
 		if ( ! empty( $context ) ) {
 			/* translators: 1: context 2: exception message */
-			$message = sprintf( __( 'action failed via %1$s: %2$s', 'import-eventbrite-events' ), $context, $exception->getMessage() );
+			$message = sprintf( __( 'action failed via %1$s: %2$s', 'wp-event-aggregator' ), $context, $exception->getMessage() );
 		} else {
 			/* translators: %s: exception message */
-			$message = sprintf( __( 'action failed: %s', 'import-eventbrite-events' ), $exception->getMessage() );
+			$message = sprintf( __( 'action failed: %s', 'wp-event-aggregator' ), $exception->getMessage() );
 		}
 		$this->log( $action_id, $message );
 	}
@@ -168,7 +168,7 @@ abstract class ActionScheduler_Logger {
 	 */
 	public function log_timed_out_action( $action_id, $timeout ) {
 		/* translators: %s: amount of time */
-		$this->log( $action_id, sprintf( __( 'action marked as failed after %s seconds. Unknown error occurred. Check server, PHP and database error logs to diagnose cause.', 'import-eventbrite-events' ), $timeout ) );
+		$this->log( $action_id, sprintf( __( 'action marked as failed after %s seconds. Unknown error occurred. Check server, PHP and database error logs to diagnose cause.', 'wp-event-aggregator' ), $timeout ) );
 	}
 
 	/**
@@ -180,7 +180,7 @@ abstract class ActionScheduler_Logger {
 	public function log_unexpected_shutdown( $action_id, $error ) {
 		if ( ! empty( $error ) ) {
 			/* translators: 1: error message 2: filename 3: line */
-			$this->log( $action_id, sprintf( __( 'unexpected shutdown: PHP Fatal error %1$s in %2$s on line %3$s', 'import-eventbrite-events' ), $error['message'], $error['file'], $error['line'] ) );
+			$this->log( $action_id, sprintf( __( 'unexpected shutdown: PHP Fatal error %1$s in %2$s on line %3$s', 'wp-event-aggregator' ), $error['message'], $error['file'], $error['line'] ) );
 		}
 	}
 
@@ -190,7 +190,7 @@ abstract class ActionScheduler_Logger {
 	 * @param int $action_id Action ID.
 	 */
 	public function log_reset_action( $action_id ) {
-		$this->log( $action_id, __( 'action reset', 'import-eventbrite-events' ) );
+		$this->log( $action_id, __( 'action reset', 'wp-event-aggregator' ) );
 	}
 
 	/**
@@ -202,9 +202,9 @@ abstract class ActionScheduler_Logger {
 	public function log_ignored_action( $action_id, $context = '' ) {
 		if ( ! empty( $context ) ) {
 			/* translators: %s: context */
-			$message = sprintf( __( 'action ignored via %s', 'import-eventbrite-events' ), $context );
+			$message = sprintf( __( 'action ignored via %s', 'wp-event-aggregator' ), $context );
 		} else {
-			$message = __( 'action ignored', 'import-eventbrite-events' );
+			$message = __( 'action ignored', 'wp-event-aggregator' );
 		}
 		$this->log( $action_id, $message );
 	}
@@ -219,9 +219,9 @@ abstract class ActionScheduler_Logger {
 
 		if ( ! is_null( $exception ) ) {
 			/* translators: %s: exception message */
-			$log_message = sprintf( __( 'There was a failure fetching this action: %s', 'import-eventbrite-events' ), $exception->getMessage() );
+			$log_message = sprintf( __( 'There was a failure fetching this action: %s', 'wp-event-aggregator' ), $exception->getMessage() );
 		} else {
-			$log_message = __( 'There was a failure fetching this action', 'import-eventbrite-events' );
+			$log_message = __( 'There was a failure fetching this action', 'wp-event-aggregator' );
 		}
 
 		$this->log( $action_id, $log_message );
@@ -235,7 +235,7 @@ abstract class ActionScheduler_Logger {
 	 */
 	public function log_failed_schedule_next_instance( $action_id, Exception $exception ) {
 		/* translators: %s: exception message */
-		$this->log( $action_id, sprintf( __( 'There was a failure scheduling the next instance of this action: %s', 'import-eventbrite-events' ), $exception->getMessage() ) );
+		$this->log( $action_id, sprintf( __( 'There was a failure scheduling the next instance of this action: %s', 'wp-event-aggregator' ), $exception->getMessage() ) );
 	}
 
 	/**

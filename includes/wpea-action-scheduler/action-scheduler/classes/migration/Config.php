@@ -74,7 +74,7 @@ class Config {
 	 */
 	public function get_source_store() {
 		if ( empty( $this->source_store ) ) {
-			throw new \RuntimeException( __( 'Source store must be configured before running a migration', 'import-eventbrite-events' ) );
+			throw new \RuntimeException( __( 'Source store must be configured before running a migration', 'wp-event-aggregator' ) );
 		}
 
 		return $this->source_store;
@@ -97,7 +97,7 @@ class Config {
 	 */
 	public function get_source_logger() {
 		if ( empty( $this->source_logger ) ) {
-			throw new \RuntimeException( __( 'Source logger must be configured before running a migration', 'import-eventbrite-events' ) );
+			throw new \RuntimeException( __( 'Source logger must be configured before running a migration', 'wp-event-aggregator' ) );
 		}
 
 		return $this->source_logger;
@@ -120,7 +120,7 @@ class Config {
 	 */
 	public function get_destination_store() {
 		if ( empty( $this->destination_store ) ) {
-			throw new \RuntimeException( __( 'Destination store must be configured before running a migration', 'import-eventbrite-events' ) );
+			throw new \RuntimeException( __( 'Destination store must be configured before running a migration', 'wp-event-aggregator' ) );
 		}
 
 		return $this->destination_store;
@@ -143,7 +143,7 @@ class Config {
 	 */
 	public function get_destination_logger() {
 		if ( empty( $this->destination_logger ) ) {
-			throw new \RuntimeException( __( 'Destination logger must be configured before running a migration', 'import-eventbrite-events' ) );
+			throw new \RuntimeException( __( 'Destination logger must be configured before running a migration', 'wp-event-aggregator' ) );
 		}
 
 		return $this->destination_logger;

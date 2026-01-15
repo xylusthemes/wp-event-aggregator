@@ -103,16 +103,16 @@ class WP_Event_Aggregator_FB_Authorize {
 
 					   	update_option('wpea_fb_authorize_user', $wpea_fb_authorize_user );
 					   	$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wauthorize=1');
-					    wp_redirect($redirect_url);
+					    wp_safe_redirect($redirect_url);
 					    exit();
 					}else{
 						$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wauthorize=0');
-					    wp_redirect($redirect_url);
+					    wp_safe_redirect($redirect_url);
 					    exit();					
 					}
 				} else {
 					$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wauthorize=2');
-					wp_redirect($redirect_url);
+					wp_safe_redirect($redirect_url);
 					exit();
 					die( esc_attr__( 'Please insert Facebook App ID and Secret.', 'wp-event-aggregator' ) );
 				}

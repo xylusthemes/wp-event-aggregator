@@ -19,7 +19,7 @@ class ActionScheduler_wpPostStore_TaxonomyRegistrar {
 	 */
 	protected function taxonomy_args() {
 		$args = array(
-			'label'             => __( 'Action Group', 'import-eventbrite-events' ),
+			'label'             => __( 'Action Group', 'wp-event-aggregator' ),
 			'public'            => false,
 			'hierarchical'      => false,
 			'show_admin_column' => true,

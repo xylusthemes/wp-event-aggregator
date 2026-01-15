@@ -19,7 +19,7 @@ class ActionScheduler_InvalidActionException extends \InvalidArgumentException i
 	public static function from_schedule( $action_id, $schedule ) {
 		$message = sprintf(
 			/* translators: 1: action ID 2: schedule */
-			__( 'Action [%1$s] has an invalid schedule: %2$s', 'import-eventbrite-events' ),
+			__( 'Action [%1$s] has an invalid schedule: %2$s', 'wp-event-aggregator' ),
 			$action_id,
 			var_export( $schedule, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 		);
@@ -37,7 +37,7 @@ class ActionScheduler_InvalidActionException extends \InvalidArgumentException i
 	public static function from_decoding_args( $action_id, $args = array() ) {
 		$message = sprintf(
 			/* translators: 1: action ID 2: arguments */
-			__( 'Action [%1$s] has invalid arguments. It cannot be JSON decoded to an array. $args = %2$s', 'import-eventbrite-events' ),
+			__( 'Action [%1$s] has invalid arguments. It cannot be JSON decoded to an array. $args = %2$s', 'wp-event-aggregator' ),
 			$action_id,
 			var_export( $args, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 		);

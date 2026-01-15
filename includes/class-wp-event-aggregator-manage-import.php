@@ -132,7 +132,7 @@ class WP_Event_Aggregator_Manage_Import {
 				if ( $post_type == 'xt_scheduled_imports' ) {
 					wp_delete_post( $import_id, true );
 					$query_args = array( 'imp_msg' => 'import_del', 'tab' => $tab );
-        			wp_redirect(  add_query_arg( $query_args, $wp_redirect ) );
+        			wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 					exit;
 				}
 			}
@@ -146,7 +146,7 @@ class WP_Event_Aggregator_Manage_Import {
 			if ( $history_id > 0 ) {
 				wp_delete_post( $history_id, true );
 				$query_args = array( 'imp_msg' => 'history_del', 'tab' => $tab );
-        		wp_redirect(  add_query_arg( $query_args, $wp_redirect ) );
+        		wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 				exit;
 			}
 		}
@@ -159,7 +159,7 @@ class WP_Event_Aggregator_Manage_Import {
 			if ( $import_id > 0 ) {
 				do_action( 'xt_run_scheduled_import', $import_id );
 				$query_args = array( 'imp_msg' => 'import_success', 'tab' => $tab );
-        		wp_redirect(  add_query_arg( $query_args, $wp_redirect ) );
+        		wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 				exit;
 			}
 		}
@@ -180,7 +180,7 @@ class WP_Event_Aggregator_Manage_Import {
         		}            		
         	}
         	$query_args = array( 'imp_msg' => 'import_dels', 'tab' => $tab );
-        	wp_redirect(  add_query_arg( $query_args, $wp_redirect ) );
+        	wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 			exit;
 		}
 
@@ -194,7 +194,7 @@ class WP_Event_Aggregator_Manage_Import {
         		}            		
         	}	
         	$query_args = array( 'imp_msg' => 'history_dels', 'tab' => $tab );
-        	wp_redirect(  add_query_arg( $query_args, $wp_redirect ) );
+        	wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 			exit;
 		}
 
@@ -214,7 +214,7 @@ class WP_Event_Aggregator_Manage_Import {
 				'imp_msg' => 'history_dels',
 				'tab'     => $tab,
 			);			
-			wp_redirect( add_query_arg( $query_args, $wp_redirect ) );
+			wp_safe_redirect( add_query_arg( $query_args, $wp_redirect ) );
 			exit;
 		}
 	}
@@ -333,7 +333,10 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if( $event_data['import_by'] == 'ics_file' ){
 
-			$file_ext = pathinfo( $_FILES['ics_file']['name'], PATHINFO_EXTENSION ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$original_name = wp_unslash( $_FILES['ics_file']['name'] );
+    		$sanitized_name = sanitize_file_name( $original_name );
+
+			$file_ext = strtolower( pathinfo( $sanitized_name, PATHINFO_EXTENSION ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$file_type = esc_attr( sanitize_text_field( wp_unslash( $_FILES['ics_file']['type'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 			if( $file_type != 'text/calendar' && $file_ext != 'ics' ){

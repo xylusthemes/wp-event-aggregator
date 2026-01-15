@@ -445,7 +445,7 @@ class WP_Event_Aggregator_Admin {
 	public function add_event_aggregator_credit( $footer_text ){
 		$page = isset( $_GET['page'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( $page != '' && $page == 'import_events' ) {
-			$rate_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
+			$rate_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/';
 			$footer_text .= sprintf(
 				// translators: %1$s: Opening HTML tag for WP Event Aggregator, %2$s: Closing HTML tag for WP Event Aggregator, %3$s: The star rating link
 				esc_html__( ' Rate %1$sWP Event Aggregator%2$s %3$s', 'wp-event-aggregator' ),

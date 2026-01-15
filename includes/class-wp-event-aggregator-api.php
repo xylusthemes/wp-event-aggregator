@@ -265,7 +265,7 @@ GRAPHQL;
 
 		$json_data = json_encode($payload);
 		if ($json_data === false) {
-			throw new Exception('JSON encode error: ' . json_last_error_msg());
+			throw new Exception('JSON encode error: ' . json_last_error_msg()); //phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		}
 
 		$context = stream_context_create([

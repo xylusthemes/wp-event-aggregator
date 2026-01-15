@@ -46,7 +46,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 	 */
 	protected function cancel_single( $hook, $callback_args, $group ) {
 		if ( empty( $hook ) ) {
-			\WP_CLI::error( __( 'Please specify hook of action to cancel.', 'import-eventbrite-events' ) );
+			\WP_CLI::error( __( 'Please specify hook of action to cancel.', 'wp-event-aggregator' ) );
 		}
 
 		try {
@@ -56,7 +56,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 		}
 
 		if ( null === $result ) {
-			$e = new \Exception( __( 'Unable to cancel scheduled action: check the logs.', 'import-eventbrite-events' ) );
+			$e = new \Exception( __( 'Unable to cancel scheduled action: check the logs.', 'wp-event-aggregator' ) );
 			$this->print_error( $e, false );
 		}
 
@@ -73,7 +73,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 	 */
 	protected function cancel_all( $hook, $callback_args, $group ) {
 		if ( empty( $hook ) && empty( $group ) ) {
-			\WP_CLI::error( __( 'Please specify hook and/or group of actions to cancel.', 'import-eventbrite-events' ) );
+			\WP_CLI::error( __( 'Please specify hook and/or group of actions to cancel.', 'wp-event-aggregator' ) );
 		}
 
 		try {
@@ -86,7 +86,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 		 * Because as_unschedule_all_actions() does not provide a result,
 		 * neither confirm or deny actions cancelled.
 		 */
-		\WP_CLI::success( __( 'Request to cancel scheduled actions completed.', 'import-eventbrite-events' ) );
+		\WP_CLI::success( __( 'Request to cancel scheduled actions completed.', 'wp-event-aggregator' ) );
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 	 * @return void
 	 */
 	protected function print_success() {
-		\WP_CLI::success( __( 'Scheduled action cancelled.', 'import-eventbrite-events' ) );
+		\WP_CLI::success( __( 'Scheduled action cancelled.', 'wp-event-aggregator' ) );
 	}
 
 	/**
@@ -110,8 +110,8 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::error(
 			sprintf(
 				/* translators: %1$s: singular or plural %2$s: refers to the exception error message. */
-				__( 'There was an error cancelling the %1$s: %2$s', 'import-eventbrite-events' ),
-				$multiple ? __( 'scheduled actions', 'import-eventbrite-events' ) : __( 'scheduled action', 'import-eventbrite-events' ),
+				__( 'There was an error cancelling the %1$s: %2$s', 'wp-event-aggregator' ),
+				$multiple ? __( 'scheduled actions', 'wp-event-aggregator' ) : __( 'scheduled action', 'wp-event-aggregator' ),
 				$e->getMessage()
 			)
 		);

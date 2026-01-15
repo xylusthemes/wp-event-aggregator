@@ -256,11 +256,11 @@ if( is_object( $meetup_authorized_user ) ){
                         <?php esc_attr_e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
                         <strong><a href="http://docs.xylusthemes.com/docs/import-meetup-events/creating-oauth-consumer/" target="_blank"><?php esc_attr_e( 'Click here', 'wp-event-aggregator' ); ?></a></strong>.
                         <br/>
-                        <?php echo  '<strong>' . esc_attr( 'Set the Application Website as : ', 'wp-event-aggregator' ). '</strong>'; ?>
+                        <?php echo  '<strong>' . esc_attr__( 'Set the Application Website as : ', 'wp-event-aggregator' ). '</strong>'; ?>
                         <span style="color: green;"><?php echo esc_url( get_site_url() ); ?></span>
                         <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo esc_url( get_site_url() ); ?>' ></span>
                         <br/>
-                        <?php echo  '<strong>' . esc_attr( 'Set Redirect URI : ', 'wp-event-aggregator' ). '</strong>'; ?>
+                        <?php echo  '<strong>' . esc_attr__( 'Set Redirect URI : ', 'wp-event-aggregator' ). '</strong>'; ?>
                         <span style="color: green;"><?php echo esc_url( admin_url( 'admin-post.php?action=wepa_meetup_authorize_callback' ) ); ?></span>
                         <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo esc_url( admin_url( 'admin-post.php?action=wepa_meetup_authorize_callback' ) ); ?>' ></span>
                     </div>
@@ -474,11 +474,11 @@ if( is_object( $meetup_authorized_user ) ){
                             <?php esc_attr_e( 'For detailed step by step instructions ', 'wp-event-aggregator' ); ?>
                             <strong><a href="http://docs.xylusthemes.com/docs/import-facebook-events/creating-facebook-application/" target="_blank"><?php esc_attr_e( 'Click here', 'wp-event-aggregator' ); ?></a></strong>.
                             <br/>
-                            <?php echo  '<strong>' . esc_attr( 'Set the site url as : ', 'wp-event-aggregator' ). '</strong>'; ?>
+                            <?php echo  '<strong>' . esc_attr__( 'Set the site url as : ', 'wp-event-aggregator' ). '</strong>'; ?>
                             <span style="color: green;"><?php echo esc_url( get_site_url() ); ?></span>
                             <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo esc_url( get_site_url() ); ?>' ></span>
                             <br/>
-                            <?php echo  '<strong>' . esc_attr( 'Set Valid OAuth redirect URI : ', 'wp-event-aggregator' ). '</strong>'; ?>
+                            <?php echo  '<strong>' . esc_attr__( 'Set Valid OAuth redirect URI : ', 'wp-event-aggregator' ). '</strong>'; ?>
                             <span style="color: green;"><?php echo esc_url( admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ) ?></span>
                             <span class="dashicons dashicons-admin-page wpea-btn-copy-shortcode wpea_link_cp" data-value='<?php echo esc_url( admin_url( 'admin-post.php?action=wpea_facebook_authorize_callback' ) ); ?>' ></span>
                         </div>

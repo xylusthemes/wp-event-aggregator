@@ -180,7 +180,7 @@ class Controller {
 	 * Show a dashboard notice that migration is in progress.
 	 */
 	public function display_migration_notice() {
-		printf( '<div class="notice notice-warning"><p>%s</p></div>', esc_html__( 'Action Scheduler migration in progress. The list of scheduled actions may be incomplete.', 'import-eventbrite-events' ) );
+		printf( '<div class="notice notice-warning"><p>%s</p></div>', esc_html__( 'Action Scheduler migration in progress. The list of scheduled actions may be incomplete.', 'wp-event-aggregator' ) );
 	}
 
 	/**

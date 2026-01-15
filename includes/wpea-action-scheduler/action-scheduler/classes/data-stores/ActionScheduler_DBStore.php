@@ -127,7 +127,7 @@ class ActionScheduler_DBStore extends ActionScheduler_Store {
 				if ( $unique ) {
 					return 0;
 				}
-				throw new \RuntimeException( $wpdb->last_error ? $wpdb->last_error : __( 'Database error.', 'import-eventbrite-events' ) );
+				throw new \RuntimeException( $wpdb->last_error ? $wpdb->last_error : __( 'Database error.', 'wp-event-aggregator' ) );
 			}
 
 			do_action( 'action_scheduler_stored_action', $action_id );
@@ -135,7 +135,7 @@ class ActionScheduler_DBStore extends ActionScheduler_Store {
 			return $action_id;
 		} catch ( \Exception $e ) {
 			/* translators: %s: error message */
-			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'import-eventbrite-events' ), $e->getMessage() ), 0 );
+			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'wp-event-aggregator' ), $e->getMessage() ), 0 );
 		}
 	}
 
@@ -422,7 +422,7 @@ AND `group_id` = %d
 	protected function get_query_actions_sql( array $query, $select_or_count = 'select' ) {
 
 		if ( ! in_array( $select_or_count, array( 'select', 'count' ), true ) ) {
-			throw new InvalidArgumentException( __( 'Invalid value for select or count parameter. Cannot query actions.', 'import-eventbrite-events' ) );
+			throw new InvalidArgumentException( __( 'Invalid value for select or count parameter. Cannot query actions.', 'wp-event-aggregator' ) );
 		}
 
 		$query = wp_parse_args(
@@ -487,7 +487,7 @@ AND `group_id` = %d
 			switch ( $query['partial_args_matching'] ) {
 				case 'json':
 					if ( ! $supports_json ) {
-						throw new \RuntimeException( __( 'JSON partial matching not supported in your environment. Please check your MySQL/MariaDB version.', 'import-eventbrite-events' ) );
+						throw new \RuntimeException( __( 'JSON partial matching not supported in your environment. Please check your MySQL/MariaDB version.', 'wp-event-aggregator' ) );
 					}
 					$supported_types = array(
 						'integer' => '%d',
@@ -505,7 +505,7 @@ AND `group_id` = %d
 							throw new \RuntimeException(
 								sprintf(
 									/* translators: %s: provided value type */
-									__( 'The value type for the JSON partial matching is not supported. Must be either integer, boolean, double or string. %s type provided.', 'import-eventbrite-events' ),
+									__( 'The value type for the JSON partial matching is not supported. Must be either integer, boolean, double or string. %s type provided.', 'wp-event-aggregator' ),
 									$value_type
 								)
 							);
@@ -527,7 +527,7 @@ AND `group_id` = %d
 					$sql_params[] = $this->get_args_for_query( $query['args'] );
 					break;
 				default:
-					throw new \RuntimeException( __( 'Unknown partial args matching value.', 'import-eventbrite-events' ) );
+					throw new \RuntimeException( __( 'Unknown partial args matching value.', 'wp-event-aggregator' ) );
 			}
 		}
 
@@ -696,7 +696,7 @@ AND `group_id` = %d
 		);
 		if ( false === $updated ) {
 			/* translators: %s: action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to cancel this action. It may may have been deleted by another process.', 'import-eventbrite-events' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to cancel this action. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
 		}
 		do_action( 'action_scheduler_canceled_action', $action_id );
 	}
@@ -798,7 +798,7 @@ AND `group_id` = %d
 		$deleted = $wpdb->delete( $wpdb->actionscheduler_actions, array( 'action_id' => $action_id ), array( '%d' ) );
 		if ( empty( $deleted ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to delete this action. It may may have been deleted by another process.', 'import-eventbrite-events' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to delete this action. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
 		}
 		do_action( 'action_scheduler_deleted_action', $action_id );
 	}
@@ -835,7 +835,7 @@ AND `group_id` = %d
 		$record = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->actionscheduler_actions} WHERE action_id=%d", $action_id ) );
 		if ( empty( $record ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to determine the date of this action. It may may have been deleted by another process.', 'import-eventbrite-events' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to determine the date of this action. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
 		}
 		if ( self::STATUS_PENDING === $record->status ) {
 			return as_get_datetime_object( $record->scheduled_date_gmt );
@@ -976,7 +976,7 @@ AND `group_id` = %d
 							'The group "%s" does not exist.',
 							'The groups "%s" do not exist.',
 							is_array( $group ) ? count( $group ) : 1,
-							'import-eventbrite-events'
+							'wp-event-aggregator'
 						),
 						$group
 					)
@@ -1014,12 +1014,12 @@ AND `group_id` = %d
 		$rows_affected = $wpdb->query( $wpdb->prepare( $update_sql, $update_params ) );
 		if ( false === $rows_affected ) {
 			$error = empty( $wpdb->last_error )
-				? _x( 'unknown', 'database error', 'import-eventbrite-events' )
+				? _x( 'unknown', 'database error', 'wp-event-aggregator' )
 				: $wpdb->last_error;
 			throw new \RuntimeException(
 				sprintf(
 					/* translators: %s database error. */
-					__( 'Unable to claim actions. Database error: %s.', 'import-eventbrite-events' ),
+					__( 'Unable to claim actions. Database error: %s.', 'wp-event-aggregator' ),
 					$error
 				)
 			);
@@ -1175,7 +1175,7 @@ AND `group_id` = %d
 			throw new RuntimeException(
 				sprintf(
 					// translators: %d is an id.
-					__( 'Unable to release actions from claim id %d.', 'import-eventbrite-events' ),
+					__( 'Unable to release actions from claim id %d.', 'wp-event-aggregator' ),
 					$claim->get_id()
 				)
 			);
@@ -1229,7 +1229,7 @@ AND `group_id` = %d
 		);
 		if ( empty( $updated ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having failed. It may may have been deleted by another process.', 'import-eventbrite-events' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having failed. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
 		}
 	}
 
@@ -1260,7 +1260,7 @@ AND `group_id` = %d
 			throw new Exception(
 				sprintf(
 					/* translators: 1: action ID. 2: status slug. */
-					__( 'Unable to update the status of action %1$d to %2$s.', 'import-eventbrite-events' ),
+					__( 'Unable to update the status of action %1$d to %2$s.', 'wp-event-aggregator' ),
 					$action_id,
 					self::STATUS_RUNNING
 				)
@@ -1297,7 +1297,7 @@ AND `group_id` = %d
 		);
 		if ( empty( $updated ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having completed. It may may have been deleted by another process.', 'import-eventbrite-events' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having completed. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
 		}
 
 		/**
@@ -1332,9 +1332,9 @@ AND `group_id` = %d
 		$status = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( is_null( $status ) ) {
-			throw new \InvalidArgumentException( __( 'Invalid action ID. No status found.', 'import-eventbrite-events' ) );
+			throw new \InvalidArgumentException( __( 'Invalid action ID. No status found.', 'wp-event-aggregator' ) );
 		} elseif ( empty( $status ) ) {
-			throw new \RuntimeException( __( 'Unknown status found for action.', 'import-eventbrite-events' ) );
+			throw new \RuntimeException( __( 'Unknown status found for action.', 'wp-event-aggregator' ) );
 		} else {
 			return $status;
 		}

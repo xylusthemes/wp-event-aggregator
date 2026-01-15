@@ -241,10 +241,10 @@ abstract class ActionScheduler {
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'import-eventbrite-events', 'ActionScheduler_WPCLI_Scheduler_command' );
-			WP_CLI::add_command( 'import-eventbrite-events', 'ActionScheduler_WPCLI_Clean_Command' );
+			WP_CLI::add_command( 'wp-event-aggregator', 'ActionScheduler_WPCLI_Scheduler_command' );
+			WP_CLI::add_command( 'wp-event-aggregator', 'ActionScheduler_WPCLI_Clean_Command' );
 			WP_CLI::add_command( 'action-scheduler action', '\Action_Scheduler\WP_CLI\Action_Command' );
-			WP_CLI::add_command( 'import-eventbrite-events', '\Action_Scheduler\WP_CLI\System_Command' );
+			WP_CLI::add_command( 'wp-event-aggregator', '\Action_Scheduler\WP_CLI\System_Command' );
 			if ( ! ActionScheduler_DataController::is_migration_complete() && Controller::instance()->allow_migration() ) {
 				$command = new Migration_Command();
 				$command->register();
@@ -271,7 +271,7 @@ abstract class ActionScheduler {
 		if ( ! self::$data_store_initialized && ! empty( $function_name ) ) {
 			$message = sprintf(
 				/* translators: %s function name. */
-				__( '%s() was called before the Action Scheduler data store was initialized', 'import-eventbrite-events' ),
+				__( '%s() was called before the Action Scheduler data store was initialized', 'wp-event-aggregator' ),
 				esc_attr( $function_name )
 			);
 			_doing_it_wrong( esc_html( $function_name ), esc_html( $message ), '3.1.6' );

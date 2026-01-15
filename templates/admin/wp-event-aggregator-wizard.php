@@ -1,3 +1,7 @@
+<?php
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) exit;
+?>
 <div class="wpea-wizard-wrap" >
     <h3><?php esc_attr_e( 'WP Event Aggregator', 'wp-event-aggregator' ); ?></h3>
     <div class="wpea-wizard-starter-video" >
