@@ -334,8 +334,7 @@ class WP_Event_Aggregator_Manage_Import {
 
 		if( $event_data['import_by'] == 'ics_file' ){
 
-			$original_name = wp_unslash( $_FILES['ics_file']['name'] );
-    		$sanitized_name = sanitize_file_name( $original_name );
+			$sanitized_name  = sanitize_file_name( wp_unslash( $_FILES['ics_file']['name'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 			$file_ext = strtolower( pathinfo( $sanitized_name, PATHINFO_EXTENSION ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$file_type = esc_attr( sanitize_text_field( wp_unslash( $_FILES['ics_file']['type'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
