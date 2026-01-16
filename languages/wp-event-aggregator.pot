@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-15T10:06:44+00:00\n"
+"POT-Creation-Date: 2026-01-16T07:59:52+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -1086,41 +1086,41 @@ msgstr ""
 msgid "Please provide valid Meetup group URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:344
+#: includes/class-wp-event-aggregator-manage-import.php:343
 msgid "Please upload .ics file"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:357
+#: includes/class-wp-event-aggregator-manage-import.php:356
 msgid "Nothing to import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:374
+#: includes/class-wp-event-aggregator-manage-import.php:373
 msgid "Scheduled import deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:378
-#: includes/class-wp-event-aggregator-manage-import.php:398
+#: includes/class-wp-event-aggregator-manage-import.php:377
+#: includes/class-wp-event-aggregator-manage-import.php:397
 msgid "Scheduled imports successfully deleted."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:382
+#: includes/class-wp-event-aggregator-manage-import.php:381
 msgid "Scheduled import has been run successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:386
-#: includes/class-wp-event-aggregator-manage-import.php:390
+#: includes/class-wp-event-aggregator-manage-import.php:385
+#: includes/class-wp-event-aggregator-manage-import.php:389
 msgid "Import history successfully deleted."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:394
+#: includes/class-wp-event-aggregator-manage-import.php:393
 msgid "Scheduled import successfully updated."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:416
+#: includes/class-wp-event-aggregator-manage-import.php:415
 msgid "Google Maps API Key has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:418
+#: includes/class-wp-event-aggregator-manage-import.php:417
 msgid "Something went wrong! please try again."
 msgstr ""
 
