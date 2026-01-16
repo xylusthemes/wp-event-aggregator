@@ -374,7 +374,7 @@ abstract class ActionScheduler_Store extends ActionScheduler_Store_Deprecated {
 	protected function validate_action( ActionScheduler_Action $action ) {
 		if ( strlen( wp_json_encode( $action->get_args() ) ) > static::$max_args_length ) {
 			// translators: %d is a number (maximum length of action arguments).
-			throw new InvalidArgumentException( sprintf( __( 'ActionScheduler_Action::$args too long. To ensure the args column can be indexed, action args should not be more than %d characters when encoded as JSON.', 'import-eventbrite-events' ), static::$max_args_length ) );
+			throw new InvalidArgumentException( sprintf( __( 'ActionScheduler_Action::$args too long. To ensure the args column can be indexed, action args should not be more than %d characters when encoded as JSON.', 'wp-event-aggregator' ), static::$max_args_length ) );
 		}
 	}
 
@@ -452,11 +452,11 @@ abstract class ActionScheduler_Store extends ActionScheduler_Store_Deprecated {
 	 */
 	public function get_status_labels() {
 		return array(
-			self::STATUS_COMPLETE => __( 'Complete', 'import-eventbrite-events' ),
-			self::STATUS_PENDING  => __( 'Pending', 'import-eventbrite-events' ),
-			self::STATUS_RUNNING  => __( 'In-progress', 'import-eventbrite-events' ),
-			self::STATUS_FAILED   => __( 'Failed', 'import-eventbrite-events' ),
-			self::STATUS_CANCELED => __( 'Canceled', 'import-eventbrite-events' ),
+			self::STATUS_COMPLETE => __( 'Complete', 'wp-event-aggregator' ),
+			self::STATUS_PENDING  => __( 'Pending', 'wp-event-aggregator' ),
+			self::STATUS_RUNNING  => __( 'In-progress', 'wp-event-aggregator' ),
+			self::STATUS_FAILED   => __( 'Failed', 'wp-event-aggregator' ),
+			self::STATUS_CANCELED => __( 'Canceled', 'wp-event-aggregator' ),
 		);
 	}
 

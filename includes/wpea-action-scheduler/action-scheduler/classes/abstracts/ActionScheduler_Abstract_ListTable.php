@@ -538,7 +538,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 			echo '</select>';
 		}
 
-		submit_button( esc_html__( 'Filter', 'import-eventbrite-events' ), '', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
+		submit_button( esc_html__( 'Filter', 'wp-event-aggregator' ), '', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
 		echo '</div>';
 	}
 
@@ -665,7 +665,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 		echo '<h1 class="wp-heading-inline">' . esc_attr( $this->table_header ) . '</h1>';
 		if ( $this->get_request_search_query() ) {
 			/* translators: %s: search query */
-			echo '<span class="subtitle">' . esc_attr( sprintf( __( 'Search results for "%s"', 'import-eventbrite-events' ), $this->get_request_search_query() ) ) . '</span>';
+			echo '<span class="subtitle">' . esc_attr( sprintf( __( 'Search results for "%s"', 'wp-event-aggregator' ), $this->get_request_search_query() ) ) . '</span>';
 		}
 		echo '<hr class="wp-header-end">';
 	}
@@ -700,8 +700,8 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 
 		// Translated status labels.
 		$status_labels             = ActionScheduler_Store::instance()->get_status_labels();
-		$status_labels['all']      = esc_html_x( 'All', 'status labels', 'import-eventbrite-events' );
-		$status_labels['past-due'] = esc_html_x( 'Past-due', 'status labels', 'import-eventbrite-events' );
+		$status_labels['all']      = esc_html_x( 'All', 'status labels', 'wp-event-aggregator' );
+		$status_labels['past-due'] = esc_html_x( 'Past-due', 'status labels', 'wp-event-aggregator' );
 
 		foreach ( $this->status_counts as $status_slug => $count ) {
 
@@ -783,7 +783,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 	 * Get the text to display in the search box on the list table.
 	 */
 	protected function get_search_box_placeholder() {
-		return esc_html__( 'Search', 'import-eventbrite-events' );
+		return esc_html__( 'Search', 'wp-event-aggregator' );
 	}
 
 	/**

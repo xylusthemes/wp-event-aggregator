@@ -265,7 +265,7 @@ GRAPHQL;
 
 		$json_data = json_encode($payload);
 		if ($json_data === false) {
-			throw new Exception('JSON encode error: ' . json_last_error_msg());
+			throw new Exception('JSON encode error: ' . json_last_error_msg()); //phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		}
 
 		$context = stream_context_create([
@@ -285,7 +285,7 @@ GRAPHQL;
 
 		$response = json_decode($data, true);
 		if (isset($response['errors'])) {
-			error_log('GraphQL API returned errors: ' . print_r($response['errors'], true));
+			error_log('GraphQL API returned errors: ' . print_r($response['errors'], true)); //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log, WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		}
 
 		return $response;

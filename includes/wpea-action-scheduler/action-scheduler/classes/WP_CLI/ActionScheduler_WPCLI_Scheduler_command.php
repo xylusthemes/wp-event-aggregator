@@ -27,7 +27,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 				WP_CLI::success(
 					sprintf(
 						/* translators: %s refers to the schema name*/
-						__( 'Registered schema for %s', 'import-eventbrite-events' ),
+						__( 'Registered schema for %s', 'wp-event-aggregator' ),
 						$classname
 					)
 				);
@@ -147,7 +147,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::log(
 			sprintf(
 				/* translators: %d refers to how many scheduled tasks were found to run */
-				_n( 'Found %d scheduled task', 'Found %d scheduled tasks', $total, 'import-eventbrite-events' ),
+				_n( 'Found %d scheduled task', 'Found %d scheduled tasks', $total, 'wp-event-aggregator' ),
 				$total
 			)
 		);
@@ -162,7 +162,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::log(
 			sprintf(
 				/* translators: %d refers to the total number of batches executed */
-				_n( '%d batch executed.', '%d batches executed.', $batches_completed, 'import-eventbrite-events' ),
+				_n( '%d batch executed.', '%d batches executed.', $batches_completed, 'wp-event-aggregator' ),
 				$batches_completed
 			)
 		);
@@ -179,7 +179,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::error(
 			sprintf(
 				/* translators: %s refers to the exception error message */
-				__( 'There was an error running the action scheduler: %s', 'import-eventbrite-events' ),
+				__( 'There was an error running the action scheduler: %s', 'wp-event-aggregator' ),
 				$e->getMessage()
 			)
 		);
@@ -194,7 +194,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::success(
 			sprintf(
 				/* translators: %d refers to the total number of tasks completed */
-				_n( '%d scheduled task completed.', '%d scheduled tasks completed.', $actions_completed, 'import-eventbrite-events' ),
+				_n( '%d scheduled task completed.', '%d scheduled tasks completed.', $actions_completed, 'wp-event-aggregator' ),
 				$actions_completed
 			)
 		);

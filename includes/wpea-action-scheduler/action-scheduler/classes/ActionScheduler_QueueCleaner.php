@@ -67,7 +67,7 @@ class ActionScheduler_QueueCleaner {
 				__METHOD__,
 				sprintf(
 					/* Translators: %s is the exception message. */
-					esc_html__( 'It was not possible to determine a valid cut-off time: %s.', 'import-eventbrite-events' ),
+					esc_html__( 'It was not possible to determine a valid cut-off time: %s.', 'wp-event-aggregator' ),
 					esc_html( $e->getMessage() )
 				),
 				'3.5.5'

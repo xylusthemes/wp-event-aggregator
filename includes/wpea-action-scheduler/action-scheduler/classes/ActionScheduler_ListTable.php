@@ -12,7 +12,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 	 *
 	 * @var string
 	 */
-	protected $package = 'import-eventbrite-events';
+	protected $package = 'wp-event-aggregator';
 
 	/**
 	 * Columns to show (name => label).
@@ -86,20 +86,20 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 		$this->logger = $logger;
 		$this->runner = $runner;
 
-		$this->table_header = __( 'Scheduled Actions', 'import-eventbrite-events' );
+		$this->table_header = __( 'Scheduled Actions', 'wp-event-aggregator' );
 
 		$this->bulk_actions = array(
-			'delete' => __( 'Delete', 'import-eventbrite-events' ),
+			'delete' => __( 'Delete', 'wp-event-aggregator' ),
 		);
 
 		$this->columns = array(
-			'hook'        => __( 'Hook', 'import-eventbrite-events' ),
-			'status'      => __( 'Status', 'import-eventbrite-events' ),
-			'args'        => __( 'Arguments', 'import-eventbrite-events' ),
-			'group'       => __( 'Group', 'import-eventbrite-events' ),
-			'recurrence'  => __( 'Recurrence', 'import-eventbrite-events' ),
-			'schedule'    => __( 'Scheduled Date', 'import-eventbrite-events' ),
-			'log_entries' => __( 'Log', 'import-eventbrite-events' ),
+			'hook'        => __( 'Hook', 'wp-event-aggregator' ),
+			'status'      => __( 'Status', 'wp-event-aggregator' ),
+			'args'        => __( 'Arguments', 'wp-event-aggregator' ),
+			'group'       => __( 'Group', 'wp-event-aggregator' ),
+			'recurrence'  => __( 'Recurrence', 'wp-event-aggregator' ),
+			'schedule'    => __( 'Scheduled Date', 'wp-event-aggregator' ),
+			'log_entries' => __( 'Log', 'wp-event-aggregator' ),
 		);
 
 		$this->sort_by = array(
@@ -119,19 +119,19 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 		if ( empty( $request_status ) ) {
 			$this->sort_by[] = 'status';
 		} elseif ( in_array( $request_status, array( 'in-progress', 'failed' ), true ) ) {
-			$this->columns  += array( 'claim_id' => __( 'Claim ID', 'import-eventbrite-events' ) );
+			$this->columns  += array( 'claim_id' => __( 'Claim ID', 'wp-event-aggregator' ) );
 			$this->sort_by[] = 'claim_id';
 		}
 
 		$this->row_actions = array(
 			'hook' => array(
 				'run'    => array(
-					'name' => __( 'Run', 'import-eventbrite-events' ),
-					'desc' => __( 'Process the action now as if it were run as part of a queue', 'import-eventbrite-events' ),
+					'name' => __( 'Run', 'wp-event-aggregator' ),
+					'desc' => __( 'Process the action now as if it were run as part of a queue', 'wp-event-aggregator' ),
 				),
 				'cancel' => array(
-					'name'  => __( 'Cancel', 'import-eventbrite-events' ),
-					'desc'  => __( 'Cancel the action now to avoid it being run in future', 'import-eventbrite-events' ),
+					'name'  => __( 'Cancel', 'wp-event-aggregator' ),
+					'desc'  => __( 'Cancel the action now to avoid it being run in future', 'wp-event-aggregator' ),
 					'class' => 'cancel trash',
 				),
 			),
@@ -141,44 +141,44 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 			array(
 				'seconds' => YEAR_IN_SECONDS,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s year', '%s years', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s year', '%s years', 'wp-event-aggregator' ),
 			),
 			array(
 				'seconds' => MONTH_IN_SECONDS,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s month', '%s months', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s month', '%s months', 'wp-event-aggregator' ),
 			),
 			array(
 				'seconds' => WEEK_IN_SECONDS,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s week', '%s weeks', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s week', '%s weeks', 'wp-event-aggregator' ),
 			),
 			array(
 				'seconds' => DAY_IN_SECONDS,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s day', '%s days', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s day', '%s days', 'wp-event-aggregator' ),
 			),
 			array(
 				'seconds' => HOUR_IN_SECONDS,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s hour', '%s hours', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s hour', '%s hours', 'wp-event-aggregator' ),
 			),
 			array(
 				'seconds' => MINUTE_IN_SECONDS,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s minute', '%s minutes', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s minute', '%s minutes', 'wp-event-aggregator' ),
 			),
 			array(
 				'seconds' => 1,
 				/* translators: %s: amount of time */
-				'names'   => _n_noop( '%s second', '%s seconds', 'import-eventbrite-events' ),
+				'names'   => _n_noop( '%s second', '%s seconds', 'wp-event-aggregator' ),
 			),
 		);
 
 		parent::__construct(
 			array(
-				'singular' => 'import-eventbrite-events',
-				'plural'   => 'import-eventbrite-events',
+				'singular' => 'wp-event-aggregator',
+				'plural'   => 'wp-event-aggregator',
 				'ajax'     => false,
 			)
 		);
@@ -221,7 +221,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 	private static function human_interval( $interval, $periods_to_include = 2 ) {
 
 		if ( $interval <= 0 ) {
-			return __( 'Now!', 'import-eventbrite-events' );
+			return __( 'Now!', 'wp-event-aggregator' );
 		}
 
 		$output           = '';
@@ -235,7 +235,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 				if ( ! empty( $output ) ) {
 					$output .= ' ';
 				}
-				$output            .= sprintf( translate_nooped_plural( self::$time_periods[ $time_period_index ]['names'], $periods_in_interval, 'import-eventbrite-events' ), $periods_in_interval );
+				$output            .= sprintf( translate_nooped_plural( self::$time_periods[ $time_period_index ]['names'], $periods_in_interval, 'wp-event-aggregator' ), $periods_in_interval );
 				$seconds_remaining -= $periods_in_interval * self::$time_periods[ $time_period_index ]['seconds'];
 				$periods_included++;
 			}
@@ -258,13 +258,13 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 
 			if ( is_numeric( $recurrence ) ) {
 				/* translators: %s: time interval */
-				return sprintf( __( 'Every %s', 'import-eventbrite-events' ), self::human_interval( $recurrence ) );
+				return sprintf( __( 'Every %s', 'wp-event-aggregator' ), self::human_interval( $recurrence ) );
 			} else {
 				return $recurrence;
 			}
 		}
 
-		return __( 'Non-repeating', 'import-eventbrite-events' );
+		return __( 'Non-repeating', 'wp-event-aggregator' );
 	}
 
 	/**
@@ -362,7 +362,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 				if ( ! in_array( $wpdb->prefix . $table_name, $found_tables, true ) ) {
 					$this->admin_notices[] = array(
 						'class'   => 'error',
-						'message' => __( 'It appears one or more database tables were missing. Attempting to re-create the missing table(s).', 'import-eventbrite-events' ),
+						'message' => __( 'It appears one or more database tables were missing. Attempting to re-create the missing table(s).', 'wp-event-aggregator' ),
 					);
 					$this->recreate_tables();
 					parent::display_admin_notices();
@@ -382,7 +382,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 						'Maximum simultaneous queues already in progress (%s queue). No additional queues will begin processing until the current queues are complete.',
 						'Maximum simultaneous queues already in progress (%s queues). No additional queues will begin processing until the current queues are complete.',
 						$claim_count,
-						'import-eventbrite-events'
+						'wp-event-aggregator'
 					),
 					$claim_count
 				),
@@ -395,10 +395,10 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 			if ( false === $async_request_lock_expiration || $async_request_lock_expiration < time() ) {
 				$in_progress_url = add_query_arg( 'status', 'in-progress', remove_query_arg( 'status' ) );
 				/* translators: %s: process URL */
-				$async_request_message = sprintf( __( 'A new queue has begun processing. <a href="%s">View actions in-progress &raquo;</a>', 'import-eventbrite-events' ), esc_url( $in_progress_url ) );
+				$async_request_message = sprintf( __( 'A new queue has begun processing. <a href="%s">View actions in-progress &raquo;</a>', 'wp-event-aggregator' ), esc_url( $in_progress_url ) );
 			} else {
 				/* translators: %d: seconds */
-				$async_request_message = sprintf( __( 'The next queue will begin processing in approximately %d seconds.', 'import-eventbrite-events' ), $async_request_lock_expiration - time() );
+				$async_request_message = sprintf( __( 'The next queue will begin processing in approximately %d seconds.', 'wp-event-aggregator' ), $async_request_lock_expiration - time() );
 			}
 
 			$this->admin_notices[] = array(
@@ -420,21 +420,21 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 				switch ( $notification['row_action_type'] ) {
 					case 'run':
 						/* translators: %s: action HTML */
-						$action_message_html = sprintf( __( 'Successfully executed action: %s', 'import-eventbrite-events' ), $action_hook_html );
+						$action_message_html = sprintf( __( 'Successfully executed action: %s', 'wp-event-aggregator' ), $action_hook_html );
 						break;
 					case 'cancel':
 						/* translators: %s: action HTML */
-						$action_message_html = sprintf( __( 'Successfully canceled action: %s', 'import-eventbrite-events' ), $action_hook_html );
+						$action_message_html = sprintf( __( 'Successfully canceled action: %s', 'wp-event-aggregator' ), $action_hook_html );
 						break;
 					default:
 						/* translators: %s: action HTML */
-						$action_message_html = sprintf( __( 'Successfully processed change for action: %s', 'import-eventbrite-events' ), $action_hook_html );
+						$action_message_html = sprintf( __( 'Successfully processed change for action: %s', 'wp-event-aggregator' ), $action_hook_html );
 						break;
 				}
 			} else {
 				$class = 'error';
 				/* translators: 1: action HTML 2: action ID 3: error message */
-				$action_message_html = sprintf( __( 'Could not process change for action: "%1$s" (ID: %2$d). Error: %3$s', 'import-eventbrite-events' ), $action_hook_html, esc_html( $notification['action_id'] ), esc_html( $notification['error_message'] ) );
+				$action_message_html = sprintf( __( 'Could not process change for action: "%1$s" (ID: %2$d). Error: %3$s', 'wp-event-aggregator' ), $action_hook_html, esc_html( $notification['action_id'] ), esc_html( $notification['error_message'] ) );
 			}
 
 			$action_message_html = apply_filters( 'action_scheduler_admin_notice_html', $action_message_html, $action, $notification );
@@ -470,7 +470,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 		$schedule_display_string = '';
 
 		if ( is_a( $schedule, 'ActionScheduler_NullSchedule' ) ) {
-			return __( 'async', 'import-eventbrite-events' );
+			return __( 'async', 'wp-event-aggregator' );
 		}
 
 		if ( ! method_exists( $schedule, 'get_date' ) || ! $schedule->get_date() ) {
@@ -484,10 +484,10 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 
 		if ( gmdate( 'U' ) > $next_timestamp ) {
 			/* translators: %s: date interval */
-			$schedule_display_string .= sprintf( __( ' (%s ago)', 'import-eventbrite-events' ), self::human_interval( gmdate( 'U' ) - $next_timestamp ) );
+			$schedule_display_string .= sprintf( __( ' (%s ago)', 'wp-event-aggregator' ), self::human_interval( gmdate( 'U' ) - $next_timestamp ) );
 		} else {
 			/* translators: %s: date interval */
-			$schedule_display_string .= sprintf( __( ' (%s)', 'import-eventbrite-events' ), self::human_interval( $next_timestamp - gmdate( 'U' ) ) );
+			$schedule_display_string .= sprintf( __( ' (%s)', 'wp-event-aggregator' ), self::human_interval( $next_timestamp - gmdate( 'U' ) ) );
 		}
 
 		return $schedule_display_string;
@@ -513,7 +513,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 				error_log(
 					sprintf(
 						/* translators: 1: action ID 2: exception message. */
-						__( 'Action Scheduler was unable to delete action %1$d. Reason: %2$s', 'import-eventbrite-events' ),
+						__( 'Action Scheduler was unable to delete action %1$d. Reason: %2$s', 'wp-event-aggregator' ),
 						$id,
 						$e->getMessage()
 					)
@@ -663,7 +663,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 	 * Get the text to display in the search box on the list table.
 	 */
 	protected function get_search_box_button_text() {
-		return __( 'Search hook, args and claim ID', 'import-eventbrite-events' );
+		return __( 'Search hook, args and claim ID', 'wp-event-aggregator' );
 	}
 
 	/**

@@ -164,7 +164,7 @@ class System_Command {
 		$sources = ActionScheduler_SystemInformation::get_sources();
 
 		if ( empty( $sources ) ) {
-			WP_CLI::log( __( 'Detailed information about registered sources is not currently available.', 'import-eventbrite-events' ) );
+			WP_CLI::log( __( 'Detailed information about registered sources is not currently available.', 'wp-event-aggregator' ) );
 			return;
 		}
 

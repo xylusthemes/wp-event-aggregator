@@ -67,7 +67,7 @@ class Generate_Command extends \ActionScheduler_WPCLI_Command {
 		$progress_bar = \WP_CLI\Utils\make_progress_bar(
 			sprintf(
 				/* translators: %d is number of actions to create */
-				_n( 'Creating %d action', 'Creating %d actions', $count, 'import-eventbrite-events' ),
+				_n( 'Creating %d action', 'Creating %d actions', $count, 'wp-event-aggregator' ),
 				number_format_i18n( $count )
 			),
 			$count
@@ -94,7 +94,7 @@ class Generate_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::success(
 			sprintf(
 				/* translators: %1$d refers to the total number of tasks added, %2$s is the action type */
-				_n( '%1$d %2$s action scheduled.', '%1$d %2$s actions scheduled.', $actions_added, 'import-eventbrite-events' ),
+				_n( '%1$d %2$s action scheduled.', '%1$d %2$s actions scheduled.', $actions_added, 'wp-event-aggregator' ),
 				number_format_i18n( $actions_added ),
 				$action_type
 			)
@@ -112,7 +112,7 @@ class Generate_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::error(
 			sprintf(
 				/* translators: %s refers to the exception error message. */
-				__( 'There was an error creating the scheduled action: %s', 'import-eventbrite-events' ),
+				__( 'There was an error creating the scheduled action: %s', 'wp-event-aggregator' ),
 				$e->getMessage()
 			)
 		);

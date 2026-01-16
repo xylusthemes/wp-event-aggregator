@@ -38,9 +38,9 @@ class ActionScheduler_wpPostStore_PostStatusRegistrar {
 	 */
 	protected function post_status_failed_labels() {
 		$labels = array(
-			'label'       => _x( 'Failed', 'post', 'import-eventbrite-events' ),
+			'label'       => _x( 'Failed', 'post', 'wp-event-aggregator' ),
 			/* translators: %s: count */
-			'label_count' => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'import-eventbrite-events' ),
+			'label_count' => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'wp-event-aggregator' ),
 		);
 
 		return apply_filters( 'action_scheduler_post_status_failed_labels', $labels );
@@ -53,9 +53,9 @@ class ActionScheduler_wpPostStore_PostStatusRegistrar {
 	 */
 	protected function post_status_running_labels() {
 		$labels = array(
-			'label'       => _x( 'In-Progress', 'post', 'import-eventbrite-events' ),
+			'label'       => _x( 'In-Progress', 'post', 'wp-event-aggregator' ),
 			/* translators: %s: count */
-			'label_count' => _n_noop( 'In-Progress <span class="count">(%s)</span>', 'In-Progress <span class="count">(%s)</span>', 'import-eventbrite-events' ),
+			'label_count' => _n_noop( 'In-Progress <span class="count">(%s)</span>', 'In-Progress <span class="count">(%s)</span>', 'wp-event-aggregator' ),
 		);
 
 		return apply_filters( 'action_scheduler_post_status_running_labels', $labels );

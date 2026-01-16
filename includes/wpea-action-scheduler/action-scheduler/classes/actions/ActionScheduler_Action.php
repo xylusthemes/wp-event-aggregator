@@ -77,7 +77,7 @@ class ActionScheduler_Action {
 			throw new Exception(
 				sprintf(
 					/* translators: 1: action hook. */
-					__( 'Scheduled action for %1$s will not be executed as no callbacks are registered.', 'import-eventbrite-events' ),
+					__( 'Scheduled action for %1$s will not be executed as no callbacks are registered.', 'wp-event-aggregator' ),
 					$hook
 				)
 			);

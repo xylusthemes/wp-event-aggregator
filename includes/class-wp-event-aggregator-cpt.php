@@ -785,12 +785,12 @@ class WP_Event_Aggregator_Cpt {
 							<nav class="prev-next-posts">
 								<div class="prev-posts-link alignright">
 									<?php if( $paged < $wp_events->max_num_pages ) : ?>
-										<a href="#" class="wpea-next-page" data-page="<?php echo $paged + 1; ?>"><?php esc_attr_e( 'Next Events &raquo;' ); ?></a>
+										<a href="#" class="wpea-next-page" data-page="<?php echo esc_html( $paged + 1 ); ?>"><?php esc_attr_e( 'Next Events &raquo;', 'wp-event-aggregator' ); ?></a>
 									<?php endif; ?>
 								</div>
 								<div class="next-posts-link alignleft">
 									<?php if( $paged > 1 ) : ?>
-										<a href="#" class="wpea-prev-page" data-page="<?php echo $paged - 1; ?>"><?php esc_attr_e( '&laquo; Previous Events' ); ?></a>
+										<a href="#" class="wpea-prev-page" data-page="<?php echo esc_html( $paged - 1 ); ?>"><?php esc_attr_e( '&laquo; Previous Events', 'wp-event-aggregator' ); ?></a>
 									<?php endif; ?>
 								</div>
 							</nav>

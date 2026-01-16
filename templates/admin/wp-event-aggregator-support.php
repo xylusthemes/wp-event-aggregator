@@ -6,7 +6,7 @@ global $importevents;
 $open_source_support_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/';
 $support_url = 'https://xylusthemes.com/support/?utm_source=insideplugin&utm_medium=web&utm_content=sidebar&utm_campaign=freeplugin';
 
-$review_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post';
+$review_url = 'https://wordpress.org/support/plugin/wp-event-aggregator/reviews/';
 $facebook_url = 'https://www.facebook.com/xylusinfo/';
 $twitter_url = 'https://twitter.com/XylusThemes/';
 
@@ -68,7 +68,7 @@ $twitter_url = 'https://twitter.com/XylusThemes/';
 					<div class="wpea-support-features-text">
 						<h3 class="wpea-support-features-title"><?php esc_attr_e( 'Like The Plugin?', 'wp-event-aggregator' ); ?></h3>
 						<p><?php esc_attr_e( 'Your Review is very important to us, and helps us to grow!', 'wp-event-aggregator' ); ?></p>
-						<a target="_blank" class="button button-primary" href="https://wordpress.org/support/plugin/wp-event-aggregator/reviews/?rate=5#new-post"><?php esc_attr_e( 'Review WP Event Aggregator on WP.org', 'wp-event-aggregator' ); ?></a>
+						<a target="_blank" class="button button-primary" href="https://wordpress.org/support/plugin/wp-event-aggregator/reviews/"><?php esc_attr_e( 'Review WP Event Aggregator on WP.org', 'wp-event-aggregator' ); ?></a>
 					</div>
 				</div>
 			</div>

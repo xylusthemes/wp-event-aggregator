@@ -20,7 +20,7 @@ class Get_Command extends \ActionScheduler_WPCLI_Command {
 
 		if ( is_a( $action, ActionScheduler_NullAction::class ) ) {
 			/* translators: %d is action ID. */
-			\WP_CLI::error( sprintf( esc_html__( 'Unable to retrieve action %d.', 'import-eventbrite-events' ), $action_id ) );
+			\WP_CLI::error( sprintf( esc_html__( 'Unable to retrieve action %d.', 'wp-event-aggregator' ), $action_id ) );
 		}
 
 		$only_logs   = ! empty( $this->assoc_args['field'] ) && 'log_entries' === $this->assoc_args['field'];

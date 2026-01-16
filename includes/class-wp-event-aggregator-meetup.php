@@ -53,7 +53,7 @@ class WP_Event_Aggregator_Meetup {
 			$api             = new WP_Event_Aggregator_Meetup_API();
 			
 			if( empty($this->api_key) && empty($this->access_token) ){
-				$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'import-meetup-events');
+				$wpea_errors[] = __( 'Please insert "Meetup API key" Or OAuth key and secret in settings.', 'wp-event-aggregator');
 				return;
 			}
 		}else{

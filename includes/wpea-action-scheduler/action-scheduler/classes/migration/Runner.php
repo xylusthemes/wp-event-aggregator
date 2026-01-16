@@ -111,7 +111,7 @@ class Runner {
 
 		if ( $this->progress_bar ) {
 			/* translators: %d: amount of actions */
-			$this->progress_bar->set_message( sprintf( _n( 'Migrating %d action', 'Migrating %d actions', $batch_size, 'import-eventbrite-events' ), $batch_size ) );
+			$this->progress_bar->set_message( sprintf( _n( 'Migrating %d action', 'Migrating %d actions', $batch_size, 'wp-event-aggregator' ), $batch_size ) );
 			$this->progress_bar->set_count( $batch_size );
 		}
 
@@ -138,7 +138,7 @@ class Runner {
 					$destination_action_id,
 					sprintf(
 						/* translators: 1: source action ID 2: source store class 3: destination action ID 4: destination store class */
-						__( 'Migrated action with ID %1$d in %2$s to ID %3$d in %4$s', 'import-eventbrite-events' ),
+						__( 'Migrated action with ID %1$d in %2$s to ID %3$d in %4$s', 'wp-event-aggregator' ),
 						$source_action_id,
 						get_class( $this->source_store ),
 						$destination_action_id,

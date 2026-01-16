@@ -85,7 +85,7 @@ class ActionScheduler_WPCLI_Clean_Command extends WP_CLI_Command {
 		WP_CLI::log(
 			sprintf(
 				/* translators: %d refers to the total number of batches processed */
-				_n( '%d batch processed.', '%d batches processed.', $batches_processed, 'import-eventbrite-events' ),
+				_n( '%d batch processed.', '%d batches processed.', $batches_processed, 'wp-event-aggregator' ),
 				$batches_processed
 			)
 		);
@@ -100,7 +100,7 @@ class ActionScheduler_WPCLI_Clean_Command extends WP_CLI_Command {
 		WP_CLI::error(
 			sprintf(
 				/* translators: %s refers to the exception error message */
-				__( 'There was an error deleting an action: %s', 'import-eventbrite-events' ),
+				__( 'There was an error deleting an action: %s', 'wp-event-aggregator' ),
 				$e->getMessage()
 			)
 		);
@@ -115,7 +115,7 @@ class ActionScheduler_WPCLI_Clean_Command extends WP_CLI_Command {
 		WP_CLI::success(
 			sprintf(
 				/* translators: %d refers to the total number of actions deleted */
-				_n( '%d action deleted.', '%d actions deleted.', $actions_deleted, 'import-eventbrite-events' ),
+				_n( '%d action deleted.', '%d actions deleted.', $actions_deleted, 'wp-event-aggregator' ),
 				$actions_deleted
 			)
 		);

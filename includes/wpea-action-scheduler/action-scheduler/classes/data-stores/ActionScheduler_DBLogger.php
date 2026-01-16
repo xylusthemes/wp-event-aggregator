@@ -139,7 +139,7 @@ class ActionScheduler_DBLogger extends ActionScheduler_Logger {
 		$date_gmt = $date->format( 'Y-m-d H:i:s' );
 		ActionScheduler_TimezoneHelper::set_local_timezone( $date );
 		$date_local = $date->format( 'Y-m-d H:i:s' );
-		$message    = __( 'action canceled', 'import-eventbrite-events' );
+		$message    = __( 'action canceled', 'wp-event-aggregator' );
 		$format     = '(%d, ' . $wpdb->prepare( '%s, %s, %s', $message, $date_gmt, $date_local ) . ')';
 		$sql_query  = "INSERT {$wpdb->actionscheduler_logs} (action_id, message, log_date_gmt, log_date_local) VALUES ";
 		$value_rows = array();

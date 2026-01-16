@@ -51,7 +51,7 @@ class Delete_Command extends \ActionScheduler_WPCLI_Command {
 		$progress_bar = \WP_CLI\Utils\make_progress_bar(
 			sprintf(
 				/* translators: %d: number of actions to be deleted */
-				_n( 'Deleting %d action', 'Deleting %d actions', $this->action_counts['total'], 'import-eventbrite-events' ),
+				_n( 'Deleting %d action', 'Deleting %d actions', $this->action_counts['total'], 'wp-event-aggregator' ),
 				number_format_i18n( $this->action_counts['total'] )
 			),
 			$this->action_counts['total']
@@ -71,9 +71,9 @@ class Delete_Command extends \ActionScheduler_WPCLI_Command {
 		$progress_bar->finish();
 
 		/* translators: %1$d: number of actions deleted */
-		$format = _n( 'Deleted %1$d action', 'Deleted %1$d actions', $this->action_counts['deleted'], 'import-eventbrite-events' ) . ', ';
+		$format = _n( 'Deleted %1$d action', 'Deleted %1$d actions', $this->action_counts['deleted'], 'wp-event-aggregator' ) . ', ';
 		/* translators: %2$d: number of actions deletions failed */
-		$format .= _n( '%2$d failure.', '%2$d failures.', $this->action_counts['failed'], 'import-eventbrite-events' );
+		$format .= _n( '%2$d failure.', '%2$d failures.', $this->action_counts['failed'], 'wp-event-aggregator' );
 
 		\WP_CLI::success(
 			sprintf(

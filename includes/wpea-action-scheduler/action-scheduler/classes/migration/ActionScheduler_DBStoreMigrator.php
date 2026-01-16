@@ -46,7 +46,7 @@ class ActionScheduler_DBStoreMigrator extends ActionScheduler_DBStore {
 			return $action_id;
 		} catch ( \Exception $e ) {
 			// translators: %s is an error message.
-			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'import-eventbrite-events' ), $e->getMessage() ), 0 );
+			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'wp-event-aggregator' ), $e->getMessage() ), 0 );
 		}
 	}
 }

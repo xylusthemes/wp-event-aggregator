@@ -1,4 +1,4 @@
-=== WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into WordPress ===
+=== WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into Event Calendar ===
 Contributors: xylus,dharm1025,rajat1192
 Donate link: http://xylusthemes.com
 Tags: event importer, event calendar, eventbrite event, facebook event, ical import
@@ -230,6 +230,34 @@ facebook events, eventbrite, iCal, facebook, eventbrite, meetup, event feeds, ev
 4. Locate “WP Event Aggregator Pro” in the list and click the “Activate” link.
 
 [More Information](http://docs.xylusthemes.com/docs/wp-event-aggregator/plugin-installation-pro/)
+
+== External Services ==
+
+This plugin connects to external services to import and display event data. Requests are made only when the related feature is enabled by the site administrator.
+
+=== Eventbrite ===
+Used to import events and related details.
+Data sent: API token and event/organizer IDs during import or display.
+Terms: [Eventbrite Terms](https://www.eventbrite.com/l/legalterms/)  
+Privacy: [Eventbrite Privacy Policy](https://www.eventbrite.com/privacypolicy)
+
+=== Meetup ===
+Used to authorize and import Meetup events.
+Data sent: OAuth token and group/event IDs during authorization or import.
+Terms: [Meetup Terms](https://www.meetup.com/terms)  
+Privacy: [Meetup Privacy Policy](https://www.meetup.com/privacy)
+
+=== Google Maps ===
+Used to display event locations.
+Data sent: Event address when a map is loaded.
+Terms: [Google Maps Terms](https://www.google.com/help/terms_maps/)  
+Privacy: [Google Maps Privacy Policy](https://policies.google.com/privacy)
+
+=== Xylus Themes API ===
+Used for plugin licensing and updates.
+Data sent: Site URL, plugin version, license key (if applicable).
+Terms: [Xylus Themes Terms](https://xylusthemes.com/terms-conditions/)  
+Privacy: [Xylus Themes Privacy Policy](https://xylusthemes.com/privacy-policy)
 
 == Frequently Asked Questions ==
 

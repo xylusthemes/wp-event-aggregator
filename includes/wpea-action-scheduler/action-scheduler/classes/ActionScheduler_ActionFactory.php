@@ -230,7 +230,7 @@ class ActionScheduler_ActionFactory {
 		$next     = $schedule->get_next( as_get_datetime_object() );
 
 		if ( is_null( $next ) || ! $schedule->is_recurring() ) {
-			throw new InvalidArgumentException( __( 'Invalid action - must be a recurring action.', 'import-eventbrite-events' ) );
+			throw new InvalidArgumentException( __( 'Invalid action - must be a recurring action.', 'wp-event-aggregator' ) );
 		}
 
 		$schedule_class = get_class( $schedule );
@@ -323,7 +323,7 @@ class ActionScheduler_ActionFactory {
 			error_log(
 				sprintf(
 					/* translators: %1$s is the name of the hook to be enqueued, %2$s is the exception message. */
-					__( 'Caught exception while enqueuing action "%1$s": %2$s', 'import-eventbrite-events' ),
+					__( 'Caught exception while enqueuing action "%1$s": %2$s', 'wp-event-aggregator' ),
 					$options['hook'],
 					$e->getMessage()
 				)
