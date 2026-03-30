@@ -157,6 +157,21 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                     </div>
 
+                    <div class="wpea-inner-main-section"  >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Automatically Import and Assign Eventbrite Categories', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $eventbritre_category = isset( $eventbrite_options['eventbritre_category'] ) ? $eventbrite_options['eventbritre_category'] : 'no';
+                            ?>
+                            <input type="checkbox" name="eventbrite[eventbritre_category]" value="yes" <?php if ( $eventbritre_category == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_html_e( 'Enable this option to automatically import Eventbrite categories and assign them in events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Private Events Section -->
                     <?php
                         $private_events     = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
