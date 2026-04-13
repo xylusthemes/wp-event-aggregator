@@ -28,6 +28,8 @@ class WP_Event_Aggregator_Common {
 		add_action( 'admin_init', array( $this, 'wpea_check_for_minimum_pro_version' ) );
 		add_action( 'ep_after_single_event_contant', array( $this, 'wpea_add_eventprime_add_ticket_section' ) );
 		add_action( 'admin_init', array( $this, 'wpea_redirect_after_activation' ) );
+		add_filter( 'post_thumbnail_html', array( $this, 'wpea_external_image_thumbnail_html' ), 10, 5 );
+		add_filter( 'has_post_thumbnail', array( $this, 'wpea_external_image_has_thumbnail' ), 10, 3 );
 	}	
 
 	/**
@@ -1448,6 +1450,21 @@ class WP_Event_Aggregator_Common {
 	public function wpea_set_feature_image_logic( $event_id, $image_url, $event_args ){
 		global $importevents;
 		
+		if ( empty( $image_url ) ) {
+			return;
+		}
+
+		// Check the image import method setting.
+		$wpea_options = get_option( WPEA_OPTIONS );
+		$image_import_method = isset( $wpea_options['wpea']['image_import_method'] ) ? $wpea_options['wpea']['image_import_method'] : 'download';
+
+		if ( $image_import_method === 'external_url' ) {
+			// Store external image URL in post meta without downloading.
+			update_post_meta( $event_id, '_wpea_external_image_url', esc_url_raw( $image_url ) );
+			return;
+		}
+
+		// Default behavior: download and set as featured image.
 		if ( $event_args['import_type'] === 'onetime' && $event_args['import_by'] === 'event_id' ) {
 			$importevents->common->setup_featured_image_to_event( $event_id, $image_url );
 		} else {
@@ -1502,6 +1519,68 @@ class WP_Event_Aggregator_Common {
 		}
 
 		return $cat_id;
+	}
+
+	/**
+	 * Filter has_post_thumbnail to return true when external image URL exists.
+	 *
+	 * @since 1.7.5
+	 * @param bool             $has_thumbnail True if the post has a thumbnail.
+	 * @param int|WP_Post|null $post          Post ID or WP_Post object.
+	 * @param int|false        $thumbnail_id  Thumbnail attachment ID or false.
+	 * @return bool
+	 */
+	public function wpea_external_image_has_thumbnail( $has_thumbnail, $post, $thumbnail_id ) {
+		if ( $has_thumbnail ) {
+			return $has_thumbnail;
+		}
+
+		$post_id = is_object( $post ) ? $post->ID : (int) $post;
+		$post_type = get_post_type( $post_id );
+
+		// Only apply to WPEA event post type.
+		if ( 'wp_events' !== $post_type ) {
+			return $has_thumbnail;
+		}
+
+		$external_image = get_post_meta( $post_id, '_wpea_external_image_url', true );
+		if ( ! empty( $external_image ) ) {
+			return true;
+		}
+
+		return $has_thumbnail;
+	}
+
+	/**
+	 * Filter post_thumbnail_html to display external image when no featured image exists.
+	 *
+	 * @since 1.7.5
+	 * @param string       $html          The post thumbnail HTML.
+	 * @param int          $post_id       The post ID.
+	 * @param int          $thumbnail_id  The post thumbnail ID.
+	 * @param string|int[] $size          Requested image size.
+	 * @param string|array $attr          Query string or array of attributes.
+	 * @return string
+	 */
+	public function wpea_external_image_thumbnail_html( $html, $post_id, $thumbnail_id, $size, $attr ) {
+		if ( ! empty( $html ) ) {
+			return $html;
+		}
+
+		$post_type = get_post_type( $post_id );
+
+		// Only apply to WPEA event post type.
+		if ( 'wp_events' !== $post_type ) {
+			return $html;
+		}
+
+		$external_image = get_post_meta( $post_id, '_wpea_external_image_url', true );
+		if ( ! empty( $external_image ) ) {
+			$alt = esc_attr( get_the_title( $post_id ) );
+			$html = '<img src="' . esc_url( $external_image ) . '" alt="' . $alt . '" class="wpea-external-thumbnail" />';
+		}
+
+		return $html;
 	}
 }
 
