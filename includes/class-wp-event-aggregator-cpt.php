@@ -539,8 +539,21 @@ class WP_Event_Aggregator_Cpt {
 	 */
 	function wp_events_meta_before_content( $content ) { 
 	    if ( is_singular( $this->event_posttype ) ) {
-			$event_details = $this->wp_events_get_event_meta( get_the_ID() );
-			$content = $event_details . $content;
+			$event_id = get_the_ID();
+			$event_details = $this->wp_events_get_event_meta( $event_id );
+
+			// Inject external image if no actual featured image attachment is set and external URL exists.
+			$external_image_html = '';
+			$actual_thumbnail_id = get_post_meta( $event_id, '_thumbnail_id', true );
+			if ( empty( $actual_thumbnail_id ) ) {
+				$external_image_url = get_post_meta( $event_id, '_wpea_external_image_url', true );
+				if ( ! empty( $external_image_url ) ) {
+					$alt = esc_attr( get_the_title( $event_id ) );
+					$external_image_html = '<div class="wpea-external-event-image"><img src="' . esc_url( $external_image_url ) . '" alt="' . $alt . '" style="max-width:100%; height:auto; margin-bottom:20px;" /></div>';
+				}
+			}
+
+			$content = $external_image_html . $event_details . $content;
 		}
 	    return $content;
 	}

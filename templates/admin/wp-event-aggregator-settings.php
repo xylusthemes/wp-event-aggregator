@@ -834,6 +834,29 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                     </div>
 
+                    <!-- Image Import Method Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Image Import Method', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                                $image_import_method = isset( $aggregator_options['image_import_method'] ) ? $aggregator_options['image_import_method'] : 'download';
+                            ?>
+                            <label style="display:block; margin-bottom:5px;">
+                                <input type="radio" name="wpea[image_import_method]" value="download" <?php checked( $image_import_method, 'download' ); ?> />
+                                <?php esc_attr_e( 'Download image and set as Featured Image (Default)', 'wp-event-aggregator' ); ?>
+                            </label>
+                            <label style="display:block; margin-bottom:5px;">
+                                <input type="radio" name="wpea[image_import_method]" value="external_url" <?php checked( $image_import_method, 'external_url' ); ?> />
+                                <?php esc_attr_e( 'Store external image URL only (No download)', 'wp-event-aggregator' ); ?>
+                            </label>
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Choose how event images are handled during import. "Download" saves images to your media library and sets them as featured images. "Store external URL" saves only the image URL in post meta without downloading, reducing server storage usage.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Default Event Thumbnail Section -->
                     <div class="wpea-inner-main-section" >
                         <div class="wpea-inner-section-1" >
