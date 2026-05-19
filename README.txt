@@ -4,8 +4,8 @@ Donate link: http://xylusthemes.com
 Tags: event importer, event calendar, eventbrite event, facebook event, ical import
 Requires at least: 4.0
 Requires PHP: 7.4
-Tested up to: 6.9
-Stable tag: 1.9.0
+Tested up to: 7.0
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -321,6 +321,11 @@ Yes. The plugin is actively maintained and tested with the latest WordPress and 
 15. Import events via CSV, XML, or JSON files (Pro).
 
 == Changelog ==
+
+= 1.9.1 =
+* ADDED: Option to store external event image URLs without downloading.
+* ADDED: Automatic Eventbrite category create, update, and assignment option in settings.
+* IMPROVEMENTS: Support for WP 7.0
 
 = 1.9.0 =
 * IMPROVEMENTS: Optimized Facebook event API for fetching Facebook Event images.
