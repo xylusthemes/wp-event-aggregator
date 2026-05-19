@@ -129,6 +129,20 @@ class WP_Event_Aggregator_WPEA {
 			}
 
 			// Asign event category.
+			$is_insert_ecat = isset( $wpea_options['eventbrite']['eventbritre_category'] ) ? $wpea_options['eventbrite']['eventbritre_category'] : 'no';
+			$ewpea_cats     = isset( $event_args['event_cats'] ) && is_array( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
+			$e_cats         = isset( $centralize_array['e_category'] ) ? $centralize_array['e_category'] : '';
+
+			if ( $is_insert_ecat === 'yes' ) {
+				$get_ecat_id = $importevents->common->wpea_insert_eventbrite_category_and_assing_into_event( $e_cats );
+				if ( ! empty( $get_ecat_id ) ) {
+					$ewpea_cats[] = (int) $get_ecat_id;
+					$ewpea_cats   = array_unique( $ewpea_cats );
+				}
+			}
+
+			$event_args['event_cats'] = $ewpea_cats;
+
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			$category  = isset( $centralize_array['category'] ) ? $centralize_array['category'] : '';
 			if ( ! empty( $category ) ) {

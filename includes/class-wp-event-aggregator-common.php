@@ -1276,17 +1276,19 @@ class WP_Event_Aggregator_Common {
 	/**
 	 * Rendering Evebnt update category
 	 */
-	public function wepa_create_update_ical_categories( $ical_cateories = array(), $source_taxonomy ){
+	public function wepa_create_update_ical_categories( $ical_categories = array(), $source_taxonomy ){
 
 		$event_cat_ids  = [];
-		foreach ( $ical_cateories as $category_name ) {
-			$term = term_exists( $category_name, $source_taxonomy );
-			if( $term && isset($term['term_id'] ) ) {
-				$event_cat_ids[] = (int) $term['term_id'];
-			} else {
-				$new_term = wp_insert_term( $category_name, $source_taxonomy );
-				if (!is_wp_error($new_term) && isset($new_term['term_id'])) {
-					$event_cat_ids[] = (int) $new_term['term_id'];
+		if( !empty( $ical_categories ) && !empty( $source_taxonomy ) ){
+			foreach ( $ical_categories as $category_name ) {
+				$term = term_exists( $category_name, $source_taxonomy );
+				if( $term && isset($term['term_id'] ) ) {
+					$event_cat_ids[] = (int) $term['term_id'];
+				} else {
+					$new_term = wp_insert_term( $category_name, $source_taxonomy );
+					if (!is_wp_error($new_term) && isset($new_term['term_id'])) {
+						$event_cat_ids[] = (int) $new_term['term_id'];
+					}
 				}
 			}
 		}
@@ -1522,6 +1524,40 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Sync API collection data
+	 */
+
+	public function wpea_insert_eventbrite_category_and_assing_into_event( $category_name ) {
+		global $importevents;
+
+		if ( empty( $category_name ) ) {
+			return [];
+		}
+
+		$taxonomy = $importevents->cpt->get_event_categroy_taxonomy();
+		$ecat_id = 0;
+
+		// Sanitize name
+		$name = sanitize_text_field( $category_name );
+		$term = term_exists( $name, $taxonomy );
+
+		if ( $term !== 0 && $term !== null ) {
+			if ( is_array( $term ) ) {
+				$ecat_id = (int) $term['term_id'];
+			} else {
+				$ecat_id = (int) $term;
+			}
+		} else {
+			$new_term = wp_insert_term( $name, $taxonomy );
+			if ( ! is_wp_error( $new_term ) && isset( $new_term['term_id'] ) ) {
+				$ecat_id = (int) $new_term['term_id'];
+			}
+		}
+
+		return $ecat_id;
+	}
+
+	/*
 	 * Filter has_post_thumbnail to return true when external image URL exists.
 	 *
 	 * @since 1.7.5
