@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-19T07:55:22+00:00\n"
+"POT-Creation-Date: 2026-05-26T13:29:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: wp-event-aggregator.php
 #: includes/class-wp-event-aggregator-admin.php:58
-#: includes/class-wp-event-aggregator-common.php:232
+#: includes/class-wp-event-aggregator-common.php:237
 #: templates/admin/wp-event-aggregator-wizard.php:6
 msgid "WP Event Aggregator"
 msgstr ""
@@ -38,7 +38,7 @@ msgid "Xylus Themes"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:61
-#: includes/class-wp-event-aggregator-common.php:1322
+#: includes/class-wp-event-aggregator-common.php:1327
 msgid "Dashboard"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgid "Shortcode"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:73
-#: includes/class-wp-event-aggregator-common.php:1352
+#: includes/class-wp-event-aggregator-common.php:1357
 msgid "Support"
 msgstr ""
 
@@ -92,7 +92,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-admin.php:76
 #: templates/admin/admin-sidebar.php:16
 #: templates/admin/admin-sidebar.php:19
-#: wp-event-aggregator.php:250
+#: wp-event-aggregator.php:252
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -274,17 +274,17 @@ msgid "Import Facebook Events"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:469
-#: includes/class-wp-event-aggregator-common.php:1436
+#: includes/class-wp-event-aggregator-common.php:1441
 msgid "Import Eventbrite Events"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:470
-#: includes/class-wp-event-aggregator-common.php:1438
+#: includes/class-wp-event-aggregator-common.php:1443
 msgid "Import Meetup Events"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:471
-#: includes/class-wp-event-aggregator-common.php:1435
+#: includes/class-wp-event-aggregator-common.php:1440
 msgid "WP Bulk Delete"
 msgstr ""
 
@@ -391,16 +391,20 @@ msgstr ""
 msgid "Event Espresso (EE4)"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:312
+#: includes/class-wp-event-aggregator-common.php:231
+msgid "Easy Events Calendar"
+msgstr ""
+
+#: includes/class-wp-event-aggregator-common.php:317
 msgid "Invalid image URL"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:587
+#: includes/class-wp-event-aggregator-common.php:592
 msgid "Event(s) successfully imported."
 msgstr ""
 
 #. translators: %d: Number of events Created.
-#: includes/class-wp-event-aggregator-common.php:590
+#: includes/class-wp-event-aggregator-common.php:595
 #: includes/class-wp-event-aggregator-list-table.php:132
 #: includes/class-wp-event-aggregator-list-table.php:394
 #: includes/class-wp-event-aggregator-list-table.php:596
@@ -409,7 +413,7 @@ msgid "%d Created"
 msgstr ""
 
 #. translators: %d: Number of events Updated.
-#: includes/class-wp-event-aggregator-common.php:594
+#: includes/class-wp-event-aggregator-common.php:599
 #: includes/class-wp-event-aggregator-list-table.php:136
 #: includes/class-wp-event-aggregator-list-table.php:398
 #: includes/class-wp-event-aggregator-list-table.php:600
@@ -418,13 +422,13 @@ msgid "%d Updated"
 msgstr ""
 
 #. translators: %d: Number of events Skipped.
-#: includes/class-wp-event-aggregator-common.php:598
+#: includes/class-wp-event-aggregator-common.php:603
 #, php-format
 msgid "%d Skipped (Already exists)"
 msgstr ""
 
 #. translators: %d: Number of events Skipped.
-#: includes/class-wp-event-aggregator-common.php:602
+#: includes/class-wp-event-aggregator-common.php:607
 #: includes/class-wp-event-aggregator-list-table.php:144
 #: includes/class-wp-event-aggregator-list-table.php:406
 #: includes/class-wp-event-aggregator-list-table.php:608
@@ -432,110 +436,110 @@ msgstr ""
 msgid "%d Skipped (Already exists in Trash)"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:606
+#: includes/class-wp-event-aggregator-common.php:611
 msgid "errors found"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:673
+#: includes/class-wp-event-aggregator-common.php:678
 msgid "Once Hourly"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:676
+#: includes/class-wp-event-aggregator-common.php:681
 msgid "Twice Daily"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:679
+#: includes/class-wp-event-aggregator-common.php:684
 msgid "Once Daily"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:682
+#: includes/class-wp-event-aggregator-common.php:687
 msgid "Once Weekly"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:685
+#: includes/class-wp-event-aggregator-common.php:690
 msgid "Once a Month"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:752
+#: includes/class-wp-event-aggregator-common.php:757
 msgid "One-time Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:753
+#: includes/class-wp-event-aggregator-common.php:758
 #: includes/class-wp-event-aggregator-list-table.php:185
 msgid "Scheduled Import"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:808
+#: includes/class-wp-event-aggregator-common.php:813
 #: includes/wpea-action-scheduler/action-scheduler/classes/ActionScheduler_AdminView.php:301
 #: includes/wpea-action-scheduler/action-scheduler/classes/ActionScheduler_ListTable.php:97
 msgid "Status"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:813
+#: includes/class-wp-event-aggregator-common.php:818
 msgid "Published"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:816
+#: includes/class-wp-event-aggregator-common.php:821
 #: includes/wpea-action-scheduler/action-scheduler/classes/abstracts/ActionScheduler_Store.php:456
 msgid "Pending"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:819
+#: includes/class-wp-event-aggregator-common.php:824
 msgid "Draft"
 msgstr ""
 
 #. translators: %s: Settings page URL.
-#: includes/class-wp-event-aggregator-common.php:927
+#: includes/class-wp-event-aggregator-common.php:932
 #, php-format
 msgid "The Access Token has been invalidated because the user has changed their password, or Facebook has changed the session for security reasons. Please reauthorize your Facebook account from <strong>WP Event Aggregator</strong> > <strong> <a style=\"text-decoration: none;\" href=\"%s\" target=\"_blank\">Settings</a> </strong>."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:944
+#: includes/class-wp-event-aggregator-common.php:949
 msgid "The current \"WP Event Aggregator Pro\" add-on is not compatible with the Free plugin. Please update to Pro for flawless importing."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:958
+#: includes/class-wp-event-aggregator-common.php:963
 msgid "Available in Pro version."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:958
+#: includes/class-wp-event-aggregator-common.php:963
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1350
+#: includes/class-wp-event-aggregator-common.php:1355
 msgid "Made with ♥ by the Xylus Themes"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1354
-#: wp-event-aggregator.php:242
+#: includes/class-wp-event-aggregator-common.php:1359
+#: wp-event-aggregator.php:244
 msgid "Docs"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1356
+#: includes/class-wp-event-aggregator-common.php:1361
 msgid "Free Plugins"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1437
+#: includes/class-wp-event-aggregator-common.php:1442
 msgid "Import Social Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1439
+#: includes/class-wp-event-aggregator-common.php:1444
 msgid "Event Schema / Structured Data"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1440
+#: includes/class-wp-event-aggregator-common.php:1445
 msgid "WP Smart Import : Import any XML File to WordPress"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1441
+#: includes/class-wp-event-aggregator-common.php:1446
 msgid "Xylus Events Calendar"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1442
+#: includes/class-wp-event-aggregator-common.php:1447
 msgid "XT Feed for LinkedIn"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-common.php:1788
+#: includes/class-wp-event-aggregator-common.php:1793
 msgid "Buy Tickets"
 msgstr ""
 
@@ -3134,11 +3138,11 @@ msgstr ""
 msgid "Organizer's Website"
 msgstr ""
 
-#: wp-event-aggregator.php:104
-#: wp-event-aggregator.php:111
+#: wp-event-aggregator.php:105
+#: wp-event-aggregator.php:112
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: wp-event-aggregator.php:237
+#: wp-event-aggregator.php:239
 msgid "Setting"
 msgstr ""
