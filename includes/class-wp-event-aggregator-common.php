@@ -226,6 +226,11 @@ class WP_Event_Aggregator_Common {
 			$supported_plugins['ee4'] = __( 'Event Espresso (EE4)', 'wp-event-aggregator' );
 		}
 
+		// Check Xylus Events Calendar
+		if ( class_exists( 'Xylus_Events_Calendar' ) ) {
+			$supported_plugins['xec'] = __( 'Easy Events Calendar', 'wp-event-aggregator' );
+		}
+
 		$wpea_options = get_option( WPEA_OPTIONS );
 		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
 		if( $deactive_wpevents != 'yes' ){
