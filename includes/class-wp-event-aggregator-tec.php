@@ -299,6 +299,8 @@ class WP_Event_Aggregator_TEC {
 			'post_author'  => isset( $event_args['event_author'] ) ? $event_args['event_author'] : get_current_user_id()
 		);
 		
+		$tec_event = $importevents->common->wpea_preserve_existing_event_data( $tec_event, $event_id );
+		
 		$update_event_id = wp_update_post( $tec_event, true );
 
 		if ( $update_event_id ) {
@@ -375,16 +377,14 @@ class WP_Event_Aggregator_TEC {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $event_id ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $update_event_id, $event_image, $event_args );
-			}else{
+			} elseif ( $importevents->common->wpea_is_event_image_updatable( $event_id ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $update_event_id, $default_thumb );
 				}else{
-					if ( $is_exitsing_event ) {
-						delete_post_thumbnail( $update_event_id );
-					}
+					delete_post_thumbnail( $update_event_id );
 				}
 			}
 

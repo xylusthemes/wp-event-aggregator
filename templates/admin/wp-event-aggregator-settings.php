@@ -857,6 +857,35 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                     </div>
 
+                    <!-- Do Not Update Data Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Do not update these data', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                                $dont_update_fields = isset( $aggregator_options['dont_update'] ) && is_array( $aggregator_options['dont_update'] ) ? $aggregator_options['dont_update'] : array();
+                                $dont_update_options = array(
+                                    'title'       => __( 'Title', 'wp-event-aggregator' ),
+                                    'description' => __( 'Description', 'wp-event-aggregator' ),
+                                    'image'       => __( 'Image', 'wp-event-aggregator' ),
+                                    'status'      => __( 'Status', 'wp-event-aggregator' ),
+                                    'categories'  => __( 'Categories', 'wp-event-aggregator' ),
+                                    'tags'        => __( 'Tags', 'wp-event-aggregator' ),
+                                );
+                            ?>
+                            <?php foreach ( $dont_update_options as $field_key => $field_label ) { ?>
+                                <label style="display:block; margin-bottom:5px;">
+                                    <input type="checkbox" name="wpea[dont_update][<?php echo esc_attr( $field_key ); ?>]" value="yes" <?php checked( isset( $dont_update_fields[ $field_key ] ) ? $dont_update_fields[ $field_key ] : 'no', 'yes' ); ?> />
+                                    <?php echo esc_html( $field_label ); ?>
+                                </label>
+                            <?php } ?>
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Checked fields will be preserved when an existing imported event is updated.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Default Event Thumbnail Section -->
                     <div class="wpea-inner-main-section" >
                         <div class="wpea-inner-section-1" >

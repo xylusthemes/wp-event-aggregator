@@ -126,6 +126,10 @@ class WP_Event_Aggregator_Aioec {
 			$eo_eventdata['post_status'] = get_post_status( $is_exitsing_event );
 		}
 
+		if ( $is_exitsing_event ) {
+			$eo_eventdata = $importevents->common->wpea_preserve_existing_event_data( $eo_eventdata, $is_exitsing_event );
+		}
+
 		$inserted_event_id = wp_insert_post( $eo_eventdata, true );
 
 		if ( ! is_wp_error( $inserted_event_id ) ) {
@@ -182,9 +186,9 @@ class WP_Event_Aggregator_Aioec {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $inserted_event_id, $event_image, $event_args );
-			}else{
+			}elseif ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $inserted_event_id, $default_thumb );
