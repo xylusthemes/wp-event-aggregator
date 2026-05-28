@@ -172,6 +172,21 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                     </div>
 
+                    <div class="wpea-inner-main-section"  >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Automatically Import and Assign Eventbrite Tags', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $eventbritre_tags = isset( $eventbrite_options['eventbritre_tags'] ) ? $eventbrite_options['eventbritre_tags'] : 'no';
+                            ?>
+                            <input type="checkbox" name="eventbrite[eventbritre_tags]" value="yes" <?php if ( $eventbritre_tags == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_html_e( 'Enable this option to automatically import Eventbrite tags and assign them in events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Private Events Section -->
                     <?php
                         $private_events     = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
@@ -867,7 +882,7 @@ if( is_object( $meetup_authorized_user ) ){
                             wp_enqueue_media();
 
                             $wpea_cfulb     = ' upload-button button-add-media button-add-site-icon ';
-                            $wpea_cfub      = ' button-add-site-icon  ';
+                            $wpea_cfub      = ' button  ';
                             $wpea_options   = get_option( WPEA_OPTIONS );
                             $wpea_edt_id    = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
                             $wpea_edt_url   = !empty( $wpea_edt_id ) ? wp_get_attachment_url( $wpea_edt_id ) : '';
@@ -883,7 +898,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <input type="hidden" name="wpea[wpea_event_default_thumbnail]" id="wpea-event_thumbnail_hidden_field" value="<?php echo esc_attr( $wpea_edt_id ); ?>" />
 
                             <div class="action-buttons">
-                                <button type="button" id="wpea-choose-from-library-button" class="button-add-site-icon"  >
+                                <button type="button" id="wpea-choose-from-library-button" class="button"  >
                                     <?php echo esc_attr( $button_text ); ?>
                                 </button>
                                 <button id="wpea-js-remove-thumbnail" type="button" class="reset <?php echo esc_attr( $remove_class ); ?><?php echo esc_attr( $wpea_cfub ); ?>" >
