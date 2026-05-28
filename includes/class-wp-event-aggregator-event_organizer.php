@@ -224,6 +224,12 @@ class WP_Event_Aggregator_Event_Organizer {
 				update_post_meta( $inserted_event_id, 'series_id', $series_id );
 			}
 			
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
+			}
+			
 			// Custom table Details
 			$event_array = array(
 				'post_id' 		   => $inserted_event_id,

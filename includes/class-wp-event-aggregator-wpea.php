@@ -282,6 +282,12 @@ class WP_Event_Aggregator_WPEA {
 				update_post_meta( $inserted_event_id, 'series_id', $series_id );
 			}
 
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
+			}
+
 
 			if ( $is_exitsing_event ) {
 				do_action( 'wpea_after_update_wpea_'.$centralize_array["origin"].'_event', $inserted_event_id, $centralize_array );
