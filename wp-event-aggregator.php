@@ -27,7 +27,7 @@ class WP_Event_Aggregator{
 	 * WP_Event_Aggregator The one true WP_Event_Aggregator.
 	 */
 	private static $instance;
-	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax, $eventbrite_api;
+	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax, $eventbrite_api, $ical_export;
 
     /**
      * Main WP Event Aggregator Instance.
@@ -56,6 +56,7 @@ class WP_Event_Aggregator{
 
 			self::$instance->includes();
 			self::$instance->common = new WP_Event_Aggregator_Common();
+			self::$instance->ical_export     = new WP_Event_Aggregator_Ical_Export();
 			self::$instance->ajax   = new WP_Event_Aggregator_Ajax();
 			self::$instance->cpt    = new WP_Event_Aggregator_Cpt();
 			self::$instance->eventbrite = new WP_Event_Aggregator_Eventbrite();
@@ -201,6 +202,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-public-api.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/parsedown.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/wpea-action-scheduler/wpea-image-init.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-ical-export.php';
 
 		// Gutenberg Block
 		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';

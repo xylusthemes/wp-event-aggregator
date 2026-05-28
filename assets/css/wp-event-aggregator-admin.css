@@ -2142,3 +2142,94 @@ input#current-page-selector {
   width : unset;
 } 
 /* public api option css end */
+
+
+.wpea-ical-export-card {
+  padding: 24px;
+}
+
+.wpea-ical-export-form .wpea-inner-main-section {
+  align-items: flex-start;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.wpea-ical-export-form .wpea-inner-main-section:first-of-type {
+  padding-top: 0;
+}
+
+.wpea-ical-export-form .wpea-inner-main-section:last-of-type {
+  border-bottom: 0;
+}
+
+.wpea-ical-export-form .wpea-inner-section-1 {
+  max-width: 220px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.wpea-ical-export-form .wpea-inner-section-2 {
+  max-width: 680px;
+}
+
+.wpea-ical-control {
+  width: 100%;
+  max-width: 520px;
+}
+
+.wpea-ical-number {
+  width: 140px;
+}
+
+.wpea-ical-inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.wpea-ical-inline-fields input[type="date"] {
+  min-width: 160px;
+}
+
+.wpea-ical-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.wpea-ical-checkboxes label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wpea-ical-actions {
+  margin-top: 20px;
+}
+
+@media (max-width: 782px) {
+  .wpea-ical-export-card {
+    padding: 18px;
+  }
+
+  .wpea-ical-export-form .wpea-inner-main-section {
+    display: block;
+  }
+
+  .wpea-ical-export-form .wpea-inner-section-1,
+  .wpea-ical-export-form .wpea-inner-section-2 {
+    width: 100%;
+    max-width: none;
+  }
+
+  .wpea-ical-export-form .wpea-inner-section-1 {
+    margin-bottom: 8px;
+  }
+}
+
+.wpea-ical-export-card input[type="search"], .wpea-ical-export-card select, .wpea-ical-export-card input[type="number"] {
+    width: 60%;
+    max-width: 100%;
+}

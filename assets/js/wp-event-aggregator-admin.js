@@ -405,4 +405,15 @@ jQuery(document).ready(function($) {
 
 		form.appendTo('body').submit();
 	});
+
+	jQuery(document).ready(function($) {
+		jQuery(document).on('change', '#wpea_ical_date_filter', function(){
+
+			if( jQuery(this).val() == 'range' ){
+				jQuery('.date-range-section').show();
+			} else {
+				jQuery('.date-range-section').hide();
+			}
+		});
+	});
 });
