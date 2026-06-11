@@ -367,16 +367,11 @@ class WP_Event_Aggregator_Meetup {
 	 */
 	public function convert_datetime_to_timezone_wise_datetime( $datetime, $timezone = false ) {
 		try {
-			$datetime = new DateTime( $datetime );
-			if( $timezone && $timezone !='' ){
-				try{
-					$datetime->setTimezone(new DateTimeZone( $timezone ) );
-				}catch ( Exception $ee ){ }
-			}
-			return $datetime->format( 'Y-m-d H:i:s' );
+			$e_datetime = ( new DateTime( $datetime ) )->format('Y-m-d H:i:s');
+			return $e_datetime;
 		}
 		catch ( Exception $e ) {
-		return $datetime;
+			return $datetime;
 		}
 	}
 
