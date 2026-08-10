@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-10T11:12:13+00:00\n"
+"POT-Creation-Date: 2026-08-10T13:12:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -105,7 +105,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-admin.php:115
 #: templates/admin/admin-sidebar.php:16
 #: templates/admin/admin-sidebar.php:19
-#: wp-event-aggregator.php:240
+#: wp-event-aggregator.php:270
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -528,7 +528,7 @@ msgid "Made with ♥ by the Xylus Themes"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:1432
-#: wp-event-aggregator.php:232
+#: wp-event-aggregator.php:262
 msgid "Docs"
 msgstr ""
 
@@ -913,7 +913,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-facebook.php:65
 #: includes/class-wp-event-aggregator-facebook.php:154
-#: includes/class-wp-event-aggregator-manage-import.php:325
+#: includes/class-wp-event-aggregator-manage-import.php:327
 msgid "Please insert Facebook app ID and app Secret."
 msgstr ""
 
@@ -1085,58 +1085,58 @@ msgstr ""
 msgid "Please provide Import into plugin for Event import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:136
+#: includes/class-wp-event-aggregator-manage-import.php:138
 msgid "Import settings has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:257
+#: includes/class-wp-event-aggregator-manage-import.php:259
 msgid "Please insert Eventbrite \"Personal OAuth token\" in settings."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:271
+#: includes/class-wp-event-aggregator-manage-import.php:273
 msgid "Please provide valid Eventbrite event ID."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:301
+#: includes/class-wp-event-aggregator-manage-import.php:303
 #: includes/class-wp-event-aggregator-meetup.php:67
 msgid "Please provide valid Meetup group URL."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:365
+#: includes/class-wp-event-aggregator-manage-import.php:367
 msgid "Please upload .ics file"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:378
+#: includes/class-wp-event-aggregator-manage-import.php:380
 msgid "Nothing to import."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:395
+#: includes/class-wp-event-aggregator-manage-import.php:397
 msgid "Scheduled import deleted successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:399
-#: includes/class-wp-event-aggregator-manage-import.php:419
+#: includes/class-wp-event-aggregator-manage-import.php:401
+#: includes/class-wp-event-aggregator-manage-import.php:421
 msgid "Scheduled imports successfully deleted."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:403
+#: includes/class-wp-event-aggregator-manage-import.php:405
 msgid "Scheduled import has been run successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:407
-#: includes/class-wp-event-aggregator-manage-import.php:411
+#: includes/class-wp-event-aggregator-manage-import.php:409
+#: includes/class-wp-event-aggregator-manage-import.php:413
 msgid "Import history successfully deleted."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:415
+#: includes/class-wp-event-aggregator-manage-import.php:417
 msgid "Scheduled import successfully updated."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:437
+#: includes/class-wp-event-aggregator-manage-import.php:439
 msgid "Google Maps API Key has been saved successfully."
 msgstr ""
 
-#: includes/class-wp-event-aggregator-manage-import.php:439
+#: includes/class-wp-event-aggregator-manage-import.php:441
 msgid "Something went wrong! please try again."
 msgstr ""
 
@@ -2558,11 +2558,11 @@ msgstr ""
 msgid "Organizer's Website"
 msgstr ""
 
-#: wp-event-aggregator.php:108
-#: wp-event-aggregator.php:115
+#: wp-event-aggregator.php:138
+#: wp-event-aggregator.php:145
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: wp-event-aggregator.php:227
+#: wp-event-aggregator.php:257
 msgid "Setting"
 msgstr ""
