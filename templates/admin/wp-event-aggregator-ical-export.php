@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $importevents;
 
-$export_post_type = $importevents->ical_export->get_export_post_type();
-$export_taxonomy  = $importevents->ical_export->get_export_taxonomy();
+$wpea_export_post_type = $importevents->ical_export->get_export_post_type();
+$wpea_export_taxonomy  = $importevents->ical_export->get_export_taxonomy();
 
 ?>
 
@@ -22,7 +22,7 @@ $export_taxonomy  = $importevents->ical_export->get_export_taxonomy();
 		<?php wp_nonce_field( 'wpea_export_ical_nonce_action', 'wpea_export_ical_nonce' ); ?>
 
 		<?php
-		if ( empty( $export_post_type ) || ! post_type_exists( $export_post_type ) ) : ?>
+		if ( empty( $wpea_export_post_type ) || ! post_type_exists( $wpea_export_post_type ) ) : ?>
 			<h3><?php esc_html_e( 'The Wp Event Aggregator post type is not available for export.', 'wp-event-aggregator' ); ?></h3>
 		<?php else : ?>
 			<div class="wpea-inner-main-section">
@@ -79,18 +79,18 @@ $export_taxonomy  = $importevents->ical_export->get_export_taxonomy();
 					<select id="wpea_ical_event_cat" name="event_cat" class="wpea-ical-control">
 						<option value="0"><?php esc_html_e( 'Any category', 'wp-event-aggregator' ); ?></option>
 						<?php
-						$terms = array();
-						if ( ! empty( $export_taxonomy ) && taxonomy_exists( $export_taxonomy ) ) {
-							$terms = get_terms(
+						$wpea_terms = array();
+						if ( ! empty( $wpea_export_taxonomy ) && taxonomy_exists( $wpea_export_taxonomy ) ) {
+							$wpea_terms = get_terms(
 								array(
-									'taxonomy'   => $export_taxonomy,
+									'taxonomy'   => $wpea_export_taxonomy,
 									'hide_empty' => false,
 								)
 							);
 						}
 
-						if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) :
-							foreach ( $terms as $term ) :
+						if ( ! is_wp_error( $wpea_terms ) && ! empty( $wpea_terms ) ) :
+							foreach ( $wpea_terms as $term ) :
 								?>
 								<option value="<?php echo esc_attr( $term->term_id ); ?>">
 									<?php echo esc_html( $term->name ); ?>

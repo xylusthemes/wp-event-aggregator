@@ -1701,7 +1701,7 @@ class WP_Event_Aggregator_Common {
 			return array();
 		}
 
-		$allowed_prefixes = apply_filters( 'iee_eventbrite_tag_prefixes', array( 'OrganizerTag' ) );
+		$allowed_prefixes = apply_filters( 'iee_eventbrite_tag_prefixes', array( 'OrganizerTag' ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$tag_names        = array();
 
 		foreach ( $eventbrite_tags as $eventbrite_tag ) {

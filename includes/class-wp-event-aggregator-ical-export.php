@@ -140,12 +140,12 @@ class WP_Event_Aggregator_Ical_Export {
 			'posts_per_page'        => $args['limit'],
 			'orderby'               => 'meta_value_num',
 			'order'                 => 'ASC',
-			'meta_key'              => 'start_ts',
-			'meta_query'            => $this->get_date_meta_query($args),
+			'meta_key'              => 'start_ts', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_query'            => $this->get_date_meta_query($args), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			'no_found_rows'         => true,
 			'update_post_meta_cache'=> true,
 			'update_post_term_cache'=> true,
-			'suppress_filters'      => true,
+			'suppress_filters'      => false,
 		);
 
 		if (!empty($args['s'])) {
@@ -157,7 +157,7 @@ class WP_Event_Aggregator_Ical_Export {
 			!empty($args['taxonomy']) &&
 			taxonomy_exists($args['taxonomy'])
 		) {
-			$query_args['tax_query'] = array(
+			$query_args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
 					'taxonomy' => $args['taxonomy'],
 					'field'    => 'term_id',
