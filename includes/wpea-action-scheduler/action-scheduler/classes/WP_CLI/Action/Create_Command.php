@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 namespace Action_Scheduler\WP_CLI\Action;
 
@@ -107,7 +108,7 @@ class Create_Command extends \ActionScheduler_WPCLI_Command {
 		}
 
 		if ( 0 === $action_id ) {
-			$e = new \Exception( __( 'Unable to create a scheduled action.', 'wp-event-aggregator' ) );
+			$e = new \Exception( __( 'Unable to create a scheduled action.', 'action-scheduler' ) );
 			$this->print_error( $e );
 		}
 
@@ -126,7 +127,7 @@ class Create_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::success(
 			sprintf(
 				/* translators: %1$s: type of action, %2$d: ID of the created action */
-				__( '%1$s action (%2$d) scheduled.', 'wp-event-aggregator' ),
+				__( '%1$s action (%2$d) scheduled.', 'action-scheduler' ),
 				ucfirst( $action_type ),
 				$action_id
 			)
@@ -144,7 +145,7 @@ class Create_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::error(
 			sprintf(
 				/* translators: %s refers to the exception error message. */
-				__( 'There was an error creating the scheduled action: %s', 'wp-event-aggregator' ),
+				__( 'There was an error creating the scheduled action: %s', 'action-scheduler' ),
 				$e->getMessage()
 			)
 		);

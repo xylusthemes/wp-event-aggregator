@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_DBStore
@@ -127,7 +128,7 @@ class ActionScheduler_DBStore extends ActionScheduler_Store {
 				if ( $unique ) {
 					return 0;
 				}
-				throw new \RuntimeException( $wpdb->last_error ? $wpdb->last_error : __( 'Database error.', 'wp-event-aggregator' ) );
+				throw new \RuntimeException( $wpdb->last_error ? $wpdb->last_error : __( 'Database error.', 'action-scheduler' ) );
 			}
 
 			do_action( 'action_scheduler_stored_action', $action_id );
@@ -135,7 +136,7 @@ class ActionScheduler_DBStore extends ActionScheduler_Store {
 			return $action_id;
 		} catch ( \Exception $e ) {
 			/* translators: %s: error message */
-			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'wp-event-aggregator' ), $e->getMessage() ), 0 );
+			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'action-scheduler' ), $e->getMessage() ), 0 );
 		}
 	}
 
@@ -168,7 +169,6 @@ SELECT $placeholder_sql FROM DUAL
 WHERE ( $where_clause ) IS NULL",
 			$values
 		);
-		// phpcs:enable
 
 		return $insert_query;
 	}
@@ -202,16 +202,17 @@ SELECT action_id FROM $table_name
 WHERE status IN ( $pending_status_placeholders )
 AND hook = %s
 AND `group_id` = %d
+AND args = %s
 ",
 			array_merge(
 				$pending_statuses,
 				array(
 					$data['hook'],
 					$data['group_id'],
+					$data['args'],
 				)
 			)
 		);
-		// phpcs:enable
 
 		return "$where_clause" . ' LIMIT 1';
 	}
@@ -391,17 +392,22 @@ AND `group_id` = %d
 	 * @return ActionScheduler_Action|ActionScheduler_CanceledAction|ActionScheduler_FinishedAction
 	 */
 	protected function make_action_from_db_record( $data ) {
-
-		$hook     = $data->hook;
-		$args     = json_decode( $data->args, true );
-		$schedule = unserialize( $data->schedule ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
-
-		$this->validate_args( $args, $data->action_id );
-		$this->validate_schedule( $schedule, $data->action_id );
-
-		if ( empty( $schedule ) ) {
-			$schedule = new ActionScheduler_NullSchedule();
+		$args = json_decode( $data->args, true );
+		if ( ! is_array( $args ) && $data->status === self::STATUS_CANCELED ) {
+			// The handled corrupted action should appear in UI.
+			$args = array();
+		} else {
+			$this->validate_args( $args, $data->action_id );
 		}
+
+		$schedule = @unserialize( $data->schedule ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize WordPress.PHP.NoSilencingOperator
+		if ( false === $schedule && $data->status === self::STATUS_CANCELED ) {
+			// The handled corrupted action should appear in UI.
+			$schedule = new ActionScheduler_NullSchedule();
+		} else {
+			$this->validate_schedule( $schedule, $data->action_id );
+		}
+
 		$group = $data->group ? $data->group : '';
 
 		return ActionScheduler::factory()->get_stored_action( $data->status, $data->hook, $args, $schedule, $group, $data->priority );
@@ -422,7 +428,7 @@ AND `group_id` = %d
 	protected function get_query_actions_sql( array $query, $select_or_count = 'select' ) {
 
 		if ( ! in_array( $select_or_count, array( 'select', 'count' ), true ) ) {
-			throw new InvalidArgumentException( __( 'Invalid value for select or count parameter. Cannot query actions.', 'wp-event-aggregator' ) );
+			throw new InvalidArgumentException( __( 'Invalid value for select or count parameter. Cannot query actions.', 'action-scheduler' ) );
 		}
 
 		$query = wp_parse_args(
@@ -487,7 +493,7 @@ AND `group_id` = %d
 			switch ( $query['partial_args_matching'] ) {
 				case 'json':
 					if ( ! $supports_json ) {
-						throw new \RuntimeException( __( 'JSON partial matching not supported in your environment. Please check your MySQL/MariaDB version.', 'wp-event-aggregator' ) );
+						throw new \RuntimeException( __( 'JSON partial matching not supported in your environment. Please check your MySQL/MariaDB version.', 'action-scheduler' ) );
 					}
 					$supported_types = array(
 						'integer' => '%d',
@@ -505,7 +511,7 @@ AND `group_id` = %d
 							throw new \RuntimeException(
 								sprintf(
 									/* translators: %s: provided value type */
-									__( 'The value type for the JSON partial matching is not supported. Must be either integer, boolean, double or string. %s type provided.', 'wp-event-aggregator' ),
+									__( 'The value type for the JSON partial matching is not supported. Must be either integer, boolean, double or string. %s type provided.', 'action-scheduler' ),
 									$value_type
 								)
 							);
@@ -527,7 +533,7 @@ AND `group_id` = %d
 					$sql_params[] = $this->get_args_for_query( $query['args'] );
 					break;
 				default:
-					throw new \RuntimeException( __( 'Unknown partial args matching value.', 'wp-event-aggregator' ) );
+					throw new \RuntimeException( __( 'Unknown partial args matching value.', 'action-scheduler' ) );
 			}
 		}
 
@@ -696,7 +702,7 @@ AND `group_id` = %d
 		);
 		if ( false === $updated ) {
 			/* translators: %s: action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to cancel this action. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to cancel this action. It may may have been deleted by another process.', 'action-scheduler' ), $action_id ) );
 		}
 		do_action( 'action_scheduler_canceled_action', $action_id );
 	}
@@ -798,7 +804,7 @@ AND `group_id` = %d
 		$deleted = $wpdb->delete( $wpdb->actionscheduler_actions, array( 'action_id' => $action_id ), array( '%d' ) );
 		if ( empty( $deleted ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to delete this action. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to delete this action. It may may have been deleted by another process.', 'action-scheduler' ), $action_id ) );
 		}
 		do_action( 'action_scheduler_deleted_action', $action_id );
 	}
@@ -835,7 +841,7 @@ AND `group_id` = %d
 		$record = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->actionscheduler_actions} WHERE action_id=%d", $action_id ) );
 		if ( empty( $record ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to determine the date of this action. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to determine the date of this action. It may may have been deleted by another process.', 'action-scheduler' ), $action_id ) );
 		}
 		if ( self::STATUS_PENDING === $record->status ) {
 			return as_get_datetime_object( $record->scheduled_date_gmt );
@@ -976,7 +982,7 @@ AND `group_id` = %d
 							'The group "%s" does not exist.',
 							'The groups "%s" do not exist.',
 							is_array( $group ) ? count( $group ) : 1,
-							'wp-event-aggregator'
+							'action-scheduler'
 						),
 						$group
 					)
@@ -1014,12 +1020,12 @@ AND `group_id` = %d
 		$rows_affected = $wpdb->query( $wpdb->prepare( $update_sql, $update_params ) );
 		if ( false === $rows_affected ) {
 			$error = empty( $wpdb->last_error )
-				? _x( 'unknown', 'database error', 'wp-event-aggregator' )
+				? _x( 'unknown', 'database error', 'action-scheduler' )
 				: $wpdb->last_error;
 			throw new \RuntimeException(
 				sprintf(
 					/* translators: %s database error. */
-					__( 'Unable to claim actions. Database error: %s.', 'wp-event-aggregator' ),
+					__( 'Unable to claim actions. Database error: %s.', 'action-scheduler' ),
 					$error
 				)
 			);
@@ -1073,7 +1079,16 @@ AND `group_id` = %d
 	public function get_claim_count() {
 		global $wpdb;
 
-		$sql = "SELECT COUNT(DISTINCT claim_id) FROM {$wpdb->actionscheduler_actions} WHERE claim_id != 0 AND status IN ( %s, %s)";
+		$sql = "
+			SELECT COUNT(*)
+			FROM {$wpdb->actionscheduler_claims} c
+			WHERE EXISTS (
+				SELECT 1
+				FROM {$wpdb->actionscheduler_actions} a
+				WHERE a.claim_id = c.claim_id
+				AND a.status IN ( %s, %s )
+			)
+		";
 		$sql = $wpdb->prepare( $sql, array( self::STATUS_PENDING, self::STATUS_RUNNING ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		return (int) $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -1175,7 +1190,7 @@ AND `group_id` = %d
 			throw new RuntimeException(
 				sprintf(
 					// translators: %d is an id.
-					__( 'Unable to release actions from claim id %d.', 'wp-event-aggregator' ),
+					__( 'Unable to release actions from claim id %d.', 'action-scheduler' ),
 					$claim->get_id()
 				)
 			);
@@ -1222,14 +1237,18 @@ AND `group_id` = %d
 
 		$updated = $wpdb->update(
 			$wpdb->actionscheduler_actions,
-			array( 'status' => self::STATUS_FAILED ),
+			array(
+				'status'             => self::STATUS_FAILED,
+				'last_attempt_gmt'   => current_time( 'mysql', true ),
+				'last_attempt_local' => current_time( 'mysql' ),
+			),
 			array( 'action_id' => $action_id ),
-			array( '%s' ),
+			array( '%s', '%s', '%s' ),
 			array( '%d' )
 		);
 		if ( empty( $updated ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having failed. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having failed. It may may have been deleted by another process.', 'action-scheduler' ), $action_id ) );
 		}
 	}
 
@@ -1260,7 +1279,7 @@ AND `group_id` = %d
 			throw new Exception(
 				sprintf(
 					/* translators: 1: action ID. 2: status slug. */
-					__( 'Unable to update the status of action %1$d to %2$s.', 'wp-event-aggregator' ),
+					__( 'Unable to update the status of action %1$d to %2$s.', 'action-scheduler' ),
 					$action_id,
 					self::STATUS_RUNNING
 				)
@@ -1292,12 +1311,12 @@ AND `group_id` = %d
 				'last_attempt_local' => current_time( 'mysql' ),
 			),
 			array( 'action_id' => $action_id ),
-			array( '%s' ),
+			array( '%s', '%s', '%s' ),
 			array( '%d' )
 		);
 		if ( empty( $updated ) ) {
 			/* translators: %s is the action ID */
-			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having completed. It may may have been deleted by another process.', 'wp-event-aggregator' ), $action_id ) );
+			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having completed. It may may have been deleted by another process.', 'action-scheduler' ), $action_id ) );
 		}
 
 		/**
@@ -1332,9 +1351,9 @@ AND `group_id` = %d
 		$status = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( is_null( $status ) ) {
-			throw new \InvalidArgumentException( __( 'Invalid action ID. No status found.', 'wp-event-aggregator' ) );
+			throw new \InvalidArgumentException( __( 'Invalid action ID. No status found.', 'action-scheduler' ) );
 		} elseif ( empty( $status ) ) {
-			throw new \RuntimeException( __( 'Unknown status found for action.', 'wp-event-aggregator' ) );
+			throw new \RuntimeException( __( 'Unknown status found for action.', 'action-scheduler' ) );
 		} else {
 			return $status;
 		}

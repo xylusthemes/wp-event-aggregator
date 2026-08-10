@@ -178,6 +178,12 @@ class WP_Event_Aggregator_TEC {
 				update_post_meta( $new_event_id, 'series_id', $series_id );
 			}
 
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $new_event_id, 'discount_code', $discount_code );
+			}
+
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
 
@@ -248,15 +254,13 @@ class WP_Event_Aggregator_TEC {
 			// insert the $wpdb->prefix.tec_events table
 			$tetable_name   = $wpdb->prefix . 'tec_events';
 			$tedata         = array( 'post_id'   => $new_event_id, 'start_date' => $start_time, 'end_date'  => $end_time, 'timezone'  => $timezone, 'start_date_utc' => $start_date_utc, 'end_date_utc' => $end_date_utc );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->insert( $tetable_name, $tedata );
+			$wpdb->insert( $tetable_name, $tedata ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$tec_e_id       = $wpdb->insert_id;
 
 			// Update the $wpdb->prefix.tec_occurrences table
 			$totable_name   = $wpdb->prefix . 'tec_occurrences';
 			$todata         = array( 'event_id' => $tec_e_id, 'post_id' => $new_event_id, 'start_date' => $start_time, 'start_date_utc' => $start_date_utc, 'end_date' => $end_time, 'end_date_utc' => $end_date_utc, 'hash' => $hash );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->insert( $totable_name, $todata );
+			$wpdb->insert( $totable_name, $todata ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 			do_action( 'wpea_after_create_tec_' . $centralize_array['origin'] . '_event', $new_event_id, $formated_args, $centralize_array );
 			return array(
@@ -299,6 +303,8 @@ class WP_Event_Aggregator_TEC {
 			'post_author'  => isset( $event_args['event_author'] ) ? $event_args['event_author'] : get_current_user_id()
 		);
 		
+		$tec_event = $importevents->common->wpea_preserve_existing_event_data( $tec_event, $event_id );
+		
 		$update_event_id = wp_update_post( $tec_event, true );
 
 		if ( $update_event_id ) {
@@ -324,6 +330,12 @@ class WP_Event_Aggregator_TEC {
 			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
 			if( !empty( $series_id ) ){
 				update_post_meta( $update_event_id, 'series_id', $series_id );
+			}
+
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $update_event_id, 'discount_code', $discount_code );
 			}
 			
 			delete_post_meta( $update_event_id, '_tribe_is_classic_editor' );
@@ -375,16 +387,14 @@ class WP_Event_Aggregator_TEC {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $event_id ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $update_event_id, $event_image, $event_args );
-			}else{
+			} elseif ( $importevents->common->wpea_is_event_image_updatable( $event_id ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $update_event_id, $default_thumb );
 				}else{
-					if ( $is_exitsing_event ) {
-						delete_post_thumbnail( $update_event_id );
-					}
+					delete_post_thumbnail( $update_event_id );
 				}
 			}
 
@@ -401,15 +411,13 @@ class WP_Event_Aggregator_TEC {
 			$tetable_name   = $wpdb->prefix . 'tec_events';
 			$tedata         = array( 'start_date' => $start_time, 'end_date' => $end_time, 'timezone' => $timezone, 'start_date_utc' => $start_date_utc, 'end_date_utc' => $end_date_utc );
 			$where          = array( 'post_id' => $update_event_id );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->update( $tetable_name, $tedata, $where );
+			$wpdb->update( $tetable_name, $tedata, $where ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			//update the $wpdb->prefix.tec_occurrences table
 			$totable_name   = $wpdb->prefix . 'tec_occurrences';
 			$todata         = array( 'start_date' => $start_time, 'start_date_utc' => $start_date_utc, 'end_date' => $end_time, 'end_date_utc' => $end_date_utc  );
 			$where          = array( 'post_id' => $update_event_id );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->update( $totable_name, $todata, $where );
+			$wpdb->update( $totable_name, $todata, $where ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 
 			do_action( 'wpea_after_update_tec_' . $centralize_array['origin'] . '_event', $update_event_id, $formated_args, $centralize_array );

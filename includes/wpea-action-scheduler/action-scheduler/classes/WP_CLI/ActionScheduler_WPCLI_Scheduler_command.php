@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Commands for Action Scheduler.
@@ -27,7 +28,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 				WP_CLI::success(
 					sprintf(
 						/* translators: %s refers to the schema name*/
-						__( 'Registered schema for %s', 'wp-event-aggregator' ),
+						__( 'Registered schema for %s', 'action-scheduler' ),
 						$classname
 					)
 				);
@@ -147,7 +148,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::log(
 			sprintf(
 				/* translators: %d refers to how many scheduled tasks were found to run */
-				_n( 'Found %d scheduled task', 'Found %d scheduled tasks', $total, 'wp-event-aggregator' ),
+				_n( 'Found %d scheduled task', 'Found %d scheduled tasks', $total, 'action-scheduler' ),
 				$total
 			)
 		);
@@ -162,7 +163,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::log(
 			sprintf(
 				/* translators: %d refers to the total number of batches executed */
-				_n( '%d batch executed.', '%d batches executed.', $batches_completed, 'wp-event-aggregator' ),
+				_n( '%d batch executed.', '%d batches executed.', $batches_completed, 'action-scheduler' ),
 				$batches_completed
 			)
 		);
@@ -179,7 +180,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::error(
 			sprintf(
 				/* translators: %s refers to the exception error message */
-				__( 'There was an error running the action scheduler: %s', 'wp-event-aggregator' ),
+				__( 'There was an error running the action scheduler: %s', 'action-scheduler' ),
 				$e->getMessage()
 			)
 		);
@@ -194,7 +195,7 @@ class ActionScheduler_WPCLI_Scheduler_command extends WP_CLI_Command {
 		WP_CLI::success(
 			sprintf(
 				/* translators: %d refers to the total number of tasks completed */
-				_n( '%d scheduled task completed.', '%d scheduled tasks completed.', $actions_completed, 'wp-event-aggregator' ),
+				_n( '%d scheduled task completed.', '%d scheduled tasks completed.', $actions_completed, 'action-scheduler' ),
 				$actions_completed
 			)
 		);

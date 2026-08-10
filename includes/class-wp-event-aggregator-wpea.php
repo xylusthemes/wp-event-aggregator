@@ -16,6 +16,9 @@ class WP_Event_Aggregator_WPEA {
 	// Event Taxonomy
 	protected $taxonomy;
 
+	// Event Taxonomy
+	protected $tags;
+
 	// Event Posttype
 	protected $event_posttype;
 
@@ -28,6 +31,7 @@ class WP_Event_Aggregator_WPEA {
 		
 		$this->event_posttype = 'wp_events';
 		$this->taxonomy = 'event_category';
+		$this->tags = 'event_tag';
 
 	}
 
@@ -42,6 +46,9 @@ class WP_Event_Aggregator_WPEA {
 	}	
 	public function get_taxonomy(){
 		return $this->taxonomy;
+	}
+	public function get_tags(){
+		return $this->tags;
 	}
 
 	/**
@@ -90,6 +97,7 @@ class WP_Event_Aggregator_WPEA {
 		$online_event = !empty( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : false ;
 		$timezone     = isset( $centralize_array['timezone'] ) ? sanitize_text_field(  $centralize_array['timezone'] ) : '';
 		$timezone_name = isset( $centralize_array['timezone_name'] ) ? sanitize_text_field(  $centralize_array['timezone_name'] ) : '';
+		$post_description = $importevents->htmltblock->convert( $post_description );
 
 		$emeventdata = array(
 			'post_title'  => $post_title,
@@ -108,6 +116,10 @@ class WP_Event_Aggregator_WPEA {
 		if ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable('status') ) {
 			$emeventdata['post_status'] = get_post_status( $is_exitsing_event );
 			$event_args['event_status'] = get_post_status( $is_exitsing_event );
+		}
+
+		if ( $is_exitsing_event ) {
+			$emeventdata = $importevents->common->wpea_preserve_existing_event_data( $emeventdata, $is_exitsing_event );
 		}
 
 		$inserted_event_id = wp_insert_post( $emeventdata, true );
@@ -164,6 +176,33 @@ class WP_Event_Aggregator_WPEA {
 				}
 			}
 
+			// Assign Eventbrite tags.
+			$is_insert_etags = isset( $wpea_options['eventbrite']['eventbritre_tags'] ) ? $wpea_options['eventbrite']['eventbritre_tags'] : 'no';
+			$wpea_tags       = isset( $event_args['event_tag'] ) && is_array( $event_args['event_tag'] ) ? $event_args['event_tag'] : array();
+			$e_tags          = isset( $centralize_array['e_tags'] ) && is_array( $centralize_array['e_tags'] ) ? $centralize_array['e_tags'] : array();
+
+			if ( 'yes' === $is_insert_etags && ! ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable( 'tags' ) ) ) {
+				$eventbrite_tag_ids = $importevents->common->insert_eventbrite_tags_and_assing_into_event( $e_tags, $this->tags );
+
+				if ( ! empty( $eventbrite_tag_ids ) ) {
+					$wpea_tags = array_merge( $wpea_tags, $eventbrite_tag_ids );
+				}
+			}
+
+			if ( ! empty( $wpea_tags ) ) {
+				foreach ( $wpea_tags as $iee_tagk => $iee_tagv ) {
+					$wpea_tags[ $iee_tagk ] = (int) $iee_tagv;
+				}
+
+				$wpea_tags = array_unique( $wpea_tags );
+			}
+
+			if ( ! empty( $wpea_tags ) ) {
+				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('tags') )) {
+					wp_set_object_terms( $inserted_event_id, $wpea_tags, $this->tags );
+				}
+			}
+
 			// Assign Featured images
 			$event_image = $centralize_array['image_url'] ?? '';
 			$url         = $centralize_array['url'] ?? '';
@@ -180,9 +219,9 @@ class WP_Event_Aggregator_WPEA {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $inserted_event_id, $event_image, $event_args );
-			}else{
+			} elseif ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $inserted_event_id, $default_thumb );
@@ -280,6 +319,12 @@ class WP_Event_Aggregator_WPEA {
 			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
 			if( !empty( $series_id ) ){
 				update_post_meta( $inserted_event_id, 'series_id', $series_id );
+			}
+
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
 			}
 
 

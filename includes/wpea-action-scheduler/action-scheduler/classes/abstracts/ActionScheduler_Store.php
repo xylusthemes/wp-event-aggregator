@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_Store
@@ -374,7 +375,7 @@ abstract class ActionScheduler_Store extends ActionScheduler_Store_Deprecated {
 	protected function validate_action( ActionScheduler_Action $action ) {
 		if ( strlen( wp_json_encode( $action->get_args() ) ) > static::$max_args_length ) {
 			// translators: %d is a number (maximum length of action arguments).
-			throw new InvalidArgumentException( sprintf( __( 'ActionScheduler_Action::$args too long. To ensure the args column can be indexed, action args should not be more than %d characters when encoded as JSON.', 'wp-event-aggregator' ), static::$max_args_length ) );
+			throw new InvalidArgumentException( sprintf( __( 'ActionScheduler_Action::$args too long. To ensure the args column can be indexed, action args should not be more than %d characters when encoded as JSON.', 'action-scheduler' ), static::$max_args_length ) );
 		}
 	}
 
@@ -452,11 +453,11 @@ abstract class ActionScheduler_Store extends ActionScheduler_Store_Deprecated {
 	 */
 	public function get_status_labels() {
 		return array(
-			self::STATUS_COMPLETE => __( 'Complete', 'wp-event-aggregator' ),
-			self::STATUS_PENDING  => __( 'Pending', 'wp-event-aggregator' ),
-			self::STATUS_RUNNING  => __( 'In-progress', 'wp-event-aggregator' ),
-			self::STATUS_FAILED   => __( 'Failed', 'wp-event-aggregator' ),
-			self::STATUS_CANCELED => __( 'Canceled', 'wp-event-aggregator' ),
+			self::STATUS_COMPLETE => __( 'Complete', 'action-scheduler' ),
+			self::STATUS_PENDING  => __( 'Pending', 'action-scheduler' ),
+			self::STATUS_RUNNING  => __( 'In-progress', 'action-scheduler' ),
+			self::STATUS_FAILED   => __( 'Failed', 'action-scheduler' ),
+			self::STATUS_CANCELED => __( 'Canceled', 'action-scheduler' ),
 		);
 	}
 

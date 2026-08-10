@@ -123,6 +123,10 @@ class WP_Event_Aggregator_Event_Organizer {
 			$event_args['event_status'] = get_post_status( $is_exitsing_event );
 		}
 
+		if ( $is_exitsing_event ) {
+			$eo_eventdata = $importevents->common->wpea_preserve_existing_event_data( $eo_eventdata, $is_exitsing_event );
+		}
+
 		$inserted_event_id = wp_insert_post( $eo_eventdata, true );
 
 		if ( ! is_wp_error( $inserted_event_id ) ) {
@@ -179,9 +183,9 @@ class WP_Event_Aggregator_Event_Organizer {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $inserted_event_id, $event_image, $event_args );
-			}else{
+			} elseif ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $inserted_event_id, $default_thumb );
@@ -224,6 +228,12 @@ class WP_Event_Aggregator_Event_Organizer {
 				update_post_meta( $inserted_event_id, 'series_id', $series_id );
 			}
 			
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
+			}
+			
 			// Custom table Details
 			$event_array = array(
 				'post_id' 		   => $inserted_event_id,
@@ -234,15 +244,12 @@ class WP_Event_Aggregator_Event_Organizer {
 				'event_occurrence' => 0,
 			);
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_db_table WHERE `post_id` = ".absint( $inserted_event_id ) );
+			$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_db_table WHERE `post_id` = ".absint( $inserted_event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			if( $event_count > 0 && is_numeric( $event_count ) ){
 				$where = array( 'post_id' => absint( $inserted_event_id ) );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->update( $this->event_db_table , $event_array, $where );	
+				$wpdb->update( $this->event_db_table , $event_array, $where ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}else{
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->insert( $this->event_db_table , $event_array );
+				$wpdb->insert( $this->event_db_table , $event_array ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
 
 			// Save location Data
@@ -272,54 +279,51 @@ class WP_Event_Aggregator_Event_Organizer {
 				$lon     = !empty( $venue['long'] ) ? round( $venue['long'], 6 ) : 0.000000;
 				$country = isset( $venue['country'] ) ? $venue['country'] : '';
 
-				$loc_term_meta = array();
-				$$loc_term_meta[] = array(
+				$wpea_loc_term_meta = array();
+				$wpea_loc_term_meta[] = array( 
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_address', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $address,   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
-				$loc_term_meta[] = array(
+				$wpea_loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_city',   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $city,     // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
-				$loc_term_meta[] = array(
+				$wpea_loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_state',   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $state,     // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
-				$loc_term_meta[] = array(
+				$wpea_loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_postcode',  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $zip,         // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
-				$loc_term_meta[] = array(
+				$wpea_loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_country',  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $country,    // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
-				$loc_term_meta[] = array(
+				$wpea_loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_lat',  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $lat,    // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);
-				$loc_term_meta[] = array(
+				$wpea_loc_term_meta[] = array(
 					'eo_venue_id' => $loc_term_id,
 					'meta_key' 	  => '_lng', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key 
 					'meta_value'  => $lon,   // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value 
 				);	
 
-				if( !empty( $loc_term_meta ) ){
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$meta_keys = $wpdb->get_col( "SELECT `meta_key` FROM {$wpdb->prefix}eo_venuemeta WHERE `eo_venue_id` = ".$loc_term_id );
-					foreach ($loc_term_meta as $loc_value) {
+				if( !empty( $wpea_loc_term_meta ) ){
+					$meta_keys = $wpdb->get_col( "SELECT `meta_key` FROM {$wpdb->prefix}eo_venuemeta WHERE `eo_venue_id` = ".$loc_term_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+					foreach ($wpea_loc_term_meta as $loc_value) {
 						if( in_array( $loc_value['meta_key'], $meta_keys) ){
 							$where = array( 'eo_venue_id' => absint( $loc_term_id ), 'meta_key' => $loc_value['meta_key'] ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-							// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-							$wpdb->update( $this->venue_db_table , $loc_value, $where );	
+							$wpdb->update( $this->venue_db_table , $loc_value, $where ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 						}else{
-							// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-							$wpdb->insert( $this->venue_db_table , $loc_value );
+							$wpdb->insert( $this->venue_db_table , $loc_value ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 						}			
 					}
 				}

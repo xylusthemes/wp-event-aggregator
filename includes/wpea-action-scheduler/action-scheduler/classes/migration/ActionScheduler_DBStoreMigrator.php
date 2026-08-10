@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_DBStoreMigrator
@@ -46,7 +47,7 @@ class ActionScheduler_DBStoreMigrator extends ActionScheduler_DBStore {
 			return $action_id;
 		} catch ( \Exception $e ) {
 			// translators: %s is an error message.
-			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'wp-event-aggregator' ), $e->getMessage() ), 0 );
+			throw new \RuntimeException( sprintf( __( 'Error saving action: %s', 'action-scheduler' ), $e->getMessage() ), 0 );
 		}
 	}
 }

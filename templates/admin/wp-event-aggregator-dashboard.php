@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $importevents;
-$counts = $importevents->common->wpea_get_wpea_events_counts();
+$wpea_counts = $importevents->common->wpea_get_wpea_events_counts();
 
 ?>
 <div class="wpea-container" style="margin-top: 60px;">
@@ -40,19 +40,19 @@ $counts = $importevents->common->wpea_get_wpea_events_counts();
                                         <div class="wpea-counter-main-container" >
                                             <div class="wpea-col-sm-3" >
                                                 <div class="wpea-w-box " >
-                                                    <p class="wpea_dash_count"><?php echo esc_attr( $counts['all'] ); ?></p>
+                                                    <p class="wpea_dash_count"><?php echo esc_attr( $wpea_counts['all'] ); ?></p>
                                                     <span><strong><?php esc_attr_e( 'Total Events', 'wp-event-aggregator' ); ?></strong></span>
                                                 </div>
                                             </div>
                                             <div class="wpea-col-sm-3" >
                                                 <div class="wpea-w-box " >
-                                                    <p class="wpea_dash_count"><?php echo esc_attr( $counts['upcoming'] ); ?></p>
+                                                    <p class="wpea_dash_count"><?php echo esc_attr( $wpea_counts['upcoming'] ); ?></p>
                                                     <span><strong><?php esc_attr_e( 'Upcoming Events', 'wp-event-aggregator' ); ?></strong></span>
                                                 </div>
                                             </div>
                                             <div class="wpea-col-sm-3" >
                                                 <div class="wpea-w-box " >
-                                                    <p class="wpea_dash_count"><?php echo esc_attr( $counts['past'] ); ?></p>
+                                                    <p class="wpea_dash_count"><?php echo esc_attr( $wpea_counts['past'] ); ?></p>
                                                     <span><strong><?php esc_attr_e( 'Past Events', 'wp-event-aggregator' ); ?></strong></span>
                                                 </div>
                                             </div>

@@ -40,11 +40,30 @@ class WP_Event_Aggregator_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles') );
 		add_action( 'wpea_display_all_notice', array( $this, 'wpea_display_notices' ) );
 		add_filter( 'submenu_file', array( $this, 'get_selected_tab_submenu_wpea' ) );
+		add_filter( 'parent_file', array( $this, 'get_selected_tab_parent_wpea' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_event_aggregator_credit' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget') );
 		add_action( 'admin_action_wpea_view_import_history',  array( $this, 'wpea_view_import_history_handler' ) );
 		add_action( 'admin_init', array( $this, 'setup_success_messages' ) );
 		add_action( 'admin_init', array( $this, 'wpea_wp_cron_check' ) );
+		add_action( 'admin_menu', array( $this, 'wpea_widget_free_page' ) ); 
+	}
+
+	function wpea_widget_free_page() {
+		if ( ! post_type_exists( 'wpeapro_live_feed' ) && ! defined( 'WPEAPRO_VERSION' ) ) {
+			add_submenu_page(
+				null,
+				__( 'WP Event Aggregator Widget', 'wp-event-aggregator' ),
+				__( 'WP Event Aggregator Widget', 'wp-event-aggregator' ),
+				'manage_options',
+				'wpea_import_events_feed_upgrade',
+				array( $this, 'wpea_render_feed_upgrade_page' )
+			);
+		}
+	}
+
+	function wpea_render_feed_upgrade_page() {
+		require WPEA_PLUGIN_DIR . 'templates/admin/feed-upgrade-page.php';
 	}
 
 	/**
@@ -59,6 +78,25 @@ class WP_Event_Aggregator_Admin {
 
 		global $submenu;	
 		$submenu['import_events'][] = array( __( 'Dashboard', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=dashboard' ) );
+		if ( post_type_exists( 'wpeapro_live_feed' ) || defined( 'WPEAPRO_VERSION' ) ) {
+			$submenu['import_events'][] = array(
+				'<span style="display:flex; justify-content:space-between; align-items:center; width:100%;">' 
+					. __( 'WP Event Aggregator Widget', 'wp-event-aggregator' ) 
+					. '<span style="background:#4CAF50; margin-left:6px; flex-shrink:0;height: 22px;border-radius: 3px;color: #FFF;font-size: 12px;line-height: 18px;font-weight: 600;display: inline-flex;padding: 0 4px;align-items: center;">NEW</span>'
+				. '</span>',
+				'manage_options',
+				'edit.php?post_type=wpeapro_live_feed'
+			);
+		} else {
+			$submenu['import_events'][] = array(
+				'<span style="display:flex; justify-content:space-between; align-items:center; width:100%;">' 
+					. __( 'WP Event Aggregator Widget', 'wp-event-aggregator' ) 
+					. '<span style="background:#4CAF50; margin-left:6px; flex-shrink:0;height:22px;border-radius:3px;color:#FFF;font-size:12px;line-height:18px;font-weight:600;display:inline-flex;padding:0 4px;align-items:center;">NEW</span>'
+				. '</span>',
+				'manage_options',
+				'admin.php?page=wpea_import_events_feed_upgrade'
+			);
+		}
 		$submenu['import_events'][] = array( __( 'Eventbrite Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=eventbrite' ) );
     	$submenu['import_events'][] = array( __( 'Meetup Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=meetup' ) );
     	$submenu['import_events'][] = array( __( 'Facebook Import', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=facebook' ));
@@ -528,6 +566,11 @@ class WP_Event_Aggregator_Admin {
 	 * @return void
 	 */
 	public function get_selected_tab_submenu_wpea( $submenu_file ){
+
+		if ( ! empty( $_GET['page'] ) && 'wpea_import_events_feed_upgrade' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return 'admin.php?page=wpea_import_events_feed_upgrade';
+		}
+
 		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$allowed_tabs = array( 'dashboard', 'eventbrite', 'meetup', 'facebook', 'ical', 'ical_export','scheduled', 'history', 'settings', 'shortcodes', 'support' );
 			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'dashboard'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -535,8 +578,28 @@ class WP_Event_Aggregator_Admin {
 				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
 			}
 		}
+
+		global $post_type;
+		if ( 'wpeapro_live_feed' === $post_type ) {
+			$submenu_file = 'edit.php?post_type=wpeapro_live_feed';
+		}
+
 		return $submenu_file;
 	}
+
+	/**
+	 * Set parent file for CPTs to keep menu open.
+	 *
+	 * @since 1.8.0
+	 */
+	public function get_selected_tab_parent_wpea( $parent_file ){
+		global $post_type;
+		if ( 'wpeapro_live_feed' === $post_type ) {
+			$parent_file = 'import_events';
+		}
+		return $parent_file;
+	}
+
 	/**
 	 * Render imported Events in history Page.
 	 *

@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_wcSystemStatus
@@ -107,22 +108,22 @@ class ActionScheduler_wcSystemStatus {
 		<table class="wc_status_table widefat" cellspacing="0">
 			<thead>
 				<tr>
-					<th colspan="5" data-export-label="Action Scheduler"><h2><?php esc_html_e( 'Action Scheduler', 'wp-event-aggregator' ); ?><?php echo wc_help_tip( esc_html__( 'This section shows details of Action Scheduler.', 'wp-event-aggregator' ) ); ?></h2></th>
+					<th colspan="5" data-export-label="Action Scheduler"><h2><?php esc_html_e( 'Action Scheduler', 'action-scheduler' ); ?><?php echo wc_help_tip( esc_html__( 'This section shows details of Action Scheduler.', 'action-scheduler' ) ); ?></h2></th>
 				</tr>
 				<tr>
-					<td colspan="2" data-export-label="Version"><?php esc_html_e( 'Version:', 'wp-event-aggregator' ); ?></td>
+					<td colspan="2" data-export-label="Version"><?php esc_html_e( 'Version:', 'action-scheduler' ); ?></td>
 					<td colspan="3"><?php echo esc_html( $as_version ); ?></td>
 				</tr>
 				<tr>
-					<td colspan="2" data-export-label="Data store"><?php esc_html_e( 'Data store:', 'wp-event-aggregator' ); ?></td>
+					<td colspan="2" data-export-label="Data store"><?php esc_html_e( 'Data store:', 'action-scheduler' ); ?></td>
 					<td colspan="3"><?php echo esc_html( $as_datastore ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Action Status', 'wp-event-aggregator' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Action Status', 'action-scheduler' ); ?></strong></td>
 					<td class="help">&nbsp;</td>
-					<td><strong><?php esc_html_e( 'Count', 'wp-event-aggregator' ); ?></strong></td>
-					<td><strong><?php esc_html_e( 'Oldest Scheduled Date', 'wp-event-aggregator' ); ?></strong></td>
-					<td><strong><?php esc_html_e( 'Newest Scheduled Date', 'wp-event-aggregator' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Count', 'action-scheduler' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Oldest Scheduled Date', 'action-scheduler' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Newest Scheduled Date', 'action-scheduler' ); ?></strong></td>
 				</tr>
 			</thead>
 			<tbody>
