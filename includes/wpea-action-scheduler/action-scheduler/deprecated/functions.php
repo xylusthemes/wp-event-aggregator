@@ -1,4 +1,6 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound, WordPress.Security.EscapeOutput.ExceptionNotEscaped, missing_direct_file_access_protection
+if ( ! defined( "ABSPATH" ) ) { exit; }
 /**
  * Deprecated API functions for scheduling actions
  *

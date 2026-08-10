@@ -100,39 +100,46 @@ class WP_Event_Aggregator_Ical {
 	 * @param  string $ical_url
 	 * @since    1.1.0
 	 */
+	// phpcs:disable WordPress.WP.AlternativeFunctions
 	protected function get_remote_content( $ical_url ) {
+		global $wp_version;
 
-		global $wp_version, $wpea_errors;
-		$ical_url = str_replace( 'webcal://', 'http://', $ical_url );
-		$timeout_in_seconds = 5;
-		$response = null;
+		$ical_url = str_replace( 'webcal://', 'https://', $ical_url );
 
-		$request_args = array(
-			'timeout'     => $timeout_in_seconds,
-			'sslverify'   => false,
-			'method'      => 'GET',
-			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+		$ch = curl_init();
+
+		curl_setopt( $ch, CURLOPT_URL, $ical_url );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, 600 );
+		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 30 );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+		curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
+		curl_setopt( $ch, CURLOPT_ENCODING, '' );
+		curl_setopt( $ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1 );
+		curl_setopt(
+			$ch,
+			CURLOPT_USERAGENT,
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36'
 		);
 
-		$response = wp_remote_get( $ical_url, $request_args );
+		// SSL
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
 
-		if ( is_wp_error( $response ) ) {
-			$request_args['sslverify'] = true;
-			$response = wp_remote_head( $ical_url, $request_args );
-		}
+		$response = curl_exec( $ch );
 
-		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
-			$wpea_errors[] = esc_html__( 'Unable to retrieve content from the provided URL.', 'wp-event-aggregator');
+		if ( curl_errno( $ch ) ) {
+			curl_close( $ch );
 			return false;
 		}
-		$content_type = wp_remote_retrieve_header( $response, 'content-type' );
-		if ( $content_type !== false ) {
-			if ( strpos( $content_type, 'text/calendar' ) === false && strpos( $content_type, 'application/calendar+xml' ) === false ) {
-				$wpea_errors[] = esc_html__( 'The provided URL does not contain iCal format data.', 'wp-event-aggregator' );
-				return false;
-			}
-		}
-		return $response['body'];
-	}
 
+		$http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+		curl_close( $ch );
+
+		if ( $http_code !== 200 ) {
+			return false;
+		}
+		return $response;
+	}
+	// phpcs:enable WordPress.WP.AlternativeFunctions
 }

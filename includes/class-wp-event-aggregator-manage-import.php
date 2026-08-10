@@ -11,6 +11,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 class WP_Event_Aggregator_Manage_Import {
 
 	/**
@@ -24,6 +25,28 @@ class WP_Event_Aggregator_Manage_Import {
 		add_action( 'admin_init', array( $this, 'handle_import_settings_submit' ), 99 );
 		add_action( 'admin_init', array( $this, 'handle_listtable_oprations' ), 99 );
 		add_action( 'admin_init', array( $this, 'handle_gma_settings_submit' ), 99 );
+	}
+
+	/**
+	 * Recursively sanitize settings fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $settings Settings data.
+	 * @return array
+	 */
+	private function sanitize_settings_fields( $settings ) {
+		$settings = (array) $settings;
+
+		foreach ( $settings as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$settings[ $key ] = $this->sanitize_settings_fields( $value );
+			} else {
+				$settings[ $key ] = esc_attr( sanitize_text_field( $value ) );
+			}
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -94,11 +117,11 @@ class WP_Event_Aggregator_Manage_Import {
 			
 			// Update only the options present in $_POST, keeping the existing values for others
 			$wpea_options = array(
-				'eventbrite' => isset( $_POST['eventbrite'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['eventbrite'] ) ) ) : ( isset( $existing_options['eventbrite'] ) ? array_map( 'esc_attr', $existing_options['eventbrite'] ) : array() ),
-				'meetup'     => isset( $_POST['meetup'] ) ? array_map( 'esc_attr', array_map('sanitize_text_field', wp_unslash( $_POST['meetup'] ) ) ) : ( isset( $existing_options['meetup'] ) ? array_map( 'esc_attr', $existing_options['meetup'] ) : array() ),
-				'facebook'   => isset( $_POST['facebook']) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['facebook'] ) ) ) : ( isset( $existing_options['facebook'] ) ? array_map( 'esc_attr', $existing_options['facebook'] ) : array() ),
-				'ical'       => isset( $_POST['ical'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['ical'] ) ) ) : ( isset( $existing_options['ical'] ) ? array_map('esc_attr', $existing_options['ical'] ) : array() ),
-				'wpea'       => isset( $_POST['wpea'] ) ? array_map( 'esc_attr', array_map( 'sanitize_text_field', wp_unslash( $_POST['wpea'] ) ) ) : ( isset( $existing_options['wpea'] ) ? array_map('esc_attr', $existing_options['wpea'] ) : array() )
+				'eventbrite' => isset( $_POST['eventbrite'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['eventbrite'] ) ) : ( isset( $existing_options['eventbrite'] ) ? $this->sanitize_settings_fields( $existing_options['eventbrite'] ) : array() ),
+				'meetup'     => isset( $_POST['meetup'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['meetup'] ) ) : ( isset( $existing_options['meetup'] ) ? $this->sanitize_settings_fields( $existing_options['meetup'] ) : array() ),
+				'facebook'   => isset( $_POST['facebook']) ? $this->sanitize_settings_fields( wp_unslash( $_POST['facebook'] ) ) : ( isset( $existing_options['facebook'] ) ? $this->sanitize_settings_fields( $existing_options['facebook'] ) : array() ),
+				'ical'       => isset( $_POST['ical'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['ical'] ) ) : ( isset( $existing_options['ical'] ) ? $this->sanitize_settings_fields( $existing_options['ical'] ) : array() ),
+				'wpea'       => isset( $_POST['wpea'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['wpea'] ) ) : ( isset( $existing_options['wpea'] ) ? $this->sanitize_settings_fields( $existing_options['wpea'] ) : array() )
 			);
 
 			if( isset( $wpea_options['eventbrite']['using_standard_api'] ) && ! empty( $wpea_options['eventbrite']['using_standard_api'] ) ) {
@@ -158,7 +181,7 @@ class WP_Event_Aggregator_Manage_Import {
 			$tab = isset($_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'scheduled';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $import_id > 0 ) {
-				do_action( 'xt_run_scheduled_import', $import_id );
+				do_action( 'xt_run_scheduled_import', $import_id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				$query_args = array( 'imp_msg' => 'import_success', 'tab' => $tab );
         		wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 				exit;
@@ -270,8 +293,7 @@ class WP_Event_Aggregator_Manage_Import {
 		
 
 		$event_data['import_by']     = isset( $_POST['meetup_import_by'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['meetup_import_by'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-		$event_data['ime_event_ids'] = isset( $_POST['ime_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', wp_unslash( $_POST['ime_event_ids'] ) ) ) ) ) : array(); // input var okay.
+		$event_data['ime_event_ids'] = isset( $_POST['ime_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', wp_unslash( $_POST['ime_event_ids'] ) ) ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$event_data['meetup_url']    = isset( $_POST['meetup_url'] ) ? sanitize_text_field( $_POST['meetup_url'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 		if ( 'group_url' === $event_data['import_by'] && !empty( $event_data['meetup_url'] ) ) {

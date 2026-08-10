@@ -226,6 +226,11 @@ class WP_Event_Aggregator_Common {
 			$supported_plugins['ee4'] = __( 'Event Espresso (EE4)', 'wp-event-aggregator' );
 		}
 
+		// Check Xylus Events Calendar
+		if ( class_exists( 'Xylus_Events_Calendar' ) ) {
+			$supported_plugins['xec'] = __( 'Easy Events Calendar', 'wp-event-aggregator' );
+		}
+
 		$wpea_options = get_option( WPEA_OPTIONS );
 		$deactive_wpevents = isset( $wpea_options['wpea']['deactive_wpevents'] ) ? $wpea_options['wpea']['deactive_wpevents'] : 'no';
 		if( $deactive_wpevents != 'yes' ){
@@ -390,7 +395,7 @@ class WP_Event_Aggregator_Common {
 
 			// If error storing permanently, unlink.
 			if ( is_wp_error( $att_id ) ) {
-				@unlink( $file_array['tmp_name'] );
+				wp_delete_file( $file_array['tmp_name'] );
 				return $att_id;
 			}
 
@@ -488,6 +493,9 @@ class WP_Event_Aggregator_Common {
 	 * @since    1.0.0
 	 */
 	public function wpea_add_em_add_ticket_section( $content = '' ) {
+		if ( ! is_singular() ) {
+			return $content;
+		}
 		global $importevents;
 		$xt_post_type =  get_post_type();
 		$event_id = get_the_ID();
@@ -872,8 +880,7 @@ class WP_Event_Aggregator_Common {
 		$skip_trash = isset( $wpea_options['wpea']['skip_trash'] ) ? $wpea_options['wpea']['skip_trash'] : 'no';
 		
 		if( $skip_trash == 'yes' ){
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$get_post_id = $wpdb->get_col(
+			$get_post_id = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
 					$post_type,
@@ -882,8 +889,7 @@ class WP_Event_Aggregator_Common {
 				)
 			);
 		}else{
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$get_post_id = $wpdb->get_col(
+			$get_post_id = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					'SELECT ' . $wpdb->prefix . 'posts.ID FROM ' . $wpdb->prefix . 'posts, ' . $wpdb->prefix . 'postmeta WHERE ' . $wpdb->prefix . 'posts.post_type = %s AND ' . $wpdb->prefix . 'postmeta.post_id = ' . $wpdb->prefix . 'posts.ID AND ' . $wpdb->prefix . 'posts.post_status != %s AND (' . $wpdb->prefix . 'postmeta.meta_key = %s AND ' . $wpdb->prefix . 'postmeta.meta_value = %s ) LIMIT 1',
 					$post_type,
@@ -901,8 +907,7 @@ class WP_Event_Aggregator_Common {
 		if( isset( $centralize_array['origin'] ) && $centralize_array['origin'] == 'ical' ){
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, 	WordPress.DB.PreparedSQLPlaceholders.QuotedSimplePlaceholder
 			$search_query = $wpdb->prepare( "SELECT DISTINCT ".$wpdb->posts.".`ID` FROM ".$wpdb->posts." INNER JOIN ".$wpdb->postmeta." ON ".$wpdb->posts.".`ID` = ".$wpdb->postmeta.".`post_id` WHERE ".$wpdb->posts.".`post_title` = '%s' AND ".$wpdb->posts.".`post_type` = '%s' AND ( ".$wpdb->postmeta.".`meta_key` = '_wpea_starttime_str' AND ".$wpdb->postmeta.".`meta_value` = '%s' ) LIMIT 1", $centralize_array['name'], $post_type, $centralize_array['starttime_local'] );
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$is_exists = $wpdb->get_var( $search_query );
+			$is_exists = $wpdb->get_var( $search_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching 
 			if( $is_exists && is_numeric( $is_exists ) && $is_exists > 0 ){
 				return $is_exists;
 			}
@@ -991,10 +996,63 @@ class WP_Event_Aggregator_Common {
 		$wpea_options = get_option( WPEA_OPTIONS, array() );
 		$aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
 		$dontupdate = isset( $aggregator_options['dont_update'] ) ? $aggregator_options['dont_update'] : array();
+		if ( 'category' === $field ) {
+			return ! (
+				( isset( $dontupdate['categories'] ) && 'yes' == $dontupdate['categories'] ) ||
+				( isset( $dontupdate['category'] ) && 'yes' == $dontupdate['category'] )
+			);
+		}
 		if( isset( $dontupdate[$field] ) &&  'yes' == $dontupdate[$field] ){
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Preserve selected post fields while updating an existing imported event.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $event_data Event post data.
+	 * @param int   $event_id Existing event ID.
+	 * @return array
+	 */
+	public function wpea_preserve_existing_event_data( $event_data, $event_id ) {
+		$event_id = absint( $event_id );
+		if ( empty( $event_id ) ) {
+			return $event_data;
+		}
+
+		$existing_event = get_post( $event_id );
+		if ( empty( $existing_event ) ) {
+			return $event_data;
+		}
+
+		if ( ! $this->wpea_is_updatable( 'title' ) ) {
+			$event_data['post_title'] = $existing_event->post_title;
+		}
+
+		if ( ! $this->wpea_is_updatable( 'description' ) ) {
+			$event_data['post_content'] = $existing_event->post_content;
+		}
+
+		if ( ! $this->wpea_is_updatable( 'status' ) ) {
+			$event_data['post_status'] = $existing_event->post_status;
+		}
+
+		return $event_data;
+	}
+
+	/**
+	 * Check if an imported event image can be updated.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $event_id Existing event ID.
+	 * @return bool
+	 */
+	public function wpea_is_event_image_updatable( $event_id = 0 ) {
+		return empty( $event_id ) || $this->wpea_is_updatable( 'image' );
 	}
 
 	/**
@@ -1293,26 +1351,27 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
-	 * Rendering Evebnt update category
+	 * Create or update iCal categories.
 	 */
-	public function wepa_create_update_ical_categories( $ical_categories = array(), $source_taxonomy ){
+	public function wepa_create_update_ical_categories( $source_taxonomy, $ical_categories = array() ) {
 
-		$event_cat_ids  = [];
-		if( !empty( $ical_categories ) && !empty( $source_taxonomy ) ){
+		$event_cat_ids = array();
+
+		if ( ! empty( $ical_categories ) && ! empty( $source_taxonomy ) ) {
 			foreach ( $ical_categories as $category_name ) {
 				$term = term_exists( $category_name, $source_taxonomy );
-				if( $term && isset($term['term_id'] ) ) {
+				if ( $term && isset( $term['term_id'] ) ) {
 					$event_cat_ids[] = (int) $term['term_id'];
 				} else {
 					$new_term = wp_insert_term( $category_name, $source_taxonomy );
-					if (!is_wp_error($new_term) && isset($new_term['term_id'])) {
+					if ( ! is_wp_error( $new_term ) && isset( $new_term['term_id'] ) ) {
 						$event_cat_ids[] = (int) $new_term['term_id'];
 					}
 				}
 			}
 		}
-		return $event_cat_ids;
 
+		return $event_cat_ids;
 	}
 
 	/**
@@ -1432,8 +1491,7 @@ class WP_Event_Aggregator_Common {
 			AND pm.meta_key = %s";
 
 		$prepared_sql = $wpdb->prepare( $sql, $current_time, $current_time, 'wp_events', 'publish', 'end_ts' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-		$counts       = $wpdb->get_row( $prepared_sql );
+		$counts       = $wpdb->get_row( $prepared_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		// Return the counts as an array
 		return [
@@ -1576,6 +1634,191 @@ class WP_Event_Aggregator_Common {
 		return $ecat_id;
 	}
 
+	/**
+	 * Get Eventbrite organizer tags by event ID.
+	 *
+	 * @since 1.0.0
+	 * @param string $event_id Eventbrite event ID.
+	 * @return array Eventbrite tag names.
+	 */
+	public function get_eventbrite_tags_by_event_id( $event_id ) {
+		$event_id = sanitize_text_field( $event_id );
+
+		if ( empty( $event_id ) ) {
+			return array();
+		}
+
+		$transient_key = 'iee_eventbrite_tags_' . $event_id;
+		$cached_tags   = get_transient( $transient_key );
+
+		if ( false !== $cached_tags ) {
+			return is_array( $cached_tags ) ? $cached_tags : array();
+		}
+
+		$eventbrite_api_url = add_query_arg(
+			array(
+				'event_ids' => $event_id,
+				'expand'    => 'series',
+			),
+			'https://www.eventbrite.nl/api/v3/destination/events/'
+		);
+
+		$response = wp_remote_get(
+			$eventbrite_api_url,
+			array(
+				'headers' => array(
+					'Content-Type' => 'application/json',
+				),
+				'timeout' => 20,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return array();
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$tags = array();
+
+		if ( is_array( $body ) && ! empty( $body['events'][0]['tags'] ) && is_array( $body['events'][0]['tags'] ) ) {
+			$tags = $this->prepare_eventbrite_tag_names( $body['events'][0]['tags'] );
+		}
+
+		set_transient( $transient_key, $tags, HOUR_IN_SECONDS );
+
+		return $tags;
+	}
+
+	/**
+	 * Prepare Eventbrite tag names from API tag objects.
+	 *
+	 * @since 1.0.0
+	 * @param array $eventbrite_tags Eventbrite tag objects.
+	 * @return array Tag names.
+	 */
+	public function prepare_eventbrite_tag_names( $eventbrite_tags ) {
+		if ( empty( $eventbrite_tags ) || ! is_array( $eventbrite_tags ) ) {
+			return array();
+		}
+
+		$allowed_prefixes = apply_filters( 'iee_eventbrite_tag_prefixes', array( 'OrganizerTag' ) );
+		$tag_names        = array();
+
+		foreach ( $eventbrite_tags as $eventbrite_tag ) {
+			if ( empty( $eventbrite_tag ) || ! is_array( $eventbrite_tag ) ) {
+				continue;
+			}
+
+			$prefix = isset( $eventbrite_tag['prefix'] ) ? sanitize_text_field( $eventbrite_tag['prefix'] ) : '';
+
+			if ( ! empty( $allowed_prefixes ) && ! in_array( $prefix, $allowed_prefixes, true ) ) {
+				continue;
+			}
+
+			$tag_name = isset( $eventbrite_tag['display_name'] ) ? sanitize_text_field( $eventbrite_tag['display_name'] ) : '';
+
+			if ( empty( $tag_name ) && ! empty( $eventbrite_tag['tag'] ) ) {
+				$tag_parts = explode( '/', sanitize_text_field( $eventbrite_tag['tag'] ) );
+				$tag_name  = end( $tag_parts );
+			}
+
+			if ( ! empty( $tag_name ) ) {
+				$tag_names[] = $this->normalize_eventbrite_tag_name( $tag_name );
+			}
+		}
+
+		return array_values( array_unique( $tag_names ) );
+	}
+
+	/**
+	 * Convert Eventbrite organizer tag values into readable WordPress tag names.
+	 *
+	 * @since 1.0.0
+	 * @param string $tag_name Eventbrite tag name.
+	 * @return string Normalized tag name.
+	 */
+	public function normalize_eventbrite_tag_name( $tag_name ) {
+		$tag_name = sanitize_text_field( $tag_name );
+
+		if ( empty( $tag_name ) ) {
+			return '';
+		}
+
+		$tag_name = preg_replace( '/[_-]+/', ' ', $tag_name );
+		$tag_name = preg_replace( '/\s+/', ' ', $tag_name );
+		$tag_name = trim( $tag_name );
+
+		if ( function_exists( 'mb_convert_case' ) ) {
+			return mb_convert_case( $tag_name, MB_CASE_TITLE, 'UTF-8' );
+		}
+
+		return ucwords( strtolower( $tag_name ) );
+	}
+
+	/**
+	 * Create/update Eventbrite tags and return term IDs.
+	 *
+	 * @since 1.0.0
+	 * @param array  $eventbrite_tags Eventbrite tag names.
+	 * @param string $taxonomy Tag taxonomy.
+	 * @return array Term IDs.
+	 */
+	public function insert_eventbrite_tags_and_assing_into_event( $eventbrite_tags, $taxonomy = '' ) {
+		global $iee_events;
+
+		if ( empty( $eventbrite_tags ) || ! is_array( $eventbrite_tags ) ) {
+			return array();
+		}
+
+		if ( empty( $taxonomy ) ) {
+			$taxonomy = $iee_events->cpt->get_event_tag_taxonomy();
+		}
+
+		if ( ! taxonomy_exists( $taxonomy ) ) {
+			return array();
+		}
+
+		$term_ids = array();
+
+		foreach ( $eventbrite_tags as $tag_name ) {
+			$raw_name = sanitize_text_field( $tag_name );
+			$name     = $this->normalize_eventbrite_tag_name( $raw_name );
+
+			if ( empty( $name ) ) {
+				continue;
+			}
+
+			$slug = sanitize_title( $name );
+			$term = get_term_by( 'slug', $slug, $taxonomy );
+
+			if ( ! $term ) {
+				$term = term_exists( $raw_name, $taxonomy );
+			}
+
+			if ( $term ) {
+				if ( is_array( $term ) ) {
+					$term_id = (int) $term['term_id'];
+				} else {
+					$term_id = (int) $term->term_id;
+				}
+
+				wp_update_term( $term_id, $taxonomy, array( 'name' => $name, 'slug' => $slug ) );
+			} else {
+				$new_term = wp_insert_term( $name, $taxonomy, array( 'slug' => $slug ) );
+
+				if ( is_wp_error( $new_term ) || empty( $new_term['term_id'] ) ) {
+					continue;
+				}
+
+				$term_id = (int) $new_term['term_id'];
+			}
+
+			$term_ids[] = $term_id;
+		}
+
+		return array_values( array_unique( $term_ids ) );
+	}
+
 	/*
 	 * Filter has_post_thumbnail to return true when external image URL exists.
 	 *
@@ -1689,7 +1932,7 @@ function wpea_aioec_active() {
  * @param string $template_path (default: '')
  * @param string $default_path (default: '')
  */
-function get_wpea_template( $template_name, $args = array(), $template_path = 'wp-event-aggregator', $default_path = '' ) {
+function get_wpea_template( $template_name, $args = array(), $template_path = 'wp-event-aggregator', $default_path = '' ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	if ( $args && is_array( $args ) ) {
 		extract( $args );
 	}
@@ -1711,7 +1954,7 @@ function get_wpea_template( $template_name, $args = array(), $template_path = 'w
  * @param string|bool $default_path (default: '') False to not load a default
  * @return string
  */
-function locate_wpea_template( $template_name, $template_path = 'wp-event-aggregator', $default_path = '' ) {
+function locate_wpea_template( $template_name, $template_path = 'wp-event-aggregator', $default_path = '' ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	// Look within passed path within the theme - this is priority
 	$template = locate_template(
 		array(
@@ -1727,7 +1970,7 @@ function locate_wpea_template( $template_name, $template_path = 'wp-event-aggreg
 		}
 	}
 	// Return what we found
-	return apply_filters( 'wepa_locate_template', $template, $template_name, $template_path );
+	return apply_filters( 'wepa_locate_template', $template, $template_name, $template_path ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 }
 
 /**
@@ -1739,7 +1982,7 @@ function locate_wpea_template( $template_name, $template_path = 'wp-event-aggreg
  * @param string      $template_path (default: 'wp-event-aggregator')
  * @param string|bool $default_path (default: '') False to not load a default
  */
-function get_wpea_template_part( $slug, $name = '', $template_path = 'wp-event-aggregator', $default_path = '' ) {
+function get_wpea_template_part( $slug, $name = '', $template_path = 'wp-event-aggregator', $default_path = '' ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	$template = '';
 	if ( $name ) {
 		$template = locate_wpea_template( "{$slug}-{$name}.php", $template_path, $default_path );
@@ -1764,8 +2007,7 @@ function wpea_get_inprogress_import(){
 	if ( is_multisite() ) {
 		$batch_query = "SELECT * FROM {$wpdb->sitemeta} WHERE meta_key LIKE '%wpea_import_batch_%' ORDER BY meta_id ASC";
 	}
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-	$batches = $wpdb->get_results( $batch_query );
+	$batches = $wpdb->get_results( $batch_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	return $batches;
 }
 
