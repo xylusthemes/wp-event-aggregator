@@ -3,24 +3,24 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 global $importevents;
 $wpea_options = get_option( WPEA_OPTIONS );
-$eventbrite_options = isset($wpea_options['eventbrite'])?$wpea_options['eventbrite']:array();
-$meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
-$facebook_options = isset($wpea_options['facebook'])? $wpea_options['facebook'] : array();
-$ical_options = isset($wpea_options['ical'])? $wpea_options['ical'] : array();
-$aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
-$facebook_app_id = isset( $facebook_options['facebook_app_id'] ) ? $facebook_options['facebook_app_id'] : '';
-$facebook_app_secret = isset( $facebook_options['facebook_app_secret'] ) ? $facebook_options['facebook_app_secret'] : '';
+$wpea_eventbrite_options = isset($wpea_options['eventbrite'])?$wpea_options['eventbrite']:array();
+$wpea_meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
+$wpea_facebook_options = isset($wpea_options['facebook'])? $wpea_options['facebook'] : array();
+$wpea_ical_options = isset($wpea_options['ical'])? $wpea_options['ical'] : array();
+$wpea_aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
+$wpea_facebook_app_id = isset( $wpea_facebook_options['facebook_app_id'] ) ? $wpea_facebook_options['facebook_app_id'] : '';
+$wpea_facebook_app_secret = isset( $wpea_facebook_options['facebook_app_secret'] ) ? $wpea_facebook_options['facebook_app_secret'] : '';
 $wpea_user_token_options = get_option( 'wpea_user_token_options', array() );
 $wpea_fb_authorize_user = get_option( 'wpea_fb_authorize_user', array() );
 
-$meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_options['meetup_oauth_key'] : '';
-$meetup_oauth_secret = isset( $meetup_options['meetup_oauth_secret'] ) ? $meetup_options['meetup_oauth_secret'] : '';
-$meetup_user_token_options = get_option( 'wpea_muser_token_options', array() );
-$meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
+$wpea_meetup_oauth_key = isset( $wpea_meetup_options['meetup_oauth_key'] ) ? $wpea_meetup_options['meetup_oauth_key'] : '';
+$wpea_meetup_oauth_secret = isset( $wpea_meetup_options['meetup_oauth_secret'] ) ? $wpea_meetup_options['meetup_oauth_secret'] : '';
+$wpea_meetup_user_token_options = get_option( 'wpea_muser_token_options', array() );
+$wpea_meetup_meetup_authorized_user = get_option( 'wpea_mauthorized_user', array() );
 $wpea_google_maps_api_key = get_option( 'wpea_google_maps_api_key', array() );
 
-if( is_object( $meetup_authorized_user ) ){
-    $meetup_authorized_user = (array)$meetup_authorized_user;
+if( is_object( $wpea_meetup_meetup_authorized_user ) ){
+    $wpea_meetup_meetup_authorized_user = (array)$wpea_meetup_meetup_authorized_user;
 }
 
 ?>
@@ -80,9 +80,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2" >
                             <?php
-                                $using_standard_api = isset( $eventbrite_options['using_standard_api'] ) ? $eventbrite_options['using_standard_api'] : 'no';
+                                $wpea_using_standard_api = isset( $wpea_eventbrite_options['using_standard_api'] ) ? $wpea_eventbrite_options['using_standard_api'] : 'no';
                             ?>
-                            <input type="checkbox" name="eventbrite[using_standard_api]" value="yes" <?php if( $using_standard_api == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="eventbrite[using_standard_api]" value="yes" <?php if( $wpea_using_standard_api == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <strong><?php esc_attr_e( 'Using "Import Event With Standard API" lets you fetch events directly. No Eventbrite private token is required.', 'wp-event-aggregator' ); ?></strong>
                             </span>
@@ -109,7 +109,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <span class="wpea-title-text" ><?php esc_attr_e( 'Eventbrite Private token','wp-event-aggregator' ); ?></span>
                         </div>
                         <div class="wpea-inner-section-2">
-                            <input class="eventbrite_oauth_token" name="eventbrite[oauth_token]" type="text" value="<?php if ( isset( $eventbrite_options['oauth_token'] ) ) { echo esc_attr( $eventbrite_options['oauth_token'] ); } ?>" />
+                            <input class="eventbrite_oauth_token" name="eventbrite[oauth_token]" type="text" value="<?php if ( isset( $wpea_eventbrite_options['oauth_token'] ) ) { echo esc_attr( $wpea_eventbrite_options['oauth_token'] ); } ?>" />
                         </div>
                     </div>
 
@@ -120,19 +120,19 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $enable_ticket_sec = isset( $eventbrite_options['enable_ticket_sec'] ) ? $eventbrite_options['enable_ticket_sec'] : 'no';
-                                $ticket_model = isset( $eventbrite_options['ticket_model'] ) ? $eventbrite_options['ticket_model'] : '0';
+                                $wpea_enable_ticket_sec = isset( $wpea_eventbrite_options['enable_ticket_sec'] ) ? $wpea_eventbrite_options['enable_ticket_sec'] : 'no';
+                                $wpea_ticket_model = isset( $wpea_eventbrite_options['ticket_model'] ) ? $wpea_eventbrite_options['ticket_model'] : '0';
                                 ?>
-                                <input type="checkbox" class="enable_ticket_sec" name="eventbrite[enable_ticket_sec]" value="yes" <?php if ( $enable_ticket_sec == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <input type="checkbox" class="enable_ticket_sec" name="eventbrite[enable_ticket_sec]" value="yes" <?php if ( $wpea_enable_ticket_sec == 'yes' ) { echo 'checked="checked"'; } ?> />
                                 <span>
                                     <?php esc_attr_e( 'Check to display ticket option after event.', 'wp-event-aggregator' ); ?>
                                 </span>
                             <?php 
                                 if( is_ssl() ){ ?>
                                     <div class="wpea_small checkout_model_option">
-                                        <input type="radio" name="eventbrite[ticket_model]" value="0" <?php checked( $ticket_model, '0'); ?>>
+                                        <input type="radio" name="eventbrite[ticket_model]" value="0" <?php checked( $wpea_ticket_model, '0'); ?>>
                                             <?php esc_attr_e( 'Non-Modal Checkout', 'wp-event-aggregator' ); ?><br/>
-                                        <input type="radio" name="eventbrite[ticket_model]" value="1" <?php checked( $ticket_model, '1'); ?>>
+                                        <input type="radio" name="eventbrite[ticket_model]" value="1" <?php checked( $wpea_ticket_model, '1'); ?>>
                                             <?php esc_attr_e( 'Popup Checkout Widget (Display your checkout as a modal popup)', 'wp-event-aggregator' ); ?><br/>
                                     </div>
                             <?php 
@@ -147,9 +147,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php 
-                                $update_eventbrite_events = isset( $eventbrite_options['update_events'] ) ? $eventbrite_options['update_events'] : 'no';
+                                $wpea_update_eventbrite_events = isset( $wpea_eventbrite_options['update_events'] ) ? $wpea_eventbrite_options['update_events'] : 'no';
                             ?>
-                            <input type="checkbox" name="eventbrite[update_events]" value="yes" <?php if( $update_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="eventbrite[update_events]" value="yes" <?php if( $wpea_update_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
                                 <?php printf( "( <em>%s</em> )", esc_attr__( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
@@ -163,9 +163,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                            $eventbritre_category = isset( $eventbrite_options['eventbritre_category'] ) ? $eventbrite_options['eventbritre_category'] : 'no';
+                            $wpea_eventbritre_category = isset( $wpea_eventbrite_options['eventbritre_category'] ) ? $wpea_eventbrite_options['eventbritre_category'] : 'no';
                             ?>
-                            <input type="checkbox" name="eventbrite[eventbritre_category]" value="yes" <?php if ( $eventbritre_category == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="eventbrite[eventbritre_category]" value="yes" <?php if ( $wpea_eventbritre_category == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_html_e( 'Enable this option to automatically import Eventbrite categories and assign them in events.', 'wp-event-aggregator' ); ?>
                             </span>
@@ -174,24 +174,24 @@ if( is_object( $meetup_authorized_user ) ){
 
                     <!-- Private Events Section -->
                     <?php
-                        $private_events     = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
-                        $using_standard_api = isset( $eventbrite_options['using_standard_api'] ) ? $eventbrite_options['using_standard_api'] : 'no';
-                        $disable_section    = ( $using_standard_api === 'yes' );
+                        $wpea_private_events     = isset( $wpea_eventbrite_options['private_events'] ) ? $wpea_eventbrite_options['private_events'] : 'no';
+                        $wpea_using_standard_api = isset( $wpea_eventbrite_options['using_standard_api'] ) ? $wpea_eventbrite_options['using_standard_api'] : 'no';
+                        $wpea_disable_section    = ( $wpea_using_standard_api === 'yes' );
                     ?>
-                    <div class="wpea-inner-main-section" <?php echo $disable_section ? 'style="opacity:0.5; pointer-events:none;"' : ''; ?> >
+                    <div class="wpea-inner-main-section" <?php echo $wpea_disable_section ? 'style="opacity:0.5; pointer-events:none;"' : ''; ?> >
                         <div class="wpea-inner-section-1" >
                             <span class="wpea-title-text" ><?php esc_attr_e( 'Import Private Events', 'wp-event-aggregator' ); ?></span>
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php 
-                                $private_eventbrite_events = isset( $eventbrite_options['private_events'] ) ? $eventbrite_options['private_events'] : 'no';
+                                $wpea_private_eventbrite_events = isset( $wpea_eventbrite_options['private_events'] ) ? $wpea_eventbrite_options['private_events'] : 'no';
                             ?>
-                            <input type="checkbox" <?php if ( $private_events == 'yes' ) { echo 'checked="checked"'; } if ( $disable_section ) { echo 'disabled="disabled"'; }  ?>  name="eventbrite[private_events]" value="yes" <?php if( $private_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" <?php if ( $wpea_private_events == 'yes' ) { echo 'checked="checked"'; } if ( $wpea_disable_section ) { echo 'disabled="disabled"'; }  ?>  name="eventbrite[private_events]" value="yes" <?php if( $wpea_private_eventbrite_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Tick to import Private events, Untick to not import private event.', 'wp-event-aggregator' ); ?>
                                 <?php printf( "( <em>%s</em> )", esc_attr__( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
                             </span>
-                            <?php if ( $disable_section ): ?>
+                            <?php if ( $wpea_disable_section ): ?>
                                 <div class="wpea_notice" style="margin-top:5px; color:#d63638; font-size:13px;">
                                     <?php esc_html_e( 'This option only works with a eventbrite private token.', 'wp-event-aggregator' ); ?>
                                 </div>
@@ -206,9 +206,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $small_thumbnail = isset( $eventbrite_options['small_thumbnail'] ) ? $eventbrite_options['small_thumbnail'] : 'no';
+                                $wpea_small_thumbnail = isset( $wpea_eventbrite_options['small_thumbnail'] ) ? $wpea_eventbrite_options['small_thumbnail'] : 'no';
                             ?>
-                            <input type="checkbox" name="eventbrite[small_thumbnail]" value="yes" <?php if ( $small_thumbnail == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="eventbrite[small_thumbnail]" value="yes" <?php if ( $wpea_small_thumbnail == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'You can import small thumbnails of events into an event by enabling this option.', 'wp-event-aggregator' ); ?>
                             </span>
@@ -223,9 +223,9 @@ if( is_object( $meetup_authorized_user ) ){
                         <div class="wpea-inner-section-2">
                             <?php 
                                 if( wpea_is_pro() ){
-                                    $advanced_esync = isset( $eventbrite_options['advanced_sync'] ) ? $eventbrite_options['advanced_sync'] : 'no';
+                                    $wpea_advanced_esync = isset( $wpea_eventbrite_options['advanced_sync'] ) ? $wpea_eventbrite_options['advanced_sync'] : 'no';
                                     ?>
-                                    <input type="checkbox" name="eventbrite[advanced_sync]" value="yes" <?php if( $advanced_esync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <input type="checkbox" name="eventbrite[advanced_sync]" value="yes" <?php if( $wpea_advanced_esync == 'yes' ) { echo 'checked="checked"'; } ?> />
                                     <?php
                                 }else{
                                     ?>
@@ -282,7 +282,7 @@ if( is_object( $meetup_authorized_user ) ){
 
                     <!-- Connect Meetup App Section -->
                     <?php
-                        if( $meetup_oauth_key != '' && $meetup_oauth_secret != '' ){
+                        if( $wpea_meetup_oauth_key != '' && $wpea_meetup_oauth_secret != '' ){
                             ?>
                             <div> 
                                 <div class="wpea-inner-main-section" >
@@ -291,18 +291,18 @@ if( is_object( $meetup_authorized_user ) ){
                                     </div>
                                     <div class="wpea-inner-section-2">
                                         <?php
-                                            if( !empty($meetup_authorized_user) && isset($meetup_authorized_user['name']) ) {
-                                                $email = isset($meetup_authorized_user['email']) ? $meetup_authorized_user['email'] : '';
-                                                $name = $meetup_authorized_user['name'];
+                                            if( !empty($wpea_meetup_meetup_authorized_user) && isset($wpea_meetup_meetup_authorized_user['name']) ) {
+                                                $wpea_email = isset($wpea_meetup_meetup_authorized_user['email']) ? $wpea_meetup_meetup_authorized_user['email'] : '';
+                                                $wpea_name = $wpea_meetup_meetup_authorized_user['name'];
                                                 ?>
                                                 <div class="wpea_connection_wrapper">
                                                     <div class="name_wrap">
                                                         <?php 
                                                             // translators: %s: Connected user name
-                                                            printf( esc_attr__('Connected as: %s', 'wp-event-aggregator'), '<strong>'. esc_attr( $name ) .'</strong>' ); 
+                                                            printf( esc_attr__('Connected as: %s', 'wp-event-aggregator'), '<strong>'. esc_attr( $wpea_name ) .'</strong>' ); 
                                                         ?>
                                                         <br/>
-                                                        <?php echo esc_attr( $email ); ?>
+                                                        <?php echo esc_attr( $wpea_email ); ?>
                                                         <br/>
                                                         <a href="<?php echo esc_url( admin_url( 'admin-post.php?action=wpea_mdeauthorize_action&_wpnonce=' . wp_create_nonce( 'wpea_deauthorize_nonce' ) ) ); ?>">
                                                             <?php esc_attr_e('Remove Connection', 'wp-event-aggregator'); ?>
@@ -337,9 +337,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2" >
                             <?php
-                                $using_public_api = isset( $meetup_options['using_public_api'] ) ? $meetup_options['using_public_api'] : 'no';
+                                $wpea_using_public_api = isset( $wpea_meetup_options['using_public_api'] ) ? $wpea_meetup_options['using_public_api'] : 'no';
                             ?>
-                            <input type="checkbox" name="meetup[using_public_api]" value="yes" <?php if( $using_public_api == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="meetup[using_public_api]" value="yes" <?php if( $wpea_using_public_api == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <strong><?php esc_attr_e( 'Using "Import Event With Meetup API Key (No Auth Required)" lets you fetch events directly. No Key or authorization needed.', 'wp-event-aggregator' ); ?></strong>
                             </span>
@@ -358,7 +358,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <span class="wpea-title-text" ><?php esc_attr_e( 'Meetup OAuth Key', 'wp-event-aggregator' ); ?></span>
                         </div>
                         <div class="wpea-inner-section-2">
-                            <input class="meetup_api_key" name="meetup[meetup_oauth_key]" type="text" value="<?php echo esc_attr( $meetup_oauth_key ); ?>" />
+                            <input class="meetup_api_key" name="meetup[meetup_oauth_key]" type="text" value="<?php echo esc_attr( $wpea_meetup_oauth_key ); ?>" />
                             <span class="wpea_small">
                                 <?php printf('%s <a href="https://www.meetup.com/api/oauth/list/" target="_blank">%s</a>', esc_attr__( 'Insert your meetup.com OAuth Key you can get it from', 'wp-event-aggregator' ), esc_attr__( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
@@ -371,7 +371,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <span class="wpea-title-text" ><?php esc_attr_e( 'Meetup OAuth Secret', 'wp-event-aggregator' ); ?></span>
                         </div>
                         <div class="wpea-inner-section-2">
-                            <input class="meetup_api_key" name="meetup[meetup_oauth_secret]" type="text" value="<?php echo esc_attr( $meetup_oauth_secret ); ?>" />
+                            <input class="meetup_api_key" name="meetup[meetup_oauth_secret]" type="text" value="<?php echo esc_attr( $wpea_meetup_oauth_secret ); ?>" />
                             <span class="wpea_small">
                                 <?php printf('%s <a href="https://www.meetup.com/api/oauth/list/" target="_blank">%s</a>', esc_attr__( 'Insert your meetup.com OAuth Secret you can get it from', 'wp-event-aggregator' ), esc_attr__( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
@@ -391,7 +391,7 @@ if( is_object( $meetup_authorized_user ) ){
                             <span class="wpea-title-text" ><?php esc_attr_e( 'Meetup API key', 'wp-event-aggregator' ); ?></span>
                         </div>
                         <div class="wpea-inner-section-2">
-                            <input class="meetup_api_key" name="meetup[meetup_api_key]" type="text" value="<?php if ( isset( $meetup_options['meetup_api_key'] ) ) { echo esc_attr( $meetup_options['meetup_api_key'] ); } ?>" />
+                            <input class="meetup_api_key" name="meetup[meetup_api_key]" type="text" value="<?php if ( isset( $wpea_meetup_options['meetup_api_key'] ) ) { echo esc_attr( $wpea_meetup_options['meetup_api_key'] ); } ?>" />
                             <span class="wpea_small">
                                 <?php printf('%s <a href="https://www.meetup.com/api/oauth/list" target="_blank">%s</a>', esc_attr__( 'Insert your meetup.com API key you can get it from', 'wp-event-aggregator' ), esc_attr__( 'here', 'wp-event-aggregator' ) ); ?>
                             </span>
@@ -405,9 +405,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php 
-                                $update_meetup_events = isset( $meetup_options['update_events'] ) ? $meetup_options['update_events'] : 'no';
+                                $wpea_update_meetup_events = isset( $wpea_meetup_options['update_events'] ) ? $wpea_meetup_options['update_events'] : 'no';
                             ?>
-                            <input type="checkbox" name="meetup[update_events]" value="yes" <?php if( $update_meetup_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="meetup[update_events]" value="yes" <?php if( $wpea_update_meetup_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
                                 <?php printf( "( <em>%s</em> )", esc_attr__( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
@@ -423,9 +423,9 @@ if( is_object( $meetup_authorized_user ) ){
                         <div class="wpea-inner-section-2">
                             <?php 
                                 if( wpea_is_pro() ){
-                                    $advanced_msync = isset( $meetup_options['advanced_sync'] ) ? $meetup_options['advanced_sync'] : 'no';
+                                    $wpea_advanced_msync = isset( $wpea_meetup_options['advanced_sync'] ) ? $wpea_meetup_options['advanced_sync'] : 'no';
                                     ?>
-                                    <input type="checkbox" name="meetup[advanced_sync]" value="yes" <?php if( $advanced_msync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <input type="checkbox" name="meetup[advanced_sync]" value="yes" <?php if( $wpea_advanced_msync == 'yes' ) { echo 'checked="checked"'; } ?> />
                                     <?php
                                 }else{
                                     ?>
@@ -458,8 +458,8 @@ if( is_object( $meetup_authorized_user ) ){
                     
                     <!-- Facebook Notice Section -->
                     <?php
-                        $site_url = get_home_url();
-                        if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $site_url, 'https' ) ) {
+                        $wpea_site_url = get_home_url();
+                        if( !isset( $_SERVER['HTTPS'] ) && false === stripos( $wpea_site_url, 'https' ) ) {
                             ?>
                             <div class="widefat wpea_settings_error">
                                 <?php
@@ -500,7 +500,7 @@ if( is_object( $meetup_authorized_user ) ){
 
                         <!-- Facebook Authorization Section -->
                         <?php 
-                            if( $facebook_app_id != '' && $facebook_app_secret != '' ){
+                            if( $wpea_facebook_app_id != '' && $wpea_facebook_app_secret != '' ){
                                 ?>
 
                                 <div class="wpea-inner-main-section" >
@@ -511,18 +511,18 @@ if( is_object( $meetup_authorized_user ) ){
                                         <input type="hidden" name="action" value="wpea_facebook_authorize_action"/>
                                         <?php wp_nonce_field('wpea_facebook_authorize_action', 'wpea_facebook_authorize_nonce'); ?>
                                         <?php 
-                                        $button_value = esc_attr__('Authorize', 'wp-event-aggregator');
+                                        $wpea_button_value = esc_attr__('Authorize', 'wp-event-aggregator');
                                         if( isset( $wpea_user_token_options['authorize_status'] ) && $wpea_user_token_options['authorize_status'] == 1 && isset(  $wpea_user_token_options['access_token'] ) &&  $wpea_user_token_options['access_token'] != '' ){
-                                            $button_value = esc_attr__('Reauthorize', 'wp-event-aggregator');
+                                            $wpea_button_value = esc_attr__('Reauthorize', 'wp-event-aggregator');
                                         }
                                         ?>
-                                        <button type="button" class="wpea_button" id="wpea-facebook-auth-btn"><?php echo esc_attr($button_value); ?></button>
+                                        <button type="button" class="wpea_button" id="wpea-facebook-auth-btn"><?php echo esc_attr($wpea_button_value); ?></button>
                                         <?php 
                                         if( !empty( $wpea_fb_authorize_user ) && isset( $wpea_fb_authorize_user['name'] ) && $importevents->common->has_authorized_user_token() ){
-                                            $fbauthname = sanitize_text_field( $wpea_fb_authorize_user['name'] );
-                                            if( $fbauthname != '' ){
+                                            $wpea_fbauthname = sanitize_text_field( $wpea_fb_authorize_user['name'] );
+                                            if( $wpea_fbauthname != '' ){
                                                 // translators: %s: Authorized user name
-                                                printf( esc_attr__(' ( Authorized as: %s )', 'wp-event-aggregator'), '<b>'. esc_attr( $fbauthname ) .'</b>' );
+                                                printf( esc_attr__(' ( Authorized as: %s )', 'wp-event-aggregator'), '<b>'. esc_attr( $wpea_fbauthname ) .'</b>' );
                                             }   
                                         }
                                         ?>
@@ -541,7 +541,7 @@ if( is_object( $meetup_authorized_user ) ){
                                 <span class="wpea-title-text" ><?php esc_attr_e( 'Facebook App ID','wp-event-aggregator' ); ?></span>
                             </div>
                             <div class="wpea-inner-section-2">
-                                <input class="facebook_app_id" name="facebook[facebook_app_id]" type="text" value="<?php if ( $facebook_app_id != '' ) { echo esc_attr( $facebook_app_id ); } ?>" />
+                                <input class="facebook_app_id" name="facebook[facebook_app_id]" type="text" value="<?php if ( $wpea_facebook_app_id != '' ) { echo esc_attr( $wpea_facebook_app_id ); } ?>" />
                                 <span class="wpea_small">
                                     <?php
                                     printf( '%s <a href="https://developers.facebook.com/apps" target="_blank">%s</a>', 
@@ -559,7 +559,7 @@ if( is_object( $meetup_authorized_user ) ){
                                 <span class="wpea-title-text" ><?php esc_attr_e( 'Facebook App secret','wp-event-aggregator' ); ?></span>
                             </div>
                             <div class="wpea-inner-section-2">
-                                <input class="facebook_app_secret" name="facebook[facebook_app_secret]" type="text" value="<?php if ( $facebook_app_secret != '' ) { echo esc_attr( $facebook_app_secret ); } ?>" />
+                                <input class="facebook_app_secret" name="facebook[facebook_app_secret]" type="text" value="<?php if ( $wpea_facebook_app_secret != '' ) { echo esc_attr( $wpea_facebook_app_secret ); } ?>" />
                                 <span class="wpea_small">
                                     <?php
                                     printf( '%s <a href="https://developers.facebook.com/apps" target="_blank">%s</a>', 
@@ -578,9 +578,9 @@ if( is_object( $meetup_authorized_user ) ){
                             </div>
                             <div class="wpea-inner-section-2">
                                 <?php 
-                                    $update_facebook_events = isset( $facebook_options['update_events'] ) ? $facebook_options['update_events'] : 'no';
+                                    $wpea_update_facebook_events = isset( $wpea_facebook_options['update_events'] ) ? $wpea_facebook_options['update_events'] : 'no';
                                 ?>
-                                <input type="checkbox" name="facebook[update_events]" value="yes" <?php if( $update_facebook_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <input type="checkbox" name="facebook[update_events]" value="yes" <?php if( $wpea_update_facebook_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                                 <span class="wpea_small">
                                     <?php esc_attr_e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
                                     <?php printf( "( <em>%s</em> )", esc_attr__( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
@@ -594,9 +594,9 @@ if( is_object( $meetup_authorized_user ) ){
                             </div>
                             <div class="wpea-inner-section-2">
                                 <?php
-                                $import_fb_event_cats = isset( $facebook_options['import_fb_event_cats'] ) ? $facebook_options['import_fb_event_cats'] : 'no';
+                                $wpea_import_fb_event_cats = isset( $wpea_facebook_options['import_fb_event_cats'] ) ? $wpea_facebook_options['import_fb_event_cats'] : 'no';
                                 ?>
-                                <input type="checkbox" id="import_fb_event_cats" name="facebook[import_fb_event_cats]" value="yes" <?php echo( ( 'yes' === $import_fb_event_cats ) ? 'checked="checked"' : '' ); ?> />
+                                <input type="checkbox" id="import_fb_event_cats" name="facebook[import_fb_event_cats]" value="yes" <?php echo( ( 'yes' === $wpea_import_fb_event_cats ) ? 'checked="checked"' : '' ); ?> />
                                 <span class="wpea_small">
                                     <?php esc_attr_e( 'Check to import the Facebook event category and assign it to events.', 'wp-event-aggregator' ); ?>
                                 </span>
@@ -611,9 +611,9 @@ if( is_object( $meetup_authorized_user ) ){
                             <div class="wpea-inner-section-2">
                                 <?php 
                                     if( wpea_is_pro() ){
-                                        $advanced_fsync = isset( $facebook_options['advanced_sync'] ) ? $facebook_options['advanced_sync'] : 'no';
+                                        $wpea_advanced_fsync = isset( $wpea_facebook_options['advanced_sync'] ) ? $wpea_facebook_options['advanced_sync'] : 'no';
                                         ?>
-                                        <input type="checkbox" name="facebook[advanced_sync]" value="yes" <?php if( $advanced_fsync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                        <input type="checkbox" name="facebook[advanced_sync]" value="yes" <?php if( $wpea_advanced_fsync == 'yes' ) { echo 'checked="checked"'; } ?> />
                                         <?php
                                     }else{
                                         ?>
@@ -652,9 +652,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php 
-                                $update_ical_events = isset( $ical_options['update_events'] ) ? $ical_options['update_events'] : 'no';
+                                $wpea_update_ical_events = isset( $wpea_ical_options['update_events'] ) ? $wpea_ical_options['update_events'] : 'no';
                             ?>
-                            <input type="checkbox" name="ical[update_events]" value="yes" <?php if( $update_ical_events == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="ical[update_events]" value="yes" <?php if( $wpea_update_ical_events == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Check to updates existing events.', 'wp-event-aggregator' ); ?>
                                 <?php printf( "( <em>%s</em> )", esc_attr__( 'Not Recommend', 'wp-event-aggregator' ) ); ?>
@@ -670,9 +670,9 @@ if( is_object( $meetup_authorized_user ) ){
                         <div class="wpea-inner-section-2">
                             <?php 
                                 if( wpea_is_pro() ){
-                                    $advanced_sync = isset( $ical_options['advanced_sync'] ) ? $ical_options['advanced_sync'] : 'no';
+                                    $wpea_advanced_sync = isset( $wpea_ical_options['advanced_sync'] ) ? $wpea_ical_options['advanced_sync'] : 'no';
                                     ?>
-                                    <input type="checkbox" name="ical[advanced_sync]" value="yes" <?php if( $advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <input type="checkbox" name="ical[advanced_sync]" value="yes" <?php if( $wpea_advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
                                     <?php
                                 }else{
                                     ?>
@@ -695,9 +695,9 @@ if( is_object( $meetup_authorized_user ) ){
                         <div class="wpea-inner-section-2">
                             <?php 
                                 if( wpea_is_pro() ){
-                                    $advanced_sync = isset( $ical_options['ical_cat_import'] ) ? $ical_options['ical_cat_import'] : 'no';
+                                    $wpea_advanced_sync = isset( $wpea_ical_options['ical_cat_import'] ) ? $wpea_ical_options['ical_cat_import'] : 'no';
                                     ?>
-                                    <input type="checkbox" name="ical[ical_cat_import]" value="yes" <?php if( $advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                    <input type="checkbox" name="ical[ical_cat_import]" value="yes" <?php if( $wpea_advanced_sync == 'yes' ) { echo 'checked="checked"'; } ?> />
                                     <?php
                                 }else{
                                     ?>
@@ -738,7 +738,7 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $wpea_move_peit = isset( $aggregator_options['move_peit'] ) ? $aggregator_options['move_peit'] : 'no';
+                                $wpea_move_peit = isset( $wpea_aggregator_options['move_peit'] ) ? $wpea_aggregator_options['move_peit'] : 'no';
                             ?>
                             <input type="checkbox" name="wpea[move_peit]" value="yes" <?php if ( $wpea_move_peit == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
@@ -754,9 +754,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $direct_link = isset($aggregator_options['direct_link']) ? $aggregator_options['direct_link'] : 'no';
+                                $wpea_direct_link = isset($wpea_aggregator_options['direct_link']) ? $wpea_aggregator_options['direct_link'] : 'no';
                             ?>
-                            <input type="checkbox" name="wpea[direct_link]" value="yes" <?php if ($direct_link == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                            <input type="checkbox" name="wpea[direct_link]" value="yes" <?php if ($wpea_direct_link == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e('Check to enable direct event link to Event Source instead of event detail page.', 'wp-event-aggregator'); ?>
                             </span>
@@ -771,9 +771,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $events_slug = isset($aggregator_options['events_slug']) ? $aggregator_options['events_slug'] : 'wp-event';
+                                $wpea_events_slug = isset($wpea_aggregator_options['events_slug']) ? $wpea_aggregator_options['events_slug'] : 'wp-event';
                             ?>
-                            <input type="text" name="wpea[events_slug]" value="<?php if ( $events_slug ) { echo esc_attr( $events_slug ); } ?>" <?php if (!wpea_is_pro()) { echo 'disabled="disabled"'; } ?> />
+                            <input type="text" name="wpea[events_slug]" value="<?php if ( $wpea_events_slug ) { echo esc_attr( $wpea_events_slug ); } ?>" <?php if (!wpea_is_pro()) { echo 'disabled="disabled"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e('Slug for the event.', 'wp-event-aggregator'); ?>
                             </span>
@@ -788,9 +788,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $skip_trash = isset($aggregator_options['skip_trash']) ? $aggregator_options['skip_trash'] : 'no';
+                                $wpea_skip_trash = isset($wpea_aggregator_options['skip_trash']) ? $wpea_aggregator_options['skip_trash'] : 'no';
                             ?>
-                            <input type="checkbox" name="wpea[skip_trash]" value="yes" <?php if ($skip_trash == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                            <input type="checkbox" name="wpea[skip_trash]" value="yes" <?php if ($wpea_skip_trash == 'yes') { echo 'checked="checked"'; }if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e('Check to enable skip-the-trash events during importing.', 'wp-event-aggregator'); ?>
                             </span>
@@ -805,12 +805,12 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $time_format = isset( $aggregator_options['time_format'] ) ? $aggregator_options['time_format'] : '12hours';
+                                $wpea_time_format = isset( $wpea_aggregator_options['time_format'] ) ? $wpea_aggregator_options['time_format'] : '12hours';
                             ?>
                             <select name="wpea[time_format]">
-                                    <option value="12hours" <?php selected( '12hours', $time_format ); ?>><?php esc_attr_e( '12 Hours', 'wp-event-aggregator' );  ?></option>
-                                    <option value="24hours" <?php selected( '24hours', $time_format ); ?>><?php esc_attr_e( '24 Hours', 'wp-event-aggregator' ); ?></option>						
-                                    <option value="wordpress_default" <?php selected( 'wordpress_default', $time_format ); ?>><?php esc_attr_e( 'WordPress Default', 'wp-event-aggregator' ); ?></option>
+                                    <option value="12hours" <?php selected( '12hours', $wpea_time_format ); ?>><?php esc_attr_e( '12 Hours', 'wp-event-aggregator' );  ?></option>
+                                    <option value="24hours" <?php selected( '24hours', $wpea_time_format ); ?>><?php esc_attr_e( '24 Hours', 'wp-event-aggregator' ); ?></option>						
+                                    <option value="wordpress_default" <?php selected( 'wordpress_default', $wpea_time_format ); ?>><?php esc_attr_e( 'WordPress Default', 'wp-event-aggregator' ); ?></option>
                             </select>
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Choose event display time format for front-end.', 'wp-event-aggregator' ); ?>
@@ -825,9 +825,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $accent_color = isset( $aggregator_options['accent_color'] ) ? $aggregator_options['accent_color'] : '#039ED7';
+                                $wpea_accent_color = isset( $wpea_aggregator_options['accent_color'] ) ? $wpea_aggregator_options['accent_color'] : '#039ED7';
                             ?>
-                            <input class="wpea_color_field" type="text" name="wpea[accent_color]" value="<?php echo esc_attr( $accent_color ); ?>"/>
+                            <input class="wpea_color_field" type="text" name="wpea[accent_color]" value="<?php echo esc_attr( $wpea_accent_color ); ?>"/>
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Choose accent color for front-end event grid and event widget.', 'wp-event-aggregator' ); ?>
                             </span>
@@ -841,14 +841,14 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $image_import_method = isset( $aggregator_options['image_import_method'] ) ? $aggregator_options['image_import_method'] : 'download';
+                                $wpea_image_import_method = isset( $wpea_aggregator_options['image_import_method'] ) ? $wpea_aggregator_options['image_import_method'] : 'download';
                             ?>
                             <label style="display:block; margin-bottom:5px;">
-                                <input type="radio" name="wpea[image_import_method]" value="download" <?php checked( $image_import_method, 'download' ); ?> />
+                                <input type="radio" name="wpea[image_import_method]" value="download" <?php checked( $wpea_image_import_method, 'download' ); ?> />
                                 <?php esc_attr_e( 'Download image and set as Featured Image (Default)', 'wp-event-aggregator' ); ?>
                             </label>
                             <label style="display:block; margin-bottom:5px;">
-                                <input type="radio" name="wpea[image_import_method]" value="external_url" <?php checked( $image_import_method, 'external_url' ); ?> />
+                                <input type="radio" name="wpea[image_import_method]" value="external_url" <?php checked( $wpea_image_import_method, 'external_url' ); ?> />
                                 <?php esc_attr_e( 'Store external image URL only (No download)', 'wp-event-aggregator' ); ?>
                             </label>
                             <span class="wpea_small">
@@ -871,8 +871,8 @@ if( is_object( $meetup_authorized_user ) ){
                             $wpea_options   = get_option( WPEA_OPTIONS );
                             $wpea_edt_id    = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
                             $wpea_edt_url   = !empty( $wpea_edt_id ) ? wp_get_attachment_url( $wpea_edt_id ) : '';
-                            $button_text    = empty( $wpea_edt_url ) ? 'Choose Event Thumbnail' : 'Change Event Thumbnail';
-                            $remove_class   = empty( $wpea_edt_url ) ? 'hidden' : '';
+                            $wpea_button_text    = empty( $wpea_edt_url ) ? 'Choose Event Thumbnail' : 'Change Event Thumbnail';
+                            $wpea_remove_class   = empty( $wpea_edt_url ) ? 'hidden' : '';
                             ?>
 
                             <div id="wpea-event-thumbnail-preview" class="wp-clearfix settings-page-preview <?php echo esc_attr( ! empty( $wpea_edt_url ) ? '' : 'hidden' ); ?>">
@@ -884,9 +884,9 @@ if( is_object( $meetup_authorized_user ) ){
 
                             <div class="action-buttons">
                                 <button type="button" id="wpea-choose-from-library-button" class="button-add-site-icon"  >
-                                    <?php echo esc_attr( $button_text ); ?>
+                                    <?php echo esc_attr( $wpea_button_text ); ?>
                                 </button>
-                                <button id="wpea-js-remove-thumbnail" type="button" class="reset <?php echo esc_attr( $remove_class ); ?><?php echo esc_attr( $wpea_cfub ); ?>" >
+                                <button id="wpea-js-remove-thumbnail" type="button" class="reset <?php echo esc_attr( $wpea_remove_class ); ?><?php echo esc_attr( $wpea_cfub ); ?>" >
                                     <?php esc_attr_e( 'Remove Event Thumbnail', 'wp-event-aggregator' ); ?>
                                 </button>
                             </div>
@@ -903,9 +903,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php 
-                                $deactive_wpevents = isset( $aggregator_options['deactive_wpevents'] ) ? $aggregator_options['deactive_wpevents'] : 'no';
+                                $wpea_deactive_wpevents = isset( $wpea_aggregator_options['deactive_wpevents'] ) ? $wpea_aggregator_options['deactive_wpevents'] : 'no';
                             ?>
-                            <input type="checkbox" name="wpea[deactive_wpevents]" value="yes" <?php if( $deactive_wpevents == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="wpea[deactive_wpevents]" value="yes" <?php if( $wpea_deactive_wpevents == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Check to disable inbuilt event management system.', 'wp-event-aggregator' ); ?>
                             </span>
@@ -919,9 +919,9 @@ if( is_object( $meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php 
-                                $delete_wpdata = isset( $aggregator_options['delete_wpdata'] ) ? $aggregator_options['delete_wpdata'] : 'no';
+                                $wpea_delete_wpdata = isset( $wpea_aggregator_options['delete_wpdata'] ) ? $wpea_aggregator_options['delete_wpdata'] : 'no';
                             ?>
-                            <input type="checkbox" name="wpea[delete_wpdata]" value="yes" <?php if( $delete_wpdata == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <input type="checkbox" name="wpea[delete_wpdata]" value="yes" <?php if( $wpea_delete_wpdata == 'yes' ) { echo 'checked="checked"'; } ?> />
                             <span class="wpea_small">
                                 <?php esc_attr_e( 'Delete WP Event Aggregator data like settings, scheduled imports, import history on Uninstall', 'wp-event-aggregator' ); ?>
                             </span>
@@ -987,12 +987,12 @@ if( is_object( $meetup_authorized_user ) ){
                 if( class_exists( 'WP_Event_Aggregator_Pro_Common' ) && method_exists( $importevents->common_pro, 'wpea_licence_page_in_setting' ) ){
                     $importevents->common_pro->wpea_licence_page_in_setting(); 
                 }else{
-                    $license_section = sprintf(
+                    $wpea_license_section = sprintf(
                         '<h3 class="setting_bar" >Once you have updated the plugin Pro version <a href="%s">%s</a>, you will be able to access this section.</h3>',
                         esc_url( admin_url( 'plugins.php?s=WP+Event+Aggregator+Pro' ) ),
                         esc_html__( 'Here', 'wp-event-aggregator' )
                     );
-                    echo wp_kses_post( $license_section );
+                    echo wp_kses_post( $wpea_license_section );
                 }
             ?>
         </div>

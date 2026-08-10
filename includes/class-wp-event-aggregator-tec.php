@@ -248,15 +248,13 @@ class WP_Event_Aggregator_TEC {
 			// insert the $wpdb->prefix.tec_events table
 			$tetable_name   = $wpdb->prefix . 'tec_events';
 			$tedata         = array( 'post_id'   => $new_event_id, 'start_date' => $start_time, 'end_date'  => $end_time, 'timezone'  => $timezone, 'start_date_utc' => $start_date_utc, 'end_date_utc' => $end_date_utc );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->insert( $tetable_name, $tedata );
+			$wpdb->insert( $tetable_name, $tedata ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$tec_e_id       = $wpdb->insert_id;
 
 			// Update the $wpdb->prefix.tec_occurrences table
 			$totable_name   = $wpdb->prefix . 'tec_occurrences';
 			$todata         = array( 'event_id' => $tec_e_id, 'post_id' => $new_event_id, 'start_date' => $start_time, 'start_date_utc' => $start_date_utc, 'end_date' => $end_time, 'end_date_utc' => $end_date_utc, 'hash' => $hash );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->insert( $totable_name, $todata );
+			$wpdb->insert( $totable_name, $todata ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 			do_action( 'wpea_after_create_tec_' . $centralize_array['origin'] . '_event', $new_event_id, $formated_args, $centralize_array );
 			return array(
@@ -401,15 +399,13 @@ class WP_Event_Aggregator_TEC {
 			$tetable_name   = $wpdb->prefix . 'tec_events';
 			$tedata         = array( 'start_date' => $start_time, 'end_date' => $end_time, 'timezone' => $timezone, 'start_date_utc' => $start_date_utc, 'end_date_utc' => $end_date_utc );
 			$where          = array( 'post_id' => $update_event_id );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->update( $tetable_name, $tedata, $where );
+			$wpdb->update( $tetable_name, $tedata, $where ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			//update the $wpdb->prefix.tec_occurrences table
 			$totable_name   = $wpdb->prefix . 'tec_occurrences';
 			$todata         = array( 'start_date' => $start_time, 'start_date_utc' => $start_date_utc, 'end_date' => $end_time, 'end_date_utc' => $end_date_utc  );
 			$where          = array( 'post_id' => $update_event_id );
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-			$wpdb->update( $totable_name, $todata, $where );
+			$wpdb->update( $totable_name, $todata, $where ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 
 			do_action( 'wpea_after_update_tec_' . $centralize_array['origin'] . '_event', $update_event_id, $formated_args, $centralize_array );

@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Commands for Action Scheduler.
@@ -85,7 +86,7 @@ class ActionScheduler_WPCLI_Clean_Command extends WP_CLI_Command {
 		WP_CLI::log(
 			sprintf(
 				/* translators: %d refers to the total number of batches processed */
-				_n( '%d batch processed.', '%d batches processed.', $batches_processed, 'wp-event-aggregator' ),
+				_n( '%d batch processed.', '%d batches processed.', $batches_processed, 'action-scheduler' ),
 				$batches_processed
 			)
 		);
@@ -100,7 +101,7 @@ class ActionScheduler_WPCLI_Clean_Command extends WP_CLI_Command {
 		WP_CLI::error(
 			sprintf(
 				/* translators: %s refers to the exception error message */
-				__( 'There was an error deleting an action: %s', 'wp-event-aggregator' ),
+				__( 'There was an error deleting an action: %s', 'action-scheduler' ),
 				$e->getMessage()
 			)
 		);
@@ -115,7 +116,7 @@ class ActionScheduler_WPCLI_Clean_Command extends WP_CLI_Command {
 		WP_CLI::success(
 			sprintf(
 				/* translators: %d refers to the total number of actions deleted */
-				_n( '%d action deleted.', '%d actions deleted.', $actions_deleted, 'wp-event-aggregator' ),
+				_n( '%d action deleted.', '%d actions deleted.', $actions_deleted, 'action-scheduler' ),
 				$actions_deleted
 			)
 		);

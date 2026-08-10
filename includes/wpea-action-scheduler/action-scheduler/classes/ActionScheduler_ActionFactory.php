@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_ActionFactory
@@ -230,7 +231,7 @@ class ActionScheduler_ActionFactory {
 		$next     = $schedule->get_next( as_get_datetime_object() );
 
 		if ( is_null( $next ) || ! $schedule->is_recurring() ) {
-			throw new InvalidArgumentException( __( 'Invalid action - must be a recurring action.', 'wp-event-aggregator' ) );
+			throw new InvalidArgumentException( __( 'Invalid action - must be a recurring action.', 'action-scheduler' ) );
 		}
 
 		$schedule_class = get_class( $schedule );
@@ -323,7 +324,7 @@ class ActionScheduler_ActionFactory {
 			error_log(
 				sprintf(
 					/* translators: %1$s is the name of the hook to be enqueued, %2$s is the exception message. */
-					__( 'Caught exception while enqueuing action "%1$s": %2$s', 'wp-event-aggregator' ),
+					__( 'Caught exception while enqueuing action "%1$s": %2$s', 'action-scheduler' ),
 					$options['hook'],
 					$e->getMessage()
 				)

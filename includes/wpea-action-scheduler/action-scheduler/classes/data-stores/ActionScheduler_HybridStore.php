@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, missing_direct_file_access_protection
 
 use ActionScheduler_Store as Store;
 use Action_Scheduler\Migration\Runner;
@@ -400,9 +401,13 @@ class ActionScheduler_HybridStore extends Store {
 		}
 
 		foreach ( $stores as $store ) {
-			$action = $store->fetch_action( $action_id );
-			if ( ! is_a( $action, 'ActionScheduler_NullAction' ) ) {
-				return $store;
+			try {
+				// Probe by fetching the action status: if entry is corrupted, the object construction is not feasible.
+				if ( null !== $store->get_status( $action_id ) ) {
+					return $store;
+				}
+			} catch ( \InvalidArgumentException | \RuntimeException $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+				// A missing or corrupted/empty status just means this store can't resolve the action; keep probing.
 			}
 		}
 		return null;

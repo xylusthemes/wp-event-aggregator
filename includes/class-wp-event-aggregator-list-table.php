@@ -423,8 +423,7 @@ class WP_Event_Aggregator_List_Table extends WP_List_Table {
 				}
 	
 				$totalimport_query = $wpdb->prepare( "SELECT SUM( meta_value) AS created_total FROM ".$wpdb->postmeta." WHERE post_id IN ( SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key = 'schedule_import_id' AND meta_value = %d ) AND meta_key = 'created'", $import_id );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$totalimport = $wpdb->get_var( $totalimport_query );
+				$totalimport = $wpdb->get_var( $totalimport_query ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 				$next_run = '-';
 				if(isset($next_run_times[$import_id]) && !empty($next_run_times[$import_id])){
