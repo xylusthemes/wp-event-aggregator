@@ -3,8 +3,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-$shortcodeTable = new WPEA_Shortcode_List_Table();
-$shortcodeTable->prepare_items();
+$wpea_shortcodeTable = new WPEA_Shortcode_List_Table();
+$wpea_shortcodeTable->prepare_items();
 
 ?>
 
@@ -24,15 +24,15 @@ $shortcodeTable->prepare_items();
                 <li><?php esc_attr_e( '💯 100% Free Plugin', 'wp-event-aggregator' ); ?></li>
             </ul>
             <?php
-                $plugin_slug = 'xylus-events-calendar';
-                $plugin_file = 'xylus-events-calendar/xylus-events-calendar.php';
-                $current_page = admin_url( 'admin.php?page=eventbrite_event&tab=shortcodes' );
-                if ( ! file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
-                    $install_url = wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=' . $plugin_slug ), 'install-plugin_' . $plugin_slug );
-                    echo '<a href="' . esc_url( $install_url ) . '" class="button button-primary">🚀 Install Now – It’s Free!</a>';
-                } elseif ( ! is_plugin_active( $plugin_file ) ) {
-                    $activate_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=' . $plugin_file ), 'activate-plugin_' . $plugin_file );
-                    echo '<a href="' . esc_url( $activate_url ) . '" class="button button-secondary">⚡ Activate Plugin</a>';
+                $wpea_plugin_slug = 'xylus-events-calendar';
+                $wpea_plugin_file = 'xylus-events-calendar/xylus-events-calendar.php';
+                $wpea_current_page = admin_url( 'admin.php?page=eventbrite_event&tab=shortcodes' );
+                if ( ! file_exists( WP_PLUGIN_DIR . '/' . $wpea_plugin_file ) ) {
+                    $wpea_install_url = wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=' . $wpea_plugin_slug ), 'install-plugin_' . $wpea_plugin_slug );
+                    echo '<a href="' . esc_url( $wpea_install_url ) . '" class="button button-primary">🚀 Install Now – It’s Free!</a>';
+                } elseif ( ! is_plugin_active( $wpea_plugin_file ) ) {
+                    $wpea_activate_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=' . $wpea_plugin_file ), 'activate-plugin_' . $wpea_plugin_file );
+                    echo '<a href="' . esc_url( $wpea_activate_url ) . '" class="button button-secondary">⚡ Activate Plugin</a>';
                 } else {
                     echo '<div class="wpea-xylus-plugin-box">';
                     echo '<h3>✅ Easy Events Calendar is Active</h3>';
@@ -70,6 +70,6 @@ $shortcodeTable->prepare_items();
 <div class="wpea_container">
     <div class="wpea_row">
     <h3 class="setting_bar"><?php esc_attr_e( 'WP Event Aggregator Shortcodes', 'wp-event-aggregator' ); ?></h3>
-        <?php $shortcodeTable->display(); ?>
+        <?php $wpea_shortcodeTable->display(); ?>
     </div>
 </div>

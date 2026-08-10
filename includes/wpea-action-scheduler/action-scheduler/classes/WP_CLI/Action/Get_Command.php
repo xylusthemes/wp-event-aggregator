@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 namespace Action_Scheduler\WP_CLI\Action;
 
@@ -20,7 +21,7 @@ class Get_Command extends \ActionScheduler_WPCLI_Command {
 
 		if ( is_a( $action, ActionScheduler_NullAction::class ) ) {
 			/* translators: %d is action ID. */
-			\WP_CLI::error( sprintf( esc_html__( 'Unable to retrieve action %d.', 'wp-event-aggregator' ), $action_id ) );
+			\WP_CLI::error( sprintf( esc_html__( 'Unable to retrieve action %d.', 'action-scheduler' ), $action_id ) );
 		}
 
 		$only_logs   = ! empty( $this->assoc_args['field'] ) && 'log_entries' === $this->assoc_args['field'];

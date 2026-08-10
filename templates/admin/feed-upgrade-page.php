@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$pro_url = WPEA_PLUGIN_BUY_NOW_URL;
+$wpea_pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 ?>
 <style>
 	.wpea-upgrade-wrap { max-width: 900px; margin: 40px auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -38,6 +38,7 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 	.wpea-compare-table td { padding:11px 20px; font-size:13px; border-top:1px solid #f0f0f0; text-align:center; }
 	.wpea-compare-table td:first-child { text-align:left; color:#444; font-weight:500; }
 	.wpea-compare-table tr:hover td { background:#fafafa; }
+	.wpea-compare-table td.wpea-section-row { background:#f8f9fa; font-weight:700; color:#1d2327; text-transform:uppercase; font-size:11px; letter-spacing:0.5px; }
 	.wpea-check { color:#4CAF50; font-size:16px; font-weight:700; }
 	.wpea-cross { color:#ccc; font-size:16px; }
 
@@ -53,8 +54,8 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 	<div class="wpea-upgrade-hero">
 		<span class="wpea-pro-badge-large"><?php esc_html_e( 'PRO Feature', 'wp-event-aggregator' ); ?></span>
 		<h1 style="color:#fff;"><?php esc_html_e( 'WP Event Aggregator Widget', 'wp-event-aggregator' ); ?></h1>
-		<p style="color:#ddd;"><?php esc_html_e( 'Display Eventbrite and Meetup events directly on your website no import, no authorization, no API token needed. Just paste a shortcode and go live!', 'wp-event-aggregator' ); ?></p>
-		<a href="<?php echo esc_url( $pro_url ); ?>" target="_blank" class="wpea-upgrade-hero-btn">
+		<p style="color:#ddd;"><?php esc_html_e( 'Display Eventbrite, Meetup and Facebook events directly on your website, import from multiple pages, groups, organizers and collections at once. Just paste a shortcode and go live!', 'wp-event-aggregator' ); ?></p>
+		<a href="<?php echo esc_url( $wpea_pro_url ); ?>" target="_blank" class="wpea-upgrade-hero-btn">
 			✦ <?php esc_html_e( 'Upgrade to PRO', 'wp-event-aggregator' ); ?>
 		</a>
 	</div>
@@ -63,32 +64,62 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 		<div class="wpea-feature-card">
 			<span class="wpea-feature-icon">🚀</span>
 			<h3><?php esc_html_e( 'No Import Needed', 'wp-event-aggregator' ); ?></h3>
-			<p><?php esc_html_e( 'Show live events directly from Eventbrite or Meetup, no manual importing, no syncing required.', 'wp-event-aggregator' ); ?></p>
+			<p><?php esc_html_e( 'Show live events directly from Eventbrite, Meetup or Facebook, no manual importing, no syncing required.', 'wp-event-aggregator' ); ?></p>
 		</div>
 		<div class="wpea-feature-card">
 			<span class="wpea-feature-icon">🔑</span>
 			<h3><?php esc_html_e( 'No Auth & No Token', 'wp-event-aggregator' ); ?></h3>
-			<p><?php esc_html_e( 'No API key, no OAuth setup. Use Eventbrite organizer, collection, event IDs, or Meetup group and event IDs.', 'wp-event-aggregator' ); ?></p>
+			<p><?php esc_html_e( 'No API key, no OAuth setup. Use Eventbrite organizer, collection, event IDs, Meetup group and event IDs, or Facebook page, group and event IDs.', 'wp-event-aggregator' ); ?></p>
 		</div>
 		<div class="wpea-feature-card">
 			<span class="wpea-feature-icon">🔄</span>
 			<h3><?php esc_html_e( 'Always Up-to-Date', 'wp-event-aggregator' ); ?></h3>
-			<p><?php esc_html_e( 'Events auto-refresh via smart caching. Your visitors always see fresh event data.', 'wp-event-aggregator' ); ?></p>
+			<p><?php esc_html_e( 'Events auto-refresh via smart caching with 1/6/12/24 hour or custom presets, plus background auto-refresh and one-click manual cache clear.', 'wp-event-aggregator' ); ?></p>
+		</div>
+		<div class="wpea-feature-card">
+			<span class="wpea-feature-icon">📥</span>
+			<h3><?php esc_html_e( 'Multiple Sources at Once', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Import from multiple Eventbrite Organizer/Collection/Event IDs, Meetup Group URLs, or Facebook Pages/Groups/Events/iCal feeds in a single go, one per line or comma separated.', 'wp-event-aggregator' ); ?></p>
+		</div>
+		<div class="wpea-feature-card">
+			<span class="wpea-feature-icon">📘</span>
+			<h3><?php esc_html_e( 'Facebook Page, Group & iCal Import', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Pull events from Facebook Pages, Groups, specific Event IDs, or a public Facebook iCal feed URL.', 'wp-event-aggregator' ); ?></p>
 		</div>
 		<div class="wpea-feature-card">
 			<span class="wpea-feature-icon">🎨</span>
 			<h3><?php esc_html_e( '7 Layout Styles', 'wp-event-aggregator' ); ?></h3>
-			<p><?php esc_html_e( 'Card Grid, List, Masonry, Timeline, Ticket, Minimal Grid, Compact List — pick what fits your site.', 'wp-event-aggregator' ); ?></p>
+			<p><?php esc_html_e( 'Card Grid, List, Masonry, Timeline, Ticket List, Minimal Grid, Compact List — pick what fits your site, in 1 to 4 columns.', 'wp-event-aggregator' ); ?></p>
 		</div>
 		<div class="wpea-feature-card">
 			<span class="wpea-feature-icon">🎟️</span>
 			<h3><?php esc_html_e( 'Ticket & RSVP Buttons', 'wp-event-aggregator' ); ?></h3>
-			<p><?php esc_html_e( 'Show Eventbrite tickets with popup modal or link, and Meetup RSVP links with customizable labels.', 'wp-event-aggregator' ); ?></p>
+			<p><?php esc_html_e( 'Show Eventbrite tickets with popup modal or link, and Meetup / Facebook links, with fully custom button labels.', 'wp-event-aggregator' ); ?></p>
 		</div>
 		<div class="wpea-feature-card">
 			<span class="wpea-feature-icon">⚡</span>
-			<h3><?php esc_html_e( 'Shortcode Builder', 'wp-event-aggregator' ); ?></h3>
-			<p><?php esc_html_e( 'Visual builder generates your shortcode instantly. Paste it anywhere — pages, posts, widgets.', 'wp-event-aggregator' ); ?></p>
+			<h3><?php esc_html_e( '6-Step Shortcode Builder', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Platform → Source → Display → Tickets → Filters → Settings, with a live preview sidebar. Your shortcode is generated automatically.', 'wp-event-aggregator' ); ?></p>
+		</div>
+		<div class="wpea-feature-card">
+			<span class="wpea-feature-icon">🧩</span>
+			<h3><?php esc_html_e( 'Toggle Any Field', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Show or hide the image, date & time, venue, organizer name, price badge, and ticket button independently for each feed.', 'wp-event-aggregator' ); ?></p>
+		</div>
+		<div class="wpea-feature-card">
+			<span class="wpea-feature-icon">📄</span>
+			<h3><?php esc_html_e( '4 Pagination Modes', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Numbered AJAX pagination, Load More button, Infinite Scroll, or show all events with no pagination at all.', 'wp-event-aggregator' ); ?></p>
+		</div>
+		<div class="wpea-feature-card">
+			<span class="wpea-feature-icon">🗓️</span>
+			<h3><?php esc_html_e( '8 Smart Date Filters', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Today, Upcoming Week, Upcoming 15 Days, Upcoming Month, All Upcoming, Past Events (Eventbrite), Custom Date Range, or no filter at all.', 'wp-event-aggregator' ); ?></p>
+		</div>
+		<div class="wpea-feature-card">
+			<span class="wpea-feature-icon">🏷️</span>
+			<h3><?php esc_html_e( 'Custom Labels & CSS', 'wp-event-aggregator' ); ?></h3>
+			<p><?php esc_html_e( 'Rename the Buy, Register, Free and Sold Out labels, plus add your own custom CSS per feed for pixel-perfect styling.', 'wp-event-aggregator' ); ?></p>
 		</div>
 	</div>
 
@@ -103,9 +134,13 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 			</thead>
 			<tbody>
 				<tr>
-					<td><?php esc_html_e( 'Display Eventbrite and Meetup events via Live Feed (no import)', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Display Eventbrite, Meetup and Facebook events via Live Feed (no import)', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Eventbrite', 'wp-event-aggregator' ); ?></td>
 				</tr>
 				<tr>
 					<td><?php esc_html_e( 'Eventbrite feed by Organizer ID', 'wp-event-aggregator' ); ?></td>
@@ -123,6 +158,30 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
+					<td><?php esc_html_e( 'Multiple Organizer / Collection / Event IDs at once (one per line or comma separated)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Eventbrite ticket button as Popup Modal or Link to Eventbrite page', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Show or hide Sold Out Eventbrite events', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Past Events time filter (Eventbrite)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Meetup', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
 					<td><?php esc_html_e( 'Meetup feed by Group URL or group slug', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
@@ -133,37 +192,171 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( '7 Display Layouts (Grid, List, Masonry & more)', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Multiple Group URLs / Event IDs at once (one per line or comma separated)', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Shortcode Builder', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Direct RSVP link to meetup.com', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Facebook', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Facebook feed by Page ID / Username', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Filter by Date & Time', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Facebook feed by Group ID / URL', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Ticket and RSVP Buttons (Eventbrite modal/link, Meetup link)', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Facebook feed by Specific Event IDs', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Smart Cache + Auto Refresh', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Facebook feed by public iCal URL', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Pagination (Load More / Infinite Scroll)', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Multiple Page / Group IDs, Event IDs & iCal URLs at once (one per line or comma separated)', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Custom CSS per Feed', 'wp-event-aggregator' ); ?></td>
+					<td><?php esc_html_e( 'Direct link to facebook.com/events', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Layout & Display', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( '7 Display Layouts (Card Grid, List, Masonry, Timeline, Ticket List, Minimal Grid, Compact List)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Choose 1 to 4 columns on desktop (auto single column on mobile)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Events per page: 6 / 9 / 10 / 12 / 20 / 30 / 40 / 50', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( '4 Pagination modes: Numbered AJAX, Load More, Infinite Scroll, or None (show all)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Toggle visible fields: Image, Date & Time, Venue/Location, Organizer, Price/Free badge, Ticket/RSVP button', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Ticket and RSVP Buttons (Eventbrite modal/link, Meetup and Facebook link-out)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Filtering', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( '8 Time filter presets: Today, Upcoming Week, Upcoming 15 Days, Upcoming Month, All Upcoming, Custom Range, No Filter (+ Past Events for Eventbrite)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Custom Start / End date range picker', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Show/hide Sold Out events (Eventbrite)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Hide online-only events', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Customization & Labels', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Custom "Get Tickets / Buy" button label', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Custom "Register / Attend" button label', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Custom "Free" badge label', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Custom "Sold Out" label (Eventbrite)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Custom CSS per feed', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Performance & Caching', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Cache duration presets: 1 / 6 / 12 / 24 hours, or custom minutes', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Automatic background cache refresh (Action Scheduler)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'One-click manual cache clear with live cache status', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+
+				<tr>
+					<td class="wpea-section-row" colspan="3"><?php esc_html_e( 'Builder Experience', 'wp-event-aggregator' ); ?></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( '6-Step guided Feed Builder (Platform, Source, Display, Tickets, Filters, Settings)', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Live preview sidebar with full-screen preview toggle', 'wp-event-aggregator' ); ?></td>
+					<td><span class="wpea-cross">✕</span></td>
+					<td><span class="wpea-check">✔</span></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Auto-generated shortcode with one-click copy', 'wp-event-aggregator' ); ?></td>
 					<td><span class="wpea-cross">✕</span></td>
 					<td><span class="wpea-check">✔</span></td>
 				</tr>
@@ -173,8 +366,8 @@ $pro_url = WPEA_PLUGIN_BUY_NOW_URL;
 
 	<div class="wpea-bottom-cta">
 		<h3><?php esc_html_e( 'Ready to go live with Wp Event Aggregator Widget?', 'wp-event-aggregator' ); ?></h3>
-		<p><?php esc_html_e( 'Upgrade to PRO and start displaying Eventbrite and Meetup events on your website in minutes, no technical setup needed.', 'wp-event-aggregator' ); ?></p>
-		<a href="<?php echo esc_url( $pro_url ); ?>" target="_blank"
+		<p><?php esc_html_e( 'Upgrade to PRO and start displaying Eventbrite, Meetup and Facebook events on your website in minutes, no technical setup needed.', 'wp-event-aggregator' ); ?></p>
+		<a href="<?php echo esc_url( $wpea_pro_url ); ?>" target="_blank"
 			style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#f06342,#3d64f4); color:#fff; font-size:14px; font-weight:700; padding:13px 30px; border-radius:8px; text-decoration:none; box-shadow:0 4px 16px rgba(240,99,66,0.35);">
 			✦ <?php esc_html_e( 'Get PRO Now', 'wp-event-aggregator' ); ?>
 		</a>

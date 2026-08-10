@@ -3,6 +3,8 @@
  * Plugin Name:       WP Event Aggregator
  * Plugin URI:        http://xylusthemes.com/plugins/wp-event-aggregator/
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
+ * Requires at least: 5.0
+ * Requires PHP:      7.4
  * Version:           1.9.1
  * Author:            Xylus Themes
  * Author URL:        http://xylusthemes.com
@@ -27,7 +29,7 @@ class WP_Event_Aggregator{
 	 * WP_Event_Aggregator The one true WP_Event_Aggregator.
 	 */
 	private static $instance;
-	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax, $eventbrite_api;
+	public $common, $cpt, $eventbrite, $meetup, $facebook, $ical_parser, $ical, $admin, $manage_import, $wpea, $tec, $em, $eventon, $event_organizer, $aioec, $ee4, $my_calendar, $common_pro, $facebook_pro, $eventum, $cron, $fb_authorize, $meetup_authorize, $ical_parser_aioec, $eventprime, $ajax, $eventbrite_api,$multi_source;
 
     /**
      * Main WP Event Aggregator Instance.
@@ -40,7 +42,7 @@ class WP_Event_Aggregator{
      * @uses WP_Event_Aggregator::setup_constants() Setup the constants needed.
      * @uses WP_Event_Aggregator::includes() Include the required files.
      * @uses WP_Event_Aggregator::laod_textdomain() load the language files.
-     * @see run_wp_event_aggregator()
+     * @see wpea_run_wp_event_aggregator()
      * @return object| WP Event Aggregator the one true WP Event Aggregator.
      */
 	public static function instance() {
@@ -48,7 +50,6 @@ class WP_Event_Aggregator{
 			self::$instance = new WP_Event_Aggregator;
 			self::$instance->setup_constants();
 
-			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 			add_action( 'plugins_loaded', array( self::$instance, 'load_authorize_class' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_style' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'wpea_enqueue_script' ) );
@@ -92,7 +93,7 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 * @see WP_Event_Aggregator::instance()
-	 * @see run_wp_event_aggregator()
+	 * @see wpea_run_wp_event_aggregator()
 	 */
 	private function __construct() { /* Do nothing here */ }
 
@@ -207,23 +208,6 @@ class WP_Event_Aggregator{
 	}
 
 	/**
-	 * Loads the plugin language files.
-	 * 
-	 * @access public
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function load_textdomain(){
-
-		load_plugin_textdomain(
-			'wp-event-aggregator',
-			false,
-			basename( dirname( __FILE__ ) ) . '/languages'
-		);
-	
-	}
-
-	/**
 	 * WPEA setting And docs link add in plugin page.
 	 *
 	 * @since 1.0
@@ -324,7 +308,7 @@ endif; // End If class exists check.
  * @since 1.0.0
  * @return object|WP_Event_Aggregator The one true WP_Event_Aggregator Instance.
  */
-function run_wp_event_aggregator() {
+function wpea_run_wp_event_aggregator() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	return WP_Event_Aggregator::instance();
 }
 
@@ -345,7 +329,7 @@ function wpea_get_import_options( $type = '' ){
 
 // Get WP_Event_Aggregator Running.
 global $importevents, $wpea_errors, $wpea_success_msg, $wpea_warnings, $wpea_info_msg;
-$importevents = run_wp_event_aggregator();
+$importevents = wpea_run_wp_event_aggregator(); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 $wpea_errors = $wpea_warnings = $wpea_success_msg = $wpea_info_msg = array();
 
 /**
