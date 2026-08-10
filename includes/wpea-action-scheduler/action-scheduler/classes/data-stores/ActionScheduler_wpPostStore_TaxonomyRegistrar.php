@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_wpPostStore_TaxonomyRegistrar
@@ -19,7 +20,7 @@ class ActionScheduler_wpPostStore_TaxonomyRegistrar {
 	 */
 	protected function taxonomy_args() {
 		$args = array(
-			'label'             => __( 'Action Group', 'wp-event-aggregator' ),
+			'label'             => __( 'Action Group', 'action-scheduler' ),
 			'public'            => false,
 			'hierarchical'      => false,
 			'show_admin_column' => true,

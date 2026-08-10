@@ -126,6 +126,10 @@ class WP_Event_Aggregator_Aioec {
 			$eo_eventdata['post_status'] = get_post_status( $is_exitsing_event );
 		}
 
+		if ( $is_exitsing_event ) {
+			$eo_eventdata = $importevents->common->wpea_preserve_existing_event_data( $eo_eventdata, $is_exitsing_event );
+		}
+
 		$inserted_event_id = wp_insert_post( $eo_eventdata, true );
 
 		if ( ! is_wp_error( $inserted_event_id ) ) {
@@ -182,9 +186,9 @@ class WP_Event_Aggregator_Aioec {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $inserted_event_id, $event_image, $event_args );
-			}else{
+			}elseif ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $inserted_event_id, $default_thumb );
@@ -215,21 +219,24 @@ class WP_Event_Aggregator_Aioec {
 				update_post_meta( $inserted_event_id, 'series_id', $series_id );
 			}
 			
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
+			}
+			
 			// Custom table Details
 			$event_array = array(
 				'post_id' => $inserted_event_id,
 				'start'   => $start_time,
 				'end' 	  => $end_time,
 			);
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_instances_table WHERE `post_id` = ".absint( $inserted_event_id ) );
+			$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_instances_table WHERE `post_id` = ".absint( $inserted_event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			if( $event_count > 0 && is_numeric( $event_count ) ){
 				$where = array( 'post_id' => absint( $inserted_event_id ) );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->update( $this->event_instances_table , $event_array, $where );	
+				$wpdb->update( $this->event_instances_table , $event_array, $where ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}else{
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->insert( $this->event_instances_table , $event_array );
+				$wpdb->insert( $this->event_instances_table , $event_array ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
 
 			$venue   = isset( $centralize_array['location'] ) ? $centralize_array['location'] : '';
@@ -329,15 +336,12 @@ class WP_Event_Aggregator_Aioec {
 			if( $lon != '' ){
 				$event_format[] = '%f';  // longitude
 			}
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$event_exist_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_db_table WHERE `post_id` = ".absint( $inserted_event_id ) );
+			$event_exist_count = $wpdb->get_var( "SELECT COUNT(*) FROM $this->event_db_table WHERE `post_id` = ".absint( $inserted_event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			if( $event_exist_count > 0 && is_numeric( $event_exist_count ) ){
 				$where = array( 'post_id' => absint( $inserted_event_id ) );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->update( $this->event_db_table, $event_table_array, $where, $event_format );	
+				$wpdb->update( $this->event_db_table, $event_table_array, $where, $event_format );	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}else{
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->insert( $this->event_db_table, $event_table_array, $event_format );
+				$wpdb->insert( $this->event_db_table, $event_table_array, $event_format ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
 
 			if ( $is_exitsing_event ) {
@@ -367,7 +371,7 @@ class WP_Event_Aggregator_Aioec {
 	 * @return str
 	 */	
 	public function get_ical_uid_for_event( $event_id ){
-		$site_url = parse_url( ai1ec_get_site_url() );
+		$site_url = wp_parse_url( ai1ec_get_site_url() );
 		$format   = 'ai1ec-%d@' . $site_url['host'];
 		if ( isset( $site_url['path'] ) ) {
 			$format .= $site_url['path'];

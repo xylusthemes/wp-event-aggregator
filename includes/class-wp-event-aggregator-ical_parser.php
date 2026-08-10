@@ -326,6 +326,20 @@ class WP_Event_Aggregator_Ical_Parser {
 		if( !empty( $ical_wp_images ) && !empty( $ical_wp_images[1]) ){
 			$event_image =  $ical_wp_images[1];
 		}
+
+		// add new method with image tag
+		try {
+			if (method_exists($event, 'getImage')) {
+				$image = $event->getImage();
+
+				if (!empty($image)) {
+					$event_image = $image;
+				}
+			}
+		} catch (\Exception $e) {
+			$event_image = '';
+		}
+
 		$timezone_name = !empty( $timezone ) ? $timezone : $calendar_timezone;
 
 		// Only for facebook ical imports.
@@ -398,7 +412,7 @@ class WP_Event_Aggregator_Ical_Parser {
 			}
 		}		
 		
-		if( $oraganizer_data['email'] == 'noreply@facebookmail_com' ){
+		if( is_array( $oraganizer_data ) && $oraganizer_data['email'] == 'noreply@facebookmail_com' ){
 			$oraganizer_data['email'] = '';
 		}
 		

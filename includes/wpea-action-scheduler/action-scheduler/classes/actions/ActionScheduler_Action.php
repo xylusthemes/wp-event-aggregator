@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_Action
@@ -77,7 +78,7 @@ class ActionScheduler_Action {
 			throw new Exception(
 				sprintf(
 					/* translators: 1: action hook. */
-					__( 'Scheduled action for %1$s will not be executed as no callbacks are registered.', 'wp-event-aggregator' ),
+					__( 'Scheduled action for %1$s will not be executed as no callbacks are registered.', 'action-scheduler' ),
 					$hook
 				)
 			);

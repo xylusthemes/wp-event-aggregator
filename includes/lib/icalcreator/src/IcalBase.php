@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable missing_direct_file_access_protection
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
@@ -29,6 +30,7 @@
  */
 namespace Kigkonsult\Icalcreator;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
 use InvalidArgumentException;
 use Kigkonsult\Icalcreator\Util\ParameterFactory;
 use Kigkonsult\Icalcreator\Util\Util;
@@ -55,7 +57,6 @@ use function trim;
 use function ucfirst;
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  *         Do NOT alter or remove the constant!!

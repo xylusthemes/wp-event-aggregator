@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 use Action_Scheduler\Migration\Controller;
 
@@ -142,11 +143,11 @@ class ActionScheduler_DataController {
 	public static function free_memory() {
 		if ( 0 < self::$sleep_time ) {
 			/* translators: %d: amount of time */
-			\WP_CLI::warning( sprintf( _n( 'Stopped the insanity for %d second', 'Stopped the insanity for %d seconds', self::$sleep_time, 'wp-event-aggregator' ), self::$sleep_time ) );
+			\WP_CLI::warning( sprintf( _n( 'Stopped the insanity for %d second', 'Stopped the insanity for %d seconds', self::$sleep_time, 'action-scheduler' ), self::$sleep_time ) );
 			sleep( self::$sleep_time );
 		}
 
-		\WP_CLI::warning( __( 'Attempting to reduce used memory...', 'wp-event-aggregator' ) );
+		\WP_CLI::warning( __( 'Attempting to reduce used memory...', 'action-scheduler' ) );
 
 		/**
 		 * Globals.
