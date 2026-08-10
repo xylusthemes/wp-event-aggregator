@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_wpPostStore_PostStatusRegistrar
@@ -38,9 +39,9 @@ class ActionScheduler_wpPostStore_PostStatusRegistrar {
 	 */
 	protected function post_status_failed_labels() {
 		$labels = array(
-			'label'       => _x( 'Failed', 'post', 'wp-event-aggregator' ),
+			'label'       => _x( 'Failed', 'post', 'action-scheduler' ),
 			/* translators: %s: count */
-			'label_count' => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'wp-event-aggregator' ),
+			'label_count' => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'action-scheduler' ),
 		);
 
 		return apply_filters( 'action_scheduler_post_status_failed_labels', $labels );
@@ -53,9 +54,9 @@ class ActionScheduler_wpPostStore_PostStatusRegistrar {
 	 */
 	protected function post_status_running_labels() {
 		$labels = array(
-			'label'       => _x( 'In-Progress', 'post', 'wp-event-aggregator' ),
+			'label'       => _x( 'In-Progress', 'post', 'action-scheduler' ),
 			/* translators: %s: count */
-			'label_count' => _n_noop( 'In-Progress <span class="count">(%s)</span>', 'In-Progress <span class="count">(%s)</span>', 'wp-event-aggregator' ),
+			'label_count' => _n_noop( 'In-Progress <span class="count">(%s)</span>', 'In-Progress <span class="count">(%s)</span>', 'action-scheduler' ),
 		);
 
 		return apply_filters( 'action_scheduler_post_status_running_labels', $labels );

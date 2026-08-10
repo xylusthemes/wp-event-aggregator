@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_DBLogger
@@ -110,17 +111,43 @@ class ActionScheduler_DBLogger extends ActionScheduler_Logger {
 		parent::init();
 
 		add_action( 'action_scheduler_deleted_action', array( $this, 'clear_deleted_action_logs' ), 10, 1 );
+		add_action( 'action_scheduler_canceled_corrupted_action', array( $this, 'clear_deleted_action_logs' ), 10, 1 );
+		add_action( 'action_scheduler_clear_deleted_action_logs_hook', array( $this, 'clear_deleted_action_logs_single_batch' ), 10, 4 );
 	}
 
 	/**
 	 * Delete the action logs for an action.
 	 *
+	 * @since 3.9.3 the logs will be deleted in batches of 100.
 	 * @param int $action_id Action ID.
 	 */
 	public function clear_deleted_action_logs( $action_id ) {
-		/** @var \wpdb $wpdb */ //phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$this->clear_deleted_action_logs_single_batch( $action_id, -1, 1, 4000 );
+	}
+
+	/**
+	 * Delete the action logs batch for an action.
+	 *
+	 * @param int  $action_id      Action id.
+	 * @param int  $cutoff_log_id  Cutoff log ID. Retain logs generated after the cleanup begins. A value of -1 indicates the start of the cleanup.
+	 * @param int  $batch          The batch index is used solely for troubleshooting. Reviewing action arguments provides a clear understanding of progressive deletion.
+	 * @param int  $batch_size     Batch size.
+	 *
+	 * @return void
+	 */
+	public function clear_deleted_action_logs_single_batch( $action_id, $cutoff_log_id, $batch, $batch_size ) {
 		global $wpdb;
-		$wpdb->delete( $wpdb->actionscheduler_logs, array( 'action_id' => $action_id ), array( '%d' ) );
+
+		if ( -1 === $cutoff_log_id ) {
+			$cutoff_log_id = 1 + (int) $wpdb->get_var( $wpdb->prepare( "SELECT MAX(log_id) FROM {$wpdb->actionscheduler_logs} WHERE action_id = %d", $action_id ) );
+		}
+
+		$deleted  = (int) $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->actionscheduler_logs} WHERE action_id = %d AND log_id < %d LIMIT %d", $action_id, $cutoff_log_id, $batch_size ) );
+		$continue = $deleted === $batch_size;
+		if ( $continue ) {
+			// Schedule immediately, as this action will not be selected during the current run and will have lower than normal priority.
+			as_schedule_single_action( time(), 'action_scheduler_clear_deleted_action_logs_hook', array( $action_id, $cutoff_log_id, ++$batch, $batch_size ), '', false, 20 );
+		}
 	}
 
 	/**
@@ -139,7 +166,7 @@ class ActionScheduler_DBLogger extends ActionScheduler_Logger {
 		$date_gmt = $date->format( 'Y-m-d H:i:s' );
 		ActionScheduler_TimezoneHelper::set_local_timezone( $date );
 		$date_local = $date->format( 'Y-m-d H:i:s' );
-		$message    = __( 'action canceled', 'wp-event-aggregator' );
+		$message    = __( 'action canceled', 'action-scheduler' );
 		$format     = '(%d, ' . $wpdb->prepare( '%s, %s, %s', $message, $date_gmt, $date_local ) . ')';
 		$sql_query  = "INSERT {$wpdb->actionscheduler_logs} (action_id, message, log_date_gmt, log_date_local) VALUES ";
 		$value_rows = array();

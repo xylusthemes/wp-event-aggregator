@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, Squiz.PHP.DiscouragedFunctions.Discouraged, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound, WordPress.Security.EscapeOutput.ExceptionNotEscaped, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_Compatibility
@@ -78,7 +79,6 @@ class ActionScheduler_Compatibility {
 			}
 		}
 
-		// phpcs:enable
 
 		return false;
 	}

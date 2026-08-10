@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 use Action_Scheduler\WP_CLI\ProgressBar;
 
@@ -8,6 +9,13 @@ use Action_Scheduler\WP_CLI\ProgressBar;
  * This class can only be called from within a WP CLI instance.
  */
 class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
+
+	/**
+	 * Whether the cleaner instance is a non-default one.
+	 *
+	 * @var bool
+	 */
+	private $is_custom_cleaner;
 
 	/**
 	 * Claimed actions.
@@ -42,10 +50,12 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	public function __construct( ?ActionScheduler_Store $store = null, ?ActionScheduler_FatalErrorMonitor $monitor = null, ?ActionScheduler_QueueCleaner $cleaner = null ) {
 		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			/* translators: %s php class name */
-			throw new Exception( sprintf( __( 'The %s class can only be run within WP CLI.', 'wp-event-aggregator' ), __CLASS__ ) );
+			throw new Exception( sprintf( __( 'The %s class can only be run within WP CLI.', 'action-scheduler' ), __CLASS__ ) );
 		}
 
 		parent::__construct( $store, $monitor, $cleaner );
+
+		$this->is_custom_cleaner = get_class( $this->cleaner ) !== ActionScheduler_QueueCleaner::class;
 	}
 
 	/**
@@ -60,15 +70,26 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	 * @throws \WP_CLI\ExitException When there are too many concurrent batches.
 	 */
 	public function setup( $batch_size, $hooks = array(), $group = '', $force = false ) {
-		$this->run_cleanup();
+		$cleanup_time_limit = 10 * $this->get_time_limit();
+		// Backward compatibility: If the action cleaner is standard, cleaning will be performed as an action to improve throughput
+		// and enable daily runs. If not, cleaning will occur explicitly before processing actions to ensure backward compatibility.
+		if ( $this->is_custom_cleaner ) {
+			// Execute complete cleanup cycle, as in this logical branch deletion IS NOT executed via a separate action.
+			$this->cleaner->clean( $cleanup_time_limit );
+		} else {
+			// Execute partial cleanup cycle, as in this logical branch deletion IS executed via a separate action.
+			$this->cleaner->reset_timeouts( $cleanup_time_limit );
+			$this->cleaner->mark_failures( $cleanup_time_limit );
+		}
+
 		$this->add_hooks();
 
 		// Check to make sure there aren't too many concurrent processes running.
 		if ( $this->has_maximum_concurrent_batches() ) {
 			if ( $force ) {
-				WP_CLI::warning( __( 'There are too many concurrent batches, but the run is forced to continue.', 'wp-event-aggregator' ) );
+				WP_CLI::warning( __( 'There are too many concurrent batches, but the run is forced to continue.', 'action-scheduler' ) );
 			} else {
-				WP_CLI::error( __( 'There are too many concurrent batches.', 'wp-event-aggregator' ) );
+				WP_CLI::error( __( 'There are too many concurrent batches.', 'action-scheduler' ) );
 			}
 		}
 
@@ -96,7 +117,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 		$count              = count( $this->actions );
 		$this->progress_bar = new ProgressBar(
 			/* translators: %d: amount of actions */
-			sprintf( _n( 'Running %d action', 'Running %d actions', $count, 'wp-event-aggregator' ), $count ),
+			sprintf( _n( 'Running %d action', 'Running %d actions', $count, 'action-scheduler' ), $count ),
 			$count
 		);
 	}
@@ -111,10 +132,12 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	public function run( $context = 'WP CLI' ) {
 		do_action( 'action_scheduler_before_process_queue' );
 		$this->setup_progress_bar();
+
+		$claim_id = $this->claim->get_id();
 		foreach ( $this->actions as $action_id ) {
-			// Error if we lost the claim.
-			if ( ! in_array( $action_id, $this->store->find_actions_by_claim_id( $this->claim->get_id() ), true ) ) {
-				WP_CLI::warning( __( 'The claim has been lost. Aborting current batch.', 'wp-event-aggregator' ) );
+			// Bail if we lost the claim.
+			if ( $claim_id !== $this->store->get_claim_id( $action_id ) ) {
+				WP_CLI::warning( __( 'The claim has been lost. Aborting current batch.', 'action-scheduler' ) );
 				break;
 			}
 
@@ -137,7 +160,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	 */
 	public function before_execute( $action_id ) {
 		/* translators: %s refers to the action ID */
-		WP_CLI::log( sprintf( __( 'Started processing action %s', 'wp-event-aggregator' ), $action_id ) );
+		WP_CLI::log( sprintf( __( 'Started processing action %s', 'action-scheduler' ), $action_id ) );
 	}
 
 	/**
@@ -152,7 +175,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 			$action = $this->store->fetch_action( $action_id );
 		}
 		/* translators: 1: action ID 2: hook name */
-		WP_CLI::log( sprintf( __( 'Completed processing action %1$s with hook: %2$s', 'wp-event-aggregator' ), $action_id, $action->get_hook() ) );
+		WP_CLI::log( sprintf( __( 'Completed processing action %1$s with hook: %2$s', 'action-scheduler' ), $action_id, $action->get_hook() ) );
 	}
 
 	/**
@@ -165,7 +188,7 @@ class ActionScheduler_WPCLI_QueueRunner extends ActionScheduler_Abstract_QueueRu
 	public function action_failed( $action_id, $exception ) {
 		WP_CLI::error(
 			/* translators: 1: action ID 2: exception message */
-			sprintf( __( 'Error processing action %1$s: %2$s', 'wp-event-aggregator' ), $action_id, $exception->getMessage() ),
+			sprintf( __( 'Error processing action %1$s: %2$s', 'action-scheduler' ), $action_id, $exception->getMessage() ),
 			false
 		);
 	}

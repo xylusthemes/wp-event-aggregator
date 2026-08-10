@@ -1,4 +1,6 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
+if ( ! defined( "ABSPATH" ) ) { exit; }
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -538,7 +540,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 			echo '</select>';
 		}
 
-		submit_button( esc_html__( 'Filter', 'wp-event-aggregator' ), '', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
+		submit_button( esc_html__( 'Filter', 'action-scheduler' ), '', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
 		echo '</div>';
 	}
 
@@ -665,7 +667,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 		echo '<h1 class="wp-heading-inline">' . esc_attr( $this->table_header ) . '</h1>';
 		if ( $this->get_request_search_query() ) {
 			/* translators: %s: search query */
-			echo '<span class="subtitle">' . esc_attr( sprintf( __( 'Search results for "%s"', 'wp-event-aggregator' ), $this->get_request_search_query() ) ) . '</span>';
+			echo '<span class="subtitle">' . esc_attr( sprintf( __( 'Search results for "%s"', 'action-scheduler' ), $this->get_request_search_query() ) ) . '</span>';
 		}
 		echo '<hr class="wp-header-end">';
 	}
@@ -700,8 +702,8 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 
 		// Translated status labels.
 		$status_labels             = ActionScheduler_Store::instance()->get_status_labels();
-		$status_labels['all']      = esc_html_x( 'All', 'status labels', 'wp-event-aggregator' );
-		$status_labels['past-due'] = esc_html_x( 'Past-due', 'status labels', 'wp-event-aggregator' );
+		$status_labels['all']      = esc_html_x( 'All', 'status labels', 'action-scheduler' );
+		$status_labels['past-due'] = esc_html_x( 'Past-due', 'status labels', 'action-scheduler' );
 
 		foreach ( $this->status_counts as $status_slug => $count ) {
 
@@ -710,15 +712,15 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 			}
 
 			if ( $status_slug === $request_status || ( empty( $request_status ) && 'all' === $status_slug ) ) {
-				$status_list_item = '<li class="%1$s"><a href="%2$s" class="current">%3$s</a> (%4$d)</li>';
+				$status_list_item = '<li class="%1$s"><a href="%2$s" class="current">%3$s</a> (%4$s)</li>';
 			} else {
-				$status_list_item = '<li class="%1$s"><a href="%2$s">%3$s</a> (%4$d)</li>';
+				$status_list_item = '<li class="%1$s"><a href="%2$s">%3$s</a> (%4$s)</li>';
 			}
 
 			$status_name         = isset( $status_labels[ $status_slug ] ) ? $status_labels[ $status_slug ] : ucfirst( $status_slug );
 			$status_filter_url   = ( 'all' === $status_slug ) ? remove_query_arg( 'status' ) : add_query_arg( 'status', $status_slug );
 			$status_filter_url   = remove_query_arg( array( 'paged', 's' ), $status_filter_url );
-			$status_list_items[] = sprintf( $status_list_item, esc_attr( $status_slug ), esc_url( $status_filter_url ), esc_html( $status_name ), absint( $count ) );
+			$status_list_items[] = sprintf( $status_list_item, esc_attr( $status_slug ), esc_url( $status_filter_url ), esc_html( $status_name ), number_format_i18n( absint( $count ) ) );
 		}
 
 		if ( $status_list_items ) {
@@ -783,7 +785,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 	 * Get the text to display in the search box on the list table.
 	 */
 	protected function get_search_box_placeholder() {
-		return esc_html__( 'Search', 'wp-event-aggregator' );
+		return esc_html__( 'Search', 'action-scheduler' );
 	}
 
 	/**
