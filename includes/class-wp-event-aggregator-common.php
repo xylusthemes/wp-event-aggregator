@@ -977,10 +977,63 @@ class WP_Event_Aggregator_Common {
 		$wpea_options = get_option( WPEA_OPTIONS, array() );
 		$aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
 		$dontupdate = isset( $aggregator_options['dont_update'] ) ? $aggregator_options['dont_update'] : array();
+		if ( 'category' === $field ) {
+			return ! (
+				( isset( $dontupdate['categories'] ) && 'yes' == $dontupdate['categories'] ) ||
+				( isset( $dontupdate['category'] ) && 'yes' == $dontupdate['category'] )
+			);
+		}
 		if( isset( $dontupdate[$field] ) &&  'yes' == $dontupdate[$field] ){
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Preserve selected post fields while updating an existing imported event.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $event_data Event post data.
+	 * @param int   $event_id Existing event ID.
+	 * @return array
+	 */
+	public function wpea_preserve_existing_event_data( $event_data, $event_id ) {
+		$event_id = absint( $event_id );
+		if ( empty( $event_id ) ) {
+			return $event_data;
+		}
+
+		$existing_event = get_post( $event_id );
+		if ( empty( $existing_event ) ) {
+			return $event_data;
+		}
+
+		if ( ! $this->wpea_is_updatable( 'title' ) ) {
+			$event_data['post_title'] = $existing_event->post_title;
+		}
+
+		if ( ! $this->wpea_is_updatable( 'description' ) ) {
+			$event_data['post_content'] = $existing_event->post_content;
+		}
+
+		if ( ! $this->wpea_is_updatable( 'status' ) ) {
+			$event_data['post_status'] = $existing_event->post_status;
+		}
+
+		return $event_data;
+	}
+
+	/**
+	 * Check if an imported event image can be updated.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $event_id Existing event ID.
+	 * @return bool
+	 */
+	public function wpea_is_event_image_updatable( $event_id = 0 ) {
+		return empty( $event_id ) || $this->wpea_is_updatable( 'image' );
 	}
 
 	/**
