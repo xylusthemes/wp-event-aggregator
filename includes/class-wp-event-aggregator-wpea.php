@@ -90,6 +90,7 @@ class WP_Event_Aggregator_WPEA {
 		$online_event = !empty( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : false ;
 		$timezone     = isset( $centralize_array['timezone'] ) ? sanitize_text_field(  $centralize_array['timezone'] ) : '';
 		$timezone_name = isset( $centralize_array['timezone_name'] ) ? sanitize_text_field(  $centralize_array['timezone_name'] ) : '';
+		$post_description = $importevents->htmltblock->convert( $post_description );
 
 		$emeventdata = array(
 			'post_title'  => $post_title,

@@ -202,11 +202,9 @@ class WP_Event_Aggregator_EE4 {
 
 			if( $is_exitsing_event ){
 				$where = array( 'EVT_ID' => $inserted_event_id );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$is_insert = $wpdb->update( $datetime_table , $datetime_data, $where );
+				$is_insert = $wpdb->update( $datetime_table , $datetime_data, $where ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}else{
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$is_insert = $wpdb->insert( $datetime_table , $datetime_data );
+				$is_insert = $wpdb->insert( $datetime_table , $datetime_data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
 
 
@@ -217,15 +215,12 @@ class WP_Event_Aggregator_EE4 {
 					'EVT_display_ticket_selector' => 0,
 					'EVT_visible_on'			  => gmdate('Y-m-d H:i:s')
 				);
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-				$event_meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT `EVTM_ID` FROM {$event_meta_table} WHERE EVT_ID = %d", $inserted_event_id ) );
+				$event_meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT `EVTM_ID` FROM {$event_meta_table} WHERE EVT_ID = %d", $inserted_event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				if( !empty($event_meta_id) && $event_meta_id > 0 ){
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$wpdb->update( $event_meta_table, $event_meta_data, array( 'EVTM_ID' => $event_meta_id, 'EVT_ID' => $inserted_event_id ) );
+					$wpdb->update( $event_meta_table, $event_meta_data, array( 'EVTM_ID' => $event_meta_id, 'EVT_ID' => $inserted_event_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				}else{
 					$event_meta_data['EVT_ID'] = $inserted_event_id;
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$wpdb->insert( $event_meta_table, $event_meta_data );	
+					$wpdb->insert( $event_meta_table, $event_meta_data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				}
 			}
 
@@ -238,14 +233,11 @@ class WP_Event_Aggregator_EE4 {
 			if( !empty( $venue_id ) && $venue_id > 0 ){
 				// Connect venue with Event
 				$event_venue_table = $wpdb->prefix . 'esp_event_venue';
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-				$result = $wpdb->get_col( $wpdb->prepare( "SELECT * FROM {$event_venue_table} WHERE EVT_ID = %d", $inserted_event_id ) );
+				$result = $wpdb->get_col( $wpdb->prepare( "SELECT * FROM {$event_venue_table} WHERE EVT_ID = %d", $inserted_event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				if( count( $result ) > 0 ){
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$wpdb->update( $event_venue_table, array( 'VNU_ID' => $venue_id ), array( 'EVT_ID' => $inserted_event_id ) );
+					$wpdb->update( $event_venue_table, array( 'VNU_ID' => $venue_id ), array( 'EVT_ID' => $inserted_event_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				}else{
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$wpdb->insert( $event_venue_table, array( 'EVT_ID' => $inserted_event_id, 'VNU_ID' => $venue_id ) );	
+					$wpdb->insert( $event_venue_table, array( 'EVT_ID' => $inserted_event_id, 'VNU_ID' => $venue_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				}
 			}
 
@@ -356,23 +348,19 @@ class WP_Event_Aggregator_EE4 {
 		$country_table = $wpdb->prefix . 'esp_country';
 		$state_table = $wpdb->prefix . 'esp_state';
 		if( $venue_country != ''){
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$cnt_country = $wpdb->get_row( $wpdb->prepare( "SELECT `CNT_ISO`,`CNT_active` FROM {$country_table} WHERE `CNT_name` = %s OR `CNT_ISO` = %s OR `CNT_ISO3` = %s", $venue_country, $venue_country, $venue_country ) );
+			$cnt_country = $wpdb->get_row( $wpdb->prepare( "SELECT `CNT_ISO`,`CNT_active` FROM {$country_table} WHERE `CNT_name` = %s OR `CNT_ISO` = %s OR `CNT_ISO3` = %s", $venue_country, $venue_country, $venue_country ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			if( !empty( $cnt_country ) && isset( $cnt_country->CNT_ISO ) ){
 				$cnt_iso = $cnt_country->CNT_ISO;
 				if( $cnt_country->CNT_active == 0 ){
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$active_con = $wpdb->update( $country_table, array( 'CNT_active' => 1 ), array( 'CNT_ISO' => $cnt_iso ) );
+					$active_con = $wpdb->update( $country_table, array( 'CNT_active' => 1 ), array( 'CNT_ISO' => $cnt_iso ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				}
 			}
 		}
 
 		if( $venue_state != '' && $cnt_iso != ''){
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$sta_id = $wpdb->get_var( $wpdb->prepare( "SELECT `STA_ID` FROM {$state_table} WHERE `CNT_ISO` = %s AND (`STA_abbrev` = %s OR `STA_name` = %s)", $cnt_iso, $venue_state, $venue_state ) );
+			$sta_id = $wpdb->get_var( $wpdb->prepare( "SELECT `STA_ID` FROM {$state_table} WHERE `CNT_ISO` = %s AND (`STA_abbrev` = %s OR `STA_name` = %s)", $cnt_iso, $venue_state, $venue_state ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			if( empty( $sta_id ) || is_null( $sta_id ) ){
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$inserted = $wpdb->insert( $state_table, array( 'CNT_ISO' => $cnt_iso, 'STA_abbrev' => $venue_state, 'STA_name' => $venue_state ) );
+				$inserted = $wpdb->insert( $state_table, array( 'CNT_ISO' => $cnt_iso, 'STA_abbrev' => $venue_state, 'STA_name' => $venue_state ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				if( $inserted ){
 					$sta_id = $wpdb->insert_id;
 				}
@@ -398,8 +386,7 @@ class WP_Event_Aggregator_EE4 {
 
 		$venue_table = $wpdb->prefix . 'esp_venue_meta';
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-		$wpdb->insert( $venue_table , $venue_data );
+		$wpdb->insert( $venue_table , $venue_data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return $ivenue_id;
 	}

@@ -274,18 +274,15 @@ class WP_Event_Aggregator_EM {
 			if ( $is_exitsing_event ) {
 				$eve_id = get_post_meta( $inserted_event_id, '_event_id', true );
 				$where = array( 'event_id' => $eve_id );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$wpdb->update( $event_table , $event_array, $where );
+				$wpdb->update( $event_table , $event_array, $where ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}else{
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				if ( $wpdb->insert( $event_table , $event_array ) ) {
+				if ( $wpdb->insert( $event_table , $event_array ) ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					update_post_meta( $inserted_event_id, '_event_id', $wpdb->insert_id );
 				}
 			}
 
 			if( isset( $event_args['event_status'] ) && $event_args['event_status'] != '' ){
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$status_changed = $wpdb->update( $wpdb->posts, array( 'post_status' => sanitize_text_field( $event_args['event_status'] ) ), array( 'ID' => $inserted_event_id ) );
+				$status_changed = $wpdb->update( $wpdb->posts, array( 'post_status' => sanitize_text_field( $event_args['event_status'] ) ), array( 'ID' => $inserted_event_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
 
 			if ( $is_exitsing_event ) {
@@ -415,15 +412,13 @@ class WP_Event_Aggregator_EM {
 				$loc_id = get_post_meta( $event_id, '_location_id', true );
 				if( $loc_id != '' ){
 					$where = array( 'location_id' => $loc_id );	
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$is_update = $wpdb->update( $event_location_table, $location_array, $where, $location_format, $where_format );
+					$is_update = $wpdb->update( $event_location_table, $location_array, $where, $location_format, $where_format ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					if ( false !== $is_update ) {
 						return $loc_id;    
 					}
 
 				}else{
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-					$is_insert = $wpdb->insert( $event_location_table , $location_array, $location_format );
+					$is_insert = $wpdb->insert( $event_location_table , $location_array, $location_format ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					if ( false !== $is_insert ) {
 						$insert_loc_id = $wpdb->insert_id;
 						update_post_meta( $location_id, '_location_id', $insert_loc_id );
@@ -432,8 +427,7 @@ class WP_Event_Aggregator_EM {
 				}				
 				
 			}else{
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-				$is_insert = $wpdb->insert( $event_location_table , $location_array, $location_format );
+				$is_insert = $wpdb->insert( $event_location_table , $location_array, $location_format ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				if ( false !== $is_insert ) {
 					$insert_loc_id = $wpdb->insert_id;
 					update_post_meta( $location_id, '_location_id', $insert_loc_id );

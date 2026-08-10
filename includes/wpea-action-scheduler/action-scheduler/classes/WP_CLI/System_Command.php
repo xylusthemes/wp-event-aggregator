@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 namespace Action_Scheduler\WP_CLI;
 
@@ -164,7 +165,7 @@ class System_Command {
 		$sources = ActionScheduler_SystemInformation::get_sources();
 
 		if ( empty( $sources ) ) {
-			WP_CLI::log( __( 'Detailed information about registered sources is not currently available.', 'wp-event-aggregator' ) );
+			WP_CLI::log( __( 'Detailed information about registered sources is not currently available.', 'action-scheduler' ) );
 			return;
 		}
 
