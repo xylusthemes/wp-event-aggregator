@@ -82,6 +82,7 @@ class WP_Event_Aggregator{
 			self::$instance->ee4 = new WP_Event_Aggregator_EE4();
 			self::$instance->my_calendar = new WP_Event_Aggregator_My_Calendar();
 			self::$instance->eventprime = new WP_Event_Aggregator_EventPrime();
+			self::$instance->xec             = new WP_Event_Aggregator_XEC();
 			
 		}
 		return self::$instance;	
@@ -204,6 +205,7 @@ class WP_Event_Aggregator{
 		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-public-api.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/parsedown.php';
 		require_once WPEA_PLUGIN_DIR . 'includes/wpea-action-scheduler/wpea-image-init.php';
+		require_once WPEA_PLUGIN_DIR . 'includes/class-wp-event-aggregator-xec.php';
 
 		// Gutenberg Block
 		include_once WPEA_PLUGIN_DIR . 'blocks/wp-events/index.php';
