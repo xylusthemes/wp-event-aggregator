@@ -218,6 +218,7 @@ class WP_Event_Aggregator_Eventbrite {
 	 */
 	public function generate_centralize_array( $eventbrite_event ) {
 		global $importevents;
+		$options = wpea_get_import_options( 'eventbrite' );
 
 		if( ! isset( $eventbrite_event['id'] ) ){
 			return false;
@@ -251,6 +252,16 @@ class WP_Event_Aggregator_Eventbrite {
 		$ticket_price      = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] : '';	
 		$ticket_currency   = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] : '';	
 		$eventbrite_cat    = isset( $eventbrite_event['category']['name'] ) ? $eventbrite_event['category']['name'] : '';
+		$is_insert_etags   = isset( $options['eventbritre_tags'] ) ? $options['eventbritre_tags'] : 'no';
+		$eventbrite_tags   = array();
+
+		if ( 'yes' === $is_insert_etags ) {
+			$eventbrite_tags = isset( $eventbrite_event['tags'] ) ? $importevents->common->prepare_eventbrite_tag_names( $eventbrite_event['tags'] ) : array();
+
+			if ( empty( $eventbrite_tags ) ) {
+				$eventbrite_tags = $importevents->common->get_eventbrite_tags_by_event_id( $eventbrite_event['id'] );
+			}
+		}
 
 
 		$xt_event = array(
@@ -274,6 +285,7 @@ class WP_Event_Aggregator_Eventbrite {
 			'ticket_price'    => $ticket_price,
 			'ticket_currency' => $ticket_currency,
 			'e_category'      => $eventbrite_cat,
+			'e_tags'          => $eventbrite_tags,
 		);
 
 		if ( array_key_exists( 'organizer', $eventbrite_event ) ) {

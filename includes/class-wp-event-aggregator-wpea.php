@@ -16,6 +16,9 @@ class WP_Event_Aggregator_WPEA {
 	// Event Taxonomy
 	protected $taxonomy;
 
+	// Event Taxonomy
+	protected $tags;
+
 	// Event Posttype
 	protected $event_posttype;
 
@@ -28,6 +31,7 @@ class WP_Event_Aggregator_WPEA {
 		
 		$this->event_posttype = 'wp_events';
 		$this->taxonomy = 'event_category';
+		$this->tags = 'event_tag';
 
 	}
 
@@ -42,6 +46,9 @@ class WP_Event_Aggregator_WPEA {
 	}	
 	public function get_taxonomy(){
 		return $this->taxonomy;
+	}
+	public function get_tags(){
+		return $this->tags;
 	}
 
 	/**
@@ -166,6 +173,33 @@ class WP_Event_Aggregator_WPEA {
 				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('category') )) {
 					$append = apply_filters('wpea_taxonomy_terms_append', false, $wpea_cats, $this->taxonomy, $centralize_array['origin'] );
 					wp_set_object_terms( $inserted_event_id, $wpea_cats, $this->taxonomy, $append );
+				}
+			}
+
+			// Assign Eventbrite tags.
+			$is_insert_etags = isset( $wpea_options['eventbrite']['eventbritre_tags'] ) ? $wpea_options['eventbrite']['eventbritre_tags'] : 'no';
+			$wpea_tags       = isset( $event_args['event_tag'] ) && is_array( $event_args['event_tag'] ) ? $event_args['event_tag'] : array();
+			$e_tags          = isset( $centralize_array['e_tags'] ) && is_array( $centralize_array['e_tags'] ) ? $centralize_array['e_tags'] : array();
+
+			if ( 'yes' === $is_insert_etags && ! ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable( 'tags' ) ) ) {
+				$eventbrite_tag_ids = $importevents->common->insert_eventbrite_tags_and_assing_into_event( $e_tags, $this->tags );
+
+				if ( ! empty( $eventbrite_tag_ids ) ) {
+					$wpea_tags = array_merge( $wpea_tags, $eventbrite_tag_ids );
+				}
+			}
+
+			if ( ! empty( $wpea_tags ) ) {
+				foreach ( $wpea_tags as $iee_tagk => $iee_tagv ) {
+					$wpea_tags[ $iee_tagk ] = (int) $iee_tagv;
+				}
+
+				$wpea_tags = array_unique( $wpea_tags );
+			}
+
+			if ( ! empty( $wpea_tags ) ) {
+				if (!($is_exitsing_event && ! $importevents->common->wpea_is_updatable('tags') )) {
+					wp_set_object_terms( $inserted_event_id, $wpea_tags, $this->tags );
 				}
 			}
 
