@@ -124,7 +124,7 @@ class WP_Event_Aggregator_Eventbrite_API {
 		$options = wpea_get_import_options( 'eventbrite' );
 
 		if ( $this->using_standard_api !== 'yes' ) {
-			$iee_errors[] = __( 'Please enable Standard API option to fetch the event.', 'wp-event-aggregator' );
+			$wpea_errors[] = __( 'Please enable Standard API option to fetch the event.', 'wp-event-aggregator' );
 			return;
 		}
 

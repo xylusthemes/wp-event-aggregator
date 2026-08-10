@@ -107,6 +107,7 @@ class WP_Event_Aggregator_Admin {
 		$submenu['import_events'][] = array( __( 'Schedule Imports', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=scheduled' ));
     	$submenu['import_events'][] = array( __( 'Import History', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=history' ));
     	$submenu['import_events'][] = array( __( 'Settings', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=settings' ));
+		$submenu['import_events'][] = array( __( 'iCal Export', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=ical_export' ));
     	$submenu['import_events'][] = array( __( 'Shortcode', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=shortcodes' ));
     	$submenu['import_events'][] = array( __( 'Support', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=support' ));
 		$submenu['import_events'][] = array( __( 'Wizard', 'wp-event-aggregator' ), 'manage_options', admin_url( 'admin.php?page=import_events&tab=wpea_setup_wizard' ));
@@ -203,6 +204,8 @@ class WP_Event_Aggregator_Admin {
 			$page_title = 'ICS Import';
 		}elseif( $active_tab == 'scheduled' ){
 			$page_title = 'Scheduled Import';
+		}elseif( $active_tab == 'ical_export' ){
+			$page_title = 'iCal Export';
 		}else{
 			$page_title = $gettab;
 		}
@@ -254,6 +257,9 @@ class WP_Event_Aggregator_Admin {
 														<a href="<?php echo esc_url( add_query_arg( 'tab', 'settings', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'settings' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
 															<span class="tab-label"><?php esc_attr_e( 'Settings', 'wp-event-aggregator' ); ?></span>
 														</a>
+														<a href="<?php echo esc_url( add_query_arg( 'tab', 'ical_export', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'ical_export' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
+															<span class="tab-label"><?php esc_attr_e( 'iCal Export', 'wp-event-aggregator' ); ?></span>
+														</a>
 														<a href="<?php echo esc_url( add_query_arg( 'tab', 'shortcodes', $this->adminpage_url ) ); ?>" class="var-tab <?php echo $active_tab == 'shortcodes' ? 'var-tab--active' : 'var-tab--inactive'; ?>">
 															<span class="tab-label"><?php esc_attr_e( 'Shortcodes', 'wp-event-aggregator'  ); ?></span>
 														</a>
@@ -277,6 +283,8 @@ class WP_Event_Aggregator_Admin {
 											require_once WPEA_PLUGIN_DIR . '/templates/admin/facebook-import-events.php';
 										} elseif ( $active_tab == 'settings' ) {
 											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-settings.php';
+										} elseif ( 'ical_export' === $active_tab ) {
+											require_once WPEA_PLUGIN_DIR . '/templates/admin/wp-event-aggregator-ical-export.php';
 										} elseif ( $active_tab == 'ical' ) {
 											require_once WPEA_PLUGIN_DIR . '/templates/admin/ical-import-events.php';
 										} elseif ( $active_tab == 'scheduled' ) {
@@ -564,7 +572,7 @@ class WP_Event_Aggregator_Admin {
 		}
 
 		if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'import_events' ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$allowed_tabs = array( 'dashboard', 'eventbrite', 'meetup', 'facebook', 'ical', 'scheduled', 'history', 'settings', 'shortcodes', 'support' );
+			$allowed_tabs = array( 'dashboard', 'eventbrite', 'meetup', 'facebook', 'ical', 'ical_export','scheduled', 'history', 'settings', 'shortcodes', 'support' );
 			$tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'dashboard'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if( in_array( $tab, $allowed_tabs ) ){
 				$submenu_file = admin_url( 'admin.php?page=import_events&tab='.$tab );
