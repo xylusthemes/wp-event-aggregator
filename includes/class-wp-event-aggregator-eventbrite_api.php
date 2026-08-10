@@ -247,6 +247,8 @@ class WP_Event_Aggregator_Eventbrite_API {
 		$ticket_price      = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] : '';	
 		$ticket_currency   = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] : '';	
 		$eventbrite_cat    = isset( $eventbrite_event['category']['name'] ) ? $eventbrite_event['category']['name'] : '';	
+		$organization_id   = isset( $eventbrite_event['organization_id'] ) ? $eventbrite_event['organization_id'] : '';
+		$get_promocode     = $importevents->common->wpea_get_event_discount_code( $eventbrite_event['id'], $organization_id );
 		$is_insert_etags   = isset( $options['eventbritre_tags'] ) ? $options['eventbritre_tags'] : 'no';
 		$eventbrite_tags   = array();
 
@@ -280,6 +282,7 @@ class WP_Event_Aggregator_Eventbrite_API {
 			'ticket_price'    => $ticket_price,
 			'ticket_currency' => $ticket_currency,
 			'e_category'      => $eventbrite_cat,
+			'discount_code'   => $get_promocode,
 			'e_tags'          => $eventbrite_tags,
 		);
 

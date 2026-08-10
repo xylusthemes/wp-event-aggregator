@@ -221,6 +221,12 @@ class WP_Event_Aggregator_EventPrime {
 				update_post_meta( $inserted_event_id, 'series_id', $series_id );
 			}
 
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
+			}
+
             //Event Date & Time
             $start_ampm = gmdate( "h:i A", $start_time );
             $end_ampm   = gmdate( "h:i A", $end_time );

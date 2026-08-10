@@ -178,6 +178,12 @@ class WP_Event_Aggregator_TEC {
 				update_post_meta( $new_event_id, 'series_id', $series_id );
 			}
 
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $new_event_id, 'discount_code', $discount_code );
+			}
+
 			$timezone_name = isset( $centralize_array['timezone_name'] ) ? $centralize_array['timezone_name'] : 'Africa/Abidjan';
 			update_post_meta( $new_event_id, '_EventTimezone', $timezone_name );
 
@@ -324,6 +330,12 @@ class WP_Event_Aggregator_TEC {
 			$series_id   = isset( $centralize_array['series_id'] ) ? $centralize_array['series_id'] : '';			
 			if( !empty( $series_id ) ){
 				update_post_meta( $update_event_id, 'series_id', $series_id );
+			}
+
+			// Discount code
+			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
+			if( !empty( $discount_code ) ){
+				update_post_meta( $update_event_id, 'discount_code', $discount_code );
 			}
 			
 			delete_post_meta( $update_event_id, '_tribe_is_classic_editor' );
