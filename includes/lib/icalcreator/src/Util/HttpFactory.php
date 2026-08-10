@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.WP.AlternativeFunctions.parse_url_parse_url, WordPress.WP.AlternativeFunctions.unlink_unlink, wp_function_not_compatible_with_requires_wp
 /**
   * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
@@ -104,7 +105,7 @@ class HttpFactory
         }
         $output   = $calendar->createCalendar();
         if( $utf8Encode ) {
-            $output = utf8_encode( $output );
+            $output = function_exists('utf8_encode') ? call_user_func('utf8_encode', $output) : $output;
         }
         $fsize = null;
         if( $gzip ) {

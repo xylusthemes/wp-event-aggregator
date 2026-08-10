@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_wpPostStore_PostTypeRegistrar
@@ -20,8 +21,8 @@ class ActionScheduler_wpPostStore_PostTypeRegistrar {
 	 */
 	protected function post_type_args() {
 		$args = array(
-			'label'        => __( 'Scheduled Actions', 'wp-event-aggregator' ),
-			'description'  => __( 'Scheduled actions are hooks triggered on a certain date and time.', 'wp-event-aggregator' ),
+			'label'        => __( 'Scheduled Actions', 'action-scheduler' ),
+			'description'  => __( 'Scheduled actions are hooks triggered on a certain date and time.', 'action-scheduler' ),
 			'public'       => false,
 			'map_meta_cap' => true,
 			'hierarchical' => false,
@@ -31,19 +32,19 @@ class ActionScheduler_wpPostStore_PostTypeRegistrar {
 			'can_export'   => true,
 			'ep_mask'      => EP_NONE,
 			'labels'       => array(
-				'name'               => __( 'Scheduled Actions', 'wp-event-aggregator' ),
-				'singular_name'      => __( 'Scheduled Action', 'wp-event-aggregator' ),
-				'menu_name'          => _x( 'Scheduled Actions', 'Admin menu name', 'wp-event-aggregator' ),
-				'add_new'            => __( 'Add', 'wp-event-aggregator' ),
-				'add_new_item'       => __( 'Add New Scheduled Action', 'wp-event-aggregator' ),
-				'edit'               => __( 'Edit', 'wp-event-aggregator' ),
-				'edit_item'          => __( 'Edit Scheduled Action', 'wp-event-aggregator' ),
-				'new_item'           => __( 'New Scheduled Action', 'wp-event-aggregator' ),
-				'view'               => __( 'View Action', 'wp-event-aggregator' ),
-				'view_item'          => __( 'View Action', 'wp-event-aggregator' ),
-				'search_items'       => __( 'Search Scheduled Actions', 'wp-event-aggregator' ),
-				'not_found'          => __( 'No actions found', 'wp-event-aggregator' ),
-				'not_found_in_trash' => __( 'No actions found in trash', 'wp-event-aggregator' ),
+				'name'               => __( 'Scheduled Actions', 'action-scheduler' ),
+				'singular_name'      => __( 'Scheduled Action', 'action-scheduler' ),
+				'menu_name'          => _x( 'Scheduled Actions', 'Admin menu name', 'action-scheduler' ),
+				'add_new'            => __( 'Add', 'action-scheduler' ),
+				'add_new_item'       => __( 'Add New Scheduled Action', 'action-scheduler' ),
+				'edit'               => __( 'Edit', 'action-scheduler' ),
+				'edit_item'          => __( 'Edit Scheduled Action', 'action-scheduler' ),
+				'new_item'           => __( 'New Scheduled Action', 'action-scheduler' ),
+				'view'               => __( 'View Action', 'action-scheduler' ),
+				'view_item'          => __( 'View Action', 'action-scheduler' ),
+				'search_items'       => __( 'Search Scheduled Actions', 'action-scheduler' ),
+				'not_found'          => __( 'No actions found', 'action-scheduler' ),
+				'not_found_in_trash' => __( 'No actions found in trash', 'action-scheduler' ),
 			),
 		);
 

@@ -11,6 +11,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 class WP_Event_Aggregator_Manage_Import {
 
 	/**
@@ -158,7 +159,7 @@ class WP_Event_Aggregator_Manage_Import {
 			$tab = isset($_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'scheduled';
 			$wp_redirect = admin_url( 'admin.php?page='.$page );
 			if ( $import_id > 0 ) {
-				do_action( 'xt_run_scheduled_import', $import_id );
+				do_action( 'xt_run_scheduled_import', $import_id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				$query_args = array( 'imp_msg' => 'import_success', 'tab' => $tab );
         		wp_safe_redirect(  add_query_arg( $query_args, $wp_redirect ) );
 				exit;
@@ -270,8 +271,7 @@ class WP_Event_Aggregator_Manage_Import {
 		
 
 		$event_data['import_by']     = isset( $_POST['meetup_import_by'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['meetup_import_by'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-		$event_data['ime_event_ids'] = isset( $_POST['ime_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', wp_unslash( $_POST['ime_event_ids'] ) ) ) ) ) : array(); // input var okay.
+		$event_data['ime_event_ids'] = isset( $_POST['ime_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', wp_unslash( $_POST['ime_event_ids'] ) ) ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$event_data['meetup_url']    = isset( $_POST['meetup_url'] ) ? sanitize_text_field( $_POST['meetup_url'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 		if ( 'group_url' === $event_data['import_by'] && !empty( $event_data['meetup_url'] ) ) {

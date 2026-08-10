@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 namespace Action_Scheduler\WP_CLI\Action;
 
@@ -56,7 +57,7 @@ class Run_Command extends \ActionScheduler_WPCLI_Command {
 		$progress_bar = \WP_CLI\Utils\make_progress_bar(
 			sprintf(
 				/* translators: %d: number of actions */
-				_n( 'Executing %d action', 'Executing %d actions', $this->action_counts['total'], 'wp-event-aggregator' ),
+				_n( 'Executing %d action', 'Executing %d actions', $this->action_counts['total'], 'action-scheduler' ),
 				number_format_i18n( $this->action_counts['total'] )
 			),
 			$this->action_counts['total']
@@ -85,7 +86,7 @@ class Run_Command extends \ActionScheduler_WPCLI_Command {
 			 * %1$d: count of actions evaluated.
 			 * %2$s: type of action evaluated.
 			 */
-			$format = _n( '%1$d action %2$s.', '%1$d actions %2$s.', $count, 'wp-event-aggregator' );
+			$format = _n( '%1$d action %2$s.', '%1$d actions %2$s.', $count, 'action-scheduler' );
 
 			\WP_CLI::warning(
 				sprintf(
@@ -99,7 +100,7 @@ class Run_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::success(
 			sprintf(
 				/* translators: %d: number of executed actions */
-				_n( 'Executed %d action.', 'Executed %d actions.', $this->action_counts['executed'], 'wp-event-aggregator' ),
+				_n( 'Executed %d action.', 'Executed %d actions.', $this->action_counts['executed'], 'action-scheduler' ),
 				number_format_i18n( $this->action_counts['executed'] )
 			)
 		);

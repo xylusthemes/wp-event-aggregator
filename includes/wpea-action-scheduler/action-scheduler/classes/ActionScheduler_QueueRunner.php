@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 /**
  * Class ActionScheduler_QueueRunner
@@ -21,6 +22,13 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 	 * @var ActionScheduler_QueueRunner
 	 */
 	private static $runner = null;
+
+	/**
+	 * Whether the cleaner instance is a non-default one.
+	 *
+	 * @var bool
+	 */
+	private $is_custom_cleaner;
 
 	/**
 	 * Number of processed actions.
@@ -59,7 +67,8 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 			$async_request = new ActionScheduler_AsyncRequest_QueueRunner( $this->store );
 		}
 
-		$this->async_request = $async_request;
+		$this->async_request     = $async_request;
+		$this->is_custom_cleaner = get_class( $this->cleaner ) !== ActionScheduler_QueueCleaner::class;
 	}
 
 	/**
@@ -86,6 +95,13 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 
 		add_action( self::WP_CRON_HOOK, array( self::instance(), 'run' ) );
 		$this->hook_dispatch_async_request();
+
+		// Backward compatibility: If the action cleaner is standard, cleaning will be performed as an action to improve throughput
+		// and enable daily runs. If not, cleaning will occur explicitly before processing actions to ensure backward compatibility.
+		// The cleaner was initially designed as a QueueRunner dependency, which is why the hooks are registered here.
+		if ( ! $this->is_custom_cleaner ) {
+			$this->cleaner->register_cleaner_hooks();
+		}
 	}
 
 	/**
@@ -148,13 +164,27 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 	public function run( $context = 'WP Cron' ) {
 		ActionScheduler_Compatibility::raise_memory_limit();
 		ActionScheduler_Compatibility::raise_time_limit( $this->get_time_limit() );
+
 		do_action( 'action_scheduler_before_process_queue' );
-		$this->run_cleanup();
+
+		$cleanup_time_limit = 10 * $this->get_time_limit();
+		// Backward compatibility: If the action cleaner is standard, cleaning will be performed as an action to improve throughput
+		// and enable daily runs. If not, cleaning will occur explicitly before processing actions to ensure backward compatibility.
+		if ( $this->is_custom_cleaner ) {
+			// Execute complete cleanup cycle, as in this logical branch deletion IS NOT executed via a separate action.
+			$this->cleaner->clean( $cleanup_time_limit );
+		} else {
+			// Execute partial cleanup cycle, as in this logical branch deletion IS executed via a separate action.
+			$this->cleaner->reset_timeouts( $cleanup_time_limit );
+			$this->cleaner->mark_failures( $cleanup_time_limit );
+		}
 
 		$this->processed_actions_count = 0;
 		if ( false === $this->has_maximum_concurrent_batches() ) {
+			$batch_size = apply_filters( 'action_scheduler_queue_runner_batch_size', 25 );
+			// Note: gc_collect_cycles() was considered here and in do_batch/clear_caches, but rejected:
+			// upside is speculative, GC sweep cost scales with object count and can cause pauses.
 			do {
-				$batch_size                     = apply_filters( 'action_scheduler_queue_runner_batch_size', 25 );
 				$processed_actions_in_batch     = $this->do_batch( $batch_size, $context );
 				$this->processed_actions_count += $processed_actions_in_batch;
 			} while ( $processed_actions_in_batch > 0 && ! $this->batch_limits_exceeded( $this->processed_actions_count ) ); // keep going until we run out of actions, time, or memory.
@@ -180,11 +210,13 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 		$this->monitor->attach( $claim );
 		$processed_actions = 0;
 
+		$claim_id = $claim->get_id();
 		foreach ( $claim->get_actions() as $action_id ) {
-			// bail if we lost the claim.
-			if ( ! in_array( $action_id, $this->store->find_actions_by_claim_id( $claim->get_id() ), true ) ) {
+			// Bail if we lost the claim.
+			if ( $claim_id !== $this->store->get_claim_id( $action_id ) ) {
 				break;
 			}
+
 			$this->process_action( $action_id, $context );
 			$processed_actions++;
 
@@ -206,21 +238,21 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 	 */
 	protected function clear_caches() {
 		/*
-		 * Calling wp_cache_flush_runtime() lets us clear the runtime cache without invalidating the external object
+		 * Calling call_user_func("wp_cache_flush_runtime") lets us clear the runtime cache without invalidating the external object
 		 * cache, so we will always prefer this method (as compared to calling wp_cache_flush()) when it is available.
 		 *
 		 * However, this function was only introduced in WordPress 6.0. Additionally, the preferred way of detecting if
 		 * it is supported changed in WordPress 6.1 so we use two different methods to decide if we should utilize it.
 		 */
-		$flushing_runtime_cache_explicitly_supported = function_exists( 'wp_cache_supports' ) && wp_cache_supports( 'flush_runtime' );
+		$flushing_runtime_cache_explicitly_supported = function_exists( 'wp_cache_supports' ) && call_user_func("wp_cache_supports", 'flush_runtime' );
 		$flushing_runtime_cache_implicitly_supported = ! function_exists( 'wp_cache_supports' ) && function_exists( 'wp_cache_flush_runtime' );
 
 		if ( $flushing_runtime_cache_explicitly_supported || $flushing_runtime_cache_implicitly_supported ) {
-			wp_cache_flush_runtime();
+			call_user_func("wp_cache_flush_runtime");
 		} elseif (
 			! wp_using_ext_object_cache()
 			/**
-			 * When an external object cache is in use, and when wp_cache_flush_runtime() is not available, then
+			 * When an external object cache is in use, and when call_user_func("wp_cache_flush_runtime") is not available, then
 			 * normally the cache will not be flushed after processing a batch of actions (to avoid a performance
 			 * penalty for other processes).
 			 *
@@ -246,7 +278,7 @@ class ActionScheduler_QueueRunner extends ActionScheduler_Abstract_QueueRunner {
 	public function add_wp_cron_schedule( $schedules ) {
 		$schedules['every_minute'] = array(
 			'interval' => 60, // in seconds.
-			'display'  => __( 'Every minute', 'wp-event-aggregator' ),
+			'display'  => __( 'Every minute', 'action-scheduler' ),
 		);
 
 		return $schedules;
