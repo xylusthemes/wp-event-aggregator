@@ -64,7 +64,7 @@ class WP_Event_Aggregator_Html_To_Blocks {
 		}
 
 		// CHECK 2: Skip if already converted to blocks.
-		if ( str_contains( $post->post_content, '<!-- wp:' ) ) {
+		if ( false !== strpos( $post->post_content, '<!-- wp:' ) ) {
 			return;
 		}
 

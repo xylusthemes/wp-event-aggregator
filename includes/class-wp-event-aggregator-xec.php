@@ -28,6 +28,9 @@ class WP_Event_Aggregator_XEC {
 	// Xylus Events Calendar Organizer Taxonomy
 	protected $organizer_taxonomy;
 
+	// Xylus Events Calendar Organizer Taxonomy
+	protected $tag_taxonomy;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -55,6 +58,9 @@ class WP_Event_Aggregator_XEC {
 	}
 	public function get_venue_posttype() {
 		return $this->venue_taxonomy;
+	}
+	public function get_tags() {
+		return $this->tag_taxonomy;
 	}
 	public function get_taxonomy() {
 		return $this->taxonomy;
@@ -461,9 +467,11 @@ class WP_Event_Aggregator_XEC {
 		$end_dt   = gmdate( 'Y-m-d H:i:s', $end_time );
 		
 		// Check if instance already exists
-		$exists = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE event_id = %d AND start_date = %s", $post_id, $start_dt ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$exists = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table_name} WHERE event_id = %d AND start_date = %s", $post_id, $start_dt ) );
 		
 		if ( ! $exists ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->insert(
 				$table_name,
 				array(

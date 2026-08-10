@@ -116,6 +116,7 @@ class WP_Event_Aggregator_Manage_Import {
 			$existing_options = get_option(WPEA_OPTIONS, array());
 			
 			// Update only the options present in $_POST, keeping the existing values for others
+			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$wpea_options = array(
 				'eventbrite' => isset( $_POST['eventbrite'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['eventbrite'] ) ) : ( isset( $existing_options['eventbrite'] ) ? $this->sanitize_settings_fields( $existing_options['eventbrite'] ) : array() ),
 				'meetup'     => isset( $_POST['meetup'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['meetup'] ) ) : ( isset( $existing_options['meetup'] ) ? $this->sanitize_settings_fields( $existing_options['meetup'] ) : array() ),
@@ -123,6 +124,7 @@ class WP_Event_Aggregator_Manage_Import {
 				'ical'       => isset( $_POST['ical'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['ical'] ) ) : ( isset( $existing_options['ical'] ) ? $this->sanitize_settings_fields( $existing_options['ical'] ) : array() ),
 				'wpea'       => isset( $_POST['wpea'] ) ? $this->sanitize_settings_fields( wp_unslash( $_POST['wpea'] ) ) : ( isset( $existing_options['wpea'] ) ? $this->sanitize_settings_fields( $existing_options['wpea'] ) : array() )
 			);
+			// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 			if( isset( $wpea_options['eventbrite']['using_standard_api'] ) && ! empty( $wpea_options['eventbrite']['using_standard_api'] ) ) {
 				if( $wpea_options['eventbrite']['using_standard_api'] === 'yes' ){
@@ -293,8 +295,8 @@ class WP_Event_Aggregator_Manage_Import {
 		
 
 		$event_data['import_by']     = isset( $_POST['meetup_import_by'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['meetup_import_by'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$event_data['ime_event_ids'] = isset( $_POST['ime_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', wp_unslash( $_POST['ime_event_ids'] ) ) ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$event_data['meetup_url']    = isset( $_POST['meetup_url'] ) ? sanitize_text_field( $_POST['meetup_url'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		$event_data['ime_event_ids'] = isset( $_POST['ime_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', sanitize_textarea_field( wp_unslash( $_POST['ime_event_ids'] ) ) ) ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$event_data['meetup_url']    = isset( $_POST['meetup_url'] ) ? sanitize_text_field( wp_unslash( $_POST['meetup_url'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( 'group_url' === $event_data['import_by'] && !empty( $event_data['meetup_url'] ) ) {
 			if ( filter_var( $event_data['meetup_url'], FILTER_VALIDATE_URL) === false ) {
@@ -329,7 +331,7 @@ class WP_Event_Aggregator_Manage_Import {
 		$event_data['import_origin'] = 'facebook';
 		$event_data['import_by'] = 'facebook_event_id';
 
-		$event_data['event_ids'] = isset( $_POST['facebook_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', $_POST['facebook_event_ids'] ) ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$event_data['event_ids'] = isset( $_POST['facebook_event_ids'] ) ? array_map( 'trim', array_map( 'sanitize_text_field', explode( "\n", preg_replace( "/^\n+|^[\t\s]*\n+/m", '', sanitize_textarea_field( wp_unslash( $_POST['facebook_event_ids'] ) ) ) ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$event_data['page_username'] = '';
 
