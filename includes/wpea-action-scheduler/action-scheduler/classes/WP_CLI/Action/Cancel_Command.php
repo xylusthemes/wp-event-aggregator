@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 namespace Action_Scheduler\WP_CLI\Action;
 
@@ -46,7 +47,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 	 */
 	protected function cancel_single( $hook, $callback_args, $group ) {
 		if ( empty( $hook ) ) {
-			\WP_CLI::error( __( 'Please specify hook of action to cancel.', 'wp-event-aggregator' ) );
+			\WP_CLI::error( __( 'Please specify hook of action to cancel.', 'action-scheduler' ) );
 		}
 
 		try {
@@ -56,7 +57,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 		}
 
 		if ( null === $result ) {
-			$e = new \Exception( __( 'Unable to cancel scheduled action: check the logs.', 'wp-event-aggregator' ) );
+			$e = new \Exception( __( 'Unable to cancel scheduled action: check the logs.', 'action-scheduler' ) );
 			$this->print_error( $e, false );
 		}
 
@@ -73,20 +74,20 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 	 */
 	protected function cancel_all( $hook, $callback_args, $group ) {
 		if ( empty( $hook ) && empty( $group ) ) {
-			\WP_CLI::error( __( 'Please specify hook and/or group of actions to cancel.', 'wp-event-aggregator' ) );
+			\WP_CLI::error( __( 'Please specify hook and/or group of actions to cancel.', 'action-scheduler' ) );
 		}
 
 		try {
 			$result = as_unschedule_all_actions( $hook, $callback_args, $group );
 		} catch ( \Exception $e ) {
-			$this->print_error( $e, $multiple );
+			$this->print_error( $e, true );
 		}
 
 		/**
 		 * Because as_unschedule_all_actions() does not provide a result,
 		 * neither confirm or deny actions cancelled.
 		 */
-		\WP_CLI::success( __( 'Request to cancel scheduled actions completed.', 'wp-event-aggregator' ) );
+		\WP_CLI::success( __( 'Request to cancel scheduled actions completed.', 'action-scheduler' ) );
 	}
 
 	/**
@@ -95,7 +96,7 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 	 * @return void
 	 */
 	protected function print_success() {
-		\WP_CLI::success( __( 'Scheduled action cancelled.', 'wp-event-aggregator' ) );
+		\WP_CLI::success( __( 'Scheduled action cancelled.', 'action-scheduler' ) );
 	}
 
 	/**
@@ -110,8 +111,8 @@ class Cancel_Command extends \ActionScheduler_WPCLI_Command {
 		\WP_CLI::error(
 			sprintf(
 				/* translators: %1$s: singular or plural %2$s: refers to the exception error message. */
-				__( 'There was an error cancelling the %1$s: %2$s', 'wp-event-aggregator' ),
-				$multiple ? __( 'scheduled actions', 'wp-event-aggregator' ) : __( 'scheduled action', 'wp-event-aggregator' ),
+				__( 'There was an error cancelling the %1$s: %2$s', 'action-scheduler' ),
+				$multiple ? __( 'scheduled actions', 'action-scheduler' ) : __( 'scheduled action', 'action-scheduler' ),
 				$e->getMessage()
 			)
 		);

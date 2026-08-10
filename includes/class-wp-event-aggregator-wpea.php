@@ -97,6 +97,7 @@ class WP_Event_Aggregator_WPEA {
 		$online_event = !empty( $centralize_array['online_event'] ) ? $centralize_array['online_event'] : false ;
 		$timezone     = isset( $centralize_array['timezone'] ) ? sanitize_text_field(  $centralize_array['timezone'] ) : '';
 		$timezone_name = isset( $centralize_array['timezone_name'] ) ? sanitize_text_field(  $centralize_array['timezone_name'] ) : '';
+		$post_description = $importevents->htmltblock->convert( $post_description );
 
 		$emeventdata = array(
 			'post_title'  => $post_title,
@@ -115,6 +116,10 @@ class WP_Event_Aggregator_WPEA {
 		if ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable('status') ) {
 			$emeventdata['post_status'] = get_post_status( $is_exitsing_event );
 			$event_args['event_status'] = get_post_status( $is_exitsing_event );
+		}
+
+		if ( $is_exitsing_event ) {
+			$emeventdata = $importevents->common->wpea_preserve_existing_event_data( $emeventdata, $is_exitsing_event );
 		}
 
 		$inserted_event_id = wp_insert_post( $emeventdata, true );
@@ -214,9 +219,9 @@ class WP_Event_Aggregator_WPEA {
 				$event_image = $importevents->common_pro->wpea_get_facebook_event_url($origin_event_id);
 			}
 
-			if ( ! empty( $event_image ) ) {
+			if ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) && ! empty( $event_image ) ) {
 				$importevents->common->wpea_set_feature_image_logic( $inserted_event_id, $event_image, $event_args );
-			}else{
+			} elseif ( $importevents->common->wpea_is_event_image_updatable( $is_exitsing_event ) ) {
 				$default_thumb  = isset( $wpea_options['wpea']['wpea_event_default_thumbnail'] ) ? $wpea_options['wpea']['wpea_event_default_thumbnail'] : '';
 				if( !empty( $default_thumb ) ){
 					set_post_thumbnail( $inserted_event_id, $default_thumb );

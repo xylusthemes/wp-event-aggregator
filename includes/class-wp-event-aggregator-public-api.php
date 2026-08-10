@@ -206,12 +206,12 @@ class WP_Event_Aggregator_Meetup_Public_API {
      * @return array User data
      */
     public function getGroupName(  $meetup_group_id = '' ){
-        // phpcs:ignore Squiz.PHP.Heredoc.NotAllowed
         $payload = [
             "operationName" => "getGroupInfo",
             "variables" => [
                 "urlname" => $meetup_group_id
             ],
+            // phpcs:ignore PluginCheck.CodeAnalysis.Heredoc.NotAllowed
             "query" => <<<GRAPHQL
                 query getGroupInfo(\$urlname: String!) {
                     groupByUrlname(urlname: \$urlname) {

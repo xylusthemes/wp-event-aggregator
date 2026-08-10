@@ -4,8 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Add Thickbox support.
 add_thickbox();
-$listtable = new WP_Event_Aggregator_History_List_Table();
-$listtable->prepare_items();
+$wpea_listtable = new WP_Event_Aggregator_History_List_Table();
+$wpea_listtable->prepare_items();
 ?>
 <div class="wpea_container">
     <div class="wpea_row">
@@ -15,7 +15,7 @@ $listtable->prepare_items();
 				<input type="hidden" name="tab" value="<?php echo $tab = isset($_REQUEST['tab'])? esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) ) ) : 'history'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
 				<input type="hidden" name="ntab" value="" />
         		<?php
-				$listtable->display();
+				$wpea_listtable->display();
         		?>
 			</form>
         </div>

@@ -36,7 +36,7 @@ global $importevents;
 											</svg>
 											<span class="wpea-popper">
 												<?php 
-													$text = sprintf(
+													$wpea_text = sprintf(
 														/* translators: 1: First option (by Facebook Event ID), 2: Second option (Facebook Page) */
 														esc_html__( 'Select Event source. %1$s %2$s %3$s', 'wp-event-aggregator' ),
 														'<br><strong>' . esc_html__( '1. Eventbrite Event ID', 'wp-event-aggregator' ) . '</strong>',
@@ -45,7 +45,7 @@ global $importevents;
 													);
 													
 													echo wp_kses(
-														$text,
+														$wpea_text,
 														array(
 															'strong' => array(),
 															'br' => array(),
@@ -199,9 +199,9 @@ global $importevents;
 							<input type="hidden" name="ntab" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['ntab'] ) ) );  // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated ?>" />
 							<?php
 							if( wpea_is_pro() ){
-								$listtable = new WP_Event_Aggregator_List_Table();
-								$listtable->prepare_items('eventbrite');
-								$listtable->display();
+								$wpea_listtable = new WP_Event_Aggregator_List_Table();
+								$wpea_listtable->prepare_items('eventbrite');
+								$wpea_listtable->display();
 							}else{
 								do_action( 'wpea_render_pro_notice' );	
 							}				

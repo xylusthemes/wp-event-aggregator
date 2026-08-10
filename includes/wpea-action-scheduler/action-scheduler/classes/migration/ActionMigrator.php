@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.I18n.TextDomainMismatch, missing_direct_file_access_protection
 
 
 namespace Action_Scheduler\Migration;
@@ -106,7 +107,7 @@ class ActionMigrator {
 			$test_action = $this->source->fetch_action( $source_action_id );
 			if ( ! is_a( $test_action, 'ActionScheduler_NullAction' ) ) {
 				// translators: %s is an action ID.
-				throw new \RuntimeException( sprintf( __( 'Unable to remove source migrated action %s', 'wp-event-aggregator' ), $source_action_id ) );
+				throw new \RuntimeException( sprintf( __( 'Unable to remove source migrated action %s', 'action-scheduler' ), $source_action_id ) );
 			}
 			do_action( 'action_scheduler/migrated_action', $source_action_id, $destination_action_id, $this->source, $this->destination ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
@@ -118,7 +119,6 @@ class ActionMigrator {
 			// phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
 			do_action( 'action_scheduler/migrate_action_incomplete', $source_action_id, $destination_action_id, $this->source, $this->destination );
 			do_action( 'action_scheduler/migrated_action', $source_action_id, $destination_action_id, $this->source, $this->destination );
-			// phpcs:enable
 
 			return $destination_action_id;
 		}
