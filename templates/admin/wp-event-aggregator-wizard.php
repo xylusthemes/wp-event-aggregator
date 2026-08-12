@@ -5,20 +5,35 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div class="wpea-wizard-wrap" >
     <h3><?php esc_attr_e( 'WP Event Aggregator', 'wp-event-aggregator' ); ?></h3>
     <div class="wpea-wizard-starter-video" >
-        <a id="wpea-watch-video-btn" href="javascript:void(0)" class="wpea-wizard-button-style">
-            <svg xmlns="http://www.w3.org/2000/svg" width="44.098" height="33" viewBox="0 0 44.098 33">
-                <path d="M24.4,9A90.306,90.306,0,0,0,8.3,10.2a5.55,5.55,0,0,0-4.5,4.3A65.024,65.024,0,0,0,3,25a54.425,54.425,0,0,0,.9,10.5,5.691,5.691,0,0,0,4.5,4.3A92.024,92.024,0,0,0,24.5,41a91.941,91.941,0,0,0,16.1-1.2,5.545,5.545,0,0,0,4.5-4.3,75.529,75.529,0,0,0,1-10.6,54.229,54.229,0,0,0-1-10.6A5.681,5.681,0,0,0,40.6,10,124.79,124.79,0,0,0,24.4,9Zm0,2a99.739,99.739,0,0,1,15.8,1.1,3.669,3.669,0,0,1,2.9,2.7,54.775,54.775,0,0,1,1,10.1,73.687,73.687,0,0,1-1,10.3c-.3,1.9-2.3,2.5-2.9,2.7a91.694,91.694,0,0,1-15.6,1.2c-6,0-12.1-.4-15.6-1.2a3.668,3.668,0,0,1-2.9-2.7A39.331,39.331,0,0,1,5,25a55.674,55.674,0,0,1,.8-10.1c.3-1.9,2.4-2.5,2.9-2.7A87.752,87.752,0,0,1,24.4,11ZM19,17V33l14-8Zm2,3.4L29,25l-8,4.6Z" transform="translate(-2.5 -8.5)" fill="#959da4" stroke="#fff" stroke-width="1"></path>
+        <?php 
+        if ( post_type_exists( 'wpeapro_live_feed' ) || defined( 'WPEAPRO_VERSION' ) ) {
+            $feed_url = admin_url( 'edit.php?post_type=wpeapro_live_feed' );
+        } else {
+            $feed_url = admin_url( 'admin.php?page=wpea_import_events_feed_upgrade' );
+        }
+        ?>
+        <a href="<?php echo esc_url( $feed_url ); ?>" class="wpea-wizard-button-style">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#959da4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto; display: block;">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
             </svg>
-            <p><?php esc_attr_e( 'Getting Started Video', 'wp-event-aggregator' ); ?></p>
+            <p><?php esc_attr_e( 'WP Event Aggregator Widget', 'wp-event-aggregator' ); ?></p>
         </a>
     </div>
 
     <div class="wpea-wizard-open-popup-box" >
+        <button id="wpea-watch-video-btn" class="wpea-wizard-open-popup wpea-wizard-button-style">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="26" viewBox="0 0 44.098 33">
+                <path d="M24.4,9A90.306,90.306,0,0,0,8.3,10.2a5.55,5.55,0,0,0-4.5,4.3A65.024,65.024,0,0,0,3,25a54.425,54.425,0,0,0,.9,10.5,5.691,5.691,0,0,0,4.5,4.3A92.024,92.024,0,0,0,24.5,41a91.941,91.941,0,0,0,16.1-1.2,5.545,5.545,0,0,0,4.5-4.3,75.529,75.529,0,0,0,1-10.6,54.229,54.229,0,0,0-1-10.6A5.681,5.681,0,0,0,40.6,10,124.79,124.79,0,0,0,24.4,9Zm0,2a99.739,99.739,0,0,1,15.8,1.1,3.669,3.669,0,0,1,2.9,2.7,54.775,54.775,0,0,1,1,10.1,73.687,73.687,0,0,1-1,10.3c-.3,1.9-2.3,2.5-2.9,2.7a91.694,91.694,0,0,1-15.6,1.2c-6,0-12.1-.4-15.6-1.2a3.668,3.668,0,0,1-2.9-2.7A39.331,39.331,0,0,1,5,25a55.674,55.674,0,0,1,.8-10.1c.3-1.9,2.4-2.5,2.9-2.7A87.752,87.752,0,0,1,24.4,11ZM19,17V33l14-8Zm2,3.4L29,25l-8,4.6Z" transform="translate(-2.5 -8.5)" fill="#959da4" stroke="#fff" stroke-width="1"></path>
+            </svg>
+            <span><?php esc_attr_e( 'Video', 'wp-event-aggregator' ); ?></span>
+        </button>
         <button class="wpea-wizard-open-popup add-event wpea-wizard-button-style" onclick="window.open('<?php echo esc_url( 'https://docs.xylusthemes.com/docs/wp-event-aggregator/' ); ?>', '_blank', 'noopener,noreferrer');">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="26" viewBox="0 0 32 26">
                 <path d="M0,29H32V3H0Zm1-1V8H31V28ZM31,4V7H1V4ZM3,5H5V6H3ZM7,5H9V6H7Zm4,0h2V6H11ZM3,12H16.5v1H3Zm0,4H16.5v1H3Zm0,4H16.5v1H3Zm15.5,1H29V12H18.5Zm1-8H28v7H19.5Z" transform="translate(0 -3)" fill="#959da4"></path>
             </svg>
-            <span><?php esc_attr_e( 'Documentation', 'wp-event-aggregator' ); ?></span>
+            <span><?php esc_attr_e( 'Docs', 'wp-event-aggregator' ); ?></span>
         </button>
         <button class="wpea-wizard-open-popup wpea-settings wpea-wizard-button-style" id="wpea_wizard_setting_button" onclick="window.location.href='<?php echo esc_url( admin_url( 'admin.php?page=import_events&tab=settings' ) ); ?>';" >
             <svg xmlns="http://www.w3.org/2000/svg" width="32.002" height="32.002" viewBox="0 0 32.002 32.002">

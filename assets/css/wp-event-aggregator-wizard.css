@@ -111,13 +111,13 @@ button.wpea-wizard-open-popup {
     border: 1px solid #DFE1E5;
     border-radius: 11px;
     padding: 22px 18px;
-    width: 230px;
+    width: 150px;
     height: 130px;
     font-size: 13px;
     text-align: center;
     color: #52595E;
     float: left;
-    margin-right: 50px;
+    margin-right: 35px;
 }
 button.wpea-wizard-open-popup span.wizard-notification-text {
     margin-top: 3px;
@@ -196,4 +196,7 @@ button.wpea-wizard-back-button:hover, button.wpea-wizard-back-button:hover svg p
 
 .wpea-wizard-wrap .wpea-wizard-starter-video a:hover svg path, button.wpea-wizard-import-box:hover svg path, button.wpea-wizard-open-popup:hover svg path{
     fill: #0049b3;
+}
+.wpea-wizard-wrap .wpea-wizard-starter-video a:hover svg rect, .wpea-wizard-wrap .wpea-wizard-starter-video a:hover svg line {
+    stroke: #0049b3;
 }

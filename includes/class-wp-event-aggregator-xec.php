@@ -139,6 +139,7 @@ class WP_Event_Aggregator_XEC {
 		$event_content = isset( $centralize_array['description'] ) ? $centralize_array['description'] : '';
 		$event_status  = $formated_args['post_status'];
 		$event_author  = $formated_args['post_author'];
+		$event_content = $importevents->htmltoblock->convert( $event_content );
 		
 		$xec_event     = array(
 			'post_title'   => $event_title,
@@ -237,6 +238,7 @@ class WP_Event_Aggregator_XEC {
 		$event_content = isset( $centralize_array['description'] ) ? $centralize_array['description'] : '';
 		$event_status  = $formated_args['post_status'];
 		$event_author  = $formated_args['post_author'];
+		$event_content = $importevents->htmltoblock->convert( $event_content );
 		
 		$xec_event     = array(
 			'ID'           => $event_id,
