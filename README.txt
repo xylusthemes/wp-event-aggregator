@@ -1,11 +1,11 @@
 === WP Event Aggregator: Import Eventbrite events, Meetup events, social events and any iCal Events into Event Calendar ===
-Contributors: xylus,dharm1025,rajat1192
+Contributors: xylus,dharm1025,rajat1192,karangadhavi
 Donate link: http://xylusthemes.com
 Tags: event importer, event calendar, eventbrite event, facebook event, ical import
-Requires at least: 4.0
+Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,9 @@ The plugin works as a **stand-alone event management system** and also integrate
 Designed for both beginners and advanced users, WP Event Aggregator offers flexible import options, scheduled automation, and reliable synchronization.
 
 You can easily import **Facebook Events**, **Eventbrite Events**, **Meetup Events**, **Google Calendar event**, **Outlook Calendar Event** and events from iCal/ICS feeds into your WordPress site—without manual data entry.
+
+🚀 **New Feature: Live Event Feed (No Import Required!)**
+Don't want to clutter your database? No problem! Our new **Event Feed** feature allows you to seamlessly display live events directly from multiple platforms (Facebook, Eventbrite, Meetup, etc.) on your website *without* importing or saving them locally. Choose from multiple stunning, highly-responsive layouts and display all your events instantly. Keep your database lightweight, fast, and your users engaged!
 
 == Key Features ==
 
@@ -304,23 +307,35 @@ Yes. The plugin is actively maintained and tested with the latest WordPress and 
 
 == Screenshots ==
 
-1. Display events with Shortcode Layout Style 1.
-2. Display events with Shortcode Layout Style 2 (Pro).
-3. Display events with Shortcode Layout Style 3.
-4. Display events with Shortcode Layout Style 4.
-5. Display events using the Gutenberg Block for WP Events.
-6. Upcoming WP Events Widget in backend (Pro).
-7. Preview events directly in the widget area.
-8. Import events from Eventbrite.
-9. Import events from Meetup.
-10. Import events from Facebook.
-11. Import events from any iCal-compatible calendar.
-12. Schedule automatic imports at regular intervals (Pro).
-13. View detailed history of all events imports.
-14. Configure settings for imported events.
-15. Import events via CSV, XML, or JSON files (Pro).
+1. **Front-end: Live Event Feed (Pro)** – A dynamic and responsive live feed displaying your upcoming events.
+2. **Front-end: Layout Style 1** – Display events in a clean layout using Shortcode Style 1.
+3. **Front-end: Layout Style 2 (Pro)** – Premium grid layout for displaying events using Shortcode Style 2.
+4. **Front-end: Layout Style 3** – An alternative responsive layout using Shortcode Style 3.
+5. **Front-end: Layout Style 4** – A sleek and modern layout using Shortcode Style 4.
+6. **Editor: Gutenberg Block** – Easily embed and display events using the WP Events Gutenberg Block.
+7. **Admin: Upcoming Events Widget (Pro)** – Configure the Upcoming WP Events Widget directly in the backend.
+8. **Admin: Widget Preview** – Preview events directly within the widget configuration area.
+9. **Integration: Eventbrite Import** – Seamlessly import your events from Eventbrite.
+10. **Integration: Meetup Import** – Easily connect and import events from Meetup groups.
+11. **Integration: Facebook Import** – Import your Facebook events directly into your WordPress site.
+12. **Integration: iCal Calendar** – Import events from any iCal-compatible calendar source.
+13. **Automation: Scheduled Imports (Pro)** – Set up automated event imports at regular scheduled intervals.
+14. **Admin: Import History Logs** – View detailed history and logs of all your event imports.
+15. **Admin: Plugin Settings** – Configure advanced settings and preferences for imported events.
+16. **Export: iCal Export** – Easily export your WordPress events using the iCal export feature.
+17. **Integration: File Importer  (Pro)** – Advanced import capabilities via CSV, XML, or JSON files.
 
 == Changelog ==
+
+= 1.9.2 =
+* ADDED: Widget support (Pro version).
+* ADDED: Eventbrite tag import and assignment options.
+* ADDED: Import compatibility with the Easy Event Calendar plugin.
+* ADDED: iCal export option for events.
+* ADDED: Applied discount code field support.
+* ADDED: Option to exclude specific event data from being updated during synchronization.
+* FIXED: Meetup timezone issue during import.
+* IMPROVEMENTS: Switched custom post types from Classic Editor to Gutenberg block editor.
 
 = 1.9.1 =
 * ADDED: Option to store external event image URLs without downloading.
