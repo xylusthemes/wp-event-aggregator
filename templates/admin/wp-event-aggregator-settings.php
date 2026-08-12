@@ -927,7 +927,7 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                             <input type="hidden" name="wpea[wpea_event_default_thumbnail]" id="wpea-event_thumbnail_hidden_field" value="<?php echo esc_attr( $wpea_edt_id ); ?>" />
 
                             <div class="action-buttons">
-                                <button type="button" id="wpea-choose-from-library-button" class="button-add-site-icon"  >
+                                <button type="button" id="wpea-choose-from-library-button" class="button-add-site-icon button"  >
                                     <?php echo esc_attr( $wpea_button_text ); ?>
                                 </button>
                                 <button id="wpea-js-remove-thumbnail" type="button" class="reset <?php echo esc_attr( $wpea_remove_class ); ?><?php echo esc_attr( $wpea_cfub ); ?>" >

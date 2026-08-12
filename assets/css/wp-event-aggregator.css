@@ -734,7 +734,7 @@
 .wpea_organizer .details > p {margin-bottom: 10px;margin-top:0;}
 .wpea_organizer .venue{ float:left; width:35%;}
 .wpea_organizer .map {border:2px solid #ddd;float: left;width:64%; border-radius:2px;}
-.wpea_organizer .titlemain{ font-size:18px; font-weight:bold; color:#444444;}
+.wpea_organizer .wpea_titlemain{ font-size:18px; font-weight:bold; color:#444444;}
 .wpea_organizer.library{ margin-top:0;}
 @media (max-width: 768px){
     .wpea_organizer .details, .wpea_organizer .map, .wpea_organizer .venue{float: none;width:100%;}

@@ -182,6 +182,7 @@ class WP_Event_Aggregator_Cpt {
 				 'show_admin_column'   		  => true,
 				 'hierarchical'               => true,
 				 'query_var'    			  => true,
+				 'show_in_rest'               => true,
 		 ) );
 
 		 /* Register the event Tag taxonomy. */
@@ -195,6 +196,7 @@ class WP_Event_Aggregator_Cpt {
 				'show_tagcloud'     => true,
 				'show_admin_column' => true,
 				'hierarchical'      => false,
+				'show_in_rest'      => true,
 				'query_var'         => $this->event_tag,
 				/* Labels used when displaying taxonomy and terms. */
 				'labels' => array(

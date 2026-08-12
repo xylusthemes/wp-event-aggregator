@@ -381,6 +381,6 @@ class WP_Event_Aggregator_Ical_Export {
 	 */
 	public function get_export_filename( $args = array() ) {
 		$post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : $this->get_export_post_type();
-		return sanitize_file_name( 'eventbrite-events-' . $post_type . '-' . gmdate( 'Y-m-d' ) . '.ics' );
+		return sanitize_file_name( $post_type . '-' . gmdate( 'Y-m-d H-i-s' ) . '.ics' );
 	}
 }

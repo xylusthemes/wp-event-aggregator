@@ -31,7 +31,7 @@ if($wpea_time_format === '12hours' ){
 ?>
 <div class="wpea_organizer">
   <div class="details">
-    <div class="titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
+    <div class="wpea_titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
 
     <?php 
 	if( gmdate( 'Y-m-d', strtotime( $wpea_start_date_str ) ) == gmdate( 'Y-m-d', strtotime( $wpea_end_date_str ) ) ){
@@ -104,7 +104,7 @@ if($wpea_time_format === '12hours' ){
 		if( $wpea_org_name != '' ){
 			?>
 			<div class="organizer">
-				<div class="titlemain"><?php esc_html_e( 'Organizer','wp-event-aggregator' ); ?></div>
+				<div class="wpea_titlemain"><?php esc_html_e( 'Organizer','wp-event-aggregator' ); ?></div>
 				<p><strong><?php echo esc_attr( $wpea_org_name ); ?></strong></p>
 			</div>
 			<?php if( $wpea_org_email != '' ){ ?>
@@ -148,7 +148,7 @@ if ( ! empty( $wpea_venue_address_name ) || ( ! empty( $wpea_venue['lat'] ) && !
 	?>
 	<div class="wpea_organizer library">
 		<div class="venue">
-			<div class="titlemain"><strong><?php esc_html_e( 'Venue','wp-event-aggregator' ); ?></strong></div>
+			<div class="wpea_titlemain"><strong><?php esc_html_e( 'Venue','wp-event-aggregator' ); ?></strong></div>
 			<p><?php echo esc_attr( $wpea_venue_name ); ?></p>
 			<?php
 			if( $wpea_venue_address != '' ){
