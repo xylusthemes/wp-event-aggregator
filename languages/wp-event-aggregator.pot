@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-10T13:12:55+00:00\n"
+"POT-Creation-Date: 2026-08-12T07:43:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -42,6 +42,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-admin.php:84
 #: includes/class-wp-event-aggregator-admin.php:93
 #: templates/admin/feed-upgrade-page.php:56
+#: templates/admin/wp-event-aggregator-wizard.php:21
 msgid "WP Event Aggregator Widget"
 msgstr ""
 
@@ -79,7 +80,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-admin.php:109
 #: includes/class-wp-event-aggregator-admin.php:258
 #: templates/admin/wp-event-aggregator-dashboard.php:35
-#: templates/admin/wp-event-aggregator-wizard.php:27
+#: templates/admin/wp-event-aggregator-wizard.php:42
 msgid "Settings"
 msgstr ""
 
@@ -528,6 +529,7 @@ msgid "Made with ♥ by the Xylus Themes"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:1432
+#: templates/admin/wp-event-aggregator-wizard.php:36
 #: wp-event-aggregator.php:262
 msgid "Docs"
 msgstr ""
@@ -703,167 +705,167 @@ msgstr ""
 msgid "New Category Name"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:201
 #: includes/class-wp-event-aggregator-cpt.php:203
+#: includes/class-wp-event-aggregator-cpt.php:205
 #: templates/wpea-event-meta.php:84
 msgid "Event Tags"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:202
 #: includes/class-wp-event-aggregator-cpt.php:204
+#: includes/class-wp-event-aggregator-cpt.php:206
 msgid "Event Tag"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:205
+#: includes/class-wp-event-aggregator-cpt.php:207
 msgid "Search Tags"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:206
+#: includes/class-wp-event-aggregator-cpt.php:208
 msgid "Popular Tags"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:207
+#: includes/class-wp-event-aggregator-cpt.php:209
 msgid "All Tags"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:208
+#: includes/class-wp-event-aggregator-cpt.php:210
 msgid "Edit Tag"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:209
+#: includes/class-wp-event-aggregator-cpt.php:211
 msgid "View Tag"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:210
+#: includes/class-wp-event-aggregator-cpt.php:212
 msgid "Update Tag"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:211
+#: includes/class-wp-event-aggregator-cpt.php:213
 msgid "Add New Tag"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:212
+#: includes/class-wp-event-aggregator-cpt.php:214
 msgid "New Tag Name"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:213
+#: includes/class-wp-event-aggregator-cpt.php:215
 msgid "Separate tags with commas"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:214
+#: includes/class-wp-event-aggregator-cpt.php:216
 msgid "Add or Remove tags"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:215
+#: includes/class-wp-event-aggregator-cpt.php:217
 msgid "Choose from the most used tags"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:216
+#: includes/class-wp-event-aggregator-cpt.php:218
 msgid "No tags found"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:232
+#: includes/class-wp-event-aggregator-cpt.php:234
 msgid "Events Details"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:256
+#: includes/class-wp-event-aggregator-cpt.php:258
 #: templates/wpea-event-meta.php:151
 msgid "Venue"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:257
+#: includes/class-wp-event-aggregator-cpt.php:259
 msgid "Address"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:258
+#: includes/class-wp-event-aggregator-cpt.php:260
 msgid "City"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:259
+#: includes/class-wp-event-aggregator-cpt.php:261
 msgid "State"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:260
+#: includes/class-wp-event-aggregator-cpt.php:262
 msgid "Country"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:261
+#: includes/class-wp-event-aggregator-cpt.php:263
 msgid "Zipcode"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:262
+#: includes/class-wp-event-aggregator-cpt.php:264
 msgid "Latitude"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:263
+#: includes/class-wp-event-aggregator-cpt.php:265
 msgid "Longitude"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:264
-#: includes/class-wp-event-aggregator-cpt.php:268
+#: includes/class-wp-event-aggregator-cpt.php:266
+#: includes/class-wp-event-aggregator-cpt.php:270
 #: templates/wpea-event-meta.php:119
 msgid "Website"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:265
+#: includes/class-wp-event-aggregator-cpt.php:267
 msgid "Organizer Name"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:266
+#: includes/class-wp-event-aggregator-cpt.php:268
 #: templates/wpea-event-meta.php:111
 msgid "Email"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:267
+#: includes/class-wp-event-aggregator-cpt.php:269
 #: templates/wpea-event-meta.php:115
 msgid "Phone"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:269
+#: includes/class-wp-event-aggregator-cpt.php:271
 msgid "Source Link"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:274
+#: includes/class-wp-event-aggregator-cpt.php:276
 msgid "Time & Date"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:277
+#: includes/class-wp-event-aggregator-cpt.php:279
 msgid "Start Date & Time"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:289
+#: includes/class-wp-event-aggregator-cpt.php:291
 msgid "End Date & Time"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:302
+#: includes/class-wp-event-aggregator-cpt.php:304
 msgid "Location Details"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:319
+#: includes/class-wp-event-aggregator-cpt.php:321
 msgid "Organizer Details"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:337
+#: includes/class-wp-event-aggregator-cpt.php:339
 msgid "Event Source Link"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:505
+#: includes/class-wp-event-aggregator-cpt.php:507
 msgid "Event Date"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:506
+#: includes/class-wp-event-aggregator-cpt.php:508
 msgid "Event Origin"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:838
+#: includes/class-wp-event-aggregator-cpt.php:840
 msgid "Next Events &raquo;"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:843
+#: includes/class-wp-event-aggregator-cpt.php:845
 msgid "&laquo; Previous Events"
 msgstr ""
 
-#: includes/class-wp-event-aggregator-cpt.php:867
+#: includes/class-wp-event-aggregator-cpt.php:869
 msgid "No Events are found."
 msgstr ""
 
@@ -1826,7 +1828,6 @@ msgid "In this video, you can learn how to Import Eventbrite, Meetup, Facebook a
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-dashboard.php:36
-#: templates/admin/wp-event-aggregator-wizard.php:21
 msgid "Documentation"
 msgstr ""
 
@@ -2525,11 +2526,11 @@ msgstr ""
 msgid "Status : "
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-wizard.php:12
-msgid "Getting Started Video"
+#: templates/admin/wp-event-aggregator-wizard.php:30
+msgid "Video"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-wizard.php:37
+#: templates/admin/wp-event-aggregator-wizard.php:52
 msgid "Back to WordPress Dashboard"
 msgstr ""
 
