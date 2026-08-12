@@ -341,6 +341,7 @@ class WP_Event_Aggregator_Ical_Parser {
 		}
 
 		$timezone_name = !empty( $timezone ) ? $timezone : $calendar_timezone;
+		$post_description = $importevents->common->wpea_remove_facebook_link_in_event_description( $post_description, $uid );
 
 		// Only for facebook ical imports.
 		$match = 'https://www.facebook.com/events/';
@@ -352,10 +353,10 @@ class WP_Event_Aggregator_Ical_Parser {
 			$timezone_name = $cwt_start['timezone_name'];
 			$start_time    = strtotime( $cwt_start['date_format'] );
 			$end_time      = strtotime( $cwt_end['date_format'] );
+		}else{
+			$post_description = $importevents->common->wpea_convert_text_to_hyperlink( $post_description );
 		}
 
-		$post_description = $importevents->common->wpea_remove_facebook_link_in_event_description( $post_description, $uid );
-		$post_description = $importevents->common->wpea_convert_text_to_hyperlink( $post_description );
 		
 		$xt_event = array(
 			'origin'          => 'ical',
