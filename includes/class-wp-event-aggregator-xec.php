@@ -445,8 +445,8 @@ class WP_Event_Aggregator_XEC {
 			update_term_meta( $term_id, 'venue_state', isset( $venue['state'] ) ? $venue['state'] : '' );
 			update_term_meta( $term_id, 'venue_country', isset( $venue['country'] ) ? $venue['country'] : '' );
 			update_term_meta( $term_id, 'venue_zip', isset( $venue['zip'] ) ? $venue['zip'] : '' );
-			update_term_meta( $term_id, 'venue_latitude', isset( $venue['latitude'] ) ? $venue['latitude'] : '' );
-			update_term_meta( $term_id, 'venue_longitude', isset( $venue['longitude'] ) ? $venue['longitude'] : '' );
+			update_term_meta( $term_id, 'venue_latitude', isset( $venue['lat'] ) ? $venue['lat'] : '' );
+			update_term_meta( $term_id, 'venue_longitude', isset( $venue['long'] ) ? $venue['long'] : '' );
 		}
 	}
 
