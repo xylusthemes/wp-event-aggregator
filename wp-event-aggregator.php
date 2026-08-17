@@ -5,7 +5,7 @@
  * Description:       Import Events from anywhere - Facebook, Eventbrite, Meetup, iCalendar and ICS into your WordPress site.
  * Requires at least: 5.0
  * Requires PHP:      7.4
- * Version:           1.9.2
+ * Version:           1.9.3
  * Author:            Xylus Themes
  * Author URL:        http://xylusthemes.com
  * License:           GPL-2.0+
@@ -135,14 +135,14 @@ class WP_Event_Aggregator{
 	 *
 	 * @since 1.0.0
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.9.2' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.9.3' ); }
 
 	/**
 	 * A dummy magic method to prevent WP_Event_Aggregator from being unserialized.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.9.2' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'wp-event-aggregator' ), '1.9.3' ); }
 
 
 	/**
@@ -156,7 +156,7 @@ class WP_Event_Aggregator{
 
 		// Plugin version.
 		if( ! defined( 'WPEA_VERSION' ) ){
-			define( 'WPEA_VERSION', '1.9.2' );
+			define( 'WPEA_VERSION', '1.9.3' );
 		}
 
 		// Minimum Pro plugin version.
