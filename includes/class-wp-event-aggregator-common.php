@@ -30,7 +30,28 @@ class WP_Event_Aggregator_Common {
 		add_action( 'admin_init', array( $this, 'wpea_redirect_after_activation' ) );
 		add_filter( 'post_thumbnail_html', array( $this, 'wpea_external_image_thumbnail_html' ), 10, 5 );
 		add_filter( 'has_post_thumbnail', array( $this, 'wpea_external_image_has_thumbnail' ), 10, 3 );
-	}	
+	}
+
+	/**
+	 * Convert description conditionally.
+	 *
+	 * @param string $post_description The post description.
+	 * @return string
+	 */
+	public function convert_description( $post_description ) {
+		global $importevents;
+
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( is_plugin_active( 'classic-editor/classic-editor.php' ) ) {
+			return $post_description;
+		}
+
+		return $importevents->htmltoblock->convert( $post_description );
+	}
+	
 
 	/**
 	 * Format events arguments as per TEC

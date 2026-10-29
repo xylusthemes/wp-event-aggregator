@@ -9,7 +9,7 @@
  * @subpackage WP_Event_Aggregator/includes
  */
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( "ABSPATH" ) ) exit;
 
 class WP_Event_Aggregator_Meetup_Authorize {
 
@@ -19,31 +19,39 @@ class WP_Event_Aggregator_Meetup_Authorize {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		add_action( 'admin_post_wpea_mauthorize_action', array( $this, 'wpea_authorize_user' ) );
-		add_action( 'admin_post_wpea_mdeauthorize_action', array( $this, 'wpea_deauthorize_user' ) );
-		add_action( 'admin_post_wepa_meetup_authorize_callback', array( $this, 'wpea_authorize_user_callback' ) );
+		add_action( "admin_post_wpea_mauthorize_action", array( $this, "wpea_authorize_user" ) );
+		add_action( "admin_post_wpea_mdeauthorize_action", array( $this, "wpea_deauthorize_user" ) );
+		add_action( "admin_post_wepa_meetup_authorize_callback", array( $this, "wpea_authorize_user_callback" ) );
 	}
 
 	/*
 	* Authorize Meetup user to get access token
 	*/
     function wpea_authorize_user() {
-		if ( ! empty($_GET) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_GET['wpea_mauthorize_nonce'] ) ) ), 'wpea_mauthorize_action' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		if ( ! current_user_can( "manage_options" ) ) {
+			wp_die( esc_html__( "You do not have sufficient permissions to perform this action.", "wp-event-aggregator" ) );
+		}
+
+		if ( ! empty($_GET) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_GET["wpea_mauthorize_nonce"] ) ) ), "wpea_mauthorize_action" ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			$wpea_options = get_option( WPEA_OPTIONS );
-			$meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
-			$meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_options['meetup_oauth_key'] : '';
-			$meetup_oauth_secret = isset( $meetup_options['meetup_oauth_secret'] ) ? $meetup_options['meetup_oauth_secret'] : '';
-			$redirect_url = admin_url( 'admin-post.php?action=wepa_meetup_authorize_callback' );
+			$meetup_options = isset($wpea_options["meetup"])? $wpea_options["meetup"] : array();
+			$meetup_oauth_key = isset( $meetup_options["meetup_oauth_key"] ) ? $meetup_options["meetup_oauth_key"] : "";
+			$meetup_oauth_secret = isset( $meetup_options["meetup_oauth_secret"] ) ? $meetup_options["meetup_oauth_secret"] : "";
+			$redirect_url = admin_url( "admin-post.php?action=wepa_meetup_authorize_callback" );
 			$param_url = urlencode($redirect_url);
-			if( $meetup_oauth_key != '' && $meetup_oauth_secret != '' ){
+			if( $meetup_oauth_key != "" && $meetup_oauth_secret != "" ){
+				$wpea_oauth_state = wp_generate_password( 32, false );
+				set_transient( "wpea_meetup_oauth_state_" . get_current_user_id(), $wpea_oauth_state, 15 * MINUTE_IN_SECONDS );
+
 				$dialog_url = "https://secure.meetup.com/oauth2/authorize?client_id="
-				        . $meetup_oauth_key . "&response_type=code&redirect_uri=" . $param_url;
-				header("Location: " . $dialog_url);
+				        . $meetup_oauth_key . "&response_type=code&redirect_uri=" . $param_url . "&state=" . $wpea_oauth_state;
+				wp_redirect( $dialog_url );
+				exit();
 			}else{
-				die( esc_attr__( 'Please insert Meetup Oauth Key and Secret.', 'wp-event-aggregator' ) );
+				wp_die( esc_html__( "Please insert Meetup Oauth Key and Secret.", "wp-event-aggregator" ) );
 			}
         } else {
-            die( esc_attr__('You have not access to do this operations.', 'wp-event-aggregator' ) );
+            wp_die( esc_html__("You do not have access to do this operation.", "wp-event-aggregator" ) );
         }
     }
 
@@ -51,19 +59,19 @@ class WP_Event_Aggregator_Meetup_Authorize {
 	* Remove Meetup user connection
 	*/
 	function wpea_deauthorize_user() {
-		if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) ), 'wpea_deauthorize_nonce' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-			if ( current_user_can( 'manage_options' ) ) {
-				delete_option('wpea_mauthorized_user');
-				delete_option('wpea_muser_token_options');
-				delete_transient('wpea_meetup_auth_token');
-				$redirect_url = admin_url('admin.php?page=import_events&tab=settings');
+		if ( isset( $_GET["_wpnonce"] ) && wp_verify_nonce( esc_attr( sanitize_text_field( wp_unslash( $_GET["_wpnonce"] ) ) ), "wpea_deauthorize_nonce" ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			if ( current_user_can( "manage_options" ) ) {
+				delete_option("wpea_mauthorized_user");
+				delete_option("wpea_muser_token_options");
+				delete_transient("wpea_meetup_auth_token");
+				$redirect_url = admin_url("admin.php?page=import_events&tab=settings");
 				wp_safe_redirect($redirect_url);
 				exit();
 			} else {
-				wp_die( esc_attr__('You do not have sufficient permissions to perform this action.', 'wp-event-aggregator' ));
+				wp_die( esc_html__("You do not have sufficient permissions to perform this action.", "wp-event-aggregator" ));
 			}
 		} else {
-			wp_die( esc_attr__('Sorry, you are not allowed to access this page.', 'wp-event-aggregator' ));
+			wp_die( esc_html__("Sorry, you are not allowed to access this page.", "wp-event-aggregator" ));
 		}
 	}
 
@@ -72,61 +80,75 @@ class WP_Event_Aggregator_Meetup_Authorize {
 	*/
     function wpea_authorize_user_callback() {
 		global $wpea_success_msg;
-		if ( isset( $_GET['code'] ) && !empty( $_GET['code'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
-				$code = esc_attr( sanitize_text_field( wp_unslash( $_GET['code'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		if ( ! current_user_can( "manage_options" ) ) {
+			wp_die( esc_html__( "You do not have sufficient permissions to perform this action.", "wp-event-aggregator" ) );
+		}
+
+		$user_id        = get_current_user_id();
+		$stored_state   = get_transient( "wpea_meetup_oauth_state_" . $user_id );
+		$returned_state = isset( $_GET["state"] ) ? sanitize_text_field( wp_unslash( $_GET["state"] ) ) : "";
+
+		if ( empty( $stored_state ) || empty( $returned_state ) || ! hash_equals( $stored_state, $returned_state ) ) {
+			wp_die( esc_html__( "Invalid or expired authorization state.", "wp-event-aggregator" ) );
+		}
+		delete_transient( "wpea_meetup_oauth_state_" . $user_id );
+
+		if ( isset( $_GET["code"] ) && !empty( $_GET["code"] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+
+				$code = esc_attr( sanitize_text_field( wp_unslash( $_GET["code"] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				$wpea_options = get_option( WPEA_OPTIONS );
-				$meetup_options = isset($wpea_options['meetup'])? $wpea_options['meetup'] : array();
-				$meetup_oauth_key = isset( $meetup_options['meetup_oauth_key'] ) ? $meetup_options['meetup_oauth_key'] : '';
-				$meetup_oauth_secret = isset( $meetup_options['meetup_oauth_secret'] ) ? $meetup_options['meetup_oauth_secret'] : '';
-				$redirect_url = admin_url('admin-post.php?action=wepa_meetup_authorize_callback');
+				$meetup_options = isset($wpea_options["meetup"])? $wpea_options["meetup"] : array();
+				$meetup_oauth_key = isset( $meetup_options["meetup_oauth_key"] ) ? $meetup_options["meetup_oauth_key"] : "";
+				$meetup_oauth_secret = isset( $meetup_options["meetup_oauth_secret"] ) ? $meetup_options["meetup_oauth_secret"] : "";
+				$redirect_url = admin_url("admin-post.php?action=wepa_meetup_authorize_callback");
 				$param_url = urlencode($redirect_url);
 				
-				if( $meetup_oauth_key != '' && $meetup_oauth_secret != '' ){
+				if( $meetup_oauth_key != "" && $meetup_oauth_secret != "" ){
 
-					$token_url = 'https://secure.meetup.com/oauth2/access';
+					$token_url = "https://secure.meetup.com/oauth2/access";
 					$args = array(
-						'method' => 'POST',
-						'headers' => array( 'content-type' => 'application/x-www-form-urlencoded'),
-						'body'    => "client_id={$meetup_oauth_key}&client_secret={$meetup_oauth_secret}&grant_type=authorization_code&redirect_uri={$param_url}&code={$code}"
+						"method" => "POST",
+						"headers" => array( "content-type" => "application/x-www-form-urlencoded"),
+						"body"    => "client_id={$meetup_oauth_key}&client_secret={$meetup_oauth_secret}&grant_type=authorization_code&redirect_uri={$param_url}&code={$code}"
 					);
 					$access_token = "";
 					$wpea_user_token_options = $wpea_authorized_user = array();
 					$response = wp_remote_post( $token_url, $args );
 					$body = wp_remote_retrieve_body( $response );
 					$body_response = json_decode( $body );
-					if ($body != '' && isset( $body_response->access_token ) ) {
-						delete_transient('wpea_meetup_auth_token');
+					if ($body != "" && isset( $body_response->access_token ) ) {
+						delete_transient("wpea_meetup_auth_token");
 						$access_token = $body_response->access_token;
-					    update_option('wpea_muser_token_options', $body_response);
+					    update_option("wpea_muser_token_options", $body_response);
 
 						$api       = new WP_Event_Aggregator_Meetup_API( $access_token );
 						$auth_user = $api->getAuthUser();
-						$user_data = $auth_user['data']['self'];
+						$user_data = $auth_user["data"]["self"];
 
 						$profile  = array(
-							'ID'	=> $user_data['id'],
-							'name'  => $user_data['name'],
-							'email' => $user_data['email']
+							"ID"	=> $user_data["id"],
+							"name"  => $user_data["name"],
+							"email" => $user_data["email"]
 						);
-						update_option('wpea_mauthorized_user', $profile );
+						update_option("wpea_mauthorized_user", $profile );
 
-						$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=1');
+						$redirect_url = admin_url("admin.php?page=import_events&tab=settings&wpeam_authorize=1");
 					    wp_safe_redirect($redirect_url);
 					    exit();
 					}else{
-						$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=0');
+						$redirect_url = admin_url("admin.php?page=import_events&tab=settings&wpeam_authorize=0");
 					    wp_safe_redirect($redirect_url);
 					    exit();
 					}
 				} else {
-					$redirect_url = admin_url('admin.php?page=import_events&tab=settings&wpeam_authorize=2');
+					$redirect_url = admin_url("admin.php?page=import_events&tab=settings&wpeam_authorize=2");
 					wp_safe_redirect($redirect_url);
 					exit();
 				}
 
             } else {
-				die( esc_attr__('You have not access to do this operations.', 'wp-event-aggregator' ) );
+				wp_die( esc_html__("You do not have access to do this operation.", "wp-event-aggregator" ) );
             }
     }
 }
