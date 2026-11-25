@@ -56,7 +56,18 @@ if ('yes' === $direct_link) {
 <a href="<?php echo esc_url( $wpea_event_source_url ); ?>" <?php echo esc_attr( $wpea_target ); ?>>	
 	<div <?php post_class( array( $css_class, 'archive-event' ) ); ?>>
 		<div class="wepa_event" >
-			<div class="img_placeholder" style=" background: url('<?php echo esc_url( $wpea_image_url[0] ); ?>') no-repeat left top;"></div>
+			<div class="img_placeholder" style="position:relative; background: url('<?php echo esc_url( $wpea_image_url[0] ); ?>') no-repeat left top;">
+				<?php
+				$is_sold_out = get_post_meta( get_the_ID(), 'wpea_is_sold_out', true );
+				$is_online   = get_post_meta( get_the_ID(), 'online_event', true );
+				if ( 'yes' === $is_sold_out || 'yes' === $is_online ) {
+				    echo '<div class="wpea-badges-wrapper">';
+				    if ( 'yes' === $is_sold_out ) { echo '<span class="wpea-badge">' . esc_html__( 'Sold Out', 'wp-event-aggregator' ) . '</span>'; }
+				    if ( 'yes' === $is_online ) { echo '<span class="wpea-badge">' . esc_html__( 'Online', 'wp-event-aggregator' ) . '</span>'; }
+				    echo '</div>';
+				}
+				?>
+			</div>
 			<div class="event_details">
 				<div class="event_date">
 					<span class="month"><?php echo esc_attr( date_i18n( 'M', $wpea_event_date ) ); ?></span>

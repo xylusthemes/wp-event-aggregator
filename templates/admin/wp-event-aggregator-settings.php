@@ -229,6 +229,63 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                             </span>
                         </div>
                     </div>
+
+                    <!-- Import Structured Content Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Import Structured Content', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                                $wpea_import_sc = isset( $wpea_eventbrite_options['import_structured_content'] ) ? $wpea_eventbrite_options['import_structured_content'] : 'no';
+                            ?>
+                            <input type="checkbox" name="eventbrite[import_structured_content]" value="yes" <?php if ( $wpea_import_sc == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Enable this option to import structured content (like FAQ, Video, Image gallery, Agenda, etc.) from Eventbrite.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Import Promotional Codes Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Import Promotional Codes', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                                $wpea_import_promo_codes = isset( $wpea_eventbrite_options['import_promo_codes'] ) ? $wpea_eventbrite_options['import_promo_codes'] : 'no';
+                            ?>
+                            <input type="checkbox" name="eventbrite[import_promo_codes]" value="yes" <?php if ( $wpea_import_promo_codes == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Enable this option to import promo/discount codes from Eventbrite. This will make an additional API call per event.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Live Sold Out Check Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Check Live Ticket Sold Out Status', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                                $wpea_live_sold_out_check = isset( $wpea_eventbrite_options['live_sold_out_check'] ) ? $wpea_eventbrite_options['live_sold_out_check'] : 'no';
+                                $wpea_live_sold_out_duration = isset( $wpea_eventbrite_options['live_sold_out_duration'] ) ? $wpea_eventbrite_options['live_sold_out_duration'] : '30';
+                            ?>
+                            <input type="checkbox" name="eventbrite[live_sold_out_check]" value="yes" <?php if ( $wpea_live_sold_out_check == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Enable real-time background checking for sold-out tickets when events are viewed.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <br/><br/>
+                            <label style="font-weight: 600; font-size: 13px;">
+                                <?php esc_attr_e( 'Cache Duration (minutes):', 'wp-event-aggregator' ); ?>
+                                <input type="number" name="eventbrite[live_sold_out_duration]" min="1" max="1440" style="width: 80px; margin-left: 8px;" value="<?php echo esc_attr( $wpea_live_sold_out_duration ); ?>" />
+                            </label>
+                            <span class="wpea_small" style="display:block; margin-top:4px;">
+                                <?php esc_attr_e( 'How long to cache sold-out status before checking Eventbrite API again (default 30 mins).', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
                     
                     <!-- Advanced Synchronization Section -->
                     <div class="wpea-inner-main-section" >
@@ -954,7 +1011,7 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                         </div>
                         <div class="wpea-inner-section-2">
                             <?php
-                                $wpea_image_import_method = isset( $wpea_aggregator_options['image_import_method'] ) ? $wpea_aggregator_options['image_import_method'] : 'download';
+                                $wpea_image_import_method = isset( $wpea_aggregator_options['image_import_method'] ) ? $wpea_aggregator_options['image_import_method'] : ( isset( $wpea_aggregator_options['skip_image_import'] ) && $wpea_aggregator_options['skip_image_import'] === 'yes' ? 'external_url' : 'download' );
                             ?>
                             <label style="display:block; margin-bottom:5px;">
                                 <input type="radio" name="wpea[image_import_method]" value="download" <?php checked( $wpea_image_import_method, 'download' ); ?> />
@@ -970,6 +1027,103 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                         </div>
                     </div>
 
+                    <!-- Single Event Details Layout -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Single Event Details Layout', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $wpea_details_layout = isset( $wpea_aggregator_options['details_layout'] ) ? $wpea_aggregator_options['details_layout'] : 'default';
+                            $is_pro = wpea_is_pro();
+                            ?>
+                            <select name="wpea[details_layout]" id="wpea_details_layout" class="wpea_input_w25" style="min-width: 280px; padding: 6px;">
+                                <option value="default" <?php selected( $wpea_details_layout, 'default' ); ?>><?php esc_html_e( 'Default Template', 'wp-event-aggregator' ); ?></option>
+                                <option value="template2" <?php selected( $wpea_details_layout, 'template2' ); ?> <?php echo ! $is_pro ? 'disabled' : ''; ?>><?php esc_html_e( 'Template 2 (Sidebar Layout)', 'wp-event-aggregator' ); ?><?php echo ! $is_pro ? ' — Pro' : ''; ?></option>
+                                <option value="template3" <?php selected( $wpea_details_layout, 'template3' ); ?> <?php echo ! $is_pro ? 'disabled' : ''; ?>><?php esc_html_e( 'Template 3 (Modern Grid Layout)', 'wp-event-aggregator' ); ?><?php echo ! $is_pro ? ' — Pro' : ''; ?></option>
+                                <option value="template4" <?php selected( $wpea_details_layout, 'template4' ); ?> <?php echo ! $is_pro ? 'disabled' : ''; ?>><?php esc_html_e( 'Template 4 (Split Screen Layout)', 'wp-event-aggregator' ); ?><?php echo ! $is_pro ? ' — Pro' : ''; ?></option>
+                                <option value="template5" <?php selected( $wpea_details_layout, 'template5' ); ?> <?php echo ! $is_pro ? 'disabled' : ''; ?>><?php esc_html_e( 'Template 5 (Premium Elegant Layout)', 'wp-event-aggregator' ); ?><?php echo ! $is_pro ? ' — Pro' : ''; ?></option>
+                                <option value="template6" <?php selected( $wpea_details_layout, 'template6' ); ?> <?php echo ! $is_pro ? 'disabled' : ''; ?>><?php esc_html_e( 'Template 6 (Modern Immersive Layout)', 'wp-event-aggregator' ); ?><?php echo ! $is_pro ? ' — Pro' : ''; ?></option>
+                            </select>
+                            <br/>
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Choose the layout template for the single event details page across all event sources.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php if ( ! $is_pro ) : ?>
+                            <br/>
+                            <span class="wpea_small" style="color: #e67e22; font-weight: 600;">
+                                🔒 <?php printf( esc_html__( 'Premium templates are available in the Pro version. %s', 'wp-event-aggregator' ), '<a href="' . esc_url( WPEA_PLUGIN_BUY_NOW_URL ) . '" target="_blank" style="color: #039ED7; font-weight: 700;">' . esc_html__( 'Upgrade to Pro', 'wp-event-aggregator' ) . '</a>' ); ?>
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Position (Template 2) -->
+                    <div class="wpea-inner-main-section" id="wpea_sidebar_position_select" style="display: <?php echo ( $wpea_details_layout === 'template2' && wpea_is_pro() ) ? 'flex' : 'none'; ?>;">
+                        <div class="wpea-inner-section-1">
+                            <span class="wpea-title-text"><?php esc_attr_e( 'Sidebar Position', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $wpea_sidebar_pos = isset( $wpea_aggregator_options['sidebar_position'] ) ? $wpea_aggregator_options['sidebar_position'] : 'right';
+                            ?>
+                            <select name="wpea[sidebar_position]" id="wpea_sidebar_position" style="min-width: 180px; padding: 6px;">
+                                <option value="right" <?php selected( $wpea_sidebar_pos, 'right' ); ?>><?php esc_html_e( 'Right Sidebar', 'wp-event-aggregator' ); ?></option>
+                                <option value="left" <?php selected( $wpea_sidebar_pos, 'left' ); ?>><?php esc_html_e( 'Left Sidebar', 'wp-event-aggregator' ); ?></option>
+                            </select>
+                            <br/>
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Choose whether the sidebar should be on the left or the right side for Template 2.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Customizer Options -->
+                    <div class="wpea-inner-main-section">
+                        <div class="wpea-inner-section-1">
+                            <span class="wpea-title-text"><?php esc_attr_e( 'Ticket Button Text', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <input class="wpea_input_w25" name="wpea[ticket_button_text]" type="text" value="<?php echo esc_attr( ! empty( $wpea_aggregator_options['ticket_button_text'] ) ? $wpea_aggregator_options['ticket_button_text'] : __( 'Buy Tickets', 'wp-event-aggregator' ) ); ?>" />
+                            <span class="wpea_small" style="display:block; margin-top:4px;">
+                                <?php esc_attr_e( 'Custom label for event ticket/registration button.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="wpea-inner-main-section">
+                        <div class="wpea-inner-section-1">
+                            <span class="wpea-title-text"><?php esc_attr_e( 'Next Events Text', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <input class="wpea_input_w25" name="wpea[next_event_text]" type="text" value="<?php echo esc_attr( ! empty( $wpea_aggregator_options['next_event_text'] ) ? $wpea_aggregator_options['next_event_text'] : __( 'Next Events', 'wp-event-aggregator' ) ); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="wpea-inner-main-section">
+                        <div class="wpea-inner-section-1">
+                            <span class="wpea-title-text"><?php esc_attr_e( 'Previous Events Text', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <input class="wpea_input_w25" name="wpea[previous_event_text]" type="text" value="<?php echo esc_attr( ! empty( $wpea_aggregator_options['previous_event_text'] ) ? $wpea_aggregator_options['previous_event_text'] : __( 'Previous Events', 'wp-event-aggregator' ) ); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="wpea-inner-main-section">
+                        <div class="wpea-inner-section-1">
+                            <span class="wpea-title-text"><?php esc_attr_e( 'Display Buy Ticket section in Past Event', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $wpea_sbntb = isset( $wpea_aggregator_options['sbntb'] ) ? $wpea_aggregator_options['sbntb'] : 'no';
+                            ?>
+                            <input type="checkbox" name="wpea[sbntb]" value="yes" <?php if ( $wpea_sbntb === 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Check to enable showing the buy ticket / registration section even for past events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Do Not Update Data Section -->
                     <div class="wpea-inner-main-section" >
                         <div class="wpea-inner-section-1" >
@@ -979,12 +1133,16 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                             <?php
                                 $wpea_dont_update_fields = isset( $wpea_aggregator_options['dont_update'] ) && is_array( $wpea_aggregator_options['dont_update'] ) ? $wpea_aggregator_options['dont_update'] : array();
                                 $wpea_dont_update_options = array(
-                                    'title'       => __( 'Title', 'wp-event-aggregator' ),
-                                    'description' => __( 'Description', 'wp-event-aggregator' ),
-                                    'image'       => __( 'Image', 'wp-event-aggregator' ),
-                                    'status'      => __( 'Status', 'wp-event-aggregator' ),
-                                    'categories'  => __( 'Categories', 'wp-event-aggregator' ),
-                                    'tags'        => __( 'Tags', 'wp-event-aggregator' ),
+                                    'title'              => __( 'Title', 'wp-event-aggregator' ),
+                                    'description'        => __( 'Description', 'wp-event-aggregator' ),
+                                    'image'              => __( 'Image', 'wp-event-aggregator' ),
+                                    'status'             => __( 'Status', 'wp-event-aggregator' ),
+                                    'categories'         => __( 'Categories', 'wp-event-aggregator' ),
+                                    'tags'               => __( 'Tags', 'wp-event-aggregator' ),
+                                    'structured_content' => __( 'Structured Content', 'wp-event-aggregator' ),
+                                    'video'              => __( 'Featured Video', 'wp-event-aggregator' ),
+                                    'faqs'               => __( 'FAQs', 'wp-event-aggregator' ),
+                                    'gallery'            => __( 'Image Gallery / Carousel', 'wp-event-aggregator' ),
                                 );
                             ?>
                             <?php foreach ( $wpea_dont_update_options as $wpea_field_key => $wpea_field_label ) { ?>

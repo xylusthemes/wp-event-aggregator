@@ -26,7 +26,7 @@ $wpea_shortcodeTable->prepare_items();
             <?php
                 $wpea_plugin_slug = 'xylus-events-calendar';
                 $wpea_plugin_file = 'xylus-events-calendar/xylus-events-calendar.php';
-                $wpea_current_page = admin_url( 'admin.php?page=eventbrite_event&tab=shortcodes' );
+                $wpea_current_page = admin_url( 'admin.php?page=import_events&tab=shortcodes' );
                 if ( ! file_exists( WP_PLUGIN_DIR . '/' . $wpea_plugin_file ) ) {
                     $wpea_install_url = wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=' . $wpea_plugin_slug ), 'install-plugin_' . $wpea_plugin_slug );
                     echo '<a href="' . esc_url( $wpea_install_url ) . '" class="button button-primary">🚀 Install Now – It’s Free!</a>';

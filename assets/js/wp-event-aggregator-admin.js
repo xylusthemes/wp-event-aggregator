@@ -407,6 +407,14 @@ jQuery(document).ready(function($) {
 	});
 
 	jQuery(document).ready(function($) {
+		$(document).on('change', '#wpea_details_layout', function() {
+			if ($(this).val() === 'template2') {
+				$('#wpea_sidebar_position_select').css('display', 'flex').show();
+			} else {
+				$('#wpea_sidebar_position_select').hide();
+			}
+		});
+
 		jQuery(document).on('change', '#wpea_ical_date_filter', function(){
 
 			if( jQuery(this).val() == 'range' ){

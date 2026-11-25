@@ -243,12 +243,30 @@ class WP_Event_Aggregator_Eventbrite_API {
 		$event_image  = isset( $eventbrite_event['logo']['original']['url'] ) ? urldecode( $eventbrite_event['logo']['original']['url'] ) : '';
 		$image = explode( '?s=', $event_image );
 		$image_url = esc_url( urldecode( str_replace('https://img.evbuc.com/', '', $image[0] ) ) );
-		$online_event = isset( $eventbrite_event['online_event'] ) ? $eventbrite_event['online_event'] : false;
+		$online_event = ( isset( $eventbrite_event['online_event'] ) && $eventbrite_event['online_event'] ) ? 'yes' : 'no';
 		$ticket_price      = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['major_value'] : '';	
 		$ticket_currency   = isset( $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] ) ? $eventbrite_event['ticket_availability']['minimum_ticket_price']['currency'] : '';	
 		$eventbrite_cat    = isset( $eventbrite_event['category']['name'] ) ? $eventbrite_event['category']['name'] : '';	
 		$organization_id   = isset( $eventbrite_event['organization_id'] ) ? $eventbrite_event['organization_id'] : '';
-		$get_promocode     = $importevents->common->wpea_get_event_discount_code( $eventbrite_event['id'], $organization_id );
+
+		// Get is_sold_out and has_tickets status
+		$is_sold_out = 'no';
+		$has_tickets = 'no';
+
+		if ( isset( $eventbrite_event['ticket_availability'] ) ) {
+			$has_tickets = 'yes';
+		}
+
+		if ( isset( $eventbrite_event['ticket_availability']['is_sold_out'] ) && $eventbrite_event['ticket_availability']['is_sold_out'] ) {
+			$is_sold_out = 'yes';
+		}
+
+		$import_promo_codes = isset( $options['import_promo_codes'] ) ? $options['import_promo_codes'] : 'no';
+		$get_promocode     = '';
+		if ( 'yes' === $import_promo_codes ) {
+			$get_promocode = $importevents->common->wpea_get_event_discount_code( $eventbrite_event['id'], $organization_id );
+		}
+
 		$is_insert_etags   = isset( $options['eventbritre_tags'] ) ? $options['eventbritre_tags'] : 'no';
 		$eventbrite_tags   = array();
 
@@ -260,30 +278,54 @@ class WP_Event_Aggregator_Eventbrite_API {
 			}
 		}
 
+		$import_structured_content = isset( $options['import_structured_content'] ) ? $options['import_structured_content'] : 'no';
+		$structured_content        = array();
+
+		if ( 'yes' === $import_structured_content ) {
+			$dont_update_sc = isset( $options['dont_update']['structured_content'] ) ? $options['dont_update']['structured_content'] : 'no';
+			$skip_api       = false;
+			if ( 'yes' === $dont_update_sc ) {
+				global $wpdb;
+				$is_existing = $wpdb->get_var( $wpdb->prepare(
+					"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1",
+					'wpea_event_id',
+					$eventbrite_event['id']
+				) );
+				if ( ! empty( $is_existing ) ) {
+					$skip_api = true;
+				}
+			}
+			if ( ! $skip_api ) {
+				$structured_content = $this->get_structured_content( $eventbrite_event['id'] );
+			}
+		}
 
 		$xt_event = array(
-			'origin'          => 'eventbrite',
-			'ID'              => isset( $eventbrite_event['id'] ) ? $eventbrite_event['id'] : '',
-			'name'            => $event_name,
-			'description'     => $event_description,
-			'starttime_local' => $start_time,
-			'endtime_local'   => $end_time,
-			'startime_utc'    => $start_time_utc,
-			'endtime_utc'     => $end_time_utc,
-			'timezone'        => $timezone,
-			'timezone_name'   => $timezone,
-			'utc_offset'      => $utc_offset,
-			'event_duration'  => '',
-			'is_all_day'      => '',
-			'url'             => $event_url,
-			'image_url'       => $image_url,
-			'online_event'    => $online_event,
-			'series_id'		  => $series_id,
-			'ticket_price'    => $ticket_price,
-			'ticket_currency' => $ticket_currency,
-			'e_category'      => $eventbrite_cat,
-			'discount_code'   => $get_promocode,
-			'e_tags'          => $eventbrite_tags,
+			'origin'             => 'eventbrite',
+			'ID'                 => isset( $eventbrite_event['id'] ) ? $eventbrite_event['id'] : '',
+			'name'               => $event_name,
+			'description'        => $event_description,
+			'starttime_local'    => $start_time,
+			'endtime_local'      => $end_time,
+			'startime_utc'       => $start_time_utc,
+			'endtime_utc'        => $end_time_utc,
+			'timezone'           => $timezone,
+			'timezone_name'      => $timezone,
+			'utc_offset'         => $utc_offset,
+			'event_duration'     => '',
+			'is_all_day'         => '',
+			'url'                => $event_url,
+			'image_url'          => $image_url,
+			'online_event'       => $online_event,
+			'series_id'          => $series_id,
+			'ticket_price'       => $ticket_price,
+			'ticket_currency'    => $ticket_currency,
+			'e_category'         => $eventbrite_cat,
+			'discount_code'      => $get_promocode,
+			'e_tags'             => $eventbrite_tags,
+			'is_sold_out'        => $is_sold_out,
+			'has_tickets'        => $has_tickets,
+			'structured_content' => $structured_content,
 		);
 
 		if ( array_key_exists( 'organizer', $eventbrite_event ) ) {
@@ -475,5 +517,115 @@ class WP_Event_Aggregator_Eventbrite_API {
 			}
 		}
 		return '';
+	}
+
+	/**
+	 * Get structured content from Eventbrite API.
+	 *
+	 * @since 1.0.0
+	 * @param string $event_id Event ID.
+	 * @return array Structured content data.
+	 */
+	public function get_structured_content( $event_id ) {
+		$structured_data = array(
+			'lineup'         => array(),
+			'speakers'       => array(),
+			'images'         => array(),
+			'slider_images'  => array(),
+			'faqs'           => array(),
+			'videos'         => array(),
+			'featured_video' => array(),
+			'parking'        => '',
+		);
+
+		if ( empty( $event_id ) ) {
+			return $structured_data;
+		}
+
+		$eventbrite_api_url  = 'https://www.eventbrite.com/api/v3/events/' . $event_id . '/structured_content/';
+		$response            = wp_remote_get( $eventbrite_api_url, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+
+		if ( is_wp_error( $response ) ) {
+			return $structured_data;
+		}
+
+		$body = json_decode( $response['body'], true );
+
+		if ( empty( $body ) || ! is_array( $body ) ) {
+			return $structured_data;
+		}
+
+		if ( isset( $body['modules'] ) && is_array( $body['modules'] ) ) {
+			foreach ( $body['modules'] as $module ) {
+				if ( isset( $module['type'] ) ) {
+					if ( $module['type'] === 'image' && isset( $module['data']['image']['url'] ) ) {
+						$structured_data['images'][] = $module['data']['image']['url'];
+					} elseif ( $module['type'] === 'video' && isset( $module['data']['video']['url'] ) ) {
+						$structured_data['videos'][] = $module['data']['video']['url'];
+					}
+				}
+			}
+		}
+
+		$faq_widget = array();
+
+		if ( isset( $body['widgets'] ) && is_array( $body['widgets'] ) ) {
+			foreach ( $body['widgets'] as $widget ) {
+				if ( isset( $widget['type'] ) ) {
+					if ( $widget['type'] === 'lineup' && isset( $widget['data']['artist_list'] ) ) {
+						if ( isset( $widget['data']['artist_type'] ) && $widget['data']['artist_type'] === 'speakers' ) {
+							$structured_data['speakers'] = array_merge( $structured_data['speakers'], $widget['data']['artist_list'] );
+						} else {
+							$structured_data['lineup'] = array_merge( $structured_data['lineup'], $widget['data']['artist_list'] );
+						}
+					} elseif ( ( $widget['type'] === 'faqs' || $widget['type'] === 'faq' ) && isset( $widget['data']['faqs'] ) ) {
+						if ( 'faqs' === $widget['type'] || empty( $faq_widget ) ) {
+							$faq_widget = $widget['data']['faqs'];
+						}
+					} elseif ( $widget['type'] === 'herocarousel' && isset( $widget['data']['slides'] ) ) {
+						foreach ( $widget['data']['slides'] as $slide ) {
+							if ( isset( $slide['image']['url'] ) ) {
+								$structured_data['slider_images'][] = $slide['image']['url'];
+							} elseif ( isset( $slide['image']['original']['url'] ) ) {
+								$structured_data['slider_images'][] = $slide['image']['original']['url'];
+							}
+						}
+					} elseif ( $widget['type'] === 'native_video' && isset( $widget['data']['id'] ) ) {
+						$structured_data['videos'][] = 'https://d1xykzbd1twk8p.cloudfront.net/' . $widget['data']['id'] . '_480p_vertical.mp4';
+					} elseif ( $widget['type'] === 'featured_video' && ! empty( $widget['data']['video'] ) ) {
+						$featured_video = $widget['data']['video'];
+						$thumbnail      = '';
+
+						if ( ! empty( $featured_video['thumbnail'] ) ) {
+							foreach ( array( 'large', 'medium', 'small', 'url' ) as $size ) {
+								if ( isset( $featured_video['thumbnail'][ $size ] ) ) {
+									$candidate    = $featured_video['thumbnail'][ $size ];
+									$thumbnail    = is_array( $candidate ) ? ( isset( $candidate['url'] ) ? $candidate['url'] : '' ) : $candidate;
+									$thumbnail    = is_string( $thumbnail ) ? $thumbnail : '';
+									if ( '' !== $thumbnail ) {
+										break;
+									}
+								}
+							}
+						}
+
+						$structured_data['featured_video'] = array(
+							'url'       => isset( $featured_video['url'] ) ? $featured_video['url'] : '',
+							'embed_url' => isset( $featured_video['embed_url'] ) ? $featured_video['embed_url'] : '',
+							'provider'  => isset( $featured_video['provider'] ) ? $featured_video['provider'] : '',
+							'thumbnail' => $thumbnail,
+						);
+					} elseif ( $widget['type'] === 'parking' && isset( $widget['data']['availability'] ) ) {
+						$structured_data['parking'] = $widget['data']['availability'];
+					}
+				}
+			}
+		}
+
+		if ( ! empty( $faq_widget ) ) {
+			$structured_data['faqs'] = $faq_widget;
+		}
+
+		return $structured_data;
 	}
 }

@@ -184,6 +184,10 @@ class WP_Event_Aggregator{
 			define( 'WPEA_OPTIONS', 'wpea_options' );
 		}
 
+		if( ! defined( 'WPEA_AP_OPTIONS' ) ){
+			define( 'WPEA_AP_OPTIONS', 'wpea_ap_options' );
+		}
+
 		// Pro plugin Buy now Link.
 		if( ! defined( 'WPEA_PLUGIN_BUY_NOW_URL' ) ){
 			define( 'WPEA_PLUGIN_BUY_NOW_URL', 'http://xylusthemes.com/plugins/wp-event-aggregator/?utm_source=insideplugin&utm_medium=web&utm_content=sidebar&utm_campaign=freeplugin' );
@@ -319,10 +323,13 @@ class WP_Event_Aggregator{
 	 */
 	public function wpea_enqueue_script() {
 		
+		$wpea_options = get_option( WPEA_OPTIONS, array() );
+		$live_check   = isset( $wpea_options['eventbrite']['live_sold_out_check'] ) ? $wpea_options['eventbrite']['live_sold_out_check'] : 'no';
 		$js_dir = WPEA_PLUGIN_URL . 'assets/js/';
 			wp_enqueue_script( 'wpea-ajax-pagi', $js_dir . 'wpea-ajax-pagi.js', array( 'jquery' ), WPEA_VERSION, true );
 			wp_localize_script( 'wpea-ajax-pagi', 'wpea_ajax', array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'ajaxurl'            => admin_url( 'admin-ajax.php' ),
+				'live_check_enabled' => $live_check,
 		));
 	}
 

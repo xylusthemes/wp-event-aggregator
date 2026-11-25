@@ -471,7 +471,8 @@ class WP_Event_Aggregator_TEC {
 			'wpea_event_link'          => $esource_url,
 			'wpea_event_timezone_name' => $timezone_name,
 			'wpea_ticket_price'        => $ticket_price,
-			'wpea_ticket_currency'     => $t_currency
+			'wpea_ticket_currency'     => $t_currency,
+			'wpea_is_sold_out'         => isset( $centralize_array['is_sold_out'] ) ? $centralize_array['is_sold_out'] : 'no',
 		);
 
 		if( isset( $centralize_array['is_all_day'] ) && true === $centralize_array['is_all_day'] ){

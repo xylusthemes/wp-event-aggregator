@@ -38,10 +38,20 @@ if ( 'yes' === $direct_link ){
 
 ?>
 <div <?php post_class( array( $css_class, 'archive-event' ) ); ?> >
-    <div class="wpea-card" >
+    <div class="wpea-card" style="position: relative;">
         <div class="wpea-card-body" >
+            <?php
+            $is_sold_out = get_post_meta( get_the_ID(), 'wpea_is_sold_out', true );
+            $is_online   = get_post_meta( get_the_ID(), 'online_event', true );
+            if ( 'yes' === $is_sold_out || 'yes' === $is_online ) {
+                echo '<div class="wpea-badges-wrapper" style="position: absolute; top: 12px; right: 15px; left: auto; z-index: 10;">';
+                if ( 'yes' === $is_sold_out ) { echo '<span class="wpea-badge">' . esc_html__( 'Sold Out', 'wp-event-aggregator' ) . '</span>'; }
+                if ( 'yes' === $is_online ) { echo '<span class="wpea-badge">' . esc_html__( 'Online', 'wp-event-aggregator' ) . '</span>'; }
+                echo '</div>';
+            }
+            ?>
             <div class="wpea-d-flex wpea-border-bottom wpea-pb-3 wpea-align-items" >
-                <div class="wpea-badge wpea-bg-label wpea-d-flex wpea-flex-column wpea-justify-content-center wpea-px-3 wpea-rounded-3 wpea-me-3 wpea-align-items" >
+                <div class="wpea-date-badge wpea-bg-label wpea-d-flex wpea-flex-column wpea-justify-content-center wpea-px-3 wpea-rounded-3 wpea-me-3 wpea-align-items" >
                     <span class="wpea-fw-bold wpea-mt-5" ><?php echo esc_attr( date_i18n( 'M', $wpea_start_date_str ) ); ?></span>
                     <span class="wpea-fw-bold wpea-mt-0 wpea-mb-5 " ><?php echo esc_attr( date_i18n( 'd', $wpea_start_date_str ) ); ?></span>
                 </div>
@@ -81,7 +91,7 @@ if ( 'yes' === $direct_link ){
 	background-color: <?php echo esc_attr( $wpea_accent_color ); ?>;
 	color: #fff;
 }
-.wpea-badge {
+.wpea-date-badge {
 	background: <?php echo esc_attr( $wpea_accent_color ); ?>;
 	border-color: <?php echo esc_attr( $wpea_accent_color ); ?>;
 	color: #fff;

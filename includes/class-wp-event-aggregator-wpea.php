@@ -98,6 +98,9 @@ class WP_Event_Aggregator_WPEA {
 		$timezone     = isset( $centralize_array['timezone'] ) ? sanitize_text_field(  $centralize_array['timezone'] ) : '';
 		$timezone_name = isset( $centralize_array['timezone_name'] ) ? sanitize_text_field(  $centralize_array['timezone_name'] ) : '';
 		$post_description = $importevents->common->convert_description( $post_description );
+		if ( isset( $importevents->htmltoblock ) ) {
+			$post_description = $importevents->htmltoblock->convert( $post_description );
+		}
 
 		$emeventdata = array(
 			'post_title'  => $post_title,
@@ -209,8 +212,8 @@ class WP_Event_Aggregator_WPEA {
 			}
 
 			if ( ! empty( $wpea_tags ) ) {
-				foreach ( $wpea_tags as $iee_tagk => $iee_tagv ) {
-					$wpea_tags[ $iee_tagk ] = (int) $iee_tagv;
+				foreach ( $wpea_tags as $wpea_tagk => $wpea_tagv ) {
+					$wpea_tags[ $wpea_tagk ] = (int) $wpea_tagv;
 				}
 
 				$wpea_tags = array_unique( $wpea_tags );
@@ -263,8 +266,10 @@ class WP_Event_Aggregator_WPEA {
 			$event_end_minute     = gmdate( 'i', $end_time );
 			$event_end_meridian   = gmdate( 'a', $end_time );
 
-			if( $online_event == true ){
-				$centralize_array['location']['name'] = 'Online Event';
+			if( 'yes' === $online_event || true === $online_event ){
+				if ( empty( $centralize_array['location']['name'] ) ) {
+					$centralize_array['location']['name'] = 'Online Event';
+				}
 			}
 
 			// Venue Deatails
@@ -344,6 +349,91 @@ class WP_Event_Aggregator_WPEA {
 			$discount_code   = isset( $centralize_array['discount_code'] ) ? $centralize_array['discount_code'] : '';
 			if( !empty( $discount_code ) ){
 				update_post_meta( $inserted_event_id, 'discount_code', $discount_code );
+			}
+
+			// Sold Out & Tickets Status
+			$is_sold_out = isset( $centralize_array['is_sold_out'] ) ? $centralize_array['is_sold_out'] : 'no';
+			update_post_meta( $inserted_event_id, 'wpea_is_sold_out', $is_sold_out );
+
+			$has_tickets = isset( $centralize_array['has_tickets'] ) ? $centralize_array['has_tickets'] : 'no';
+			update_post_meta( $inserted_event_id, 'wpea_has_tickets', $has_tickets );
+
+			// Live Sold Out Check Transient Setup
+			$eb_options = wpea_get_import_options( 'eventbrite' );
+			$live_check = isset( $eb_options['live_sold_out_check'] ) ? $eb_options['live_sold_out_check'] : 'no';
+			if ( 'yes' === $live_check ) {
+				$duration = isset( $eb_options['live_sold_out_duration'] ) ? absint( $eb_options['live_sold_out_duration'] ) : 30;
+				if ( $duration < 1 ) {
+					$duration = 30;
+				}
+				$transient_key = 'wpea_sold_out_check_' . $inserted_event_id;
+				set_transient( $transient_key, 'checked', $duration * MINUTE_IN_SECONDS );
+			}
+
+			// Structured Content
+			$structured = isset( $centralize_array['structured_content'] ) ? $centralize_array['structured_content'] : array();
+
+			if ( ! empty( $structured ) ) {
+				// Featured Video
+				if ( ! ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable( 'video' ) ) ) {
+					if ( ! empty( $structured['featured_video'] ) ) {
+						update_post_meta( $inserted_event_id, 'wpea_featured_video', $structured['featured_video'] );
+					} else {
+						delete_post_meta( $inserted_event_id, 'wpea_featured_video' );
+					}
+				}
+
+				// FAQs
+				if ( ! ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable( 'faqs' ) ) ) {
+					if ( ! empty( $structured['faqs'] ) ) {
+						update_post_meta( $inserted_event_id, 'wpea_event_faqs', $structured['faqs'] );
+					} else {
+						delete_post_meta( $inserted_event_id, 'wpea_event_faqs' );
+					}
+				}
+
+				// Slider/Carousel Images
+				if ( ! ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable( 'gallery' ) ) ) {
+					if ( ! empty( $structured['slider_images'] ) ) {
+						update_post_meta( $inserted_event_id, 'wpea_slider_images', $structured['slider_images'] );
+					} else {
+						delete_post_meta( $inserted_event_id, 'wpea_slider_images' );
+					}
+				}
+
+				// Inline Content Images
+				if ( ! empty( $structured['images'] ) ) {
+					update_post_meta( $inserted_event_id, 'wpea_event_images', $structured['images'] );
+				} else {
+					delete_post_meta( $inserted_event_id, 'wpea_event_images' );
+				}
+
+				// Description Inline Videos
+				if ( ! empty( $structured['videos'] ) ) {
+					update_post_meta( $inserted_event_id, 'wpea_event_videos', $structured['videos'] );
+				} else {
+					delete_post_meta( $inserted_event_id, 'wpea_event_videos' );
+				}
+
+				// Lineup/Artists / Speakers
+				if ( ! empty( $structured['lineup'] ) ) {
+					update_post_meta( $inserted_event_id, 'wpea_event_lineup', $structured['lineup'] );
+				} else {
+					delete_post_meta( $inserted_event_id, 'wpea_event_lineup' );
+				}
+
+				if ( ! empty( $structured['speakers'] ) ) {
+					update_post_meta( $inserted_event_id, 'wpea_event_speakers', $structured['speakers'] );
+				}
+
+				// Parking Info
+				if ( ! empty( $structured['parking'] ) ) {
+					update_post_meta( $inserted_event_id, 'wpea_parking_info', $structured['parking'] );
+				} else {
+					delete_post_meta( $inserted_event_id, 'wpea_parking_info' );
+				}
+
+				update_post_meta( $inserted_event_id, 'wpea_structured_content', $structured );
 			}
 
 

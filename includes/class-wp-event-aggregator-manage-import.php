@@ -132,7 +132,14 @@ class WP_Event_Aggregator_Manage_Import {
 				}
 			}
 
+			if ( isset( $wpea_options['wpea']['image_import_method'] ) ) {
+				$wpea_options['wpea']['skip_image_import'] = ( 'external_url' === $wpea_options['wpea']['image_import_method'] ) ? 'yes' : 'no';
+			}
+
 			// Update the options
+			if ( isset( $wpea_options['wpea'] ) && defined( 'WPEA_AP_OPTIONS' ) ) {
+				update_option( WPEA_AP_OPTIONS, $wpea_options['wpea'] );
+			}
 			$is_update = update_option( WPEA_OPTIONS, $wpea_options );
 			if( $is_update ){
 				$wpea_success_msg[] = __( 'Import settings has been saved successfully.', 'wp-event-aggregator' );

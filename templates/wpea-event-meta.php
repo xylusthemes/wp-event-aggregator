@@ -33,6 +33,18 @@ if($wpea_time_format === '12hours' ){
   <div class="details">
     <div class="wpea_titlemain" > <?php esc_html_e( 'Details','wp-event-aggregator' ); ?> </div>
 
+    <?php
+    $is_sold_out = get_post_meta( $wpea_event_id, 'wpea_is_sold_out', true );
+    $raw_online  = get_post_meta( $wpea_event_id, 'online_event', true );
+    $is_online   = ( 'yes' === $raw_online || true === $raw_online ) ? 'yes' : 'no';
+    if ( 'yes' === $is_sold_out || 'yes' === $is_online ) {
+        echo '<div class="wpea-badges-wrapper iee-badges-wrapper" style="position: relative; margin-bottom: 12px; display: inline-flex;">';
+        if ( 'yes' === $is_sold_out ) { echo '<span class="wpea-badge iee-badge">' . esc_html__( 'Sold Out', 'wp-event-aggregator' ) . '</span>'; }
+        if ( 'yes' === $is_online ) { echo '<span class="wpea-badge iee-badge">' . esc_html__( 'Online', 'wp-event-aggregator' ) . '</span>'; }
+        echo '</div>';
+    }
+    ?>
+
     <?php 
 	if( gmdate( 'Y-m-d', strtotime( $wpea_start_date_str ) ) == gmdate( 'Y-m-d', strtotime( $wpea_end_date_str ) ) ){
     	?>

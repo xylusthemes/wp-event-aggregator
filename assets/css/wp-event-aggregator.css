@@ -1200,3 +1200,284 @@
     border-radius: 5px;
     font-weight: bold;
 }
+
+/* ==========================================================================
+   Archive Layout 5 CSS
+   ========================================================================== */
+.iee5_event, .wpea5_event {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+.iee5_event-details, .wpea5_event-details {
+    flex: 1;
+    width: 60%;
+}
+.iee5_event-date, .wpea5_event-date {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 !important;
+    text-transform: uppercase;
+}
+.iee5_event-title, .wpea5_event-title {
+    position: relative;
+    top: -2px;
+    display: block;
+    text-align: left;
+    margin-top: 5px;
+    padding: 0;
+    font-size: 20px !important;
+    line-height: 1.29;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+.iee5_event-location, .wpea5_event-location {
+    font-size: 13px;
+}
+.iee5_eventbrite-item-location-icon, .wpea5_item-location-icon {
+    position: relative;
+    top: 3px;
+    width: 12px;
+    height: 15px;
+    margin-right: 5px;
+}
+.iee5_buy-tickets, .wpea5_buy-tickets {
+    display: inline-block;
+    text-decoration: none;
+    text-transform: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-right: 10px;
+    padding: 7px 16px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    box-shadow: rgba(50, 50, 93, .25) 0px 2px 5px -1px, rgba(0, 0, 0, .3) 0px 1px 3px -1px;
+    cursor: pointer;
+    border: none;
+    opacity: 0.8;
+}
+.iee5_buy-tickets:hover, .wpea5_buy-tickets:hover {
+    opacity: 1;
+}
+.iee5_event-image, .wpea5_event-image {
+    width: 400px;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.iee5_event-image img, .wpea5_event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+@media (max-width: 576px) {
+    .iee5_main_container, .wpea5_main_container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 20px;
+    }
+    .iee5_event, .wpea5_event {
+        flex-direction: column;
+        width: 100%;
+    }
+    .iee5_event-image, .wpea5_event-image {
+        order: -1;
+        width: auto;
+        height: 200px;
+    }
+    .iee5_event-details, .wpea5_event-details {
+        width: 100%;
+    }
+}
+@media (min-width: 576px) and (max-width: 768px) {
+    .iee5_main_container, .wpea5_main_container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 20px;
+        justify-content: center;
+    }
+    .iee5_event, .wpea5_event {
+        flex-direction: column;
+        width: 45%;
+    }
+    .iee5_event-image, .wpea5_event-image {
+        order: -1;
+        width: auto;
+        height: 200px;
+    }
+    .iee5_event-details, .wpea5_event-details {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   Archive Layout 6 CSS
+   ========================================================================== */
+.iee6_events-container, .wpea6_events-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 25px 0;
+}
+.iee6_event-card, .wpea6_event-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+.iee6_event-card:hover, .wpea6_event-card:hover {
+    transform: translateY(-5px);
+}
+.iee6_event-image, .wpea6_event-image {
+    position: relative;
+}
+.iee6_event-image img, .wpea6_event-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+.iee6_event-info, .wpea6_event-info {
+    padding: 15px;
+}
+.iee6_event-date, .wpea6_event-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: #007bff;
+    text-transform: uppercase;
+}
+.iee6_event-title, .wpea6_event-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+.iee6_event-time, .wpea6_event-time {
+    font-size: 14px;
+    color: #666;
+}
+.iee6_event-location, .wpea6_event-location {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+.iee6_event-description, .wpea6_event-description {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 10px;
+}
+.iee6_event-buttons, .wpea6_event-buttons {
+    display: flex;
+    gap: 10px;
+}
+.iee6_event-buttons a, .iee6_event-buttons button,
+.wpea6_event-buttons a, .wpea6_event-buttons button {
+    flex: 1;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+}
+.iee6_buy-btn, .wpea6_buy-btn {
+    opacity: 0.8;
+    color: #fff;
+}
+.iee6_buy-btn:hover, .wpea6_buy-btn:hover {
+    opacity: 1;
+    color: #fff;
+}
+.iee6_details-btn, .wpea6_details-btn {
+    background-color: #ddd;
+    color: black;
+}
+.iee6_details-btn:hover, .wpea6_details-btn:hover {
+    background-color: #bbb;
+}
+.iee6_eventbrite-item-location-icon, .wpea6_item-location-icon {
+    position: relative;
+    top: 3px;
+    width: 12px;
+    height: 15px;
+    margin-right: 5px;
+    fill: #666;
+}
+.iee6_eventbrite-item-datetime-icon, .wpea6_item-datetime-icon {
+    position: relative;
+    top: 3px;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    fill: #666;
+}
+@media (max-width: 768px) {
+    .iee6_events-container, .wpea6_events-container {
+        flex-direction: column;
+        align-items: center;
+        display: block;
+    }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+    .iee6_events-container, .wpea6_events-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .iee6_events-container .eventbrite_events,
+    .wpea6_events-container .wpea_event {
+        width: 50%;
+    }
+}
+a.iee6_event-title, a.iee6_buy-btn, a.iee6_details-btn,
+a.wpea6_event-title, a.wpea6_buy-btn, a.wpea6_details-btn {
+    text-decoration: none !important;
+}
+
+/* ==========================================================================
+   Badges (Sold Out, Online, etc.)
+   ========================================================================== */
+.iee-badges-wrapper, .wpea-badges-wrapper {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+.wpea-card > .wpea-badges-wrapper,
+.wpea_widget_style1 > .wpea-badges-wrapper {
+    top: 10px;
+    right: 12px;
+    left: auto;
+}
+.iee-badge, .wpea-badge {
+    background-color: rgba(97, 102, 125, 0.85) !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+    border-radius: 15px !important;
+    padding: 2px 10px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    display: inline-block !important;
+    text-transform: none !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+.img_placeholder, .iee_img_placeholder, .wpea_img_placeholder,
+.iee-event-img, .wpea-event-img, .iee-style4-event-image-img, .wpea-style4-event-image-img,
+.iee5_event-image, .wpea5_event-image, .iee6_event-image, .wpea6_event-image,
+.wpea-card, .wpea_widget_style1 {
+    position: relative;
+}
