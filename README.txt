@@ -5,7 +5,7 @@ Tags: event importer, event calendar, eventbrite event, facebook event, ical imp
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -326,6 +326,11 @@ Yes. The plugin is actively maintained and tested with the latest WordPress and 
 17. **Integration: File Importer  (Pro)** – Advanced import capabilities via CSV, XML, or JSON files.
 
 == Changelog ==
+
+= 1.9.4 =
+* IMPROVEMENTS: Added Classic Editor compatibility to preserve original description formatting.
+* IMPROVEMENTS: Strengthened OAuth security and state verification for Facebook and Meetup.
+* SECURITY: Added strict capability checks across authorization endpoints.
 
 = 1.9.3 =
 * Fixed: Incorrect latitude and longitude values in EEC.
