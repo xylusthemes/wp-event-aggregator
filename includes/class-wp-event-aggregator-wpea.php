@@ -155,6 +155,16 @@ class WP_Event_Aggregator_WPEA {
 
 			$event_args['event_cats'] = $ewpea_cats;
 
+			// Assign Meetup category if enabled.
+			$is_insert_mcat = isset( $wpea_options['meetup']['import_category'] ) ? $wpea_options['meetup']['import_category'] : 'no';
+			if ( 'yes' === $is_insert_mcat && ! empty( $centralize_array['category'] ) && ( ! $is_exitsing_event || $importevents->common->wpea_is_updatable( 'category' ) ) ) {
+				$mcat_id = $importevents->common->wpea_check_category_exists( $centralize_array['category'], $this->taxonomy );
+				if ( ! empty( $mcat_id ) ) {
+					$event_args['event_cats'][] = (int) $mcat_id;
+					$event_args['event_cats']   = array_unique( $event_args['event_cats'] );
+				}
+			}
+
 			$wpea_cats = isset( $event_args['event_cats'] ) ? $event_args['event_cats'] : array();
 			$category  = isset( $centralize_array['category'] ) ? $centralize_array['category'] : '';
 			if ( ! empty( $category ) ) {
@@ -186,6 +196,15 @@ class WP_Event_Aggregator_WPEA {
 
 				if ( ! empty( $eventbrite_tag_ids ) ) {
 					$wpea_tags = array_merge( $wpea_tags, $eventbrite_tag_ids );
+				}
+			}
+
+			// Assign Meetup event topics as tags.
+			$is_insert_mtags = isset( $wpea_options['meetup']['import_tags'] ) ? $wpea_options['meetup']['import_tags'] : 'no';
+			if ( 'yes' === $is_insert_mtags && ! empty( $centralize_array['topics'] ) && ! ( $is_exitsing_event && ! $importevents->common->wpea_is_updatable( 'tags' ) ) ) {
+				$meetup_tag_ids = $importevents->common->wpea_assign_topics_as_tags( $inserted_event_id, $centralize_array['topics'], $this->tags, true );
+				if ( ! empty( $meetup_tag_ids ) ) {
+					$wpea_tags = array_merge( $wpea_tags, $meetup_tag_ids );
 				}
 			}
 

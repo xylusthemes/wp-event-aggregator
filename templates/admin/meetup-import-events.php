@@ -97,6 +97,18 @@ global $importevents;
 							</div>
 						</div>
 
+						<div class="wpea-inner-main-section meetup_group_url" >
+							<div class="wpea-inner-section-1" >
+								<span class="wpea-title-text" ><?php esc_attr_e( 'Import Past Events', 'wp-event-aggregator' ); ?></span>
+							</div>
+							<div class="wpea-inner-section-2">
+								<label>
+									<input type="checkbox" name="import_past_events" value="1" <?php if ( ! wpea_is_pro() ) { echo 'disabled="disabled"'; } ?> />
+									<?php esc_attr_e( 'Check to also import past events for this group.', 'wp-event-aggregator' ); ?>
+								</label>
+							</div>
+						</div>
+
 						<div class="wpea-inner-main-section import_type_wrapper" >
 							<div class="wpea-inner-section-1" >
 								<span class="wpea-title-text" ><?php esc_attr_e( 'Import Type','wp-event-aggregator' ); ?></span>

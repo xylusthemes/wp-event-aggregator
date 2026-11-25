@@ -92,6 +92,15 @@ class WP_Event_Aggregator_Meetup_API {
                                 highResUrl
                             }
                         }
+                        topics {
+                            edges {
+                                node {
+                                    id
+                                    name
+                                    urlkey
+                                }
+                            }
+                        }
                         group{
                             id
                             name
@@ -101,6 +110,12 @@ class WP_Event_Aggregator_Meetup_API {
                             keyGroupPhoto {
                                 id
                                 standardUrl
+                            }
+                            topicCategory {
+                                id
+                                name
+                                urlkey
+                                color
                             }
                         }
                     }
@@ -164,6 +179,15 @@ GRAPHQL;
                                         highResUrl
                                     }
                                 }
+                                topics {
+                                    edges {
+                                        node {
+                                            id
+                                            name
+                                            urlkey
+                                        }
+                                    }
+                                }
                                 group{
                                     id
                                     name
@@ -173,6 +197,12 @@ GRAPHQL;
                                     keyGroupPhoto {
                                         id
                                         standardUrl
+                                    }
+                                    topicCategory {
+                                        id
+                                        name
+                                        urlkey
+                                        color
                                     }
                                 }
                             }
@@ -195,12 +225,113 @@ GRAPHQL;
     }
 
     /**
+     * Get Meetup Group Past Event Query
+     * @access private
+     */
+    private function getGroupPastEventsQuery(){
+        return <<<'GRAPHQL'
+            query ($urlname: String!, $itemsNum: Int!, $cursor: String) {
+                groupByUrlname(urlname: $urlname) {
+                    pastEvents: events(first: $itemsNum, after: $cursor, filter: { status: PAST }, sort: DESC ){
+                        pageInfo{
+                            hasNextPage
+                            endCursor
+                        }
+                        totalCount
+                        edges {
+                            node {
+                                id
+                                title
+                                dateTime
+                                endTime
+                                description
+                                eventUrl
+                                status
+                                venues{
+                                    id
+                                    name
+                                    address
+                                    city
+                                    state
+                                    country
+                                    lat
+                                    lon
+                                    postalCode
+                                    venueType
+                                }
+                                series{
+                                    endDate
+                                    description
+                                }
+                                featuredEventPhoto{
+                                    id
+                                    baseUrl
+                                    thumbUrl
+                                    standardUrl
+                                    highResUrl
+                                }
+                                eventType
+                                eventHosts{
+                                    memberId
+                                    name
+                                    memberPhoto{
+                                        id
+                                        standardUrl
+                                        highResUrl
+                                    }
+                                }
+                                topics {
+                                    edges {
+                                        node {
+                                            id
+                                            name
+                                            urlkey
+                                        }
+                                    }
+                                }
+                                group{
+                                    id
+                                    name
+                                    description
+                                    emailAnnounceAddress
+                                    urlname
+                                    keyGroupPhoto {
+                                        id
+                                        standardUrl
+                                    }
+                                    topicCategory {
+                                        id
+                                        name
+                                        urlkey
+                                        color
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+GRAPHQL;
+    }
+
+    /**
      * Get Meetup Events By Group ID With pagination
      *
      * @return array Group ID
      */
     public function getGroupEvents( $meetup_group_id = '', $itemsNum = 0, $cursor = '' ){
         $query = $this->getGroupEventsQuery();
+        $variables = ['urlname' => $meetup_group_id, 'itemsNum' => $itemsNum, 'cursor'=> $cursor ];
+        return $this->graphql_query( $this->api_url, $query, $variables );
+    }
+
+    /**
+     * Get Meetup Past Events By Group ID With pagination
+     *
+     * @return array Past Events array
+     */
+    public function getGroupPastEvents( $meetup_group_id = '', $itemsNum = 0, $cursor = '' ){
+        $query = $this->getGroupPastEventsQuery();
         $variables = ['urlname' => $meetup_group_id, 'itemsNum' => $itemsNum, 'cursor'=> $cursor ];
         return $this->graphql_query( $this->api_url, $query, $variables );
     }
