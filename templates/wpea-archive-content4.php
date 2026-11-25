@@ -36,7 +36,17 @@ if ( 'yes' === $direct_link ){
 
 ?>
 <div <?php post_class( array( $css_class, 'archive-event' ) ); ?> >
-    <div class="wpea_widget_style1 wpea_widget wpea_event" >
+    <div class="wpea_widget_style1 wpea_widget wpea_event" style="position: relative;">
+        <?php
+        $is_sold_out = get_post_meta( get_the_ID(), 'wpea_is_sold_out', true );
+        $is_online   = get_post_meta( get_the_ID(), 'online_event', true );
+        if ( 'yes' === $is_sold_out || 'yes' === $is_online ) {
+            echo '<div class="wpea-badges-wrapper" style="position: absolute; top: 8px; right: 12px; left: auto; z-index: 10;">';
+            if ( 'yes' === $is_sold_out ) { echo '<span class="wpea-badge">' . esc_html__( 'Sold Out', 'wp-event-aggregator' ) . '</span>'; }
+            if ( 'yes' === $is_online ) { echo '<span class="wpea-badge">' . esc_html__( 'Online', 'wp-event-aggregator' ) . '</span>'; }
+            echo '</div>';
+        }
+        ?>
         <div class="event_details" style="height: auto;">
             <div class="event_date event_date_style4" >
                 <div>

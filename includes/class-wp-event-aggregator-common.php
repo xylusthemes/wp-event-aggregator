@@ -595,6 +595,71 @@ class WP_Event_Aggregator_Common {
 	}
 
 	/**
+	 * Get event image URL, supporting external image URLs, featured images, and fallbacks.
+	 *
+	 * @param int    $event_id Event post ID.
+	 * @param string $fallback Fallback image URL.
+	 * @return string Image URL.
+	 */
+	public function wpea_get_event_image_url( $event_id, $fallback = '' ) {
+		if ( ! $event_id ) {
+			return $fallback;
+		}
+
+		$wpea_options        = get_option( WPEA_OPTIONS, array() );
+		$skip_image_import   = isset( $wpea_options['wpea']['skip_image_import'] ) ? $wpea_options['wpea']['skip_image_import'] : 'no';
+		$image_import_method = isset( $wpea_options['wpea']['image_import_method'] ) ? $wpea_options['wpea']['image_import_method'] : 'download';
+
+		$external_image_url = get_post_meta( $event_id, '_wpea_external_image_url', true );
+
+		if ( ( 'yes' === $skip_image_import || 'external_url' === $image_import_method ) && ! empty( $external_image_url ) ) {
+			return $external_image_url;
+		}
+
+		if ( has_post_thumbnail( $event_id ) ) {
+			$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( $event_id ), 'full' );
+			if ( ! empty( $image_url[0] ) ) {
+				return $image_url[0];
+			}
+		}
+
+		if ( ! empty( $external_image_url ) ) {
+			return $external_image_url;
+		}
+
+		return $fallback;
+	}
+
+	/**
+	 * Check whether ticket section should be displayed.
+	 *
+	 * @param int $event_id Post ID.
+	 * @return bool
+	 */
+	public function wpea_should_display_ticket_section( $event_id ) {
+		if ( empty( $event_id ) ) {
+			return false;
+		}
+
+		$wpea_ap_options = get_option( defined( 'WPEA_AP_OPTIONS' ) ? WPEA_AP_OPTIONS : 'wpea_ap_options', array() );
+		$display_after   = isset( $wpea_ap_options['sbntb'] ) ? $wpea_ap_options['sbntb'] : 'no';
+		$end_ts          = get_post_meta( $event_id, 'end_ts', true );
+		$current_time    = current_time( 'timestamp' );
+
+		// Always show if event is upcoming.
+		if ( empty( $end_ts ) || $current_time <= $end_ts ) {
+			return true;
+		}
+
+		// If event is past, show only if option is enabled.
+		if ( 'yes' === $display_after ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Format events arguments as per TEC
 	 *
 	 * @since    1.0.0
@@ -1012,11 +1077,14 @@ class WP_Event_Aggregator_Common {
 	 * @since  1.0.0
 	 * @return array
 	 */
-	public function wpea_is_updatable( $field = '' ) {
+	public function wpea_is_updatable( $field = '', $origin = '' ) {
 		if( '' == $field ){ return true; }
 		$wpea_options = get_option( WPEA_OPTIONS, array() );
 		$aggregator_options = isset($wpea_options['wpea'])? $wpea_options['wpea'] : array();
 		$dontupdate = isset( $aggregator_options['dont_update'] ) ? $aggregator_options['dont_update'] : array();
+		if ( ! empty( $origin ) && isset( $wpea_options[$origin]['dont_update'] ) && is_array( $wpea_options[$origin]['dont_update'] ) ) {
+			$dontupdate = array_merge( $dontupdate, $wpea_options[$origin]['dont_update'] );
+		}
 		if ( 'category' === $field ) {
 			return ! (
 				( isset( $dontupdate['categories'] ) && 'yes' == $dontupdate['categories'] ) ||
@@ -1556,9 +1624,11 @@ class WP_Event_Aggregator_Common {
 
 		// Check the image import method setting.
 		$wpea_options = get_option( WPEA_OPTIONS );
+		$skip_image_import   = isset( $wpea_options['wpea']['skip_image_import'] ) ? $wpea_options['wpea']['skip_image_import'] : 'no';
+		$eb_skip_image       = isset( $wpea_options['eventbrite']['skip_image_import'] ) ? $wpea_options['eventbrite']['skip_image_import'] : 'no';
 		$image_import_method = isset( $wpea_options['wpea']['image_import_method'] ) ? $wpea_options['wpea']['image_import_method'] : 'download';
 
-		if ( $image_import_method === 'external_url' ) {
+		if ( $skip_image_import === 'yes' || $eb_skip_image === 'yes' || $image_import_method === 'external_url' ) {
 			// Store external image URL in post meta without downloading.
 			update_post_meta( $event_id, '_wpea_external_image_url', esc_url_raw( $image_url ) );
 			return;
@@ -1669,7 +1739,7 @@ class WP_Event_Aggregator_Common {
 			return array();
 		}
 
-		$transient_key = 'iee_eventbrite_tags_' . $event_id;
+		$transient_key = 'wpea_eventbrite_tags_' . $event_id;
 		$cached_tags   = get_transient( $transient_key );
 
 		if ( false !== $cached_tags ) {
@@ -1722,7 +1792,7 @@ class WP_Event_Aggregator_Common {
 			return array();
 		}
 
-		$allowed_prefixes = apply_filters( 'iee_eventbrite_tag_prefixes', array( 'OrganizerTag' ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$allowed_prefixes = apply_filters( 'wpea_eventbrite_tag_prefixes', array( 'OrganizerTag' ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$tag_names        = array();
 
 		foreach ( $eventbrite_tags as $eventbrite_tag ) {
@@ -1785,14 +1855,14 @@ class WP_Event_Aggregator_Common {
 	 * @return array Term IDs.
 	 */
 	public function insert_eventbrite_tags_and_assing_into_event( $eventbrite_tags, $taxonomy = '' ) {
-		global $iee_events;
+		global $importevents;
 
 		if ( empty( $eventbrite_tags ) || ! is_array( $eventbrite_tags ) ) {
 			return array();
 		}
 
 		if ( empty( $taxonomy ) ) {
-			$taxonomy = $iee_events->cpt->get_event_tag_taxonomy();
+			$taxonomy = $importevents->cpt->get_event_tag_taxonomy();
 		}
 
 		if ( ! taxonomy_exists( $taxonomy ) ) {
@@ -2108,32 +2178,68 @@ function wpea_nonmodel_checkout_markup( $eventbrite_id, $event_id ){
 }
 
 /**
- * Get Markup for eventbrite model checkout.
+ * Check and update live sold out status for an event.
  *
- * @return string
+ * @param int $post_id
  */
-function wpea_model_checkout_markup( $eventbrite_id, $event_id ){
-	$discount_code = get_post_meta( $event_id, 'discount_code', true );
-	ob_start();
-	?>
-	<button id="wpea-eventbrite-checkout-trigger" type="button">
-		<?php esc_html_e( 'Buy Tickets', 'wp-event-aggregator' ); ?>
-	</button>
-	<script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script><?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript ?>
-	<script type="text/javascript">
-		var orderCompleteCallback = function() {
-			console.log("Order complete!");
-		};
+function wpea_live_check_sold_out_status( $post_id ) {
+	$options = wpea_get_import_options( 'eventbrite' );
+	if ( empty( $options['live_sold_out_check'] ) || 'yes' !== $options['live_sold_out_check'] ) {
+		return;
+	}
 
-		window.EBWidgets.createWidget({
-			widgetType: "checkout",
-			eventId: "<?php echo esc_attr( $eventbrite_id ); ?>",
-			modal: true,
-			modalTriggerElementId: "wpea-eventbrite-checkout-trigger",
-			onOrderComplete: orderCompleteCallback,
-			promoCode: "<?php echo esc_attr( $discount_code ); ?>"
-		});
-	</script>
-	<?php
-	return ob_get_clean();
+	$has_tickets = get_post_meta( $post_id, 'wpea_has_tickets', true );
+	if ( 'no' === $has_tickets ) {
+		return; // No tickets, skip API check.
+	}
+
+	$is_sold_out = get_post_meta( $post_id, 'wpea_is_sold_out', true );
+	if ( 'yes' === $is_sold_out ) {
+		return; // Already sold out, skip API check.
+	}
+
+	$duration = isset( $options['live_sold_out_duration'] ) ? (int) $options['live_sold_out_duration'] : 30;
+	if ( $duration < 1 ) {
+		$duration = 30;
+	}
+	$transient_key = 'wpea_sold_out_check_' . $post_id;
+
+	if ( false !== get_transient( $transient_key ) ) {
+		return; // Still cached
+	}
+
+	$eventbrite_id = get_post_meta( $post_id, 'wpea_event_id', true );
+	if ( ! $eventbrite_id ) {
+		set_transient( $transient_key, 'checked', $duration * MINUTE_IN_SECONDS );
+		return;
+	}
+
+	$token = isset( $options['eventbrite_oauth_token'] ) ? $options['eventbrite_oauth_token'] : '';
+	if ( empty( $token ) ) {
+		$api_url = 'https://www.eventbrite.com/api/v3/events/' . $eventbrite_id . '/?expand=ticket_availability';
+		$response = wp_remote_get( $api_url, array( 'headers' => array( 'Content-Type' => 'application/json' ) ) );
+	} else {
+		$api_url = 'https://www.eventbriteapi.com/v3/events/' . $eventbrite_id . '/?expand=ticket_availability';
+		$response = wp_remote_get( $api_url, array( 'headers' => array( 'Authorization' => 'Bearer ' . $token, 'Content-Type' => 'application/json' ) ) );
+	}
+
+	if ( ! is_wp_error( $response ) ) {
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( 200 === (int) $response_code ) {
+			$body = wp_remote_retrieve_body( $response );
+			$data = json_decode( $body, true );
+
+			if ( is_array( $data ) && isset( $data['ticket_availability'] ) ) {
+				if ( ! empty( $data['ticket_availability']['is_sold_out'] ) ) {
+					update_post_meta( $post_id, 'wpea_is_sold_out', 'yes' );
+				} else {
+					update_post_meta( $post_id, 'wpea_is_sold_out', 'no' );
+				}
+			} elseif ( is_array( $data ) && isset( $data['id'] ) ) {
+				update_post_meta( $post_id, 'wpea_has_tickets', 'no' );
+			}
+		}
+	}
+
+	set_transient( $transient_key, 'checked', $duration * MINUTE_IN_SECONDS );
 }

@@ -53,6 +53,7 @@ class WP_Event_Aggregator_Cpt {
 			add_action( 'manage_posts_custom_column', array( $this, 'wp_events_columns_data' ), 10, 2 ); 
 
 			add_filter( 'the_content', array( $this, 'wp_events_meta_before_content' ) ); 
+			add_filter( 'single_template', array( $this, 'wp_events_single_template' ) );
 			add_shortcode('wp_events', array( $this, 'wp_events_archive' ) );
 		}
 	}
@@ -537,26 +538,73 @@ class WP_Event_Aggregator_Cpt {
 	}
 
 	/**
+	 * Single event template routing
+	 *
+	 * @param string $single Template path.
+	 * @return string
+	 */
+	public function wp_events_single_template( $single ) {
+		global $post;
+
+		if ( $post && $post->post_type === $this->event_posttype ) {
+			if ( defined( 'WPEAPRO_PLUGIN_DIR' ) ) {
+				$custom_template = WPEAPRO_PLUGIN_DIR . 'templates/single-wp_events.php';
+				if ( file_exists( $custom_template ) ) {
+					return $custom_template;
+				}
+			}
+		}
+
+		return $single;
+	}
+
+	/**
 	 * render event information above event content
 	 *
 	 */
 	function wp_events_meta_before_content( $content ) { 
+		global $wpea_skip_meta_injection;
+		if ( ! empty( $wpea_skip_meta_injection ) ) {
+			return $content;
+		}
+
+		static $is_rendering = false;
+		if ( $is_rendering ) {
+			return $content;
+		}
+
 	    if ( is_singular( $this->event_posttype ) ) {
 			$event_id = get_the_ID();
-			$event_details = $this->wp_events_get_event_meta( $event_id );
+			$wpea_ap_options = get_option( defined( 'WPEA_AP_OPTIONS' ) ? WPEA_AP_OPTIONS : 'wpea_ap_options', array() );
+			$details_layout = isset( $wpea_ap_options['details_layout'] ) ? $wpea_ap_options['details_layout'] : 'default';
 
-			// Inject external image if no actual featured image attachment is set and external URL exists.
-			$external_image_html = '';
-			$actual_thumbnail_id = get_post_meta( $event_id, '_thumbnail_id', true );
-			if ( empty( $actual_thumbnail_id ) ) {
-				$external_image_url = get_post_meta( $event_id, '_wpea_external_image_url', true );
-				if ( ! empty( $external_image_url ) ) {
-					$alt = esc_attr( get_the_title( $event_id ) );
-					$external_image_html = '<div class="wpea-external-event-image"><img src="' . esc_url( $external_image_url ) . '" alt="' . $alt . '" style="max-width:100%; height:auto; margin-bottom:20px;" /></div>';
-				}
+			// Non-pro users can only use the default layout
+			if ( ! wpea_is_pro() ) {
+				$details_layout = 'default';
 			}
 
-			$content = $external_image_html . $event_details . $content;
+			// Pass content for custom layouts
+			global $wpea_event_content_for_template;
+			$wpea_event_content_for_template = $content;
+
+			$event_details = $this->wp_events_get_event_meta( $event_id, $details_layout );
+
+			if ( in_array( $details_layout, array( 'template2', 'template3', 'template4', 'template5', 'template6' ), true ) ) {
+				$content = $event_details;
+			} else {
+				// Inject external image if no actual featured image attachment is set and external URL exists.
+				$external_image_html = '';
+				$actual_thumbnail_id = get_post_meta( $event_id, '_thumbnail_id', true );
+				if ( empty( $actual_thumbnail_id ) ) {
+					$external_image_url = get_post_meta( $event_id, '_wpea_external_image_url', true );
+					if ( ! empty( $external_image_url ) ) {
+						$alt = esc_attr( get_the_title( $event_id ) );
+						$external_image_html = '<div class="wpea-external-event-image"><img src="' . esc_url( $external_image_url ) . '" alt="' . $alt . '" style="max-width:100%; height:auto; margin-bottom:20px;" /></div>';
+					}
+				}
+
+				$content = $external_image_html . $event_details . $content;
+			}
 		}
 	    return $content;
 	}
@@ -565,11 +613,25 @@ class WP_Event_Aggregator_Cpt {
 	 * get meta information for event.
 	 *
 	 */
-	function wp_events_get_event_meta( $event_id = '' ){	
+	function wp_events_get_event_meta( $event_id = '', $layout = 'default' ){	
 
 		ob_start();
 			
-			get_wpea_template( 'wpea-event-meta.php' );			
+		$pro_template_path = defined( 'WPEAPRO_PLUGIN_DIR' ) ? WPEAPRO_PLUGIN_DIR . 'templates/' : '';
+
+		if ( wpea_is_pro() && $layout === 'template2' ) {
+			get_wpea_template( 'wpea-event-meta-2.php', array(), 'wp-event-aggregator', $pro_template_path );
+		} elseif ( wpea_is_pro() && $layout === 'template3' ) {
+			get_wpea_template( 'wpea-event-meta-3.php', array(), 'wp-event-aggregator', $pro_template_path );
+		} elseif ( wpea_is_pro() && $layout === 'template4' ) {
+			get_wpea_template( 'wpea-event-meta-4.php', array(), 'wp-event-aggregator', $pro_template_path );
+		} elseif ( wpea_is_pro() && $layout === 'template5' ) {
+			get_wpea_template( 'wpea-event-meta-5.php', array(), 'wp-event-aggregator', $pro_template_path );
+		} elseif ( wpea_is_pro() && $layout === 'template6' ) {
+			get_wpea_template( 'wpea-event-meta-6.php', array(), 'wp-event-aggregator', $pro_template_path );
+		} else {
+			get_wpea_template( 'wpea-event-meta.php' );
+		}			
 
 		$event_meta_details = ob_get_contents();
 		ob_end_clean();
@@ -593,7 +655,7 @@ class WP_Event_Aggregator_Cpt {
 		$atts['past_events'] = (isset($atts['past_events']) && ($atts['past_events'] === 'yes' || $atts['past_events'] === true)) ? 'yes' : '';
 
 		/* layout whitelist */
-		$allowed_layouts = array( 'style1', 'style2', 'style3', 'style4' );
+		$allowed_layouts = array( 'style1', 'style2', 'style3', 'style4', 'style5', 'style6' );
 		$atts['layout'] = (isset($atts['layout']) && in_array($atts['layout'], $allowed_layouts, true)) ? $atts['layout'] : 'style1';
 
 		/* order */
@@ -620,6 +682,10 @@ class WP_Event_Aggregator_Cpt {
 
 		/* group / organizer filter */
 		$atts['group_id']   = isset( $atts['group_id'] ) ? sanitize_text_field( $atts['group_id'] ) : '';
+
+		/* custom pagination labels */
+		$atts['next_event_text']     = isset( $atts['next_event_text'] ) ? sanitize_text_field( $atts['next_event_text'] ) : '';
+		$atts['previous_event_text'] = isset( $atts['previous_event_text'] ) ? sanitize_text_field( $atts['previous_event_text'] ) : '';
 
 		$current_date = current_time('timestamp');
 		$ajaxpagi     = isset( $atts['ajaxpagi'] ) ? $atts['ajaxpagi'] : '';
@@ -737,6 +803,52 @@ class WP_Event_Aggregator_Cpt {
 				'compare' => 'LIKE',
 			);
 		}
+
+		// Filter sold out events
+		if ( isset( $atts['display_sold_out'] ) && 'no' === $atts['display_sold_out'] ) {
+			if ( ! isset( $eve_args['meta_query'] ) ) {
+				$eve_args['meta_query'] = array();
+			}
+			$eve_args['meta_query'][] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'wpea_is_sold_out',
+					'value'   => 'yes',
+					'compare' => '!=',
+				),
+				array(
+					'key'     => 'wpea_is_sold_out',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+		}
+
+		// Filter online events
+		if ( isset( $atts['display_online'] ) ) {
+			if ( ! isset( $eve_args['meta_query'] ) ) {
+				$eve_args['meta_query'] = array();
+			}
+			if ( 'yes' === $atts['display_online'] ) {
+				$eve_args['meta_query'][] = array(
+					'key'     => 'online_event',
+					'value'   => array( 'yes', '1', true ),
+					'compare' => 'IN',
+				);
+			} elseif ( 'no' === $atts['display_online'] ) {
+				$eve_args['meta_query'][] = array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'online_event',
+						'value'   => array( 'yes', '1', true ),
+						'compare' => 'NOT IN',
+					),
+					array(
+						'key'     => 'online_event',
+						'compare' => 'NOT EXISTS',
+					),
+				);
+			}
+		}
 		
 		if( isset( $atts['category'] ) && $atts['category'] != '' ){
 			$categories = explode(',', $atts['category'] );
@@ -826,6 +938,10 @@ class WP_Event_Aggregator_Cpt {
         if (!wpea_is_pro()) {
             $direct_link = 'no';
         }
+
+		$wpea_ap_options     = get_option( defined( 'WPEA_AP_OPTIONS' ) ? WPEA_AP_OPTIONS : 'wpea_ap_options', array() );
+		$next_event_text     = ! empty( $atts['next_event_text'] ) ? $atts['next_event_text'] : ( ! empty( $wpea_options['wpea']['next_event_text'] ) ? $wpea_options['wpea']['next_event_text'] : ( ! empty( $wpea_ap_options['next_event_text'] ) ? $wpea_ap_options['next_event_text'] : __( 'Next Events', 'wp-event-aggregator' ) ) );
+		$previous_event_text = ! empty( $atts['previous_event_text'] ) ? $atts['previous_event_text'] : ( ! empty( $wpea_options['wpea']['previous_event_text'] ) ? $wpea_options['wpea']['previous_event_text'] : ( ! empty( $wpea_ap_options['previous_event_text'] ) ? $wpea_ap_options['previous_event_text'] : __( 'Previous Events', 'wp-event-aggregator' ) ) );
 		ob_start();
 		?>
 		<div class="row_grid wpea_frontend_archive" data-paged="<?php echo esc_attr( $paged ); ?>" data-shortcode="<?php echo esc_attr( wp_json_encode($atts, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) ); ?>" >
@@ -843,6 +959,10 @@ class WP_Event_Aggregator_Cpt {
 						get_wpea_template( 'wpea-archive-content3.php', $template_args );
 					}elseif( isset( $atts['layout'] ) && $atts['layout'] == 'style4' ){
 						get_wpea_template( 'wpea-archive-content4.php', $template_args );
+					}elseif( isset( $atts['layout'] ) && $atts['layout'] == 'style5' ){
+						get_wpea_template( 'wpea-archive-content5.php', $template_args );
+					}elseif( isset( $atts['layout'] ) && $atts['layout'] == 'style6' ){
+						get_wpea_template( 'wpea-archive-content6.php', $template_args );
 					}else{
 						get_wpea_template( 'wpea-archive-content.php', $template_args );
 					}
@@ -855,12 +975,12 @@ class WP_Event_Aggregator_Cpt {
 							<nav class="prev-next-posts">
 								<div class="prev-posts-link alignright">
 									<?php if( $paged < $wp_events->max_num_pages ) : ?>
-										<a href="#" class="wpea-next-page" data-page="<?php echo esc_html( $paged + 1 ); ?>"><?php esc_attr_e( 'Next Events &raquo;', 'wp-event-aggregator' ); ?></a>
+										<a href="#" class="wpea-next-page" data-page="<?php echo esc_html( $paged + 1 ); ?>"><?php echo esc_html( $next_event_text ); ?> &raquo;</a>
 									<?php endif; ?>
 								</div>
 								<div class="next-posts-link alignleft">
 									<?php if( $paged > 1 ) : ?>
-										<a href="#" class="wpea-prev-page" data-page="<?php echo esc_html( $paged - 1 ); ?>"><?php esc_attr_e( '&laquo; Previous Events', 'wp-event-aggregator' ); ?></a>
+										<a href="#" class="wpea-prev-page" data-page="<?php echo esc_html( $paged - 1 ); ?>">&laquo; <?php echo esc_html( $previous_event_text ); ?></a>
 									<?php endif; ?>
 								</div>
 							</nav>
@@ -873,10 +993,20 @@ class WP_Event_Aggregator_Cpt {
 						<div class="col-wpea-md-12">
 							<nav class="prev-next-posts">
 								<div class="prev-posts-link alignright">
-									<?php echo get_next_posts_link( 'Next Events &raquo;', $wp_events->max_num_pages ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php
+									$next_events_link = get_next_posts_link( esc_html( $next_event_text ) . ' &raquo;', $wp_events->max_num_pages );
+									if ( $next_events_link ) {
+										echo wp_kses_post( $next_events_link );
+									}
+									?>
 								</div>
 								<div class="next-posts-link alignleft">
-									<?php echo get_previous_posts_link( '&laquo; Previous Events' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php
+									$prev_events_link = get_previous_posts_link( '&laquo; ' . esc_html( $previous_event_text ) );
+									if ( $prev_events_link ) {
+										echo wp_kses_post( $prev_events_link );
+									}
+									?>
 								</div>
 							</nav>
 						</div>
