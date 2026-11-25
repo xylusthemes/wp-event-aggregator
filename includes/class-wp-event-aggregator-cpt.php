@@ -618,6 +618,9 @@ class WP_Event_Aggregator_Cpt {
 		$atts['start_date'] = isset( $atts['start_date'] ) ? sanitize_text_field( $atts['start_date'] ) : '';
 		$atts['end_date']   = isset( $atts['end_date'] ) ? sanitize_text_field( $atts['end_date'] ) : '';
 
+		/* group / organizer filter */
+		$atts['group_id']   = isset( $atts['group_id'] ) ? sanitize_text_field( $atts['group_id'] ) : '';
+
 		$current_date = current_time('timestamp');
 		$ajaxpagi     = isset( $atts['ajaxpagi'] ) ? $atts['ajaxpagi'] : '';
 		if ( $ajaxpagi != 'yes' ) {
@@ -718,6 +721,21 @@ class WP_Event_Aggregator_Cpt {
 						        )
 				            );
 			}
+		}
+
+		if ( ! empty( $atts['group_id'] ) ) {
+			$group_slug = trim( $atts['group_id'], " \t\n\r\0\x0B/" );
+			$group_slug = str_replace( array( 'https://www.meetup.com/', 'http://www.meetup.com/' ), '', $group_slug );
+			$group_slug = trim( $group_slug, '/' );
+
+			if ( ! isset( $eve_args['meta_query'] ) ) {
+				$eve_args['meta_query'] = array();
+			}
+			$eve_args['meta_query'][] = array(
+				'key'     => 'organizer_url',
+				'value'   => $group_slug,
+				'compare' => 'LIKE',
+			);
 		}
 		
 		if( isset( $atts['category'] ) && $atts['category'] != '' ){

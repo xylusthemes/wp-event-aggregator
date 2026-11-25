@@ -86,6 +86,47 @@ class WP_Event_Aggregator_Meetup {
 				$have_next_page = $get_upcoming_events['pageInfo']['hasNextPage'];
 			}
 
+			if ( ! empty( $event_data['import_past_events'] ) && method_exists( $api, 'getGroupPastEvents' ) ) {
+				$endcursor      = null;
+				$have_next_page = true;
+				$pageCount      = 0;
+
+				$meetup_options    = function_exists( 'wpea_get_import_options' ) ? wpea_get_import_options( 'meetup' ) : array();
+				$past_events_limit = isset( $meetup_options['import_past_events_limit'] ) ? (int) $meetup_options['import_past_events_limit'] : 500;
+				$max_pages         = max( 1, (int)( $past_events_limit / 50 ) );
+
+				while ( true === $have_next_page ) {
+					if ( $pageCount >= $max_pages ) {
+						break;
+					}
+
+					$meetup_past_event_data = $api->getGroupPastEvents( $meetup_group_id, $itemsnum, $endcursor );
+
+					if ( isset( $meetup_past_event_data['data']['groupByUrlname']['pastEvents'] ) ) {
+						$get_past_events = $meetup_past_event_data['data']['groupByUrlname']['pastEvents'];
+						$meetup_events   = $get_past_events['edges'];
+
+						if ( ! empty( $meetup_events ) ) {
+							foreach ( $meetup_events as $meetup_event ) {
+								$imported_events[] = $this->save_meetup_event( $meetup_event['node'], $event_data );
+							}
+						}
+
+						$endcursor      = $get_past_events['pageInfo']['endCursor'];
+						$have_next_page = $get_past_events['pageInfo']['hasNextPage'];
+					} else {
+						$have_next_page = false;
+					}
+					$pageCount++;
+				}
+			}
+
+			// Meetup group reviews sync (12h transient controlled, Pro feature).
+			global $importevents;
+			if ( ! empty( $importevents->reviews ) && method_exists( $importevents->reviews, 'sync_group_reviews' ) ) {
+				$importevents->reviews->sync_group_reviews( $meetup_group_id );
+			}
+
 			return $imported_events;
 
 		}elseif(  $import_by === 'event_id' ) {
@@ -152,6 +193,20 @@ class WP_Event_Aggregator_Meetup {
 		$isOnline          = isset( $meetup_event['eventType'] ) ? $meetup_event['eventType'] : '';
 		$event_id          = isset( $meetup_event['id'] ) ? str_replace( '!chp', '', $meetup_event['id']  ) : '';
 
+		$topics = array();
+		if ( isset( $meetup_event['topics']['edges'] ) && is_array( $meetup_event['topics']['edges'] ) ) {
+			foreach ( $meetup_event['topics']['edges'] as $topic_edge ) {
+				if ( ! empty( $topic_edge['node']['name'] ) ) {
+					$topics[] = sanitize_text_field( $topic_edge['node']['name'] );
+				}
+			}
+		}
+
+		$category = '';
+		if ( ! empty( $meetup_event['group']['topicCategory']['name'] ) ) {
+			$category = sanitize_text_field( $meetup_event['group']['topicCategory']['name'] );
+		}
+
 		$xt_event = array(
 			'origin'          => 'meetup',
 			'ID'              => $event_id,
@@ -171,6 +226,8 @@ class WP_Event_Aggregator_Meetup {
 			'shortDescription'=> $shortDescription,
 			'status'          => $status,
 			'isOnline'        => $isOnline,
+			'topics'          => $topics,
+			'category'        => $category,
 		);
 
 		if ( array_key_exists( 'group', $meetup_event ) ) {

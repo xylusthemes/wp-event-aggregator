@@ -1901,6 +1901,53 @@ class WP_Event_Aggregator_Common {
 
 		return $html;
 	}
+
+	/**
+	 * Assign Meetup topics as tags to an event.
+	 *
+	 * @param int    $event_id Event post ID.
+	 * @param array  $topics   Array of topic names.
+	 * @param string $taxonomy Taxonomy name (e.g. event_tag).
+	 * @param bool   $append   Whether to append or overwrite.
+	 * @return array Term IDs.
+	 */
+	public function wpea_assign_topics_as_tags( $event_id, $topics = array(), $taxonomy = 'event_tag', $append = true ) {
+		if ( empty( $event_id ) || empty( $topics ) || ! is_array( $topics ) || ! taxonomy_exists( $taxonomy ) ) {
+			return array();
+		}
+
+		$term_ids = array();
+		foreach ( $topics as $topic_name ) {
+			$topic_name = trim( sanitize_text_field( $topic_name ) );
+			if ( empty( $topic_name ) ) {
+				continue;
+			}
+
+			$slug = sanitize_title( $topic_name );
+			$term = get_term_by( 'slug', $slug, $taxonomy );
+			if ( ! $term ) {
+				$term = term_exists( $topic_name, $taxonomy );
+			}
+
+			if ( $term ) {
+				$term_id = is_array( $term ) ? (int) $term['term_id'] : (int) $term->term_id;
+			} else {
+				$new_term = wp_insert_term( $topic_name, $taxonomy, array( 'slug' => $slug ) );
+				if ( is_wp_error( $new_term ) || empty( $new_term['term_id'] ) ) {
+					continue;
+				}
+				$term_id = (int) $new_term['term_id'];
+			}
+
+			$term_ids[] = $term_id;
+		}
+
+		if ( ! empty( $term_ids ) ) {
+			wp_set_object_terms( $event_id, array_values( array_unique( $term_ids ) ), $taxonomy, $append );
+		}
+
+		return $term_ids;
+	}
 }
 
 

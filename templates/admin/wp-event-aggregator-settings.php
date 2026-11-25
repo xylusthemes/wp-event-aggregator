@@ -430,6 +430,104 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                         </div>
                     </div>
 
+                    <!-- Past Events Import Limit Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Past Events Import Limit', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                                $past_events_limit = isset( $wpea_meetup_options['import_past_events_limit'] ) ? $wpea_meetup_options['import_past_events_limit'] : '500';
+                            ?>
+                            <input type="number" name="meetup[import_past_events_limit]" value="<?php echo esc_attr( $past_events_limit ); ?>" min="50" step="50" />
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Maximum number of past events to import per group when "Import Past Events" is checked (default 500). Higher limits may cause timeouts on large groups.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Meetup Category Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Automatically Import and Assign Meetup Categories', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $wpea_meetup_category = isset( $wpea_meetup_options['import_category'] ) ? $wpea_meetup_options['import_category'] : 'no';
+                            ?>
+                            <input type="checkbox" name="meetup[import_category]" value="yes" <?php if ( $wpea_meetup_category == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_html_e( 'Enable this option to automatically import Meetup categories and assign them to events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Meetup Tags Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Automatically Import and Assign Meetup Tags', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $wpea_meetup_tags = isset( $wpea_meetup_options['import_tags'] ) ? $wpea_meetup_options['import_tags'] : 'no';
+                            ?>
+                            <input type="checkbox" name="meetup[import_tags]" value="yes" <?php if ( $wpea_meetup_tags == 'yes' ) { echo 'checked="checked"'; } ?> />
+                            <span class="wpea_small">
+                                <?php esc_html_e( 'Enable this option to automatically import Meetup event topics as tags and assign them to events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Import Reviews Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Import Event Reviews', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $import_event_reviews = isset( $wpea_meetup_options['import_event_reviews'] ) ? $wpea_meetup_options['import_event_reviews'] : 'no';
+                            if ( wpea_is_pro() ) {
+                                ?>
+                                <input type="checkbox" name="meetup[import_event_reviews]" value="yes" <?php if ( $import_event_reviews == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <?php
+                            } else {
+                                ?>
+                                <input type="checkbox" name="" disabled="disabled" />
+                                <?php
+                            }
+                            ?>
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Enable to fetch and store group reviews for imported Meetup events.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php do_action( 'wpea_render_pro_notice' ); ?>
+                        </div>
+                    </div>
+
+                    <!-- Display Reviews Section -->
+                    <div class="wpea-inner-main-section" >
+                        <div class="wpea-inner-section-1" >
+                            <span class="wpea-title-text" ><?php esc_attr_e( 'Display Event Reviews', 'wp-event-aggregator' ); ?></span>
+                        </div>
+                        <div class="wpea-inner-section-2">
+                            <?php
+                            $display_event_reviews = isset( $wpea_meetup_options['display_event_reviews'] ) ? $wpea_meetup_options['display_event_reviews'] : 'no';
+                            if ( wpea_is_pro() ) {
+                                ?>
+                                <input type="checkbox" name="meetup[display_event_reviews]" value="yes" <?php if ( $display_event_reviews == 'yes' ) { echo 'checked="checked"'; } ?> />
+                                <?php
+                            } else {
+                                ?>
+                                <input type="checkbox" name="" disabled="disabled" />
+                                <?php
+                            }
+                            ?>
+                            <span class="wpea_small">
+                                <?php esc_attr_e( 'Enable to display group rating and attendee reviews on single event pages.', 'wp-event-aggregator' ); ?>
+                            </span>
+                            <?php do_action( 'wpea_render_pro_notice' ); ?>
+                        </div>
+                    </div>
+
                     <!-- Advanced Synchronization Section -->
                     <div class="wpea-inner-main-section" >
                         <div class="wpea-inner-section-1" >
