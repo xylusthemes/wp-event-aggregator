@@ -773,6 +773,23 @@ if( is_object( $wpea_meetup_meetup_authorized_user ) ){
                             </div>
                         </div>
 
+                        <!-- Import Past Events Section -->
+                        <div class="wpea-inner-main-section" >
+                            <div class="wpea-inner-section-1" >
+                                <span class="wpea-title-text" ><?php esc_attr_e( 'Import Past Events', 'wp-event-aggregator' ); ?></span>
+                            </div>
+                            <div class="wpea-inner-section-2">
+                                <?php
+                                $wpea_fb_import_past_events = isset( $wpea_facebook_options['import_past_events'] ) ? $wpea_facebook_options['import_past_events'] : 'no';
+                                ?>
+                                <input type="checkbox" id="wpea_fb_import_past_events" name="facebook[import_past_events]" value="yes" <?php echo( ( 'yes' === $wpea_fb_import_past_events ) ? 'checked="checked"' : '' ); if (!wpea_is_pro()) {echo 'disabled="disabled"'; } ?> />
+                                <span class="wpea_small">
+                                    <?php esc_attr_e( 'Check to import past events this option will import events from the last 2 years and upcoming events.', 'wp-event-aggregator' ); ?>
+                                </span>
+                                <?php do_action( 'wpea_render_pro_notice' ); ?>
+                            </div>
+                        </div>
+
                         <!-- Advanced Synchronization Section -->
                         <div class="wpea-inner-main-section" >
                             <div class="wpea-inner-section-1" >

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-25T11:22:22+00:00\n"
+"POT-Creation-Date: 2026-11-26T06:11:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-event-aggregator\n"
@@ -106,7 +106,7 @@ msgstr ""
 #: includes/class-wp-event-aggregator-admin.php:115
 #: templates/admin/admin-sidebar.php:16
 #: templates/admin/admin-sidebar.php:19
-#: templates/admin/wp-event-aggregator-settings.php:1055
+#: templates/admin/wp-event-aggregator-settings.php:1072
 #: wp-event-aggregator.php:274
 msgid "Upgrade to Pro"
 msgstr ""
@@ -136,7 +136,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:252
 #: templates/admin/eventbrite-import-events.php:17
-#: templates/admin/facebook-import-events.php:17
+#: templates/admin/facebook-import-events.php:22
 #: templates/admin/ical-import-events.php:18
 #: templates/admin/meetup-import-events.php:17
 msgid "Scheduled Imports"
@@ -182,7 +182,7 @@ msgstr ""
 
 #: includes/class-wp-event-aggregator-admin.php:388
 #: templates/admin/eventbrite-import-events.php:13
-#: templates/admin/facebook-import-events.php:13
+#: templates/admin/facebook-import-events.php:18
 #: templates/admin/ical-import-events.php:14
 #: templates/admin/meetup-import-events.php:13
 msgid "New Import"
@@ -487,7 +487,7 @@ msgid "Scheduled Import"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-common.php:921
-#: templates/admin/wp-event-aggregator-settings.php:1139
+#: templates/admin/wp-event-aggregator-settings.php:1156
 msgid "Status"
 msgstr ""
 
@@ -855,12 +855,12 @@ msgid "Event Origin"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:943
-#: templates/admin/wp-event-aggregator-settings.php:1099
+#: templates/admin/wp-event-aggregator-settings.php:1116
 msgid "Next Events"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-cpt.php:944
-#: templates/admin/wp-event-aggregator-settings.php:1108
+#: templates/admin/wp-event-aggregator-settings.php:1125
 msgid "Previous Events"
 msgstr ""
 
@@ -1084,7 +1084,7 @@ msgid "ID"
 msgstr ""
 
 #: includes/class-wp-event-aggregator-list-table.php:843
-#: templates/admin/wp-event-aggregator-settings.php:1136
+#: templates/admin/wp-event-aggregator-settings.php:1153
 msgid "Title"
 msgstr ""
 
@@ -1273,7 +1273,7 @@ msgid "Get Premium Add-on"
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:31
-#: templates/admin/facebook-import-events.php:31
+#: templates/admin/facebook-import-events.php:36
 #: templates/admin/ical-import-events.php:32
 #: templates/admin/meetup-import-events.php:31
 msgid "Import by"
@@ -1351,78 +1351,89 @@ msgid "Insert Eventbrite Collection ID (e.g. https://www.eventbrite.com/cc/xxxxx
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:147
-#: templates/admin/facebook-import-events.php:95
+#: templates/admin/facebook-import-events.php:125
 #: templates/admin/ical-import-events.php:137
 #: templates/admin/meetup-import-events.php:114
 msgid "Import Type"
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:162
-#: templates/admin/facebook-import-events.php:110
+#: templates/admin/facebook-import-events.php:140
 #: templates/admin/ical-import-events.php:152
 #: templates/admin/meetup-import-events.php:129
 msgid "Author"
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:169
-#: templates/admin/facebook-import-events.php:117
+#: templates/admin/facebook-import-events.php:147
 #: templates/admin/ical-import-events.php:159
 #: templates/admin/meetup-import-events.php:136
 msgid "Select event author for imported events. Default event auther is current loggedin user."
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:177
-#: templates/admin/facebook-import-events.php:125
+#: templates/admin/facebook-import-events.php:155
 #: templates/admin/ical-import-events.php:167
 #: templates/admin/meetup-import-events.php:144
 msgid "Select Author"
 msgstr ""
 
 #: templates/admin/eventbrite-import-events.php:185
-#: templates/admin/facebook-import-events.php:133
+#: templates/admin/facebook-import-events.php:163
 #: templates/admin/ical-import-events.php:175
 #: templates/admin/meetup-import-events.php:152
 msgid "Import Event"
 msgstr ""
 
 #. translators: 1: First option (by Facebook Event ID), 2: Second option (Facebook Page)
-#: templates/admin/facebook-import-events.php:41
-#: templates/admin/ical-import-events.php:42
-#: templates/admin/meetup-import-events.php:41
+#: templates/admin/facebook-import-events.php:46
 #, php-format
-msgid "Select Event source. %1$s %2$s"
+msgid "Select Event source. %1$s, %2$s."
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:42
-msgid "1. Facebook Event ID"
+#: templates/admin/facebook-import-events.php:47
+msgid "1. by Facebook Event ID"
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:43
+#: templates/admin/facebook-import-events.php:48
 msgid "2. Facebook Page"
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:62
+#: templates/admin/facebook-import-events.php:67
 msgid "Facebook Event ID"
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:63
+#: templates/admin/facebook-import-events.php:68
 msgid "Facebook Page"
 msgstr ""
 
 #: templates/admin/facebook-import-events.php:70
+#: templates/admin/facebook-import-events.php:103
+msgid "My Pages"
+msgstr ""
+
+#: templates/admin/facebook-import-events.php:78
 msgid "Facebook Event IDs"
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:75
+#: templates/admin/facebook-import-events.php:83
 msgid "One event ID per line, (Eg. Event ID for https://www.facebook.com/events/123456789/ is \"123456789\")."
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:82
+#: templates/admin/facebook-import-events.php:90
 msgid "Page username / ID to fetch events from"
 msgstr ""
 
-#: templates/admin/facebook-import-events.php:87
+#: templates/admin/facebook-import-events.php:95
 msgid " Eg. username for https://www.facebook.com/xylusinfo/ is \"xylusinfo\"."
+msgstr ""
+
+#: templates/admin/facebook-import-events.php:108
+msgid "Select Page"
+msgstr ""
+
+#: templates/admin/facebook-import-events.php:117
+msgid "Select Page for import events from it."
 msgstr ""
 
 #: templates/admin/feed-upgrade-page.php:55
@@ -1729,6 +1740,13 @@ msgstr ""
 msgid "Get PRO Now"
 msgstr ""
 
+#. translators: 1: First option (by Facebook Event ID), 2: Second option (Facebook Page)
+#: templates/admin/ical-import-events.php:42
+#: templates/admin/meetup-import-events.php:41
+#, php-format
+msgid "Select Event source. %1$s %2$s"
+msgstr ""
+
 #: templates/admin/ical-import-events.php:43
 msgid "1. .ics File"
 msgstr ""
@@ -1829,6 +1847,7 @@ msgid "Insert Meetup group url (Eg. -<span class=\"borderall\">https://www.meetu
 msgstr ""
 
 #: templates/admin/meetup-import-events.php:102
+#: templates/admin/wp-event-aggregator-settings.php:779
 msgid "Import Past Events"
 msgstr ""
 
@@ -1963,7 +1982,7 @@ msgid "General Settings"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:52
-#: templates/admin/wp-event-aggregator-settings.php:1251
+#: templates/admin/wp-event-aggregator-settings.php:1268
 msgid "Google Maps API"
 msgstr ""
 
@@ -2021,14 +2040,14 @@ msgstr ""
 #: templates/admin/wp-event-aggregator-settings.php:146
 #: templates/admin/wp-event-aggregator-settings.php:476
 #: templates/admin/wp-event-aggregator-settings.php:747
-#: templates/admin/wp-event-aggregator-settings.php:821
+#: templates/admin/wp-event-aggregator-settings.php:838
 msgid "Update existing events"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:154
 #: templates/admin/wp-event-aggregator-settings.php:484
 #: templates/admin/wp-event-aggregator-settings.php:755
-#: templates/admin/wp-event-aggregator-settings.php:829
+#: templates/admin/wp-event-aggregator-settings.php:846
 msgid "Check to updates existing events."
 msgstr ""
 
@@ -2036,7 +2055,7 @@ msgstr ""
 #: templates/admin/wp-event-aggregator-settings.php:207
 #: templates/admin/wp-event-aggregator-settings.php:485
 #: templates/admin/wp-event-aggregator-settings.php:756
-#: templates/admin/wp-event-aggregator-settings.php:830
+#: templates/admin/wp-event-aggregator-settings.php:847
 msgid "Not Recommend"
 msgstr ""
 
@@ -2110,24 +2129,24 @@ msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:293
 #: templates/admin/wp-event-aggregator-settings.php:591
-#: templates/admin/wp-event-aggregator-settings.php:779
-#: templates/admin/wp-event-aggregator-settings.php:838
+#: templates/admin/wp-event-aggregator-settings.php:796
+#: templates/admin/wp-event-aggregator-settings.php:855
 msgid "Advanced Synchronization"
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:309
 #: templates/admin/wp-event-aggregator-settings.php:607
-#: templates/admin/wp-event-aggregator-settings.php:795
-#: templates/admin/wp-event-aggregator-settings.php:854
+#: templates/admin/wp-event-aggregator-settings.php:812
+#: templates/admin/wp-event-aggregator-settings.php:871
 msgid "Check to enable advanced synchronization, this will delete events which are removed from source calendar. Also, it deletes passed events if source calendar is provide only upcoming events."
 msgstr ""
 
 #: templates/admin/wp-event-aggregator-settings.php:319
 #: templates/admin/wp-event-aggregator-settings.php:617
-#: templates/admin/wp-event-aggregator-settings.php:805
-#: templates/admin/wp-event-aggregator-settings.php:889
-#: templates/admin/wp-event-aggregator-settings.php:1235
-#: templates/admin/wp-event-aggregator-settings.php:1275
+#: templates/admin/wp-event-aggregator-settings.php:822
+#: templates/admin/wp-event-aggregator-settings.php:906
+#: templates/admin/wp-event-aggregator-settings.php:1252
+#: templates/admin/wp-event-aggregator-settings.php:1292
 msgid "Save Settings"
 msgstr ""
 
@@ -2340,258 +2359,262 @@ msgstr ""
 msgid "Check to import the Facebook event category and assign it to events."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:863
+#: templates/admin/wp-event-aggregator-settings.php:787
+msgid "Check to import past events this option will import events from the last 2 years and upcoming events."
+msgstr ""
+
+#: templates/admin/wp-event-aggregator-settings.php:880
 msgid "Import iCal Category"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:879
+#: templates/admin/wp-event-aggregator-settings.php:896
 msgid "Check to enable importing the iCal category, this will import and assign the iCal category to the events."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:907
+#: templates/admin/wp-event-aggregator-settings.php:924
 msgid "Move past events in trash"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:915
+#: templates/admin/wp-event-aggregator-settings.php:932
 msgid "Check to move past events in the trash, Automatically move events to the trash 24 hours after their end date using wp-cron. This runs once daily in the background."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:923
+#: templates/admin/wp-event-aggregator-settings.php:940
 msgid "Direct link to Event Source"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:931
+#: templates/admin/wp-event-aggregator-settings.php:948
 msgid "Check to enable direct event link to Event Source instead of event detail page."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:940
+#: templates/admin/wp-event-aggregator-settings.php:957
 msgid "Event Slug"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:948
+#: templates/admin/wp-event-aggregator-settings.php:965
 msgid "Slug for the event."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:957
+#: templates/admin/wp-event-aggregator-settings.php:974
 msgid "Skip Trashed Events"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:965
+#: templates/admin/wp-event-aggregator-settings.php:982
 msgid "Check to enable skip-the-trash events during importing."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:974
+#: templates/admin/wp-event-aggregator-settings.php:991
 msgid "Event Display Time Format"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:981
+#: templates/admin/wp-event-aggregator-settings.php:998
 msgid "12 Hours"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:982
+#: templates/admin/wp-event-aggregator-settings.php:999
 msgid "24 Hours"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:983
+#: templates/admin/wp-event-aggregator-settings.php:1000
 msgid "WordPress Default"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:986
+#: templates/admin/wp-event-aggregator-settings.php:1003
 msgid "Choose event display time format for front-end."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:994
+#: templates/admin/wp-event-aggregator-settings.php:1011
 msgid "Accent Color"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1002
+#: templates/admin/wp-event-aggregator-settings.php:1019
 msgid "Choose accent color for front-end event grid and event widget."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1010
+#: templates/admin/wp-event-aggregator-settings.php:1027
 msgid "Image Import Method"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1018
+#: templates/admin/wp-event-aggregator-settings.php:1035
 msgid "Download image and set as Featured Image (Default)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1022
+#: templates/admin/wp-event-aggregator-settings.php:1039
 msgid "Store external image URL only (No download)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1025
+#: templates/admin/wp-event-aggregator-settings.php:1042
 msgid "Choose how event images are handled during import. \"Download\" saves images to your media library and sets them as featured images. \"Store external URL\" saves only the image URL in post meta without downloading, reducing server storage usage."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1033
+#: templates/admin/wp-event-aggregator-settings.php:1050
 msgid "Single Event Details Layout"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1041
+#: templates/admin/wp-event-aggregator-settings.php:1058
 msgid "Default Template"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1042
+#: templates/admin/wp-event-aggregator-settings.php:1059
 msgid "Template 2 (Sidebar Layout)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1043
+#: templates/admin/wp-event-aggregator-settings.php:1060
 msgid "Template 3 (Modern Grid Layout)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1044
+#: templates/admin/wp-event-aggregator-settings.php:1061
 msgid "Template 4 (Split Screen Layout)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1045
+#: templates/admin/wp-event-aggregator-settings.php:1062
 msgid "Template 5 (Premium Elegant Layout)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1046
+#: templates/admin/wp-event-aggregator-settings.php:1063
 msgid "Template 6 (Modern Immersive Layout)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1050
+#: templates/admin/wp-event-aggregator-settings.php:1067
 msgid "Choose the layout template for the single event details page across all event sources."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1055
+#: templates/admin/wp-event-aggregator-settings.php:1072
 #, php-format
 msgid "Premium templates are available in the Pro version. %s"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1064
+#: templates/admin/wp-event-aggregator-settings.php:1081
 msgid "Sidebar Position"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1071
+#: templates/admin/wp-event-aggregator-settings.php:1088
 msgid "Right Sidebar"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1072
+#: templates/admin/wp-event-aggregator-settings.php:1089
 msgid "Left Sidebar"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1076
+#: templates/admin/wp-event-aggregator-settings.php:1093
 msgid "Choose whether the sidebar should be on the left or the right side for Template 2."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1084
+#: templates/admin/wp-event-aggregator-settings.php:1101
 msgid "Ticket Button Text"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1087
+#: templates/admin/wp-event-aggregator-settings.php:1104
 #: templates/wpea-archive-content5.php:26
 #: templates/wpea-archive-content6.php:27
 msgid "Buy Tickets"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1089
+#: templates/admin/wp-event-aggregator-settings.php:1106
 msgid "Custom label for event ticket/registration button."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1096
+#: templates/admin/wp-event-aggregator-settings.php:1113
 msgid "Next Events Text"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1105
+#: templates/admin/wp-event-aggregator-settings.php:1122
 msgid "Previous Events Text"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1114
+#: templates/admin/wp-event-aggregator-settings.php:1131
 msgid "Display Buy Ticket section in Past Event"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1122
+#: templates/admin/wp-event-aggregator-settings.php:1139
 msgid "Check to enable showing the buy ticket / registration section even for past events."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1130
+#: templates/admin/wp-event-aggregator-settings.php:1147
 msgid "Do not update these data"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1137
+#: templates/admin/wp-event-aggregator-settings.php:1154
 msgid "Description"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1138
+#: templates/admin/wp-event-aggregator-settings.php:1155
 msgid "Image"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1140
+#: templates/admin/wp-event-aggregator-settings.php:1157
 msgid "Categories"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1141
+#: templates/admin/wp-event-aggregator-settings.php:1158
 msgid "Tags"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1142
+#: templates/admin/wp-event-aggregator-settings.php:1159
 msgid "Structured Content"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1143
+#: templates/admin/wp-event-aggregator-settings.php:1160
 msgid "Featured Video"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1144
+#: templates/admin/wp-event-aggregator-settings.php:1161
 msgid "FAQs"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1145
+#: templates/admin/wp-event-aggregator-settings.php:1162
 msgid "Image Gallery / Carousel"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1155
+#: templates/admin/wp-event-aggregator-settings.php:1172
 msgid "Checked fields will be preserved when an existing imported event is updated."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1163
+#: templates/admin/wp-event-aggregator-settings.php:1180
 msgid "Default Event Thumbnail"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1180
+#: templates/admin/wp-event-aggregator-settings.php:1197
 msgid "Event Thumbnail"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1190
+#: templates/admin/wp-event-aggregator-settings.php:1207
 msgid "Remove Event Thumbnail"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1194
+#: templates/admin/wp-event-aggregator-settings.php:1211
 msgid "This option will display this image in the event's grid view if the event does not have a featured image."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1202
+#: templates/admin/wp-event-aggregator-settings.php:1219
 msgid "Disable WP Events"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1210
+#: templates/admin/wp-event-aggregator-settings.php:1227
 msgid "Check to disable inbuilt event management system."
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1218
+#: templates/admin/wp-event-aggregator-settings.php:1235
 msgid "Delete WP Event Aggregator data on Uninstall"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1226
+#: templates/admin/wp-event-aggregator-settings.php:1243
 msgid "Delete WP Event Aggregator data like settings, scheduled imports, import history on Uninstall"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1262
+#: templates/admin/wp-event-aggregator-settings.php:1279
 msgid "Google maps API Key (Required)"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1263
+#: templates/admin/wp-event-aggregator-settings.php:1280
 msgid "How to get an API Key"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1264
+#: templates/admin/wp-event-aggregator-settings.php:1281
 msgid "Find out more about API Key restrictions"
 msgstr ""
 
-#: templates/admin/wp-event-aggregator-settings.php:1293
+#: templates/admin/wp-event-aggregator-settings.php:1310
 msgid "Here"
 msgstr ""
 

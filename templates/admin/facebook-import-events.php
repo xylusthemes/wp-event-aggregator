@@ -2,6 +2,11 @@
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) exit;
 global $importevents;
+$user_fb_pages = get_option( 'wpea_fb_user_pages', array() );
+$disabled      = '';
+if ( ! wpea_is_pro() ) {
+	$disabled = 'disabled';
+}
 ?>
 <div class="wpea-card" style="margin-top:20px;" >			
 	<div class="wpea-app" >
@@ -38,8 +43,8 @@ global $importevents;
 												<?php 
 													$wpea_text = sprintf(
 														/* translators: 1: First option (by Facebook Event ID), 2: Second option (Facebook Page) */
-														esc_html__( 'Select Event source. %1$s %2$s', 'wp-event-aggregator' ),
-														'<br><strong>' . esc_html__( '1. Facebook Event ID', 'wp-event-aggregator' ) . '</strong>',
+														esc_html__( 'Select Event source. %1$s, %2$s.', 'wp-event-aggregator' ),
+														'<br><strong>' . esc_html__( '1. by Facebook Event ID', 'wp-event-aggregator' ) . '</strong>',
 														'<br><strong>' . esc_html__( '2. Facebook Page', 'wp-event-aggregator' ) . '</strong>'
 													);
 													
@@ -61,6 +66,9 @@ global $importevents;
 								<select name="facebook_import_by" id="facebook_import_by">
 			                    	<option value="facebook_event_id"><?php esc_attr_e( 'Facebook Event ID','wp-event-aggregator' ); ?></option>
 			                    	<option value="facebook_organization"><?php esc_attr_e( 'Facebook Page','wp-event-aggregator' ); ?></option>
+			                    	<?php if ( ! empty( $user_fb_pages ) ) { ?>
+			                    		<option value="my_pages"><?php esc_attr_e( 'My Pages', 'wp-event-aggregator' ); ?></option>
+			                    	<?php } ?>
 			                    </select>
 							</div>
 						</div>
@@ -82,11 +90,33 @@ global $importevents;
 								<span class="wpea-title-text" ><?php esc_attr_e( 'Page username / ID to fetch events from','wp-event-aggregator' ); ?></span>
 							</div>
 							<div class="wpea-inner-section-2">
-								<input class="wpea_text" class="facebook_page_username" type="text"  <?php if( wpea_is_pro() ){ echo 'name="facebook_page_username"'; }else{ echo 'disabled="disabled"'; } ?>/>
+								<input class="wpea_text facebook_page_username" type="text" <?php if( wpea_is_pro() ){ echo 'name="facebook_page_username"'; }else{ echo 'disabled="disabled"'; } ?>/>
 			                    <span class="wpea_small">
 			                        <?php echo wp_kses_post( __( ' Eg. username for https://www.facebook.com/xylusinfo/ is "xylusinfo".', 'wp-event-aggregator' ) ); ?>
 			                    </span>
 			                    <?php do_action( 'wpea_render_pro_notice' ); ?>
+							</div>
+						</div>
+
+						<div class="wpea-inner-main-section facebook_account_wrapper" style="display: none;" >
+							<div class="wpea-inner-section-1" >
+								<span class="wpea-title-text" ><?php esc_attr_e( 'My Pages', 'wp-event-aggregator' ); ?></span>
+							</div>
+							<div class="wpea-inner-section-2">
+								<?php if ( ! empty( $user_fb_pages ) ) { ?>
+									<select name="my_page" class="my_page" required="required" <?php echo esc_attr( $disabled ); ?>>
+										<option value=""><?php esc_attr_e( 'Select Page', 'wp-event-aggregator' ); ?></option>
+										<?php
+										foreach ( $user_fb_pages as $pkey => $pvalue ) {
+											echo '<option value="' . esc_attr( $pkey ) . '">' . esc_attr( $pvalue['name'] ) . '</option>';
+										}
+										?>
+									</select>
+								<?php } ?>
+								<span class="wpea_small">
+									<?php esc_attr_e( 'Select Page for import events from it.', 'wp-event-aggregator' ); ?>
+								</span>
+								<?php do_action( 'wpea_render_pro_notice' ); ?>
 							</div>
 						</div>
 
